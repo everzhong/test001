@@ -6,32 +6,69 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
-          v-hasPermi="['renwu:renwutwo:check']"
+          v-hasPermi="['renwu:renwutwo:add']"
         >批量制作通知</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
-          v-hasPermi="['renwu:renwutwo:check']"
+          v-hasPermi="['renwu:renwutwo:print']"
         >批量打印通知</el-button>
       </el-col>
-      <!-- <div class="top-right-btn">
-        <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two">医疗机构列表</el-radio-button>
-          <el-radio-button label="three">任务列表-规则列表</el-radio-button>
-          <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
-        </el-radio-group>
-      </div> -->
     </el-row>
-    <div v-loading="loading">
+    <!-- <div v-loading="loading">
       <RenwutwoTable :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
+    </div> -->
+     <div v-loading="loading">
+      <el-table :data="renwutwoList" border>
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column label="是否制作" align="center" prop="isDo"  show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.isDo?'是':'否'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
+        <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
+        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
+        <el-table-column label="检查机构" align="center" prop="jcjg"  show-overflow-tooltip/>
+        <el-table-column label="检查组" align="center" prop="jicz"  show-overflow-tooltip/>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button
+            v-if="!scope.row.isDo"
+            size="mini"
+            type="text"
+            @click="navigateToAdd(scope.row)"
+          >制作通知</el-button>
+          <el-button
+            v-else
+            size="mini"
+            type="text"
+            @click="printFile(scope.row)"
+          >打印通知</el-button>
+        </template>
+      </el-table-column>
+  </el-table>
     </div>
     <pagination
       v-show="total>0"
@@ -183,11 +220,12 @@ export default {
       rules: {
       },
       //
-      tabsValue:'two'
     };
   },
   created() {
-    this.getList();
+    this.renwutwoList = [{isDo:1},{isDo:0}]
+    this.loading = false
+    // this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });
@@ -288,13 +326,19 @@ export default {
       try {
         const res = await listRenwutwo(params)
         if(res.code===200){
-          this[`renwu${this.tabsValue}List`] = res.rows;
+          this.renwutwoList= res.rows;
           this.total = res.total;
         }
       } catch (error) {
         console.log(error)
       }
       this.loading = false
+    },
+    navigateToAdd(){
+
+    },
+    printFile(){
+
     },
     // 异本地字典翻译
     ybdFormat(row, column) {

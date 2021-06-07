@@ -187,7 +187,7 @@ export default {
       // 表单校验
       rules: {
       },
-      tabsValue:'1',
+      tabsValue:'3',
       //上页带过来的参数
       queryInfoFrom:{}
     };

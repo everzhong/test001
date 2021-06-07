@@ -1,99 +1,105 @@
 <template>
   <div class="jcbl">
-    <p class="qz-title">制作检查笔录</p>
     <section class="zhizuo-outer">
-      <div class="zhizuo">
-        <div class="zhizuo-item">
-          <span>检查地点</span>
-          <el-input size="small" v-model="zhizuo.jcdd"></el-input>
+      <p class="qz-title has-bg">制作检查笔录</p>
+      <div class="zhizuo-port">
+        <div class="zhizuo">
+          <div class="zhizuo-item">
+            <span>检查地点</span>
+            <el-input size="small" v-model="zhizuo.jcdd"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>检查时间</span>
+            <el-date-picker
+                clearable
+                size="small"
+                v-model="zhizuo.jcsj"
+                type="datetimerange"
+                format="yyyy-MM-dd hh:mm"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+              </el-date-picker>
+          </div>
+          <p class="qz-title">被检查单位信息</p>
+          <div class="zhizuo-item">
+            <span>单位全称</span>
+            <el-input size="small" v-model="zhizuo.dwqc"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>
+              机构代码
+                <el-tooltip class="item" effect="dark" content="非部队医院为“统一社会信用代码”，部队医院为“机构代码" placement="top-start">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+            </span>
+            <el-input size="small" v-model="zhizuo.jgdm"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>地址</span>
+            <el-input size="small" v-model="zhizuo.addr"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>法定代表人</span>
+            <el-input size="small" v-model="zhizuo.faren"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系电话</span>
+            <el-input size="small" v-model="zhizuo.tel"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>执法人员</span>
+            <el-input size="small" v-model="zhizuo.zfry"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>记录人</span>
+            <el-input size="small" v-model="zhizuo.jlry"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>检查内容</span>
+            <el-input type="textarea" :rows="2" resize="none" v-model="zhizuo.jcnr"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>检查情况：</span>
+            <el-input type="textarea" :rows="4" resize="none" v-model="zhizuo.jcqk"></el-input>
+          </div>
+          <div style="text-align:right">
+            <el-button size="mini" type="primary" plain @click="exportPdf">导出PDF</el-button>
+            <el-button size="mini" type="primary" @click="addDoc">保存</el-button>
+          </div>
         </div>
-        <div class="zhizuo-item">
-          <span>检查时间</span>
-          <el-date-picker
-              clearable
-              size="small"
-              v-model="zhizuo.jcsj"
-              type="datetimerange"
-              format="yyyy-MM-dd hh:mm"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-        </div>
-        <p class="qz-title">被检查单位信息</p>
-        <div class="zhizuo-item">
-          <span>单位全称</span>
-          <el-input size="small" v-model="zhizuo.dwqc"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>
-            机构代码
-              <el-tooltip class="item" effect="dark" content="非部队医院为“统一社会信用代码”，部队医院为“机构代码" placement="top-start">
-                <i class="el-icon-info"></i>
-              </el-tooltip>
-          </span>
-          <el-input size="small" v-model="zhizuo.jgdm"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>地址</span>
-          <el-input size="small" v-model="zhizuo.addr"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>法定代表人</span>
-          <el-input size="small" v-model="zhizuo.faren"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>联系电话</span>
-          <el-input size="small" v-model="zhizuo.tel"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>执法人员</span>
-          <el-input size="small" v-model="zhizuo.zfry"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>记录人</span>
-          <el-input size="small" v-model="zhizuo.jlry"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>检查内容</span>
-          <el-input type="textarea" :rows="2" resize="none" v-model="zhizuo.jcnr"></el-input>
-        </div>
-        <div class="zhizuo-item">
-          <span>检查情况：</span>
-          <el-input type="textarea" :rows="4" resize="none" v-model="zhizuo.jcqk"></el-input>
-        </div>
-        <div style="text-align:right">
-          <el-button size="mini" type="primary" plain @click="exportPdf">导出PDF</el-button>
-          <el-button size="mini" type="primary" @click="addDoc">保存</el-button>
-        </div>
-      </div>
-      <div class="pre-view">
-        <p class="top-tip">预览检查笔录</p>
-        <div id="docPart" class="doc-part" ref="docPart">
-          <h1 class="doc-title">上海市静安区医疗保障局</h1>
-          <p class="sub-doc-title">行政执法文书</p>
-          <div class="pagation">第<span></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span></span>页</div>
-          <div class="content">
-            <p class="content-title">检查笔录</p>
-            <div class="item">检查地点：{{zhizuo.jcdd}}</div>
-            <div class="item">检查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div>
-            <p class="item">被检查人（被检查单位）信息：</p>
-            <div class="item item-info">单位全称：{{zhizuo.dwqc}}</div>
-            <div class="item item-info">类别/性质：定点医疗机构</div>
-            <div class="item item-info">单位地址：{{zhizuo.addr}}</div>
-            <div class="item item-info">法定代表人：{{zhizuo.faren}}</div>
-            <div class="item item-info">记录人：{{zhizuo.jlry}}</div>
-            <p class="jianchaqk">我们（至少2人）是上海市医疗保险监督检查所的行政执法人员负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对&nbsp; &nbsp;进行检查。检查情况：{{zhizuo.jcqk}}</p>
-            <div class="sign"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
-            <div class="sign"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
+        <div class="pre-view">
+          <p class="top-tip">预览检查笔录</p>
+          <div id="docPart" class="doc-part" ref="docPart">
+            <h1 class="doc-title">上海市静安区医疗保障局</h1>
+            <p class="sub-doc-title">行政执法文书</p>
+            <div class="pagation">第<span></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span></span>页</div>
+            <div class="content">
+              <p class="content-title">检查笔录</p>
+              <div class="item">检查地点：{{zhizuo.jcdd}}</div>
+              <div class="item">检查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div>
+              <p class="item">被检查人（被检查单位）信息：</p>
+              <div class="item item-info">单位全称：{{zhizuo.dwqc}}</div>
+              <div class="item item-info">类别/性质：定点医疗机构</div>
+              <div class="item item-info">单位地址：{{zhizuo.addr}}</div>
+              <div class="item item-info">法定代表人：{{zhizuo.faren}}</div>
+              <div class="item item-info">记录人：{{zhizuo.jlry}}</div>
+              <p class="jianchaqk">我们（至少2人）是上海市医疗保险监督检查所的行政执法人员负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对&nbsp; &nbsp;进行检查。<br>检查情况：{{zhizuo.jcqk}}</p>
+              <div class="sign"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
+              <div class="sign"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
-    <p class="qz-title">检查笔录列表</p>
-    <el-table :data="tableData" border>
+    <p class="qz-title has-bg">检查笔录列表</p>
+    <el-radio-group v-model="tabsValue" size="small">
+      <el-radio-button label="online">在线制作列表</el-radio-button>
+      <el-radio-button label="upload">签字上传列表</el-radio-button>
+    </el-radio-group>
+    <el-table :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column  align="center" >
+        <el-table-column  align="center" width="55">
           <template slot-scope="scope">
             <el-radio :label="scope.row.qzid" v-model="blCheck"></el-radio>
           </template>
@@ -143,7 +149,8 @@ export default {
         jcqk:''
       },
       total:0,
-      urlQuery:{}
+      urlQuery:{},
+      tabsValue:'online'
     }
   },
   created(){
@@ -188,7 +195,7 @@ export default {
       this.loading = false
     },
     exportPdf(){
-      const title = "检查笔录"
+      const title = new Date().getTime()
       html2Canvas(document.querySelector('#docPart')).then(function(canvas) {
         let contentWidth = canvas.width
         let contentHeight = canvas.height
@@ -220,10 +227,16 @@ export default {
 <style lang="scss" scoped>
 .jcbl {
   .zhizuo-outer {
-    display: table;
+    height:380px;
+    overflow: auto;
+    margin-bottom: 15px;
+  }
+  .zhizuo-port {
+    display: flex;
+    padding-left:10px;
   }
   .zhizuo {
-    display: table-cell;
+    flex-shrink: 0;
     width: 500px;
     color:#606266;
     .zhizuo-item {
@@ -243,19 +256,7 @@ export default {
     }
   }
   .pre-view {
-    display: table-cell;
     padding-left:60px;
-    position: relative;
-    &::before {
-      content:'';
-      display:block;
-      position: absolute;
-      width: 1px;
-      height: 100%;
-      background-color: #f2f2f2;
-      left:60px;
-      top:0;
-    }
     p {
       padding: 0;
       margin: 0;
@@ -267,7 +268,7 @@ export default {
     }
     .doc-part {
       width: 800px;
-      padding:30px;
+      padding:20px 30px;
       .doc-title {
         margin: 0;
         font-size: 18px;
@@ -310,6 +311,7 @@ export default {
           letter-spacing:2px;
           margin-top:10px;
           margin-bottom: 40px;
+          text-align: justify;
         }
         .sign {
           margin-bottom: 40px;
@@ -320,6 +322,12 @@ export default {
       }
     }
   }
-  
+  .qz-title {
+    &.has-bg {
+      background-color: #f0f2f5;
+      padding:10px;
+      margin:10px 0;
+    }
+  }
 }
 </style>

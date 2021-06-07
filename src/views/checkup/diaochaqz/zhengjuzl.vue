@@ -64,7 +64,7 @@ export default {
     }
   },
   created(){
-    this.getList()
+    // this.getList()
   },
   methods:{
     /** 查询调查取证列表 type:1*/
@@ -120,8 +120,9 @@ export default {
 </style>
 <style lang="scss">
 .qz-title {
-  font-size: 18px;
+  font-size: 16px;
   color: #303133;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 </style>
