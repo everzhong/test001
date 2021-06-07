@@ -30,7 +30,15 @@
             <span>
               性别
             </span>
-            <el-input size="small" v-model="zhizuo.sex"></el-input>
+            <el-select style="width:100%" v-model="zhizuo.sex" placeholder="请选择" clearable size="small">
+              <el-option
+                v-for="dict in sexOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+            <!-- <el-input size="small" v-model="zhizuo.sex"></el-input> -->
           </div>
           <div class="zhizuo-item">
             <span>联系电话</span>
@@ -62,7 +70,7 @@
           </div>
           <div style="text-align:right">
             <!-- <el-button size="mini" type="primary" plain @click="exportPdf">导出PDF</el-button> -->
-            <el-button size="mini" type="primary" @click="addDoc">保存</el-button>
+            <el-button v-loading="loading" size="mini" type="primary" @click="saveSubmit">保存</el-button>
           </div>
         </div>
         <div class="pre-view">
@@ -78,7 +86,7 @@
               <p class="item">被询问人信息：</p>
               <div class="item item-info">姓名：{{zhizuo.xwname}}</div>
               <div class="item item-info">性别：{{zhizuo.sex}}</div>
-              <div class="item item-info">联系地址：{{zhizuo.addr}}</div>
+              <div class="item item-info">联系地址：{{zhizuo.lxdz}}</div>
               <div class="item item-info">工作单位：{{zhizuo.dwqc}}</div>
               <div class="item item-info">联系电话：{{zhizuo.tel}}</div>
               <div class="item item-info">身份证号：{{zhizuo.sfz}}</div>
@@ -86,8 +94,7 @@
               <p class="jianchaqk">告知：我们是上海市医疗保险监督检查所的行政执法人员，这是我们的执法证件，现对&nbsp; &nbsp;之事进行调查。你享有以下权利：执法人员少于两人或者执法证件与身份不符的，有权拒绝调查询问；同时你应承担以下义务：如实提供有关材料、回答询问，不得拒绝、阻扰调查。请你配合我们。
               <br>询问内容：{{zhizuo.xwnr}}
               </p>
-              <div class="sign"><span>被询问人（签名）：</span><span>见证人（签名）：</span></div>
-              <div class="sign"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
+              <div class="sign"><span>被调查人（签名）：</span><span>承办人（签名）：</span></div>
             </div>
           </div>
         </div>
@@ -98,7 +105,7 @@
       <el-radio-button label="online">在线制作列表</el-radio-button>
       <el-radio-button label="upload">签字上传列表</el-radio-button>
     </el-radio-group>
-    <el-table :data="tableData" border style="margin-top:10px">
+    <el-table class="qztable" :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
           <template slot-scope="scope">
@@ -107,16 +114,16 @@
         </el-table-column>
         <el-table-column label="姓名" align="center" prop="xwname"  show-overflow-tooltip/>
         <el-table-column label="身份证" align="center" prop="sfz"  show-overflow-tooltip/>
-        <el-table-column label="性别" align="center" prop="sex" show-overflow-tooltip></el-table-column>
+        <el-table-column label="性别" align="center" prop="sex" :formatter="sexFormat" show-overflow-tooltip></el-table-column>
         <el-table-column label="工作单位" align="center" prop="zfry" show-overflow-tooltip/>
         <el-table-column label="联系电话" align="center" prop="tel" show-overflow-tooltip/>
         <el-table-column label="询问内容" align="center" prop="jcqk" show-overflow-tooltip/>
-        <el-table-column label="操作" align="center" show-overflow-tooltip>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="opertation(scope.row,'edit')">修改</el-button>
-            <el-button type="text" size="mini" @click="opertation(scope.row,'download')">下载</el-button>
-            <el-button type="text" size="mini" @click="opertation(scope.row,'delete')">删除</el-button>
-            <el-button type="text" size="mini" @click="opertation(scope.row,'print')">打印</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'editQz')">修改</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'downloadQz')">下载</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'deleteQz')">删除</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'printQz')">打印</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -139,31 +146,37 @@ export default {
     return {
       tableData:[],
       blCheck:'',
+      sexOptions:[],
       queryParams:{
         pageNum: 1,
         pageSize: 10
       },
       zhizuo:{
         jcsj:[],
-        zfry:'',
-        addr:'',
-        dwqc:'',
-        jgdm:'',
-        faren:'',
-        tel:'',
         jcdd:'',
+        xwname:'',
+        sex:'',
+        lxdz:'',
+        dwqc:'',
+        tel:'',
         jlry:'',
+        sfz:'',
         jcnr:'',
-        jcqk:''
+        xwnr:'',
+        
       },
       total:0,
       urlQuery:{},
-      tabsValue:'online'
+      tabsValue:'online',
+      opertationType:'add'
     }
   },
   created(){
     this.urlQuery = this.$route.query
-    // this.getList()
+    this.getList()
+    this.getDicts("sys_user_sex").then(response => {
+      this.sexOptions = response.data;
+    });
   },
   methods:{
      /** 查询调查取证列表 type=3*/
@@ -182,10 +195,10 @@ export default {
       }
       this.loading = false
     },
-    async addDoc(){
-      this.loading = true
+
+    async saveSubmit(){
       const params = {
-        type:2,
+        type:3,
         rwpcid:this.urlQuery.rwpcid,
         jgbm:this.urlQuery.jgdm,
         ...this.zhizuo
@@ -193,14 +206,90 @@ export default {
       params.jcstarttime = this.zhizuo.jcsj[0]
       params.jcendtime = this.zhizuo.jcsj[1]
       delete params.jcsj
-      console.log(params)
+      if(this.opertationType==='edit'){//修改
+        this.editQuzheng(params)
+      } else {//新增
+        delete params.qzid
+        this.addQz(params)
+      }
+    },
+    async addQz(params){
+      this.loading = true
       try {
         const res = await addDcqz(params)
-        console.log(res)
+        if(res.code===200) {
+          this.msgSuccess('保存成功')
+          this.getList()
+        }
       } catch (error) {
         console.log(error)
       }
       this.loading = false
+    },
+    async editQuzheng(padams){
+      this.loading = true
+      try {
+        const res = await updateDcqz(padams)
+        if(res.code===200) {
+          this.opertationType = 'add'
+          this.msgSuccess('修改成功')
+          //清空还回默认新增的状态
+          this.zhizuo = {
+            jcsj:[],
+            jcdd:'',
+            xwname:'',
+            sex:'',
+            lxdz:'',
+            dwqc:'',
+            tel:'',
+            jlry:'',
+            sfz:'',
+            jcnr:'',
+            xwnr:'',
+          }
+          this.getList()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
+    },
+    async deleteQz(row){
+      console.log(this,this.layer)
+      this.$confirm('是否确认删除此项询问笔录?', "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          delDcqz(row.qzid)
+        }).then(res => {
+          if(res.code===200) {
+            this.msgSuccess('删除成功')
+            this.getList()
+          }
+        })
+    },
+    downloadQz(row){
+      row.jcsj = []
+      if(row.jcendtime && row.jcstarttime) {
+        row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
+      }
+      this.zhizuo = {...row}
+      this.exportPdf()
+    },
+    editQz(row){
+      this.opertationType = 'edit'
+      row.jcsj = []
+      if(row.jcendtime && row.jcstarttime) {
+        row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
+      }
+      this.zhizuo = {...row}
+    },
+    printQz(){
+
+    },
+    opertation(row,type){
+      this[type](row)
     },
     exportPdf(){
       const title = new Date().getTime()
@@ -229,9 +318,10 @@ export default {
         PDF.save(title + '.pdf')
     })
     },
-    opertation(row,type){
-
-    }
+    // 性别字典翻译
+    sexFormat(row, column) {
+      return this.selectDictLabel(this.sexOptions, row.sex);
+    },
   }
 }
 </script>
@@ -338,6 +428,11 @@ export default {
       background-color: #f0f2f5;
       padding:10px;
       margin:10px 0;
+    }
+  }
+  .qztable {
+    &::v-deep .el-radio__label {
+      display: none !important;
     }
   }
 }

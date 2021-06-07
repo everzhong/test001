@@ -1,115 +1,62 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
-          <!-- <el-form-item label="案件来源" prop="ajly">
-            <el-input readonly v-model="dcqzList.ajly"></el-input>
-          </el-form-item> -->
-          <el-form-item label="险种" prop="ybbf">
-            <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
-          </el-form-item>
-          <el-form-item label="就医类型" prop="jslb">
-            <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
-          </el-form-item>
-          <el-form-item label="批次号" prop="rwpcid">
-            <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-          </el-form-item>
-          <el-form-item label="数据开始日期" prop="datastarttime">
-            <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-          </el-form-item>
-          <el-form-item label="数据结束日期" prop="dataendtime">
-            <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-          </el-form-item>
-          <el-form-item label="机构名称" prop="jgmc">
-            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-          </el-form-item>
-            <el-form-item label="查询机构" prop="cxjg">
-            <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
-          </el-form-item>
-            <el-form-item label="检查组" prop="jcz">
-            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
-          </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px">
-            <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+    <div style="position:absolute;right:20px;top:-31px">
+      <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+    </div>
+    <div class="zhizuo-port">
+        <div class="zhizuo">
+          <div class="zhizuo-item">
+            <span>检查开始日期</span>
+            <el-input size="small" v-model="zhizuo.jcstarttime"></el-input>
           </div>
-    </el-form>
-    <el-radio-group v-model="tabsValue" size="small">
-      <el-radio-button label="1">证据资料</el-radio-button>
-      <el-radio-button label="2">检查笔录</el-radio-button>
-      <el-radio-button label="3">询问笔录</el-radio-button>
-    </el-radio-group>
-    <!-- <el-tabs type="card" v-model="tabsValue">
-      <el-tab-pane label="证据资料" name="1"></el-tab-pane>
-      <el-tab-pane label="检查笔录" name="2"></el-tab-pane>
-      <el-tab-pane label="询问笔录" name="3"></el-tab-pane>
-    </el-tabs> -->
-    <zhengjuzl v-if="tabsValue==='1'"/>
-    <jcbl v-else-if="tabsValue==='2'" />
-    <xunwbl v-else/>
-    <!-- 添加或修改调查取证对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="类型" prop="type">
-          <el-select v-model="form.type" placeholder="请选择类型">
-            <el-option
-              v-for="dict in typeOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="检查开始时间" prop="jcstarttime">
-          <el-date-picker clearable size="small"
-            v-model="form.jcstarttime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择检查开始时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="检查结束时间" prop="jcendtime">
-          <el-date-picker clearable size="small"
-            v-model="form.jcendtime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择检查结束时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="性别" prop="sex">
-          <el-select v-model="form.sex" placeholder="请选择性别">
-            <el-option
-              v-for="dict in sexOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="文件地址">
-          <fileUpload v-model="form.wenjianurl"/>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
+          <div class="zhizuo-item">
+            <span>联系人</span>
+            <el-input size="small" v-model="zhizuo.lxr"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>制作日期</span>
+            <el-input size="small" v-model="zhizuo.zzstattime"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系电话</span>
+            <el-input size="small" v-model="zhizuo.tel"></el-input>
+          </div>
+          <div style="text-align:right">
+            <el-button size="mini" type="primary" @click="submitForm">保存</el-button>
+          </div>
+        </div>
+        <div class="pre-view">
+          <p class="top-tip">预览检查笔录</p>
+          <div id="docPart" class="doc-part" ref="docPart">
+            <h1 class="doc-title">上海市静安区医疗保障局</h1>
+            <p class="sub-doc-title">行政执法文书</p>
+            <div class="pagation">第<span></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span></span>页</div>
+            <div class="content">
+              <p class="content-title">检查笔录</p>
+              <div class="item">检查地点：{{zhizuo.jcdd}}</div>
+              <!-- <div class="item">检查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div> -->
+              <p class="item">被检查人（被检查单位）信息：</p>
+              <div class="item item-info">单位全称：{{zhizuo.dwqc}}</div>
+              <div class="item item-info">类别/性质：定点医疗机构</div>
+              <div class="item item-info">单位地址：{{zhizuo.addr}}</div>
+              <div class="item item-info">法定代表人：{{zhizuo.faren}}</div>
+              <div class="item item-info">记录人：{{zhizuo.jlry}}</div>
+              <p class="jianchaqk">我们（至少2人）是上海市医疗保险监督检查所的行政执法人员负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对&nbsp; &nbsp;进行检查。<br>检查情况：{{zhizuo.jcqk}}</p>
+              <div class="sign"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
+              <div class="sign"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
+            </div>
+          </div>
+        </div>
+    </div>
   </div>
-</template>
+</template> 
 
 <script>
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
-import FileUpload from '@/components/FileUpload';
-import Zhengjuzl from './zhengjuzl.vue'
-import Jcbl from './jcbl.vue'
-import Xunwbl from './xunwbl.vue'
 
 export default {
-  name: "Dcqz",
+  name: "AddNotice",
   components: {
-    FileUpload,
-    Zhengjuzl,
-    Jcbl,
-    Xunwbl
   },
   data() {
     return {
@@ -187,15 +134,15 @@ export default {
       // 表单校验
       rules: {
       },
-      tabsValue:'1',
       //上页带过来的参数
-      queryInfoFrom:{}
+      queryInfoFrom:{},
+      zhizuo:{}
     };
   },
   created() {
     // this.getList();
     this.queryInfoFrom = this.$route.query
-    // this.gitDic();
+    this.gitDic();
   },
   methods: {
     /** 查询调查取证列表 */
@@ -487,3 +434,105 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.app-container  {
+  .zhizuo-outer {
+    height:380px;
+    overflow: auto;
+    margin-bottom: 15px;
+  }
+  .zhizuo-port {
+    display: flex;
+    padding-left:10px;
+  }
+  .zhizuo {
+    flex-shrink: 0;
+    width: 500px;
+    color:#606266;
+    .zhizuo-item {
+      display: flex;
+      font-size: 14px;
+      align-items: center;
+      margin-bottom: 10px;
+      width: 350px;
+      &::v-deep .el-input__inner {
+        color:#303313;
+      }
+      >span {
+        display: block;
+        width: 130px;
+        color:#606266;
+        flex-shrink: 0;
+      }
+    }
+  }
+  .pre-view {
+    padding-left:60px;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+    .top-tip {
+      font-size: 12px;
+      color:#606266;
+      padding-left: 30px;
+    }
+    .doc-part {
+      width: 800px;
+      padding:20px 30px;
+      flex-shrink: 0;
+      .doc-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: normal;
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      .sub-doc-title {
+        font-size: 14px;
+        text-align: center;
+        letter-spacing:5px;
+      }
+      .pagation{
+        text-align: right;
+        font-size: 12px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        margin-top: 10px;
+        >span {
+          padding:0 5px;
+        }
+      }
+      .content {
+        padding:20px;
+        font-size: 16px;
+        border:1px solid #303313;
+        letter-spacing:1px;
+        .content-title {
+          font-weight: 600;
+          text-align: center;
+        }
+        .item {
+          line-height: 36px;
+          &.item-info {
+            margin-left: 16px;
+          }
+        }
+        .jianchaqk {
+          text-indent: 2em;
+          letter-spacing:2px;
+          margin-top:10px;
+          margin-bottom: 40px;
+          text-align: justify;
+        }
+        .sign {
+          margin-bottom: 40px;
+          padding-right:90px;
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}
+</style>

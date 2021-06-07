@@ -165,6 +165,12 @@ export const constantRoutes = [{
             name: "Dayintz",
             path: "dayintz",
         }, {
+            component: (resolve) => require(['@/views/checkup/dayintz/addNotice'], resolve),
+            hidden: false,
+            meta: { title: "制作通知", noCache: false },
+            name: "AddNotice",
+            path: "dayintz/addNotice",
+        }, {
             component: (resolve) => require(['@/views/checkup/jianchass/index'], resolve),
             hidden: false,
             meta: { title: "检查实施", noCache: false },

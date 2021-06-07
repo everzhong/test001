@@ -64,8 +64,7 @@
             <el-input type="textarea" :rows="4" resize="none" v-model="zhizuo.jcqk"></el-input>
           </div>
           <div style="text-align:right">
-            <el-button size="mini" type="primary" plain @click="exportPdf">导出PDF</el-button>
-            <el-button size="mini" type="primary" @click="addDoc">保存</el-button>
+            <el-button size="mini" type="primary" @click="saveSubmit">保存</el-button>
           </div>
         </div>
         <div class="pre-view">
@@ -97,7 +96,7 @@
       <el-radio-button label="online">在线制作列表</el-radio-button>
       <el-radio-button label="upload">签字上传列表</el-radio-button>
     </el-radio-group>
-    <el-table :data="tableData" border style="margin-top:10px">
+    <el-table class="qztable" :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
           <template slot-scope="scope">
@@ -110,14 +109,21 @@
         <el-table-column label="检查地点" align="center" prop="jcdd" show-overflow-tooltip/>
         <el-table-column label="执法人员" align="center" prop="zfry" show-overflow-tooltip/>
         <el-table-column label="检查情况" align="center" prop="jcqk" show-overflow-tooltip/>
-        <el-table-column label="操作" align="center" show-overflow-tooltip></el-table-column>
-      </el-table>
-      <pagination
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="getList"
-      />
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" size="mini" @click="opertation(scope.row,'editQz')">修改</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'downloadQz')">下载</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'deleteQz')">删除</el-button>
+            <el-button type="text" size="mini" @click="opertation(scope.row,'printQz')">打印</el-button>
+          </template>
+        </el-table-column>
+    </el-table>
+    <pagination
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
   </div>
 </template>
 <script>
@@ -130,7 +136,7 @@ export default {
   data(){
     return {
       tableData:[],
-      blCheck:'',
+      blCheck:false,
       queryParams:{
         pageNum: 1,
         pageSize: 10
@@ -150,12 +156,14 @@ export default {
       },
       total:0,
       urlQuery:{},
-      tabsValue:'online'
+      tabsValue:'online',
+      //默认标记是新增
+      opertationType:'add'
     }
   },
   created(){
     this.urlQuery = this.$route.query
-    // this.getList()
+    this.getList()
   },
   methods:{
      /** 查询调查取证列表 type=2*/
@@ -174,8 +182,7 @@ export default {
       }
       this.loading = false
     },
-    async addDoc(){
-      this.loading = true
+    async saveSubmit(){
       const params = {
         type:2,
         rwpcid:this.urlQuery.rwpcid,
@@ -185,17 +192,89 @@ export default {
       params.jcstarttime = this.zhizuo.jcsj[0]
       params.jcendtime = this.zhizuo.jcsj[1]
       delete params.jcsj
-      console.log(params)
+      if(this.opertationType==='edit'){//修改
+        this.editQuzheng(params)
+      } else {//新增
+        delete params.qzid
+        this.addQz(params)
+      }
+    },
+    async addQz(params){
+      this.loading = true
       try {
         const res = await addDcqz(params)
-        console.log(res)
+        if(res.code===200) {
+          this.msgSuccess('保存成功')
+          this.getList()
+        }
       } catch (error) {
         console.log(error)
       }
       this.loading = false
     },
-    exportPdf(){
-      const title = new Date().getTime()
+    async editQuzheng(padams){
+      this.loading = true
+      try {
+        const res = await updateDcqz(padams)
+        if(res.code===200) {
+          this.opertationType = 'add'
+          this.msgSuccess('修改成功')
+          //清空还回默认新增的状态
+          this.zhizuo = {
+            jcsj:[],
+            zfry:'',
+            addr:'',
+            dwqc:'',
+            jgdm:'',
+            faren:'',
+            tel:'',
+            jcdd:'',
+            jlry:'',
+            jcnr:'',
+            jcqk:''
+          }
+          this.getList()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
+    },
+    async deleteQz(row){
+      this.$confirm('是否确认删除此项询问笔录?', "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          delDcqz(row.qzid)
+        }).then(res => {
+          if(res.code===200) {
+            this.msgSuccess('删除成功')
+            this.getList()
+          }
+        })
+    },
+    downloadQz(row){
+      row.jcsj = []
+      if(row.jcendtime && row.jcstarttime) {
+        row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
+      }
+      this.zhizuo = {...row}
+      this.exportPdf()
+    },
+    editQz(row){
+      this.opertationType = 'edit'
+      row.jcsj = []
+      if(row.jcendtime && row.jcstarttime) {
+        row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
+      }
+      this.zhizuo = {...row}
+    },
+    opertation(row,type){
+      this[type](row)
+    },
+    exportPdf(title){
+      const name = title||'下载'+ new Date().getTime()
       html2Canvas(document.querySelector('#docPart')).then(function(canvas) {
         let contentWidth = canvas.width
         let contentHeight = canvas.height
@@ -218,7 +297,7 @@ export default {
                 }
             }
         }
-        PDF.save(title + '.pdf')
+        PDF.save(name + '.pdf')
     })
     }
   }
@@ -269,6 +348,7 @@ export default {
     .doc-part {
       width: 800px;
       padding:20px 30px;
+      flex-shrink: 0;
       .doc-title {
         margin: 0;
         font-size: 18px;
@@ -327,6 +407,11 @@ export default {
       background-color: #f0f2f5;
       padding:10px;
       margin:10px 0;
+    }
+  }
+  .qztable {
+    &::v-deep .el-radio__label {
+      display: none !important;
     }
   }
 }

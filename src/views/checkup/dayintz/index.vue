@@ -88,7 +88,7 @@ import RenwutwoTable from '../../common/renwutwoTable'
 // import RenwuthreeTable from '../../common/renwuthreeTable'
 // import RenwufourTable from '../../common/renwufourTable'
 export default {
-  name: "Renwupf",
+  name: "Dayintz",
   components: {
     SearchItem,
     RenwutwoTable,
@@ -223,7 +223,7 @@ export default {
     };
   },
   created() {
-    this.renwutwoList = [{isDo:1},{isDo:0}]
+    this.renwutwoList = [{isDo:0},{isDo:0}]
     this.loading = false
     // this.getList();
     // this.getDicts("${column.dictType}").then(response => {
@@ -335,7 +335,9 @@ export default {
       this.loading = false
     },
     navigateToAdd(){
-
+      this.$router.push({
+        path:'/checkup/dayintz/addNotice'
+      })
     },
     printFile(){
 

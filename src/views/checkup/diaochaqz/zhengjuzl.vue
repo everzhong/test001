@@ -64,7 +64,7 @@ export default {
     }
   },
   created(){
-    // this.getList()
+    this.getList()
   },
   methods:{
     /** 查询调查取证列表 type:1*/
