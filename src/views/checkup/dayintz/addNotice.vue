@@ -7,45 +7,50 @@
         <div class="zhizuo">
           <div class="zhizuo-item">
             <span>检查开始日期</span>
-            <el-input size="small" v-model="zhizuo.jcstarttime"></el-input>
+            <el-date-picker
+              v-model="zhizuo.dayinstarttime"
+              type="date"
+              size="small"
+              placeholder="选择检查开始日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy年MM月dd日"
+              >
+            </el-date-picker>
           </div>
           <div class="zhizuo-item">
             <span>联系人</span>
-            <el-input size="small" v-model="zhizuo.lxr"></el-input>
-          </div>
-          <div class="zhizuo-item">
-            <span>制作日期</span>
-            <el-input size="small" v-model="zhizuo.zzstattime"></el-input>
+            <el-input size="small" v-model="zhizuo.dayinname"></el-input>
           </div>
           <div class="zhizuo-item">
             <span>联系电话</span>
-            <el-input size="small" v-model="zhizuo.tel"></el-input>
+            <el-input size="small" v-model="zhizuo.dayintel" maxlength="11"></el-input>
+            <span>(检查通知书)</span>
           </div>
-          <div style="text-align:right">
+          <div class="zhizuo-item">
+            <span>制作日期</span>
+            <el-date-picker
+              v-model="zhizuo.dayinriqi"
+              type="date"
+              size="small"
+              placeholder="选择制作日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy年MM月dd日"
+              >
+            </el-date-picker>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系电话</span>
+            <el-input size="small" v-model="zhizuo.dayinphone" maxlength="11"></el-input>
+            <span>(纪律告知书)</span>
+          </div>
+          <div style="text-align:right;padding:5px 15px 0 0">
             <el-button size="mini" type="primary" @click="submitForm">保存</el-button>
           </div>
         </div>
         <div class="pre-view">
-          <p class="top-tip">预览检查笔录</p>
-          <div id="docPart" class="doc-part" ref="docPart">
-            <h1 class="doc-title">上海市静安区医疗保障局</h1>
-            <p class="sub-doc-title">行政执法文书</p>
-            <div class="pagation">第<span></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span></span>页</div>
-            <div class="content">
-              <p class="content-title">检查笔录</p>
-              <div class="item">检查地点：{{zhizuo.jcdd}}</div>
-              <!-- <div class="item">检查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div> -->
-              <p class="item">被检查人（被检查单位）信息：</p>
-              <div class="item item-info">单位全称：{{zhizuo.dwqc}}</div>
-              <div class="item item-info">类别/性质：定点医疗机构</div>
-              <div class="item item-info">单位地址：{{zhizuo.addr}}</div>
-              <div class="item item-info">法定代表人：{{zhizuo.faren}}</div>
-              <div class="item item-info">记录人：{{zhizuo.jlry}}</div>
-              <p class="jianchaqk">我们（至少2人）是上海市医疗保险监督检查所的行政执法人员负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对&nbsp; &nbsp;进行检查。<br>检查情况：{{zhizuo.jcqk}}</p>
-              <div class="sign"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
-              <div class="sign"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
-            </div>
-          </div>
+          <p class="top-tip">预览通知书</p>
+          <!-- <single-notice :pageData="{...$route.query,...zhizuo}"></single-notice> -->
+          <mutile-notice :zhizuo="zhizuo" :noticeList="[$route.query,$route.query,$route.query,$route.query]"></mutile-notice>
         </div>
     </div>
   </div>
@@ -53,10 +58,14 @@
 
 <script>
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
+import SingleNotice from './singleNotice.vue'
+import mutileNotice from './mutilNotice.vue'
 
 export default {
   name: "AddNotice",
   components: {
+    SingleNotice,
+    mutileNotice
   },
   data() {
     return {
@@ -136,13 +145,13 @@ export default {
       },
       //上页带过来的参数
       queryInfoFrom:{},
-      zhizuo:{}
+      zhizuo:{},
     };
   },
   created() {
     // this.getList();
     this.queryInfoFrom = this.$route.query
-    this.gitDic();
+    // this.gitDic();
   },
   methods: {
     /** 查询调查取证列表 */
@@ -316,22 +325,20 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.qzid != null) {
-            updateDcqz(this.form).then(response => {
-              this.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addDcqz(this.form).then(response => {
-              this.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
+      const {
+        dayinstarttime,
+        dayintel,
+        dayinname,
+        dayinphone,
+        dayinriqi
+      } = this.zhizuo
+      if(!(dayinstarttime&&dayintel&&dayinname&&dayinphone&&dayinriqi)){
+        this.msgError('请填完所有项目后再点保存')
+        return false
+      } 
+      addDcqz({status:4,dayinstarttime,dayintel,dayinname,dayinphone,dayinriqi}).then(response => {
+        this.msgSuccess("新增成功");
+        // this.getList();
       });
     },
     /** 删除按钮操作 */
@@ -453,14 +460,19 @@ export default {
       display: flex;
       font-size: 14px;
       align-items: center;
-      margin-bottom: 10px;
-      width: 350px;
+      margin-bottom: 5px;
+      width: 450px;
       &::v-deep .el-input__inner {
         color:#303313;
+        width: 300px;
+        margin-right: 10px;
+      }
+      &::v-deep .el-date-editor.el-input {
+        width: 300px;
       }
       >span {
         display: block;
-        width: 130px;
+        width: 100px;
         color:#606266;
         flex-shrink: 0;
       }
@@ -478,8 +490,8 @@ export default {
       padding-left: 30px;
     }
     .doc-part {
-      width: 800px;
-      padding:20px 30px;
+      width: 595px;
+      padding:10px 20px;
       flex-shrink: 0;
       .doc-title {
         margin: 0;
@@ -492,6 +504,7 @@ export default {
         font-size: 14px;
         text-align: center;
         letter-spacing:5px;
+        margin-bottom: 10px;
       }
       .pagation{
         text-align: right;
@@ -505,25 +518,36 @@ export default {
       }
       .content {
         padding:20px;
-        font-size: 16px;
+        font-size: 14px;
         border:1px solid #303313;
-        letter-spacing:1px;
         .content-title {
           font-weight: 600;
+          font-size: 16px;
           text-align: center;
+          margin-bottom: 45px;
         }
-        .item {
-          line-height: 36px;
-          &.item-info {
-            margin-left: 16px;
-          }
+        .company {
+          text-align: left;
+          display: inline-block;
+          border-bottom: 1px solid #313303;
+          margin-bottom: 30px;
         }
         .jianchaqk {
           text-indent: 2em;
           letter-spacing:2px;
           margin-top:10px;
-          margin-bottom: 40px;
+          margin-bottom: 20px;
           text-align: justify;
+          >span {
+            text-indent: 0;
+            text-align: center;
+            display: inline-block;
+            min-width: 150px;
+            border-bottom: 1px solid #303310;
+          }
+        }
+        .extra {
+          margin-bottom:60px;
         }
         .sign {
           margin-bottom: 40px;

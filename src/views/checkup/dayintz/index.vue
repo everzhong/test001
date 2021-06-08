@@ -41,7 +41,7 @@
         <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
         <el-table-column label="检查机构" align="center" prop="jcjg"  show-overflow-tooltip/>
-        <el-table-column label="检查组" align="center" prop="jicz"  show-overflow-tooltip/>
+        <el-table-column label="检查组" align="center" prop="jczname"  show-overflow-tooltip/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
@@ -223,7 +223,7 @@ export default {
     };
   },
   created() {
-    this.renwutwoList = [{isDo:0},{isDo:0}]
+    this.renwutwoList = [{jczname:'小组qq',isDo:0,jgmc:'上海市市科技局好机会',jcjg:'检查开始就',jcz:''},{jczname:'小组qq',isDo:0,jcjg:'检查开始就',jgmc:'上海市市科技局好机会'}]
     this.loading = false
     // this.getList();
     // this.getDicts("${column.dictType}").then(response => {
@@ -334,9 +334,10 @@ export default {
       }
       this.loading = false
     },
-    navigateToAdd(){
+    navigateToAdd(row){
       this.$router.push({
-        path:'/checkup/dayintz/addNotice'
+        path:'/checkup/dayintz/addNotice',
+        query: row
       })
     },
     printFile(){
