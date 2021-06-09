@@ -13,7 +13,7 @@
               size="small"
               placeholder="选择检查开始日期"
               format="yyyy-MM-dd"
-              value-format="yyyy年MM月dd日"
+              value-format="timestamp"
               >
             </el-date-picker>
           </div>
@@ -34,7 +34,7 @@
               size="small"
               placeholder="选择制作日期"
               format="yyyy-MM-dd"
-              value-format="yyyy年MM月dd日"
+              value-format="timestamp"
               >
             </el-date-picker>
           </div>

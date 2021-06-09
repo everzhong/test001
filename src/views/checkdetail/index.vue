@@ -478,7 +478,7 @@ export default {
             res = await listRenwufour(params)
             break;
           default:
-            params.statu = query.status//第二层级 需要加status
+            params.status = query.status//第二层级 需要加status
             res = await listRenwutwo(params)
             break;
         }

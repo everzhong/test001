@@ -45,7 +45,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="操作" align="center">
+    <!-- <el-table-column label="操作" align="center">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -53,7 +53,7 @@
           @click="checkdetail(scope.row)"
         >调查取证</el-button>
       </template>
-    </el-table-column>
+    </el-table-column> -->
   </el-table>
 </template>
 <script>

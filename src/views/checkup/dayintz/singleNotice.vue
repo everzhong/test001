@@ -1,14 +1,14 @@
 <template>
   <section>
-    <div id="printJc" style="width:595px;padding:10px 20px;flex-shrink:0">
+    <div id="printJc" ref="printJc" style="width:595px;padding:10px 20px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市静安区医疗保障局</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">静医保监督通（2020）01182号</div>
         <section style="padding: 20px;font-size: 14px;border: 1px solid #303313;">
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">监督检查通知书</div>
-          <div style="text-align: left;display:inline-block;border-bottom: 1px solid #313303;margin-bottom: 30px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
+          <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 30px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
           <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定，决定于
-            <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303310;">{{pageData.dayinstarttime}}</span>对你的单位实施医疗保险监督检查，请予以配合，并按要求提供相关资料。
+            <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303313;">{{pageData.dayinstarttime}}</span>对你的单位实施医疗保险监督检查，请予以配合，并按要求提供相关资料。
           </div>
           <p style="margin-bottom:60px">(监督检查具体内容和要求见附件)</p>
           <div style="margin-bottom:25px">
@@ -30,19 +30,21 @@
             </div>
           </div>
         </section>
-      <div style="border:1px solid #303310;border-top:none;padding:3px 20px 20px;">备注：本文一式二份；一份留存执法案卷，一份交被检机构。</div>
+      <div style="border:1px solid #303313;border-top:none;padding:3px 20px 20px;">备注：本文一式二份；一份留存执法案卷，一份交被检机构。</div>
       </div>
     <div style="text-align:right;padding-right:19px">
       <el-button type="primary" v-print="printJianchs" size="mini" >打印</el-button>
+      <el-button type="primary" plain size="mini" @click="printEvent('printJc')">打印</el-button>
+
     </div>
-    <div id="printJl" style="width:595px;padding:10px 20px;flex-shrink:0">
+    <div id="printJl" ref="printJl" style="width:595px;padding:10px 20px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市静安区医疗保障局</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <section style="padding: 20px;font-size: 14px;border: 1px solid #303313;">
         <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 30px;">监督检查纪律告知书</div>
-        <div style="text-align: left;display:inline-block;border-bottom: 1px solid #313303;margin-bottom: 20px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
+        <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 20px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
         <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定，决定于
-          <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303310;">
+          <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303313;">
             {{pageData.dayinstarttime}}</span>
             对你的单位实施医疗保险监督检查。现将监督检查纪律告知如下：
         </div>
@@ -70,10 +72,11 @@
           <p style="text-align:right">{{pageData.dayinriqi}}</p>
         </div>
       </section>
-      <div style="border:1px solid #303310;border-top:none;padding:3px 20px 10px;">备注：本文一式三份；一份留存执法案卷，一份交被检机构，一份张贴检查室门上。</div>
+      <div style="border:1px solid #303313;border-top:none;padding:3px 20px 10px;">备注：本文一式三份；一份留存执法案卷，一份交被检机构，一份张贴检查室门上。</div>
     </div>
     <div style="text-align:right;padding-right:19px">
       <el-button size="mini" type="primary" v-print="printJilv">打印</el-button>
+      <el-button size="mini" type="primary" plain @click="printEvent('printJl')">打印</el-button>
     </div>
   </section>
 </template>
@@ -97,12 +100,9 @@ export default {
   },
   props:['pageData'],
   methods:{
-
+    printEvent(ref) {
+      this.$print(this.$refs[ref])
+    }
   },
-  // watch:{
-  //   pageData(n){
-  //     this.pageData = {...n}
-  //   }
-  // }
 }
 </script>

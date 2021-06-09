@@ -157,7 +157,7 @@ import {
 import { makeUpJs } from '@/utils/generator/js'
 import { makeUpCss } from '@/utils/generator/css'
 import drawingDefalut from '@/utils/generator/drawingDefalut'
-import logo from '@/assets/logo/logo.png'
+// import logo from '@/assets/logo/logo.png'
 import CodeTypeDialog from './CodeTypeDialog'
 import DraggableItem from './DraggableItem'
 
@@ -175,7 +175,7 @@ export default {
   },
   data() {
     return {
-      logo,
+      // logo,
       idGlobal: 100,
       formConf,
       inputComponents,
