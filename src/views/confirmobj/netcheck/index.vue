@@ -248,7 +248,7 @@ export default {
       }]
       this.total = 100
       this.loading = false
-    this.getList();
+    // this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });

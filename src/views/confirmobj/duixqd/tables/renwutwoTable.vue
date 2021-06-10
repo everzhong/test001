@@ -45,15 +45,22 @@
       </template>
     </el-table-column>
 
-    <!-- <el-table-column label="操作" align="center">
+    <el-table-column label="操作" align="center">
       <template slot-scope="scope">
         <el-button
           size="mini"
           type="text"
           @click="checkdetail(scope.row)"
-        >调查取证</el-button>
+        >查看明细</el-button>
       </template>
-    </el-table-column> -->
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          type="text"
+          @click="checkdetail(scope.row)"
+        >全明细</el-button>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>
