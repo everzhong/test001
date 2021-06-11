@@ -183,17 +183,23 @@ export const constantRoutes = [{
             name: "Diaochaqz",
             path: "diaochaqz"
         }, {
-            hidden: true,
-            component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz.vue'], resolve),
-            meta: { title: "调查取证", noCache: false },
-            name: "Dcqz",
-            path: "diaochaqz/dcqz",
-        }, {
             component: (resolve) => require(['@/views/checkup/xingchengjg/index'], resolve),
             hidden: false,
             meta: { title: "形成结果", noCache: false },
             name: "Xingchengjg",
             path: "xingchengjg",
+        }, {
+            component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz'], resolve),
+            hidden: true,
+            meta: { title: "调查取证", noCache: false },
+            name: "Dcqz",
+            path: "diaochaqz/dcqz",
+        }, {
+            component: (resolve) => require(['@/views/checkup/jianchass/shisjc'], resolve),
+            hidden: true,
+            meta: { title: "实施检查", noCache: false },
+            name: "Shisjc",
+            path: "jianchass/shisjc",
         }],
         component: Layout,
         hidden: false,

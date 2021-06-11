@@ -1,6 +1,6 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, loginapi } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-
+import axios from 'axios'
 const user = {
     state: {
         token: getToken(),
@@ -29,6 +29,20 @@ const user = {
     },
 
     actions: {
+        LoginApi({ commit }, userInfo) {
+            const uid = userInfo.uid
+            return new Promise((resolve, reject) => {
+                axios.get('http://211.149.254.6:8080/loginapi', {
+                    params: { uid }
+                }).then(res => {
+                    setToken(res.data.token)
+                    commit('SET_TOKEN', res.data.token)
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
         // 登录
         Login({ commit }, userInfo) {
             const username = userInfo.username.trim()

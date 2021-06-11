@@ -8,6 +8,7 @@
       :page-sizes="pageSizes"
       :total="total"
       :small="small"
+      :pager-count="5"
       v-bind="$attrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"

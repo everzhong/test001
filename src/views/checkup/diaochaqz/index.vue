@@ -474,7 +474,6 @@ export default {
     },
     naviGateToQz(row){
       const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczmc,jcjg} = row
-      console.log({jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczmc,jcjg},99)
       this.$router.push({
         path:'/checkup/diaochaqz/dcqz',
         query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczmc:jczmc||'',jcjg:jcjg||''}

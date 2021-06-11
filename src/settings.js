@@ -1,5 +1,5 @@
 module.exports = {
-    title: '第三方监管系统',
+    title: '第三方监管',
 
     /**
      * 侧边栏主题 深色主题theme-dark，浅色主题theme-light

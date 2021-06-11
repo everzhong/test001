@@ -6,6 +6,7 @@
       <el-table :data="renwutwoList" border>
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="状态" align="center" prop="status"></el-table-column>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
@@ -46,12 +47,10 @@
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
 import SearchItem from '../../common/objSearchItem'
-// import RenwutwoTable from '../../common/renwutwoTable'
 export default {
   name: "Jianchass",
   components: {
     SearchItem,
-    // RenwutwoTable,
   },
   data() {
     return {
@@ -182,6 +181,8 @@ export default {
     };
   },
   created() {
+    this.renwutwoList = [{status:1,rwpcid:111,jgbm:'a121212'},{status:0,rwpcid:121,jgbm:'b121212'}]
+    this.loading = false
     // this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
@@ -553,7 +554,10 @@ export default {
       console.log(val)
     },
     doCheck(row){
-
+      this.$router.push({
+        path:'/checkup/jianchass/shisjc',
+        query:{...row}
+      },()=>{})
     }
   }
 };

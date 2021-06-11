@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '第三方监管系统',
+      title: '第三方监管',
       logo:''
     }
   }

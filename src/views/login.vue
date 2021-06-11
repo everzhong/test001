@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">第三方监管系统</h3>
+      <h3 class="title">第三方监管</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -54,10 +54,10 @@
 </template>
 
 <script>
-import { getCodeImg } from "@/api/login";
+import { getCodeImg,loginApi } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
-
+import axios from 'axios'
 export default {
   name: "Login",
   data() {
@@ -95,6 +95,12 @@ export default {
   created() {
     this.getCode();
     this.getCookie();
+    // const uid = this.$route.query.uid
+    // Cookies.set("username", uid, { expires: 30 });
+    // this.handlerLoginapi({uid:uid}).then(res=>{
+    //   console.log(res)
+    //   this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+    // })
   },
   methods: {
     getCode() {
@@ -113,6 +119,14 @@ export default {
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
     },
+    handlerLoginapi(info){
+      this.$store.dispatch("LoginApi", info).then(() => {
+          this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+        }).catch(() => {
+          this.loading = false;
+          this.getCode();
+        });
+      },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
