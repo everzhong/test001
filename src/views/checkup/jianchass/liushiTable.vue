@@ -18,9 +18,9 @@
     <el-table-column label="费用类别" align="center" prop="xydm"  show-overflow-tooltip/>
     <el-table-column label="批次号" align="center" prop="fylb"  show-overflow-tooltip/>
     <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-    <el-table-column label="操作" align="center" show-overflow-tooltip>
+    <el-table-column label="操作" align="center" show-overflow-tooltip width="110px">
       <template slot-scope="scope">
-        <el-button type="text" @click="checkdetail(scope.row)">操作记录</el-button>
+        <el-button type="text" @click="checkdetail(scope.row)">同流水下明细</el-button>
       </template>
     </el-table-column>
   </el-table>

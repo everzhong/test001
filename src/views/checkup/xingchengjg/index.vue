@@ -2,7 +2,38 @@
   <div class="app-container">
     <SearchItem @handleQuery="handleQuery"/>
     <div v-loading="loading">
-      <RenwutwoTable :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
+      <!-- <RenwutwoTable :tableData="renwutwoList" /> -->
+      <el-table :data="renwutwoList" border>
+        <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column label="状态" align="center" prop="status"></el-table-column>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/>
+        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
+        <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
+        <el-table-column label="检查机构" align="center" prop="jczid"  show-overflow-tooltip/>
+        <el-table-column label="检查组" align="center" prop="jczname"  show-overflow-tooltip/>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              @click="doCheck(scope.row)"
+            >形成初步结果</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <pagination
       v-show="total>0"
@@ -15,19 +46,11 @@
 </template>
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
-// import { listRenwuthree } from '@/api/renwu/renwuthree'
-// import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../../common/objSearchItem'
-import RenwutwoTable from '../../common/renwutwoTable'
-// import RenwuthreeTable from '../../common/renwuthreeTable'
-// import RenwufourTable from '../../common/renwufourTable'
 export default {
-  name: "Jianchass",
+  name: "Xingchengjg",
   components: {
     SearchItem,
-    RenwutwoTable,
-    // RenwuthreeTable,
-    // RenwufourTable
   },
   data() {
     return {
@@ -44,7 +67,7 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 总条数
-      total: 0,
+      total: 10,
       // renwutwo表格数据
       renwutwoList: [],
       renwuthreeList: [],
@@ -158,7 +181,9 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.renwutwoList = [{status:1,rwpcid:111,jgbm:'a121212'},{status:0,rwpcid:121,jgbm:'b121212'}]
+    this.loading = false
+    // this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });
@@ -254,7 +279,7 @@ export default {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
-      params.status = '5' //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
+      params.status = '4' //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
       this.loading = true
       try {
         const res = await listRenwutwo(params)
@@ -434,15 +459,9 @@ export default {
       this.getList(query);
     },
     /** 重置按钮操作 */
-    // resetQuery() {
-    //   this.resetForm("queryForm");
-    //   this.handleQuery();
-    // },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -533,6 +552,12 @@ export default {
       this.queryParams.pageNum = 1
       this.getList()
       console.log(val)
+    },
+    doCheck(row){
+      this.$router.push({
+        path:'/checkup/xingchengjg/chubujieguo',
+        query:{...row}
+      },()=>{})
     }
   }
 };

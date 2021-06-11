@@ -29,7 +29,7 @@
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
           <div style="position:absolute;right:20px;top:-31px">
-            <el-button type="primary" plain size="mini">机构核实</el-button>
+            <el-button type="primary" plain size="mini" @click="heshiOption.show=true">机构核实</el-button>
             <el-button type="primary" size="mini">检查完成</el-button>
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
@@ -45,17 +45,17 @@
       <el-col :span="1.5">
         <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='three'">
+      <el-col :span="1.5">
         <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
       </el-col>
       <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll">
         <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='four'&&isAll">
+      <el-col :span="1.5" v-if="tabsValue==='four'  &&isAll">
         <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='four'">
-        <el-button type="warning" plain size="small" @click="tabsValue='three'">返回上一层</el-button>
+      <el-col :span="1.5" v-if="tabsValue!=='three'">
+        <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
       </el-col>
       <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
         <el-radio-button label="three">规则筛查</el-radio-button>
@@ -81,9 +81,18 @@
             </template>
           </el-table-column>
       </el-table>
-      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @handleSelectionChange="handleSelectionChange"></liushui-table>
+      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @handleSelectionChange="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
+      <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList"></tongliumx>
     </div>
-    <div v-if="tabsValue==='four'"  class="xingweirz" style="margin-top:15px;">
+    <pagination
+       style="margin-top:0;margin-bottom:25px;"
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+    <div v-if="tabsValue!=='three'"  class="xingweirz" style="margin-top:15px;">
       <el-form inline :model="xwrdForm" :rules="xwRules" size="small" ref="xwrdForm" label-width="100px">
         <el-form-item label="名称" prop="gzmc">
           <el-input v-model="xwrdForm.gzmc" disabled></el-input>
@@ -108,13 +117,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
      <!-- 查询条件 -->
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px">
       <el-form ref="chaxunForm" :model="queryForm" :rules="rules" label-width="100px" size="small">
@@ -189,25 +191,36 @@
     </el-dialog>
     <guizeshuom :options="guizeOptions"></guizeshuom>
     <xwrd-dialog :options="xwrdDialog" @on-checked="onChecked"></xwrd-dialog>
+    <jgheshi :options="heshiOption"></jgheshi>
   </div>
 </template>
 
 <script>
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
 import { listRenwufour } from '@/api/renwu/renwufour'
+import { listRenwufive } from '@/api/renwu/renwufive'
+
 import LiushuiTable from './liushiTable.vue'
+import Tongliumx from './tongliumx.vue'
+
 import Guizeshuom from './guizeshuom.vue'
 import XwrdDialog from './xwrdDialog.vue'
+import Jgheshi from './jgheshi.vue'
 
 export default {
   name: "Shisjc",
   components: {
     LiushuiTable,
     Guizeshuom,
-    XwrdDialog
+    XwrdDialog,
+    Tongliumx,
+    Jgheshi
   },
   data() {
     return {
+      heshiOption:{
+        show:true
+      },
       isDisabled:{
         dj:true,
         sl:false,
@@ -254,6 +267,7 @@ export default {
       // renwuthree表格数据
       renwuthreeList: [],
       renwufourList:[],
+      renwufiveList:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -421,6 +435,19 @@ export default {
     });
   },
   methods: {
+    //返回上一层
+    goBackUpLevel(){
+      switch(this.tabsValue) {
+        case 'five':
+          this.tabsValue = 'four'
+          break
+        case 'four':
+          this.tabsValue = 'three'
+          break
+        default :
+         break
+      }
+    },
     //选择行为回调
     onChecked(res){
       this.xwrdChecd = res
@@ -497,6 +524,9 @@ export default {
             break;
           case 'four':
             res = await listRenwufour(params)
+            break;
+          case 'five':
+            res = await listRenwufive(params)
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
@@ -683,6 +713,11 @@ export default {
         }
       }
 
+    },
+    //同流水下明细
+    tongLiushuimx(row){
+      this.tabsValue = 'five'
+      this.getList()
     },
     sum(arr){
       let s = 0
