@@ -223,9 +223,7 @@ export default {
     };
   },
   created() {
-    this.renwutwoList = [{jczname:'小组qq',isDo:0,jgmc:'上海市市科技局好机会',jcjg:'检查开始就',jcz:''},{jczname:'小组qq',isDo:0,jcjg:'检查开始就',jgmc:'上海市市科技局好机会'}]
-    this.loading = false
-    // this.getList();
+    this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });

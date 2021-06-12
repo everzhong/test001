@@ -358,9 +358,7 @@ export default {
   },
   created() {
     this.queryInfoFrom = this.$route.query
-    // this.getList();
-    this.renwuthreeList = [{rwpcid:'a1111',jgbm:19},{rwpcid:'a11511',jgbm:179}]
-    this.loading = false
+    this.getList();
     this.getDicts("${column.dictType}").then(response => {
       this.idOptions = response.data;
     });
@@ -500,8 +498,7 @@ export default {
      * 查看流水号项目汇总
     */
     async fluProject(row){
-      // await this.getList({rwpcid:row.rwpcid,jgbm:row.jgbm})
-      this.renwufourList = [{mxxmsl:13,mxxmdj:1030,mxxmbm:'111',rwpcid:'5656',jgbm:169,mxxmje:600},{mxxmsl:1,mxxmdj:100,mxxmbm:'111',rwpcid:'a14111',jgbm:169,mxxmje:1000},{mxxmsl:12,mxxmdj:100,mxxmbm:'111',rwpcid:'a141511',jgbm:1679,mxxmje:1200},{mxxmsl:81,mxxmdj:190,mxxmbm:'222',rwpcid:'a1431511',jgbm:16749,mxxmje:500}]
+      await this.getList({rwpcid:row.rwpcid,jgbm:row.jgbm})
       this.$set(this,'tabsValue','four')
     },
     /** 查询renwu列表 */

@@ -68,54 +68,7 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
-  <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['renwu:renwuone:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['renwu:renwuone:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['renwu:renwuone:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-		  :loading="exportLoading"
-          @click="handleExport"
-          v-hasPermi="['renwu:renwuone:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row> 
-   
+  
     <div>
       <el-table v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border>
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
@@ -371,42 +324,7 @@ export default {
     };
   },
   created() {
-    // this.getList();
-    this.renwuoneList = [{
-        rwpcid:'bx232323',
-        rwmc:'任务名称001',
-        jcfs:'专项检查',
-        datastarttime:new Date().getTime(),
-        dataendtime:new Date().getTime(),
-        jgsl:16,
-        rwendtime:new Date().getTime(),
-        jslb:'门诊，急诊，住院',
-        rwms:'对该批次下所有的任务进行筛查',
-        ybd:'异地，本地',
-        ybbf:'居保，职保',
-        sjje:'50,000.00',
-        status:0,
-        cbjg:'第三方承办机构',
-        uptime:new Date().getTime()
-      },{
-        rwpcid:'BX87878787',
-        rwmc:'任务名称001',
-        jcfs:'专项检查',
-        datastarttime:new Date().getTime(),
-        dataendtime:new Date().getTime(),
-        jgsl:16,
-        rwendtime:new Date().getTime(),
-        jslb:'门诊，急诊，住院',
-        rwms:'对该批次下所有的任务进行筛查',
-        ybd:'异地，本地',
-        ybbf:'居保，职保',
-        sjje:'50,000.00',
-        status:0,
-        cbjg:'第三方承办机构',
-        uptime:new Date().getTime()
-      }]
-      this.total = 100
-      this.loading = false
+    this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.rwpcidOptions = response.data;
     // });

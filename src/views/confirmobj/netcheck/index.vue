@@ -229,26 +229,7 @@ export default {
     };
   },
   created() {
-    this.renwutwoList = [{
-        rwpcid:'xxxxxxxx01',
-        rwmc:'任务名称001',
-        jcfs:'专项检查',
-        datastarttime:new Date().getTime(),
-        dataendtime:new Date().getTime(),
-        jgsl:16,
-        rwendtime:new Date().getTime(),
-        jslb:'门诊，急诊，住院',
-        rwms:'对该批次下所有的任务进行筛查',
-        ybd:'异地，本地',
-        ybbf:'居保，职保',
-        sjje:'50,000.00',
-        status:0,
-        cbjg:'第三方承办机构',
-        uptime:new Date().getTime()
-      }]
-      this.total = 100
-      this.loading = false
-    // this.getList();
+    this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });

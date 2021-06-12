@@ -181,9 +181,7 @@ export default {
     };
   },
   created() {
-    this.renwutwoList = [{status:1,rwpcid:111,jgbm:'a121212'},{status:0,rwpcid:121,jgbm:'b121212'}]
-    this.loading = false
-    // this.getList();
+    this.getList();
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });
