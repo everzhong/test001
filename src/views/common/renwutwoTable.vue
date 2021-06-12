@@ -24,10 +24,12 @@
     <el-table-column label="结算金额" align="center" prop="jsje"  show-overflow-tooltip/>
     <el-table-column label="结算人次" align="center" prop="jsrc"  show-overflow-tooltip/>
     <el-table-column label="涉及违规数" align="center" prop="sjwgs"  show-overflow-tooltip/>
-    <!-- <el-table-column label="第三方查询状态" align="center" slot-scope="scope"  show-overflow-tooltip>
-      <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
-    </el-table-column> -->
-    <el-table-column label="疑点金额" align="center" prop="xjje"  show-overflow-tooltip/>
+    <el-table-column label="第三方查询状态" align="center">
+      <template slot-scope="scope">
+        <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="疑点金额" align="center" prop="ydje"  show-overflow-tooltip/>
     <!-- <el-table-column label="操作" align="center">
       <template slot-scope="scope">
         <el-button

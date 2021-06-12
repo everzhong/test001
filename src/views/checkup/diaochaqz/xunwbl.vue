@@ -115,7 +115,7 @@
         <el-table-column label="姓名" align="center" prop="xwname"  show-overflow-tooltip/>
         <el-table-column label="身份证" align="center" prop="sfz"  show-overflow-tooltip/>
         <el-table-column label="性别" align="center" prop="sex" :formatter="sexFormat" show-overflow-tooltip></el-table-column>
-        <el-table-column label="工作单位" align="center" prop="zfry" show-overflow-tooltip/>
+        <el-table-column label="工作单位" align="center" prop="dwqc" show-overflow-tooltip/>
         <el-table-column label="联系电话" align="center" prop="tel" show-overflow-tooltip/>
         <el-table-column label="询问内容" align="center" prop="jcqk" show-overflow-tooltip/>
         <el-table-column label="操作" align="center">
@@ -136,9 +136,6 @@
   </div>
 </template>
 <script>
-import html2Canvas from 'html2canvas'
-import JsPDF from 'jspdf'
-import {exportPdf} from '@/utils/index'
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
 export default {
   name:'Xunwbl',
@@ -181,8 +178,8 @@ export default {
   methods:{
      /** 查询调查取证列表 type=3*/
     async getList() {
-      const {rwpcid,jgbm} = this.urlQuery
-      const params = {rwpcid,jgbm,...this.queryParams,type:3}
+      const {rwpcid,jgdm} = this.urlQuery
+      const params = {rwpcid,jgdm,...this.queryParams,type:3}
       this.loading = true;
       try {
         const res = await listDcqz(params)
@@ -200,7 +197,7 @@ export default {
       const params = {
         type:3,
         rwpcid:this.urlQuery.rwpcid,
-        jgbm:this.urlQuery.jgdm,
+        jgdm:this.urlQuery.jgdm,
         ...this.zhizuo
       }
       params.jcstarttime = this.zhizuo.jcsj[0]
@@ -275,7 +272,7 @@ export default {
         row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
       }
       this.zhizuo = {...row}
-      this.exportPdf()
+      this.exportPdf(row?.xwname||'')
     },
     editQz(row){
       this.opertationType = 'edit'
@@ -291,32 +288,9 @@ export default {
     opertation(row,type){
       this[type](row)
     },
-    exportPdf(){
-      const title = new Date().getTime()
-      html2Canvas(document.querySelector('#docPart')).then(function(canvas) {
-        let contentWidth = canvas.width
-        let contentHeight = canvas.height
-        let pageHeight = contentWidth / 592.28 * 841.89
-        let leftHeight = contentHeight
-        let position = 0
-        let imgWidth = 595.28
-        let imgHeight = 592.28 / contentWidth * contentHeight
-        let pageData = canvas.toDataURL('image/jpeg', 1.0)
-        let PDF = new JsPDF('', 'pt', 'a4')
-        if (leftHeight < pageHeight) {
-            PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
-        } else {
-            while (leftHeight > 0) {
-                PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-                leftHeight -= pageHeight
-                position -= 841.89
-                if (leftHeight > 0) {
-                    PDF.addPage()
-                }
-            }
-        }
-        PDF.save(title + '.pdf')
-    })
+    exportPdf(title){
+      const name = title+'询问笔录下载'
+      this.$PDFSave(this.$refs['docPart'], name);
     },
     // 性别字典翻译
     sexFormat(row, column) {
@@ -368,7 +342,7 @@ export default {
       padding-left: 30px;
     }
     .doc-part {
-      width: 800px;
+      width: 595px;
       padding:20px 30px;
       .doc-title {
         margin: 0;

@@ -20,7 +20,7 @@
         <el-table border :data="roleList">
           <el-table-column width="40px" align="center">
             <template slot-scope="scope">
-              <el-radio :label="scope.row.id" v-model="roleCheck"></el-radio>
+              <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
             </template>
           </el-table-column>
           <el-table-column label="检查组编号" prop="jczbh" align="center"></el-table-column>
@@ -171,7 +171,7 @@ export default {
       this.roleCheck =  role.id
     },
     confirm(){
-      console.log(this.roleCheck)
+      this.$emit('on-confirm',this.roleList[this.roleCheck])
       this.cancel()
     },
     cancel(){

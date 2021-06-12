@@ -37,6 +37,37 @@
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <RenwutwoTable v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
     </div>
+    <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
+      <el-form-item label="已选机构" prop="yxjg">
+        <el-input
+          style="width:280px;margin-right:30px"
+          disabled
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          v-model="submitParams.yxjg">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="网审意见" prop="wsyj">
+        <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
+          <el-option
+            key="1"
+            label="建议检查"
+            value="建议检查"
+          />
+          <el-option
+            key="2"
+            label="建议检查"
+            value="暂不检查"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="检查人员" prop="wsry">
+       <el-input readonly :value="submitParams.wsry"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
+      </el-form-item>
+    </el-form>
     <pagination
       v-show="total>0"
       :total="total"
@@ -44,169 +75,10 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <!-- 添加或修改renwutwo对话框 -->
-    <!-- <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="异本地" prop="ybd">
-          <el-input v-model="form.ybd" placeholder="请输入异本地" />
-        </el-form-item>
-        <el-form-item label="数据开始时间" prop="datastarttime">
-          <el-date-picker clearable size="small"
-            v-model="form.datastarttime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择数据开始时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
-        </el-form-item>
-        <el-form-item label="险种" prop="ybbf">
-          <el-input v-model="form.ybbf" placeholder="请输入险种" />
-        </el-form-item>
-        <el-form-item label="数据结束时间" prop="dataendtime">
-          <el-date-picker clearable size="small"
-            v-model="form.dataendtime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择数据结束时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="就医类型" prop="jslb">
-          <el-input v-model="form.jslb" placeholder="请输入就医类型" />
-        </el-form-item>
-        <el-form-item label="行政区" prop="xzq">
-          <el-input v-model="form.xzq" placeholder="请输入行政区" />
-        </el-form-item>
-        <el-form-item label="网审意见">
-          <el-radio-group v-model="form.wsyj">
-            <el-radio
-              v-for="dict in wsyjOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="更新时间" prop="uptime">
-          <el-date-picker clearable size="small"
-            v-model="form.uptime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择更新时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="网审人员" prop="wsry">
-          <el-input v-model="form.wsry" placeholder="请输入网审人员" />
-        </el-form-item>
-        <el-form-item label="涉及违规数" prop="sjwgs">
-          <el-input v-model="form.sjwgs" placeholder="请输入涉及违规数" />
-        </el-form-item>
-        <el-form-item label="疑点金额" prop="ydje">
-          <el-input v-model="form.ydje" placeholder="请输入疑点金额" />
-        </el-form-item>
-        <el-form-item label="结算金额" prop="jsje">
-          <el-input v-model="form.jsje" placeholder="请输入结算金额" />
-        </el-form-item>
-        <el-form-item label="结算人次" prop="jsrc">
-          <el-input v-model="form.jsrc" placeholder="请输入结算人次" />
-        </el-form-item>
-        <el-form-item label="添加时间" prop="addtime">
-          <el-date-picker clearable size="small"
-            v-model="form.addtime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择添加时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="信用代码" prop="xydm">
-          <el-input v-model="form.xydm" placeholder="请输入信用代码" />
-        </el-form-item>
-        <el-form-item label="机构代码" prop="jgdm">
-          <el-input v-model="form.jgdm" placeholder="请输入机构代码" />
-        </el-form-item>
-        <el-form-item label="机构名称" prop="jgmc">
-          <el-input v-model="form.jgmc" placeholder="请输入机构名称" />
-        </el-form-item>
-        <el-form-item label="结算等级" prop="jsdj">
-          <el-input v-model="form.jsdj" placeholder="请输入结算等级" />
-        </el-form-item>
-        <el-form-item label="网审人员2" prop="wsry2">
-          <el-input v-model="form.wsry2" placeholder="请输入网审人员2" />
-        </el-form-item>
-        <el-form-item label="对象同意或驳回">
-          <el-radio-group v-model="form.dxqd">
-            <el-radio
-              v-for="dict in dxqdOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="流程识别ID">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="检查组ID" prop="jczid">
-          <el-input v-model="form.jczid" placeholder="请输入检查组ID" />
-        </el-form-item>
-        <el-form-item label="是否打印了通知">
-          <el-radio-group v-model="form.isdayin">
-            <el-radio
-              v-for="dict in isdayinOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="打印通知书联系人" prop="dayinname">
-          <el-input v-model="form.dayinname" placeholder="请输入打印通知书联系人" />
-        </el-form-item>
-        <el-form-item label="打印通知书联系电话(检查通知书)" prop="dayintel">
-          <el-input v-model="form.dayintel" placeholder="请输入打印通知书联系电话(检查通知书)" />
-        </el-form-item>
-        <el-form-item label="打印日期" prop="dayinriqi">
-          <el-date-picker clearable size="small"
-            v-model="form.dayinriqi"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择打印日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="打印通知书联系电话(纪律告知书)" prop="dayinphone">
-          <el-input v-model="form.dayinphone" placeholder="请输入打印通知书联系电话(纪律告知书)" />
-        </el-form-item>
-        <el-form-item label="打印中的检查开始日期" prop="dayinstarttime">
-          <el-date-picker clearable size="small"
-            v-model="form.dayinstarttime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择打印中的检查开始日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="形成结果同意或驳回">
-          <el-radio-group v-model="form.dcjg">
-            <el-radio
-              v-for="dict in dcjgOptions"
-              :key="dict.dictValue"
-              :label="dict.dictValue"
-            >{{dict.dictLabel}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 <script>
-import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck} from "@/api/renwu/renwutwo"
 import { listRenwuthree } from '@/api/renwu/renwuthree'
 import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../common/searchItems'
@@ -223,6 +95,11 @@ export default {
   },
   data() {
     return {
+      submitParams:{
+        yxjg:'',
+        wsry:'',
+        wsyj:''
+      },
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -347,7 +224,7 @@ export default {
       },
       //
       tabsValue:'two',
-      hasThirdUncheck:false
+      noThirdCheckList:false
     };
   },
   created() {
@@ -470,6 +347,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.loading = false
     },
     /**
      * 医院维度tabsValue=Two
@@ -683,6 +561,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery(query) {
       this.queryParams.pageNum = 1;
+      delete query.status
       this.getList(query);
     },
     /** 重置按钮操作 */
@@ -693,11 +572,14 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      const hasuncheck = selection.filter(item => {
-        return (item.sancha && item.sancha*1 === 1)
-      });
+      const jgmc = selection.map(item => item.jgmc)
+      this.submitParams.wsry = this.$store.getters.name
+      this.submitParams.yxjg = jgmc.join(',')
+      
       //第三方查询状态sancha 1已查 0未查
-      this.hasThirdUncheck = hasuncheck && hasuncheck.length>0
+      this.noThirdCheckList  = selection.filter(item => {
+        return item.sancha === 0
+      });
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -771,17 +653,21 @@ export default {
      */
     handleNetCheck(){
       if(!this.ids.length){
-        this.msgWarning('请至少选择一项')
-      } else if(this.hasThirdUncheck){
+        this.msgError('请至少选择一项')
+      } else if(!this.submitParams.wsyj){
+        this.msgError('请选择网审意见')
+      } else if(this.noThirdCheckList.length){
         this.$confirm('当前医药机构任务未实施第三方筛查，请确认不进行第三方筛查直接实施网审/现场检查?', "确认提交", {
           confirmButtonText: "确认",
           cancelButtonText: "返回",
           type: "warning"
         }).then(() => {
           //点确认执行
-          //return exportRenwutwo(queryParams);
+          return submitNetCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
         }).then(() => {
             //执行完成提升成功
+            this.msgSuccess('提交成功')
+            this.getList()
         })
       }
       //检查任务中有未执行第三方筛查的
@@ -791,7 +677,9 @@ export default {
      * 第三方筛查
      */
     handleThirdCheck(){
-
+      this.$router.push({
+        path:'/thirdcheck/thirdcheck'
+      })
     },
     /**
      * tabs切换

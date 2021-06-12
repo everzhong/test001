@@ -103,8 +103,8 @@ export default {
       if(query){
         params = {...query,...params}
       } else {
-        const {rwpcid,jgbm} = this.queryInfoFrom
-        params = {rwpcid,jgbm,...params}
+        const {rwpcid,jgdm} = this.queryInfoFrom
+        params = {rwpcid,jgdm,...params}
       }
       
       this.loading = true

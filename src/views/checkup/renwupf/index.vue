@@ -34,11 +34,11 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <sendMessage :options="sendNotice" v-if="sendNotice.show"/>
+    <sendMessage :options="sendNotice" v-if="sendNotice.show" @on-confirm="submitQd"/>
   </div>
 </template>
 <script>
-import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitJcz } from "@/api/renwu/renwutwo"
 import { listRenwuthree } from '@/api/renwu/renwuthree'
 import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../../common/objSearchItem'
@@ -281,6 +281,21 @@ export default {
     // });
   },
   methods: {
+    submitQd(xiaozu){
+      console.log(xiaozu,'1111')
+      submitJcz({
+        ids:this.ids,
+        jczid:xiaozu.id,
+        jczname:xiaozu.jczmc
+      }).then(res=>{
+        if(res.code===200){
+          this.msgSuccess('提交成功')
+          this.getList()
+        } else {
+          this.msgError('提交失败')
+        }
+      })
+    },
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams

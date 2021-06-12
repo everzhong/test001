@@ -2,37 +2,47 @@
   <section class="diaocqz">
     <div class="content">
       <p class="qz-title">上传资料</p>
-      <div class="item"><span class="tips-title">上传格式：</span><span>jpg、png、pdf、doc、docs、xls、xlsx,单个文件不超过10M</span></div>
+      <div class="item"><span class="tips-title">上传格式：</span><span>jpg、jpeg、png、pdf、doc、docs、xls、xlsx,单个文件不超过10M</span></div>
       <div class="item">
         <div class="tips-title">选择文件：</div>
         <fileUpload
-          v-model="wenjianurl"
+          v-model="wenjian.wenjianurl"
           :fileSize="10"
           :fileType="uploadType"
           :isShowTip="false"
+          :needHide="true"
+          @input="upSuccess"
           ref="fileUpload"
         />
+        <el-button v-if="this.wenjian.wenjianurl" type="primary" size="small" @click="submitFileInfo">提交</el-button>
       </div>
       <div class="item">
         <span class="tips-title">资料说明：</span>
-        <el-input type="text" v-model="wjsm" style="width:400px"></el-input>
+        <el-input type="text" v-model="wenjian.zlsm" style="width:400px" clearable></el-input>
       </div>
     </div>
     <div class="content">
       <p class="qz-title">资料文件列表</p>
-      <el-table :data="tableData" border>
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="资料说明" align="center" prop="zlsm"  show-overflow-tooltip/>
-        <el-table-column label="资料文件" align="center" prop="wenjian"  show-overflow-tooltip/>
-        <el-table-column label="上传人" align="center" prop="upman" show-overflow-tooltip/>
-        <el-table-column label="上传时间" align="center" prop="addtime"  show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" show-overflow-tooltip></el-table-column>
-      </el-table>
+      <div style="max-height:450px;overflow:auto">
+        <el-table :data="tableData" border>
+          <!-- <el-table-column type="selection" width="55" align="center" /> -->
+          <el-table-column label="序号" type="index" align="center"  />
+          <el-table-column label="资料说明" align="center" prop="zlsm"  show-overflow-tooltip/>
+          <el-table-column label="资料文件" align="center" prop="wenjianurl"  show-overflow-tooltip/>
+          <el-table-column label="上传人" align="center" prop="upman" show-overflow-tooltip/>
+          <el-table-column label="上传时间" align="center" prop="addtime"  show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">下载</el-button>
+              <el-button type="text" size="mini" @click="deleteDoc(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
       <pagination
         :total="total"
         :page.sync="queryParams.pageNum"
@@ -52,15 +62,18 @@ export default {
   },
   data(){
     return {
-      uploadType:["jpg","png","pdf","doc","docs","xls","xlsx"],
-      wenjianurl:'',
-      wjsm:'',
+      uploadType:["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"],
       tableData:[],
       queryParams:{
         pageNum: 1,
         pageSize: 10
       },
-      total:0
+      total:0,
+      wenjian:{
+        wenjianurl:'',//文件链接
+        zlsm:'',//文件说明
+        wenjian:''//文件明称
+      }
     }
   },
   created(){
@@ -69,8 +82,8 @@ export default {
   methods:{
     /** 查询调查取证列表 type:1*/
     async getList() {
-      const {rwpcid,jgbm} = this.$route.query
-      const params = {rwpcid,jgbm,...this.queryParams,type:1}
+      const {rwpcid,jgdm} = this.$route.query
+      const params = {rwpcid,jgdm,...this.queryParams,type:1}
       this.loading = true;
       try {
         const res = await listDcqz(params)
@@ -83,6 +96,54 @@ export default {
       }
       this.loading = false
     },
+    upSuccess(fileUrl,file){
+      if(fileUrl) {
+        this.wenjian.wenjian = file.name
+      } else {
+        this.wenjian.wenjian = ''
+      }
+      
+    },
+    /**
+     * 提交上传文件记录
+     */
+    submitFileInfo(){
+      const {wenjian,wenjianurl,zlsm} = this.wenjian
+      addDcqz({
+        type:1,//文件资料type:1
+        rwpcid:this.$route.query.rwpcid,
+        jgdm:this.$route.query.jgdm,
+        upman:this.$store.getters.name,
+        addtime: new Date().getTime(),
+        wenjian,
+        wenjianurl,
+        zlsm
+      }).then(res=>{
+        if(res.code===200) {
+          this.msgSuccess('提交成功')
+          this.wenjian.wenjianurl = ''
+          this.getList()
+        }
+      })
+    },
+    downFile(url){
+      window.open(url)
+    },
+    deleteDoc(row){
+      this.$confirm('确定删除？')
+      this.$confirm('确定删除此记录？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        return delDcqz(row.qzid)
+      }).then(res=>{
+        if(res.code===200) {
+          this.msgSuccess('删除成功')
+          this.getList()
+        }
+      })
+    }
   }
 }
 </script>

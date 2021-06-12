@@ -45,7 +45,7 @@
           </div>
           <div class="zhizuo-item">
             <span>联系电话</span>
-            <el-input size="small" v-model="zhizuo.tel"></el-input>
+            <el-input maxlength="11" size="small" v-model="zhizuo.tel"></el-input>
           </div>
           <div class="zhizuo-item">
             <span>执法人员</span>
@@ -127,9 +127,6 @@
   </div>
 </template>
 <script>
-import html2Canvas from 'html2canvas'
-import JsPDF from 'jspdf'
-import {exportPdf} from '@/utils/index'
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
 export default {
   name:'Jcbl',
@@ -168,8 +165,8 @@ export default {
   methods:{
      /** 查询调查取证列表 type=2*/
     async getList() {
-      const {rwpcid,jgbm} = this.urlQuery
-      const params = {rwpcid,jgbm,...this.queryParams,type:2}
+      const {rwpcid,jgdm} = this.urlQuery
+      const params = {rwpcid,jgdm,...this.queryParams,type:2}
       this.loading = true;
       try {
         const res = await listDcqz(params)
@@ -186,7 +183,7 @@ export default {
       const params = {
         type:2,
         rwpcid:this.urlQuery.rwpcid,
-        jgbm:this.urlQuery.jgdm,
+        jgdm:this.urlQuery.jgdm,
         ...this.zhizuo
       }
       params.jcstarttime = this.zhizuo.jcsj[0]
@@ -274,32 +271,8 @@ export default {
       this[type](row)
     },
     exportPdf(title){
-      const name = title||'下载'+ new Date().getTime()
+      const name = title||'检查笔录下载'
       this.$PDFSave(this.$refs['docPart'], name);
-      // html2Canvas(document.querySelector('#docPart')).then(function(canvas) {
-      //   let contentWidth = canvas.width
-      //   let contentHeight = canvas.height
-      //   let pageHeight = contentWidth / 592.28 * 841.89
-      //   let leftHeight = contentHeight
-      //   let position = 0
-      //   let imgWidth = 595.28
-      //   let imgHeight = 592.28 / contentWidth * contentHeight
-      //   let pageData = canvas.toDataURL('image/jpeg', 1.0)
-      //   let PDF = new JsPDF('', 'pt', 'a4')
-      //   if (leftHeight < pageHeight) {
-      //       PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
-      //   } else {
-      //       while (leftHeight > 0) {
-      //           PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-      //           leftHeight -= pageHeight
-      //           position -= 841.89
-      //           if (leftHeight > 0) {
-      //               PDF.addPage()
-      //           }
-      //       }
-      //   }
-      //   PDF.save(name + '.pdf')
-      // })
     }
   }
 }

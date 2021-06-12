@@ -195,7 +195,7 @@ export default {
   created() {
     this.getList();
     this.queryInfoFrom = this.$route.query
-    this.gitDic();
+    // this.gitDic();
   },
   methods: {
     /** 查询调查取证列表 */

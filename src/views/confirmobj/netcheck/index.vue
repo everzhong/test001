@@ -59,13 +59,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="检查人员1" prop="wsry">
-        <el-select v-model="submitParams.wsry" placeholder="请选择" clearable  style="width: 180px">
+      <el-form-item label="检查人员" prop="wsry">
+        <!-- <el-select v-model="submitParams.wsry" placeholder="请选择" clearable  style="width: 180px">
           <el-option label="张三" value="张三"/>
-        </el-select>
+        </el-select> -->
+        <el-input readonly :value="submitParams.wsry"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary"  @click="handleTijiao" :disabled="ids.length<1">提交</el-button>
+        <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
       </el-form-item>
     </el-form>
     <pagination
@@ -325,6 +326,7 @@ export default {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
+      delete params.status
       try {
         let  res = null
         switch(this.tabsValue) {
@@ -346,6 +348,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.loading = false
     },
     // 异本地字典翻译
     ybdFormat(row, column) {
@@ -521,6 +524,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.submitParams.yxjg = (selection.map(item => item.jgmc)).join(' ')
+      this.submitParams.wsry = this.$store.getters.name
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
@@ -595,9 +599,16 @@ export default {
      */
     handleNetCheck(){
       if(!this.ids.length){
-        this.msgWarning('请至少选择一项')
+        this.msgError('请至少选择一项')
+      } else if(!this.submitParams.wsyj) {
+        this.msgError('请选择网审意见')
       } else {
-        
+        submitNetCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj}).then(res=>{
+          if(res.code===200){
+            this.msgSuccess('提交成功')
+            this.getList()
+          }
+        })
       }
       //检查任务中有未执行第三方筛查的
 
@@ -618,16 +629,6 @@ export default {
       this.ids = ''
       console.log(val)
     },
-    async handleTijiao(){
-      // const d = await delRenwutwo(this.ids)
-      // console.log(d)
-      const res = await submitNetCheck({
-        ids:this.ids,
-        wsry:this.submitParams.wsry,
-        wsyj:this.submitParams.wsyj
-      })
-      console.log(res)
-    }
   }
 };
 </script>

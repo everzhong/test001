@@ -1,74 +1,55 @@
 <template>
   <div class="app-container">
     <el-form class="top-search" :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="批次号" prop="rwpicd">
-        <el-input
-          v-model="queryParams.rwpicd"
-          placeholder="请输入"
-          clearable
-          size="small"
-          style="width: 240px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="任务名称" prop="rwmc">
-        <el-input
-          v-model="queryParams.rwmc"
-          placeholder="请输入，支持模糊搜索"
-          clearable
-          size="small"
-          style="width: 240px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="任务推送日期" label-width="98px">
-        <el-date-picker
-          v-model="dateRange"
-          size="small"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="委托机构" prop="wtjg">
-        <el-select v-model="queryParams.wtjg" placeholder="请选择" clearable size="small" style="width: 240px">
-          <el-option
-            v-for="dict in rwmcOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="承办机构" prop="cbjg">
-        <el-select v-model="queryParams.cbjg" placeholder="请选择" clearable size="small" style="width: 240px">
-          <el-option
-            v-for="dict in cbjgOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="任务状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择" clearable size="small" style="width: 240px">
-          <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
+      <el-row>
+        <el-col :span="22">
+          <el-form-item label="批次号" prop="rwpicd">
+            <el-input
+              v-model="queryParams.rwpicd"
+              placeholder="请输入"
+              clearable
+              size="small"
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="任务名称" prop="rwmc">
+            <el-input
+              v-model="queryParams.rwmc"
+              placeholder="请输入，支持模糊搜索"
+              clearable
+              size="small"
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="任务推送日期" label-width="98px">
+            <el-date-picker
+              v-model="dateRange"
+              size="small"
+              style="width: 240px"
+              value-format="yyyy-MM-dd"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="委托机构" prop="wtjg">
+            <el-input placeholder="请输入" v-model="queryParams.wtjg" clearable size="small" style="width: 240px"></el-input>
+          </el-form-item>
+          <el-form-item label="承办机构" prop="cbjg">
+            <el-input placeholder="请输入" v-model="queryParams.cbjg" clearable size="small" style="width: 240px"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+          <el-form-item style="margin-right:0;text-align:right">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
-  
     <div>
       <el-table v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border>
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
@@ -87,9 +68,9 @@
           </template>
         </el-table-column>
         <el-table-column label="机构数量" align="center" prop="jgsl"  show-overflow-tooltip/>
-        <el-table-column label="任务推送日期" align="center" prop="rwstarttime" :show-overflow-tooltip="true">
+        <el-table-column label="任务推送日期" align="center" prop="rwtssj" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.rwstarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.rwtssj,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="任务截止日期" align="center" prop="rwendtime" show-overflow-tooltip>
@@ -101,19 +82,6 @@
         <el-table-column label="任务描述" align="center" prop="rwms" show-overflow-tooltip/>
         <el-table-column label="异地/本地" align="center" prop="ybd"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
-        <el-table-column label="状态" align="center" prop="status"  show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{['待网审','实施网审','对象确定','任务派发了','打印通知和实施检查','形成结果'][scope.row.status*1]}}</span>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column label="涉及金额(元)" align="center" prop="sjje"  show-overflow-tooltip/>
-        
-        <el-table-column label="承办机构" align="center" prop="cbjg"  show-overflow-tooltip/>
-        <el-table-column label="状态更新日期" align="center" prop="uptime" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.uptime,'{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column> -->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
@@ -133,7 +101,7 @@
       @pagination="getList"
     />
     
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <!-- <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="任务批次号" prop="rwpcid">
           <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
@@ -220,7 +188,7 @@
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -367,7 +335,8 @@ export default {
     // this.getDicts("${column.dictType}").then(response => {
     //   this.addtimeOptions = response.data;
     // });
-    // this.getDicts("${column.dictType}").then(response => {
+    //任务状态字典
+    // this.getDicts("sys_renwu_status").then(response => {
     //   this.statusOptions = response.data;
     // });
     // this.getDicts("${column.dictType}").then(response => {
@@ -384,12 +353,19 @@ export default {
     /** 查询renwuone列表 */
     getList() {
       this.loading = true;
-      this.queryParams.datastarttime = this.dateRange[0]
-      this.queryParams.dataendtime = this.dateRange[1]
+      if(this.dateRange && this.dateRange.length){
+        this.queryParams.rwtssj = this.dateRange[0]
+        this.queryParams.rwendtime = this.dateRange[1]
+      } else  {
+        this.queryParams.rwtssj = ''
+        this.queryParams.rwendtime = ''
+      }
       listRenwuone(this.queryParams).then(response => {
         this.renwuoneList = response.rows;
         this.total = response.total;
         this.loading = false;
+      }).catch(e=>{
+        this.loading = false
       });
     },
     // 任务批次号字典翻译
@@ -530,7 +506,7 @@ export default {
      */
     checkdetail(row){
       this.$router.push({
-        path:`/renwu/checkdetail?status=${row.status}&rwpcid=${row.rwpcid}`,
+        path:`/renwu/checkdetail?rwpcid=${row.rwpcid}`,
       })
     },
     /** 提交按钮 */

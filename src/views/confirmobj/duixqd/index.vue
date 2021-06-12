@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitDxqd} from "@/api/renwu/renwutwo"
 import { listRenwuthree } from '@/api/renwu/renwuthree'
 import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../../common/objSearchItem'
@@ -557,9 +557,9 @@ export default {
      */
     handleAgree(){
       if(!this.ids.length){
-        this.msgWarning('请至少选择一项')
+        this.msgError('请至少选择一项')
       } else {
-        
+        submitDxqd()
       }
       //检查任务中有未执行第三方筛查的
 
@@ -568,6 +568,10 @@ export default {
      * 第三方筛查
      */
     handleNg(){
+      if(!this.ids.length){
+        this.msgError('请至少选择一项')
+        return
+      } 
       this.$prompt('驳回意见', '驳回意见填写', {
           inputType:'textarea',
           confirmButtonText: '确定',

@@ -5,7 +5,7 @@
       <el-table :data="renwutwoList" border>
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <!-- <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/> -->
         <!-- <el-table-column label="检查方式" align="center" prop="jsdj"  show-overflow-tooltip/> -->
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
@@ -23,8 +23,8 @@
         <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
         <el-table-column label="行政区" align="center" prop="xzq"  show-overflow-tooltip/>
-        <el-table-column label="检查机构" align="center" prop="jcjg"  show-overflow-tooltip/>
-        <el-table-column label="检查组" align="center" prop="jicz"  show-overflow-tooltip/>
+        <el-table-column label="检查机构" align="center" prop="jgmc"  show-overflow-tooltip/>
+        <el-table-column label="检查组" align="center" prop="jczname"  show-overflow-tooltip/>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
@@ -473,10 +473,10 @@ export default {
       console.log(val)
     },
     naviGateToQz(row){
-      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczmc,jcjg} = row
+      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczmc} = row
       this.$router.push({
         path:'/checkup/diaochaqz/dcqz',
-        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczmc:jczmc||'',jcjg:jcjg||''}
+        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczmc:jczmc||''}
       })
     }
   }

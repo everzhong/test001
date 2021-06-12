@@ -219,7 +219,7 @@ export default {
   data() {
     return {
       heshiOption:{
-        show:true
+        show:false
       },
       isDisabled:{
         dj:true,
@@ -359,78 +359,78 @@ export default {
   created() {
     this.queryInfoFrom = this.$route.query
     this.getList();
-    this.getDicts("${column.dictType}").then(response => {
-      this.idOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jgdmOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jgmcOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.gzflOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.gzmcOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.xjjzrsOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.xjmxsOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.xjjeOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jsfyOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.ybbfOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.xzqOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jslbOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.ybdOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.datastarttimeOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.xydmOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.addtimeOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jsdjOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.hsyjOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.hsztOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.hssjOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.hsrOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.hspfsjOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.rwpcidOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.issendOptions = response.data;
-    });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.idOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jgdmOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jgmcOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.gzflOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.gzmcOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.xjjzrsOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.xjmxsOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.xjjeOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jsfyOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.ybbfOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.xzqOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jslbOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.ybdOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.datastarttimeOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.xydmOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.addtimeOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jsdjOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.hsyjOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.hsztOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.hssjOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.hsrOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.hspfsjOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.rwpcidOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.issendOptions = response.data;
+    // });
   },
   methods: {
     //返回上一层
@@ -498,7 +498,7 @@ export default {
      * 查看流水号项目汇总
     */
     async fluProject(row){
-      await this.getList({rwpcid:row.rwpcid,jgbm:row.jgbm})
+      await this.getList({rwpcid:row.rwpcid,jgdm:row.jgdm})
       this.$set(this,'tabsValue','four')
     },
     /** 查询renwu列表 */
@@ -508,8 +508,8 @@ export default {
       if(query){
         params = {...query,...params}
       } else {
-        const {rwpcid,jgbm} = this.queryInfoFrom
-        params = {rwpcid,jgbm,...params}
+        const {rwpcid,jgdm} = this.queryInfoFrom
+        params = {rwpcid,jgdm,...params}
       }
       
       this.loading = true

@@ -12,19 +12,20 @@
           />
         </el-form-item>
         <el-form-item label="案件来源" prop="ybbf">
-          <el-select v-model="query.ybbf" placeholder="请选择" clearable size="small" style="width: 180px">
+          <el-input v-model="query.ybbf" clearable size="small" style="width: 180px"></el-input>
+          <!-- <el-select v-model="query.ybbf" placeholder="请选择" clearable size="small" style="width: 180px">
             <el-option
               v-for="dict in statusOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
             />
-          </el-select>
+          </el-select> -->
         </el-form-item>
         <el-form-item label="险种" prop="ybbf">
           <el-select v-model="query.ybbf" placeholder="请选择" clearable size="small" style="width: 180px">
             <el-option
-              v-for="dict in statusOptions"
+              v-for="dict in ybbfOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -34,7 +35,7 @@
         <el-form-item label="就医类型" prop="jslb">
           <el-select v-model="query.wtjg" placeholder="请选择" clearable size="small" style="width: 180px">
             <el-option
-              v-for="dict in rwmcOptions"
+              v-for="dict in jslbOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -54,7 +55,7 @@
         <el-form-item label="机构等级" prop="jgdj">
           <el-select v-model="query.jgdj" placeholder="请选择" clearable size="small" style="width: 180px">
             <el-option
-              v-for="dict in rwmcOptions"
+              v-for="dict in dcjgOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -64,7 +65,7 @@
         <el-form-item label="机构类型" prop="jgdj">
           <el-select v-model="query.jgdj" placeholder="请选择" clearable size="small" style="width: 180px">
             <el-option
-              v-for="dict in rwmcOptions"
+              v-for="dict in dcjgOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -74,7 +75,7 @@
         <el-form-item label="机构性质" prop="jgdj">
           <el-select v-model="query.jgdj" placeholder="请选择" clearable size="small" style="width: 180px">
             <el-option
-              v-for="dict in rwmcOptions"
+              v-for="dict in dcjgOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -134,7 +135,10 @@ export default {
       },
       rwmcOptions:[],
       cbjgOptions:[],
-      statusOptions:[]
+      statusOptions:[],
+      ybbfOptions:[],
+      jslbOptions:[],
+      dcjgOptions:[]
     }
   },
   props:[],

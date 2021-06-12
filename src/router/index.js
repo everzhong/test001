@@ -117,7 +117,7 @@ export const constantRoutes = [{
         }, {
             component: (resolve) => require(['@/views/checkdetail/index'], resolve),
             hidden: true,
-            meta: { title: "查看明细", noCache: false },
+            meta: { title: "查看明细", noCache: true },
             name: "Checkdetail",
             path: "/renwu/checkdetail",
         }],
@@ -191,19 +191,19 @@ export const constantRoutes = [{
         }, {
             component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz'], resolve),
             hidden: true,
-            meta: { title: "调查取证", noCache: false },
+            meta: { title: "调查取证", noCache: true },
             name: "Dcqz",
             path: "diaochaqz/dcqz",
         }, {
             component: (resolve) => require(['@/views/checkup/jianchass/shisjc'], resolve),
             hidden: true,
-            meta: { title: "实施检查", noCache: false },
+            meta: { title: "实施检查", noCache: true },
             name: "Shisjc",
             path: "jianchass/shisjc",
         }, {
             component: (resolve) => require(['@/views/checkup/xingchengjg/chubujieguo'], resolve),
             hidden: true,
-            meta: { title: "形成结果", noCache: false },
+            meta: { title: "形成结果", noCache: true },
             name: "Chubujieguo",
             path: "xingchengjg/chubujieguo",
         }],
@@ -217,23 +217,23 @@ export const constantRoutes = [{
     {
         alwaysShow: true,
         children: [{
-            component: (resolve) => require(['@/views/baseinfosave/renyuanwh/index'], resolve),
+            component: (resolve) => require(['@/views/system/dept/listd'], resolve),
             hidden: false,
             meta: { title: "网络人员维护", noCache: false },
-            name: "Renyuanwh",
-            path: "renyuanwh",
+            name: "Listd",
+            path: "system/listd",
         }, {
-            component: (resolve) => require(['@/views/baseinfosave/jianchazuwh/index'], resolve),
+            component: (resolve) => require(['@/views/system/dept/list'], resolve),
             hidden: false,
             meta: { title: "检查组维护", noCache: false },
-            name: "Jianchazuwh",
-            path: "jianchazuwh",
+            name: "List",
+            path: "system/list",
         }, {
-            component: (resolve) => require(['@/views/baseinfosave/zhanghaowh/index'], resolve),
+            component: (resolve) => require(['@/views/system/user/index'], resolve),
             hidden: false,
             meta: { title: "账号及权限维护", noCache: false },
-            name: "Zhanghaowh",
-            path: "zhanghaowh",
+            name: "User",
+            path: "system/user",
         }, {
             component: (resolve) => require(['@/views/baseinfosave/luliwh/index'], resolve),
             hidden: false,
@@ -243,7 +243,7 @@ export const constantRoutes = [{
         }, {
             component: (resolve) => require(['@/views/baseinfosave/luliwh/luliDetail'], resolve),
             hidden: true,
-            meta: { title: "履历维护详情", noCache: false },
+            meta: { title: "履历维护详情", noCache: true },
             name: "Lulidetail",
             path: "luliwh/lulidetail",
         }],

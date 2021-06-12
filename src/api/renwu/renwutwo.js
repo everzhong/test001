@@ -53,12 +53,22 @@ export function exportRenwutwo(query) {
 }
 // 提交网审查
 export function submitNetCheck(data) {
+    const { ids } = data
+    delete data.ids
     return request({
-        url: '/renwu/renwutwo/setws/' + data.ids,
+        url: '/renwu/renwutwo/setws/' + ids,
         method: 'post',
-        data: {
-            wsry: "张三",
-            wsyj: "建议检查"
-        }
+        data: data
+    })
+}
+
+// 批量派发检查组
+export function submitJcz(data) {
+    const { ids } = data
+    delete data.ids
+    return request({
+        url: '/renwu/renwutwo/setjcz/' + ids,
+        method: 'post',
+        data: data
     })
 }

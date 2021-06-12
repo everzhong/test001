@@ -163,8 +163,8 @@ export default {
     },
     /** 查询renwutwo列表 */
     async getList() {
-      const {rwpcid,jgbm} = this.$route.query
-      const params = {...this.queryParams,rwpcid,jgbm}
+      const {rwpcid,jgdm} = this.$route.query
+      const params = {...this.queryParams,rwpcid,jgdm}
       this.loading = true
       try {
         const res = await listJcfl(params)

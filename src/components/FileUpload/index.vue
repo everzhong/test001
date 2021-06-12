@@ -15,7 +15,7 @@
       ref="upload"
     >
       <!-- 上传按钮 -->
-      <el-button size="mini" type="primary">选取文件</el-button>
+      <el-button size="mini" type="primary" v-if="!needHide||!(needHide&&list.length)">选取文件</el-button>
       <!-- 上传提示 -->
       <div class="el-upload__tip" slot="tip" v-if="showTip">
         请上传
@@ -65,6 +65,10 @@ export default {
     autoUpload:{
       type: Boolean,
       default: true
+    },
+    needHide:{
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -140,8 +144,8 @@ export default {
     },
     // 上传成功回调
     handleUploadSuccess(res, file) {
-      this.$message.success("上传成功");
-      this.$emit("input", res.url);
+      // this.$message.success("上传成功");
+      this.$emit("input", res.url,file);
     },
     // 删除文件
     handleDelete(index) {
