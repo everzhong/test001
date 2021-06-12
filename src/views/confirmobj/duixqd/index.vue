@@ -10,7 +10,7 @@
         <el-button
           type="primary"
           size="small"
-          @click="handleAgree"
+          @click="handleAgree(3)"
           v-hasPermi="['renwu:renwutwo:check']"
         >同意</el-button>
       </el-col>
@@ -19,7 +19,7 @@
           type="primary"
           size="small"
           plain
-          @click="handleNg"
+          @click="handleAgree(1)"
           v-hasPermi="['renwu:renwuone:thirdcheck']"
         >驳回</el-button>
       </el-col>
@@ -34,7 +34,7 @@
     <div v-loading="loading">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
-      <RenwutwoTable v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
+      <RenwutwoTable v-else :tableData="renwutwoList" @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <pagination
       v-show="total>0"
@@ -43,26 +43,35 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <checkmx :options="mingxOptios"/>
   </div>
 </template>
 <script>
-import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitDxqd} from "@/api/renwu/renwutwo"
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo} from "@/api/renwu/renwutwo"
+import { submitDxqd} from "@/api/renwu/dcqz"
 import { listRenwuthree } from '@/api/renwu/renwuthree'
 import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../../common/objSearchItem'
 import RenwutwoTable from './tables/renwutwoTable'
 import RenwuthreeTable from './tables/renwuthreeTable'
 import RenwufourTable from './tables/renwufourTable'
+import Checkmx from './checkmx.vue'
+
 export default {
   name: "Duixqd",
   components: {
     SearchItem,
     RenwutwoTable,
     RenwuthreeTable,
-    RenwufourTable
+    RenwufourTable,
+    Checkmx
   },
   data() {
     return {
+      mingxOptios:{
+        show:false,
+        query:{}
+      },
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -553,14 +562,24 @@ export default {
         })
     },
     /**
-     * 实施网申
+     * 实施网申 type:3同意 1驳回
      */
-    handleAgree(){
+    handleAgree(type){
       if(!this.ids.length){
         this.msgError('请至少选择一项')
+        return
+      } 
+      if(type===3){
+        this.doSubmit({
+          ids:this.ids,
+          status:3,//同意3 ，驳回1
+          dxqd:'同意',
+          qdbh:''//驳回意见字段
+        })
       } else {
-        submitDxqd()
+        this.handleNg()
       }
+      
       //检查任务中有未执行第三方筛查的
 
     },
@@ -568,22 +587,30 @@ export default {
      * 第三方筛查
      */
     handleNg(){
-      if(!this.ids.length){
-        this.msgError('请至少选择一项')
-        return
-      } 
+      const self = this
       this.$prompt('驳回意见', '驳回意见填写', {
           inputType:'textarea',
           confirmButtonText: '确定',
           cancelButtonText: '返回',
         }).then(({ value }) => {
-          console.log(value)
+          self.doSubmit({
+            ids:this.ids,
+            status:1,//同意3 ，驳回1
+            dxqd:'驳回',
+            qdbh:value//驳回意见字段
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '取消输入'
           });       
         });
+    },
+    doSubmit(params){
+      submitDxqd(params).then(res=>{
+        this.msgSuccess("操作成功")
+        this.getList()
+      })
     },
     /**
      * tabs切换
@@ -592,6 +619,13 @@ export default {
       this.queryParams.pageNum = 1
       this.getList()
       console.log(val)
+    },
+    checkMix(row){
+      this.mingxOptios.show = true
+      this.mingxOptios.query = {
+        rwpcid:row.rwpcid,
+        jgdm:row.jgdm
+      }
     }
   }
 };

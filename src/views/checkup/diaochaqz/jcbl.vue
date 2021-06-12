@@ -112,9 +112,11 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="opertation(scope.row,'editQz')">修改</el-button>
-            <el-button type="text" size="mini" @click="opertation(scope.row,'downloadQz')">下载</el-button>
+            <!-- <el-button type="text" size="mini" @click="opertation(scope.row,'downloadQz')">下载</el-button> -->
+            <el-button type="text" size="mini" v-print="{id:'docPart',popTitle:'检查笔录'}">下载</el-button>
             <el-button type="text" size="mini" @click="opertation(scope.row,'deleteQz')">删除</el-button>
-            <el-button type="text" size="mini" @click="opertation(scope.row,'printQz')">打印</el-button>
+            <el-button type="text" size="mini" v-print="{id:'docPart',popTitle:'检查笔录'}">打印</el-button>
+            <!-- <el-button type="text" size="mini" @click="opertation(scope.row,'printQz')">打印</el-button> -->
           </template>
         </el-table-column>
     </el-table>
@@ -320,7 +322,7 @@ export default {
       padding-left: 30px;
     }
     .doc-part {
-      width: 800px;
+      width: 595px;
       padding:20px 30px;
       flex-shrink: 0;
       .doc-title {

@@ -49,8 +49,8 @@
         </div>
         <div class="pre-view">
           <p class="top-tip">预览通知书</p>
-          <!-- <single-notice :pageData="{...$route.query,...zhizuo}"></single-notice> -->
-          <mutile-notice :zhizuo="zhizuo" :noticeList="[$route.query,$route.query,$route.query,$route.query]"></mutile-notice>
+          <single-notice v-if="zhzLiist.length<2" :pageData="zhizuo"></single-notice>
+          <mutile-notice v-else :zhizuo="zhizuo" :noticeList="zhzLiist"></mutile-notice>
         </div>
     </div>
   </div>
@@ -146,12 +146,22 @@ export default {
       //上页带过来的参数
       queryInfoFrom:{},
       zhizuo:{},
+      zhzLiist:[],
     };
   },
   created() {
+    let printData = localStorage.getItem('PRDATA')
+    if(printData){
+      printData = JSON.parse(printData)
+      if(printData.length>1){
+        this.zhzLiist = printData
+      } else {
+        this.zhizuo = printData[0]
+      }
+    }
     this.getList();
     this.queryInfoFrom = this.$route.query
-    this.gitDic();
+    // this.gitDic();
   },
   methods: {
     /** 查询调查取证列表 */

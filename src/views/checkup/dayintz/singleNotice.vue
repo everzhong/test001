@@ -8,7 +8,7 @@
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">监督检查通知书</div>
           <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 30px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
           <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定，决定于
-            <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303313;">{{pageData.dayinstarttime}}</span>对你的单位实施医疗保险监督检查，请予以配合，并按要求提供相关资料。
+            <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303313;">{{parseTime(pageData.dayinstarttime,'{y}年{m}月{d}日')}}</span>对你的单位实施医疗保险监督检查，请予以配合，并按要求提供相关资料。
           </div>
           <p style="margin-bottom:60px">(监督检查具体内容和要求见附件)</p>
           <div style="margin-bottom:25px">
@@ -17,7 +17,7 @@
           </div>
           <div style="text-align:right;margin-bottom:70px">
             <p style="width:40%;text-align:left;margin-left:60%;margin-bottom:10px">上海市静安区医疗保障局</p>
-            <p style="width:40%;text-align:left;margin-left:60%">{{pageData.dayinriqi}}</p>
+            <p style="width:40%;text-align:left;margin-left:60%">{{parseTime(pageData.dayinriqi,'{y}年{m}月{d}日')}}{{}}</p>
           </div>
           <div>
             <div style="width:60%;display:inline-block;margin-bottom:20px">
@@ -33,8 +33,8 @@
       <div style="border:1px solid #303313;border-top:none;padding:3px 20px 20px;">备注：本文一式二份；一份留存执法案卷，一份交被检机构。</div>
       </div>
     <div style="text-align:right;padding-right:19px">
-      <el-button type="primary" v-print="printJianchs" size="mini" >打印</el-button>
-      <el-button type="primary" plain size="mini" @click="printEvent('printJc')">打印</el-button>
+      <!-- <el-button type="primary" v-print="printJianchs" size="mini" >打印</el-button> -->
+      <el-button type="primary" size="mini" @click="printEvent('printJc')">打印</el-button>
 
     </div>
     <div id="printJl" ref="printJl" style="width:595px;padding:10px 20px;flex-shrink:0">
@@ -45,7 +45,7 @@
         <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 20px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
         <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定，决定于
           <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303313;">
-            {{pageData.dayinstarttime}}</span>
+            {{parseTime(pageData.dayinstarttime,'{y}年{m}月{d}日')}}</span>
             对你的单位实施医疗保险监督检查。现将监督检查纪律告知如下：
         </div>
         <div style="padding-left:2em;line-height:30px;margin-bottom:20px">
@@ -64,19 +64,19 @@
         </div>
         <div style="text-align:right;margin-bottom:30px">
           <p style="text-align:right;margin-bottom:10px">上海市静安区医疗保障局</p>
-          <p style="text-align:right">{{pageData.dayinriqi}}</p>
+          <p style="text-align:right">{{parseTime(pageData.dayinriqi,'{y}年{m}月{d}日')}}</p>
         </div>
         <p style="text-indent:2em;font-weight:600;margin-bottom:30px">以上内容检查组已经告知我单位，我单位将按要求积极支持检查组执行好各项纪律。</p>
         <div style="text-align:right;margin-bottom:30px">
           <p style="text-align:right;margin-bottom:10px">{{pageData.jgmc}}（盖章）</p>
-          <p style="text-align:right">{{pageData.dayinriqi}}</p>
+          <p style="text-align:right">{{parseTime(pageData.dayinriqi,'{y}年{m}月{d}日')}}</p>
         </div>
       </section>
       <div style="border:1px solid #303313;border-top:none;padding:3px 20px 10px;">备注：本文一式三份；一份留存执法案卷，一份交被检机构，一份张贴检查室门上。</div>
     </div>
     <div style="text-align:right;padding-right:19px">
-      <el-button size="mini" type="primary" v-print="printJilv">打印</el-button>
-      <el-button size="mini" type="primary" plain @click="printEvent('printJl')">打印</el-button>
+      <!-- <el-button size="mini" type="primary" v-print="printJilv">打印</el-button> -->
+      <el-button size="mini" type="primary" @click="printEvent('printJl')">打印</el-button>
     </div>
   </section>
 </template>
@@ -85,18 +85,17 @@ export default {
   name:'SingleNotice',
   data(){
     return {
-       printJianchs: {
-        id: "printJc",
-        popTitle: "监督检查通知书",
-      },
-      printJilv: {
-        id: "printJl",
-        popTitle: "监督检查纪律告知书",
-      },
+      //  printJianchs: {
+      //   id: "printJc",
+      //   popTitle: "监督检查通知书",
+      // },
+      // printJilv: {
+      //   id: "printJl",
+      //   popTitle: "监督检查纪律告知书",
+      // },
     }
   },
   mounted(){
-    console.log(this.pageData,222)
   },
   props:['pageData'],
   methods:{

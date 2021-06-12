@@ -52,8 +52,6 @@
           type="text"
           @click="checkdetail(scope.row)"
         >查看明细</el-button>
-      </template>
-      <template slot-scope="scope">
         <el-button
           size="mini"
           type="text"
@@ -79,8 +77,8 @@ export default {
       // this.multiple = !selection.length
     },
     checkdetail(row){
-      this.$emit('checkdetail',row)
+      this.$emit('check-mx',row)
     }
-  }
+  },
 }
 </script>

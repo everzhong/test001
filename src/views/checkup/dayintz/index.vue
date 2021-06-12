@@ -10,7 +10,7 @@
         <el-button
           type="primary"
           size="small"
-          @click="handleNetCheck"
+          @click="handeMutilDo"
           v-hasPermi="['renwu:renwutwo:add']"
         >批量制作通知</el-button>
       </el-col>
@@ -18,7 +18,7 @@
         <el-button
           type="primary"
           size="small"
-          @click="handleNetCheck"
+          @click="handeMutilPrint"
           v-hasPermi="['renwu:renwutwo:print']"
         >批量打印通知</el-button>
       </el-col>
@@ -27,7 +27,7 @@
       <RenwutwoTable :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
     </div> -->
      <div v-loading="loading">
-      <el-table :data="renwutwoList" border>
+      <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="是否制作" align="center" prop="isDo"  show-overflow-tooltip>
@@ -219,7 +219,8 @@ export default {
       // 表单校验
       rules: {
       },
-      //
+      //选中的数据 
+      selectionData:[]
     };
   },
   created() {
@@ -333,9 +334,13 @@ export default {
       this.loading = false
     },
     navigateToAdd(row){
+      if(row) {
+        window.localStorage.setItem('PRDATA',JSON.stringify([row]))
+      } else {
+        window.localStorage.setItem('PRDATA',JSON.stringify(this.selectionData))
+      }
       this.$router.push({
         path:'/checkup/dayintz/addNotice',
-        query: row
       })
     },
     printFile(){
@@ -515,6 +520,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.selectionData = selection
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -584,16 +590,21 @@ export default {
         })
     },
     /**
-     * 实施网申
+     * 批量制作
      */
-    handleNetCheck(){
+    handeMutilDo(){
+      if(!this.ids.length){
+        this.msgWarning('请至少选择一项')
+      } else {
+        this.navigateToAdd()
+      }
+    },
+    handeMutilPrint(){
       if(!this.ids.length){
         this.msgWarning('请至少选择一项')
       } else {
         
       }
-      //检查任务中有未执行第三方筛查的
-
     },
     /**
      * 第三方筛查
