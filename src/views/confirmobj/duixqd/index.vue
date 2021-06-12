@@ -55,8 +55,7 @@ import SearchItem from '../../common/objSearchItem'
 import RenwutwoTable from './tables/renwutwoTable'
 import RenwuthreeTable from './tables/renwuthreeTable'
 import RenwufourTable from './tables/renwufourTable'
-import Checkmx from './checkmx.vue'
-
+import Checkmx from '../checkmx.vue'
 export default {
   name: "Duixqd",
   components: {
@@ -292,6 +291,13 @@ export default {
     // });
   },
   methods: {
+    checkMix(row){
+      this.mingxOptios.query = {
+        rwpcid:row.rwpcid,
+        jgdm:row.jgdm
+      }
+      this.mingxOptios.show = true
+    },
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
@@ -620,13 +626,7 @@ export default {
       this.getList()
       console.log(val)
     },
-    checkMix(row){
-      this.mingxOptios.show = true
-      this.mingxOptios.query = {
-        rwpcid:row.rwpcid,
-        jgdm:row.jgdm
-      }
-    }
+    
   }
 };
 </script>

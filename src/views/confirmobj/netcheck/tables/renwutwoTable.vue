@@ -12,7 +12,7 @@
     <el-table-column label="涉及金额(元)" align="center" prop="ydje"  show-overflow-tooltip/>
     <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
     <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-    <el-table-column label="操作" align="center">
+    <el-table-column label="操作" align="center" width="150">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -22,7 +22,7 @@
         <el-button
           size="mini"
           type="text"
-          @click="checkdetailAll(scope.row)"
+          @click="checkdetail(scope.row)"
         >全明细</el-button>
       </template>
     </el-table-column>
@@ -44,10 +44,10 @@ export default {
       // this.multiple = !selection.length
     },
     checkdetail(row){
-      this.$emit('checkdetail',row)
+      this.$emit('check-mx',row)
     },
     checkdetailAll(row){
-      this.$emit('checkdetailAll',row)
+      this.$emit('check-mx',row)
     }
   }
 }

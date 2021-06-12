@@ -30,7 +30,7 @@
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="是否制作" align="center" prop="isDo"  show-overflow-tooltip>
+        <el-table-column label="是否制作" align="center" prop="isdayin"  show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{scope.row.isDo?'是':'否'}}</span>
           </template>

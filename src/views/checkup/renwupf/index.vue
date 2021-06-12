@@ -282,17 +282,16 @@ export default {
   },
   methods: {
     submitQd(xiaozu){
-      console.log(xiaozu,'1111')
       submitJcz({
         ids:this.ids,
-        jczid:xiaozu.id,
-        jczname:xiaozu.jczmc
+        jczid:xiaozu.deptId,
+        jczname:xiaozu.deptName
       }).then(res=>{
         if(res.code===200){
-          this.msgSuccess('提交成功')
+          this.msgSuccess('派发成功')
           this.getList()
         } else {
-          this.msgError('提交失败')
+          this.msgError('派发失败')
         }
       })
     },

@@ -17,7 +17,7 @@
           </div>
           <div style="text-align:right;margin-bottom:70px">
             <p style="width:40%;text-align:left;margin-left:60%;margin-bottom:10px">上海市静安区医疗保障局</p>
-            <p style="width:40%;text-align:left;margin-left:60%">{{parseTime(pageData.dayinriqi,'{y}年{m}月{d}日')}}{{}}</p>
+            <p style="width:40%;text-align:left;margin-left:60%">{{parseTime(pageData.dayinriqi,'{y}年{m}月{d}日')}}</p>
           </div>
           <div>
             <div style="width:60%;display:inline-block;margin-bottom:20px">

@@ -16,25 +16,25 @@
         <el-form-item style="margin-right:0"><el-button size="mini" type="primary" plain >重置</el-button></el-form-item>
       </div>
     </el-form>
-    <div class="main">
-        <el-table border :data="roleList">
-          <el-table-column width="40px" align="center">
-            <template slot-scope="scope">
-              <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
-            </template>
-          </el-table-column>
-          <el-table-column label="检查组编号" prop="jczbh" align="center"></el-table-column>
-          <el-table-column label="检查组名称" prop="jczmc" align="center"></el-table-column>
-          <el-table-column label="检查组成员" prop="jczcy" align="center"></el-table-column>
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="editRole(scope.row)">更改组成员</el-button>
-              <el-button type="text" size="mini" @click="deleteRole(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="paganation">
+    <div class="main" v-loading="loading">
+      <el-table border :data="roleList">
+        <el-table-column width="40px" align="center">
+          <template slot-scope="scope">
+            <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
+          </template>
+        </el-table-column>
+        <el-table-column label="检查组编号" prop="deptId" align="center"></el-table-column>
+        <el-table-column label="检查组名称" prop="deptName" align="center"></el-table-column>
+        <el-table-column label="检查组成员" prop="jczcy" align="center"></el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" size="mini" @click="editRole(scope.row)">更改组成员</el-button>
+            <el-button type="text" size="mini" @click="deleteRole(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+      <!-- <div class="paganation">
         <el-pagination
           small
           background
@@ -47,7 +47,7 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
-      </div>
+      </div> -->
     <div slot="footer" class="msg-footer flex">
       <el-button size="mini" type="primary" @click="addNewGroup">新增检查组</el-button>
       <div>
@@ -102,33 +102,16 @@
   </el-dialog>
 </template>
 <script>
+import {listDept,listdDept} from '@/api/system/dept.js'
 export default {
   name:'SendMessage',
   data(){
-    return{
+    return {
+      loading:false,
       roleCheck:'',
       searchName:'',
       innerDialogShow:false,
-      roleList:[{
-        id:'1',
-        jczbh:'99898',
-        jczcy:"张三,里斯",
-        jczmc:'aaa小组'
-      },{
-        id:'2',
-        jczbh:'AD2222',
-        jczcy:"张三,里斯",
-        jczmc:'aaa小组'
-      }],
-      gridData: [{
-          jgdm: '11',
-          ryxm: '王小虎',
-          jgmc: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          jgdm: '22',
-          ryxm: '王小',
-          jgmc: '上海市普陀区金沙江路 1518 弄'
-        }],
+      roleList:[],
       currentPage:1,
       total:0,
       pageSize:50,
@@ -137,10 +120,37 @@ export default {
         jczmc:'',
         jczcy:[]
       },
-      roleSelection:[]
+      roleSelection:[],
+      gridData:[]
     }
   },
+  mounted(){
+    this.getJanChaxz() //检查组
+    // this.getJanChacy() //检查组成员
+  },
   methods:{
+    async getJanChaxz(){
+      this.loading = true
+      try {
+        const res = await listDept()
+      if(res.code === 200) {
+        this.roleList = res.data
+      }
+      } catch (error) { 
+        console.log(error)
+      }
+      this.loading = false
+    },
+    async getJanChacy(){
+      try {
+        const res = await listdDept()
+      if(res.code === 200) {
+        this.gridData = res.data
+      }
+      } catch (error) { 
+        console.log(error)
+      }
+    },
     handleQuery(){
       this.currentPage = 1
       this.getRoleList()
@@ -149,7 +159,7 @@ export default {
     editRole(row){
       console.log(row)
       this.addGroup = {...row}
-      this.addGroup.jczcy = row.jczcy.split(',')
+      this.addGroup.jczcy = row.jczcy?row.jczcy.split(','):''
       this.innerDialogShow = true
     },
     deleteRole(row){

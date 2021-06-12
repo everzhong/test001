@@ -511,7 +511,6 @@ export default {
         const {rwpcid,jgdm} = this.queryInfoFrom
         params = {rwpcid,jgdm,...params}
       }
-      
       this.loading = true
       try {
         let  res = null

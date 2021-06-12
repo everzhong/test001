@@ -1,5 +1,5 @@
 import { login, logout, getInfo, loginapi } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setUid } from '@/utils/auth'
 import axios from 'axios'
 const user = {
     state: {
@@ -36,6 +36,7 @@ const user = {
                     params: { uid }
                 }).then(res => {
                     setToken(res.data.token)
+                    setUid(uid)
                     commit('SET_TOKEN', res.data.token)
                     resolve()
                 }).catch(error => {
@@ -103,7 +104,14 @@ const user = {
                 removeToken()
                 resolve()
             })
-        }
+        },
+        // 登录前执行清空
+        ClearInfo({ commit }) {
+            commit('SET_TOKEN', '')
+            commit('SET_ROLES', [])
+            commit('SET_PERMISSIONS', [])
+            removeToken()
+        },
     }
 }
 

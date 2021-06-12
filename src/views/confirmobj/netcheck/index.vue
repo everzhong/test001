@@ -33,7 +33,7 @@
     <div v-loading="loading" class="sys-table">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @handleSelectionChange="handleSelectionChange"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @handleSelectionChange="handleSelectionChange"/>
-      <RenwutwoTable v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
+      <RenwutwoTable v-else :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <el-form size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
       <el-form-item label="已选机构" prop="yxjg">
@@ -75,6 +75,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <checkmx :options="mingxOptios"/>
   </div>
 </template>
 <script>
@@ -85,16 +86,23 @@ import SearchItem from '../../common/objSearchItem'
 import RenwutwoTable from './tables/renwutwoTable'
 import RenwuthreeTable from './tables/renwuthreeTable'
 import RenwufourTable from './tables/renwufourTable'
+import Checkmx from '../checkmx.vue'
+
 export default {
   name: "Netcheck",
   components: {
     SearchItem,
     RenwutwoTable,
     RenwuthreeTable,
-    RenwufourTable
+    RenwufourTable,
+    Checkmx
   },
   data() {
     return {
+      mingxOptios:{
+        show:false,
+        query:{}
+      },
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -323,6 +331,13 @@ export default {
     // });
   },
   methods: {
+    checkMix(row){
+      this.mingxOptios.query = {
+        rwpcid:row.rwpcid,
+        jgdm:row.jgdm
+      }
+      this.mingxOptios.show = true
+    },
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
