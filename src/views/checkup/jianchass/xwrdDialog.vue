@@ -108,18 +108,18 @@ export default {
     this.getDicts("sys_renwu_wgfl").then(response => {
       this.typeOptions = response.data;
     });
-    this.getDicts("${column.dictType}").then(response => {
-      this.xwbhOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.wgxwOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.lxOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.idOptions = response.data;
-    });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.xwbhOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.wgxwOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.lxOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.idOptions = response.data;
+    // });
   },
   methods: {
     //过滤规则
