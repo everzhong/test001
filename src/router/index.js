@@ -36,8 +36,8 @@ export const constantRoutes = [{
         }]
     },
     {
-        path: '/autoLogin',
-        component: (resolve) => require(['@/views/autoLogin'], resolve),
+        path: '/authLogin',
+        component: (resolve) => require(['@/views/authLogin'], resolve),
         hidden: true
     },
     {
@@ -154,7 +154,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "确定对象", icon: "cascader", noCache: false },
+        meta: { title: "确定对象", icon: "validCode", noCache: false },
         name: "Confirmobj",
         path: "/confirmobj",
         redirect: "noRedirect"
@@ -218,7 +218,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "实施检查", icon: "cascader", noCache: false },
+        meta: { title: "实施检查", icon: "monitor", noCache: false },
         name: "Checkup",
         path: "/checkup",
         redirect: "noRedirect"
@@ -228,7 +228,7 @@ export const constantRoutes = [{
         children: [{
             component: (resolve) => require(['@/views/system/dept/listd'], resolve),
             hidden: false,
-            meta: { title: "网络人员维护", noCache: false },
+            meta: { title: "网审人员维护", noCache: false },
             name: "Listd",
             path: "system/listd",
         }, {
@@ -258,7 +258,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "基础信息维护", icon: "cascader", noCache: false },
+        meta: { title: "基础信息维护", icon: "peoples", noCache: false },
         name: "Baseinfosave",
         path: "/baseinfosave",
         redirect: "noRedirect"
@@ -274,7 +274,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "第三方筛查", icon: "cascader", noCache: false },
+        meta: { title: "第三方筛查", icon: "log", noCache: false },
         name: "Thirdcheck",
         path: "/thirdcheck",
         redirect: "noRedirect"

@@ -34,7 +34,7 @@
           <el-form-item label="监管阶段" prop="jgjd">
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px">
+          <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
@@ -123,33 +123,33 @@ export default {
   created() {
     this.queryInfoFrom = this.$route.query
     this.getList();
-    this.getDicts("${column.dictType}").then(response => {
-      this.idOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jglcOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.gjxxOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.zhczrOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.zhczsjOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.bzOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.rwpcidOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jgdmOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.addtimeOptions = response.data;
-    });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.idOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jglcOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.gjxxOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.zhczrOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.zhczsjOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.bzOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.rwpcidOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.jgdmOptions = response.data;
+    // });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.addtimeOptions = response.data;
+    // });
   },
   methods: {
     /** 查询jcfl列表 */

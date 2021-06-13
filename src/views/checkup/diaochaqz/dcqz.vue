@@ -28,7 +28,7 @@
             <el-form-item label="检查组" prop="jcz">
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px">
+          <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>

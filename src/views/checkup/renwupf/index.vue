@@ -11,14 +11,13 @@
           type="primary"
           size="small"
           @click="handleNetCheck"
-          v-hasPermi="['renwu:renwutwo:check']"
         >派发组检查</el-button>
       </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two">医疗机构列表</el-radio-button>
-          <el-radio-button label="three">任务列表-规则列表</el-radio-button>
-          <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
+          <el-radio-button label="two" value="two">医疗机构列表</el-radio-button>
+          <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>
+          <el-radio-button label="four" value="four">规则筛查-项目汇总</el-radio-button>
         </el-radio-group>
       </div>
     </el-row>

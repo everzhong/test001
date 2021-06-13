@@ -11,7 +11,6 @@
           type="primary"
           size="small"
           @click="handleAgree(3)"
-          v-hasPermi="['renwu:renwutwo:check']"
         >同意</el-button>
       </el-col>
       <el-col :span="1.5" v-if="tabsValue==='two'">
@@ -20,7 +19,6 @@
           size="small"
           plain
           @click="handleAgree(1)"
-          v-hasPermi="['renwu:renwuone:thirdcheck']"
         >驳回</el-button>
       </el-col>
       <div class="top-right-btn">

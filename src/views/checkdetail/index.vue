@@ -11,7 +11,6 @@
           type="primary"
           size="small"
           @click="handleNetCheck"
-          v-hasPermi="['renwu:renwutwo:check']"
         >实施网审</el-button>
       </el-col>
       <el-col :span="1.5" v-if="tabsValue==='two'">
@@ -19,7 +18,6 @@
           type="primary"
           size="small"
           @click="handleThirdCheck"
-          v-hasPermi="['renwu:renwuone:thirdcheck']"
         >第三方筛查</el-button>
       </el-col>
       

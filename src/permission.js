@@ -7,7 +7,7 @@ import { getToken, getUid, removeToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/loginapi', '/api/sendscreening', '/auth-redirect', '/bind', '/register']
+const whiteList = ['/login', '/authLogin', '/loginapi', 'authLogin', '/api/sendscreening', '/auth-redirect', '/bind', '/register']
 
 router.beforeEach((to, from, next) => {
     const uid = getUid()
@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
             // 在免登录白名单，直接进入
             next()
         } else {
-            next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
+            next(`/authLogin?redirect=${to.fullPath}`) // 否则全部重定向到登录页
             NProgress.done()
         }
     }

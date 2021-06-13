@@ -11,7 +11,6 @@
           type="primary"
           size="small"
           @click="handeMutilDo"
-          v-hasPermi="['renwu:renwutwo:add']"
         >批量制作通知</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -19,7 +18,6 @@
           type="primary"
           size="small"
           @click="handeMutilPrint"
-          v-hasPermi="['renwu:renwutwo:print']"
         >批量打印通知</el-button>
       </el-col>
     </el-row>
