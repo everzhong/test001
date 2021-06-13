@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" show-overflow-tooltip>
           <template>
-            <el-button type="text" size="mini">数据筛查</el-button>
+            <el-button type="text" size="mini" @click="openUrl">数据筛查</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -279,6 +279,9 @@ export default {
     // });
   },
   methods: {
+    openUrl(){
+      window.open('http://192.168.1.122:8087/#/scenarioConfiguration')
+    },
     /** 查询renwutwo列表 */
     async getList(options) {
       const params = options?{...options,...this.queryParams}:this.queryParams
