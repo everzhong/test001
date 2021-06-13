@@ -1,9 +1,6 @@
 <template>
   <div class="app-container">
     <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
-          <!-- <el-form-item label="案件来源" prop="ajly">
-            <el-input readonly v-model="dcqzList.ajly"></el-input>
-          </el-form-item> -->
           <el-form-item label="险种" prop="ybbf">
             <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
           </el-form-item>
@@ -193,7 +190,6 @@ export default {
     };
   },
   created() {
-    this.getList();
     this.queryInfoFrom = this.$route.query
     // this.gitDic();
   },
