@@ -28,7 +28,7 @@ export default {
   data(){
     return {
       tabsValue:1,
-      leftList:[{jgmc:111,rwpcid:181},{jgmc:11331,rwpcid:171},{jgmc:11551,rwpcid:151},{jgmc:12211,rwpcid:121},{jgmc:44111,rwpcid:11}],
+      leftList:[],
       rightList:[],
       leftOptions:{
         title:'待选列表',

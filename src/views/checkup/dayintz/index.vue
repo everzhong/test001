@@ -26,11 +26,11 @@
     </div> -->
      <div v-loading="loading">
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return !row.isdayin}"></el-table-column>
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="是否制作" align="center" prop="isdayin"  show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{scope.row.isDo?'是':'否'}}</span>
+            <span>{{scope.row.isdayin?'是':'否'}}</span>
           </template>
         </el-table-column>
         <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
@@ -79,19 +79,13 @@
 </template>
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
-import { listRenwuthree } from '@/api/renwu/renwuthree'
-import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../../common/objSearchItem'
 import RenwutwoTable from '../../common/renwutwoTable'
-// import RenwuthreeTable from '../../common/renwuthreeTable'
-// import RenwufourTable from '../../common/renwufourTable'
 export default {
   name: "Dayintz",
   components: {
     SearchItem,
     RenwutwoTable,
-    // RenwuthreeTable,
-    // RenwufourTable
   },
   data() {
     return {
@@ -223,6 +217,13 @@ export default {
   },
   created() {
     this.getList();
+    // this.renwutwoList = [
+    //   {id:1,jgmc:'宝山区中西医结合医院',rwpcid:'BX20216A20',jgdm:'42509893X00',isdayin:0},
+    //   {id:2,jgmc:'宝山区人民医院',rwpcid:'BX20216A19',jgdm:'42509864X00',isdayin:0},
+    //   {id:3,jgmc:'宝山区第三医院',rwpcid:'BX20216A18',jgdm:'42509865X00',isdayin:1},
+    //   {id:4,jgmc:'宝山区骨科医院',rwpcid:'BX20216A17',jgdm:'42509866X00',isdayin:0}
+    // ]
+    // this.loading = false
     // this.getDicts("${column.dictType}").then(response => {
     //   this.ybdOptions = response.data;
     // });

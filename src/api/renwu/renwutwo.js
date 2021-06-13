@@ -34,6 +34,16 @@ export function updateRenwutwo(data) {
         data: data
     })
 }
+///setdy打印通知
+export function setDytz(data) {
+    const { ids } = data
+    delete data.ids
+    return request({
+        url: '/renwu/setdy/' + ids,
+        method: 'post',
+        data: data
+    })
+}
 
 // 删除renwutwo
 export function delRenwutwo(ids) {

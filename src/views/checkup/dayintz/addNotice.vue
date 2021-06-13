@@ -1,11 +1,22 @@
 <template>
   <div class="app-container">
-    <div style="position:absolute;right:20px;top:-31px">
-      <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+    <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+      <el-button type="primary" icon="el-icon-back" size="mini" @click="dayinBack">返回</el-button>
     </div>
+    
     <div class="zhizuo-port">
         <div class="zhizuo">
-          <div class="zhizuo-item">
+          <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">
+            <el-table-column label="机构代码" prop="jgdm" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column label="机构名称" prop="jgmc" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column label="行政区" prop="xzq" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column label="检查开始时间" prop="dayinstarttime" align="center" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{parseTime(scope.row.dayinstarttime,'{y}年{m}月{d}日}')}}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="zhizuo-item" v-if="zhzList.length===1">
             <span>检查开始日期</span>
             <el-date-picker
               v-model="zhizuo.dayinstarttime"
@@ -13,7 +24,6 @@
               size="small"
               placeholder="选择检查开始日期"
               format="yyyy-MM-dd"
-              value-format="timestamp"
               >
             </el-date-picker>
           </div>
@@ -34,7 +44,6 @@
               size="small"
               placeholder="选择制作日期"
               format="yyyy-MM-dd"
-              value-format="timestamp"
               >
             </el-date-picker>
           </div>
@@ -49,15 +58,17 @@
         </div>
         <div class="pre-view">
           <p class="top-tip">预览通知书</p>
-          <single-notice v-if="zhzLiist.length<2" :pageData="zhizuo"></single-notice>
-          <mutile-notice v-else :zhizuo="zhizuo" :noticeList="zhzLiist"></mutile-notice>
+          <single-notice v-if="zhzList.length<2" :pageData="zhizuo"></single-notice>
+          <mutile-notice v-else :zhizuo="zhizuo" :noticeList="zhzList"></mutile-notice>
         </div>
     </div>
   </div>
 </template> 
 
 <script>
-import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
+import { listDcqz, getDcqz, delDcqz, addDcqz, } from "@/api/renwu/dcqz";
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,setDytz } from "@/api/renwu/renwutwo"
+
 import SingleNotice from './singleNotice.vue'
 import mutileNotice from './mutilNotice.vue'
 
@@ -143,27 +154,28 @@ export default {
       // 表单校验
       rules: {
       },
-      //上页带过来的参数
-      queryInfoFrom:{},
       zhizuo:{},
-      zhzLiist:[],
+      zhzList:[],
     };
   },
   created() {
     let printData = localStorage.getItem('PRDATA')
     if(printData){
       printData = JSON.parse(printData)
-      if(printData.length>1){
-        this.zhzLiist = printData
-      } else {
-        this.zhizuo = printData[0]
-      }
+      this.zhzList = printData
+      //不管批量还是单个，首先默认编辑的都是第一份
+      this.zhizuo = printData[0]
+      this.ids = printData.map(item => item.id)
     }
-    this.getList();
-    this.queryInfoFrom = this.$route.query
+    // this.getList();
     // this.gitDic();
   },
   methods: {
+    dayinBack(){
+      this.zhzList = []
+      window.localStorage.removeItem('PRDATA')
+      this.$router.back(-1)
+    },
     /** 查询调查取证列表 */
     async getList() {
       const {query} = this.$route
@@ -342,13 +354,23 @@ export default {
         dayinphone,
         dayinriqi
       } = this.zhizuo
-      if(!(dayinstarttime&&dayintel&&dayinname&&dayinphone&&dayinriqi)){
+      if(!(dayintel&&dayinname&&dayinphone&&dayinriqi)){
         this.msgError('请填完所有项目后再点保存')
         return false
       } 
-      addDcqz({status:4,dayinstarttime,dayintel,dayinname,dayinphone,dayinriqi}).then(response => {
-        this.msgSuccess("新增成功");
-        // this.getList();
+      setDytz({
+        ids:this.ids,
+        isdayin:1,
+        dayinstarttime,
+        dayintel,
+        dayinname,
+        dayinphone,
+        dayinriqi,
+        rwpcid:this.zhizuo.rwpcid,
+        jgdm:this.zhizuo.jgdm
+        }).then(response => {
+        this.msgSuccess("制作成功");
+        this.getList();
       });
     },
     /** 删除按钮操作 */
@@ -363,21 +385,6 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有调查取证数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportDcqz(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
         })
     },
     gitDic(){
@@ -464,7 +471,7 @@ export default {
   }
   .zhizuo {
     flex-shrink: 0;
-    width: 500px;
+    width: 600px;
     color:#606266;
     .zhizuo-item {
       display: flex;

@@ -52,7 +52,7 @@
           />
           <el-option
             key="2"
-            label="建议检查"
+            label="暂不检查"
             value="暂不检查"
           />
         </el-select>

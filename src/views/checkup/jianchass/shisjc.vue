@@ -30,7 +30,7 @@
           </el-form-item>
           <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
             <el-button type="primary" plain size="mini" @click="heshiOption.show=true">机构核实</el-button>
-            <el-button type="primary" size="mini">检查完成</el-button>
+            <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
@@ -199,6 +199,7 @@
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
 import { listRenwufour } from '@/api/renwu/renwufour'
 import { listRenwufive } from '@/api/renwu/renwufive'
+import { submitDxqd} from "@/api/renwu/dcqz"
 
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
@@ -433,6 +434,19 @@ export default {
     // });
   },
   methods: {
+    //点击检查完成状态跳到5
+    doSubmit() {
+      const params = {
+        ids:[this.queryInfoFrom.id],
+        status:5,//检查完成去到状态5，形成结果
+        dxqd:'检查完成',
+        qdbh:''//驳回意见字段
+      }
+      submitDxqd(params).then(res=>{
+        this.msgSuccess("操作成功")
+        this.getList()
+      })
+    },
     //返回上一层
     goBackUpLevel(){
       switch(this.tabsValue) {

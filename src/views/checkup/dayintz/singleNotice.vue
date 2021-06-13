@@ -6,7 +6,7 @@
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">静医保监督通（2020）01182号</div>
         <section style="padding: 20px;font-size: 14px;border: 1px solid #303313;">
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">监督检查通知书</div>
-          <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 30px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
+          <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 30px;min-width:80px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
           <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定，决定于
             <span style="text-indent: 0;text-align: center;display: inline-block;min-width: 150px;border-bottom: 1px solid #303313;">{{parseTime(pageData.dayinstarttime,'{y}年{m}月{d}日')}}</span>对你的单位实施医疗保险监督检查，请予以配合，并按要求提供相关资料。
           </div>

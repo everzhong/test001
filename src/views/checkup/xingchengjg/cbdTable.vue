@@ -57,7 +57,7 @@ export default {
           name: '122',
           namePercent: '11%',
           jcfx: '规则筛查',
-          province: '260',
+          province: '130',
           city: '20%',
           address: '677',
           zip: '10%'

@@ -3,7 +3,7 @@
   <el-carousel :autoplay="false" arrow="always" height="1800px">
     <el-carousel-item v-for="(item,i) in noticeList" :key="i">
       <!-- <h3 class="small">{{ item }}</h3> -->
-      <single-notice :pageData="{...$route.query,...zhizuo}"></single-notice>
+      <single-notice :pageData="{...zhizuo,...item}"></single-notice>
     </el-carousel-item>
   </el-carousel>
   </div>
@@ -20,8 +20,6 @@ export default {
   components:{
     SingleNotice
   }
-  
-
 }
 </script>
 <style lang="scss" scoped>

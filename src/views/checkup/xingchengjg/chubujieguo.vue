@@ -29,8 +29,8 @@
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
           <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
-            <el-button type="primary" size="mini">回退</el-button>
-            <el-button type="primary" size="mini">提交</el-button>
+            <el-button type="primary" size="mini" @click="handleAgree(4)">回退</el-button>
+            <el-button type="primary" size="mini" @click="handleAgree(6)">提交</el-button>
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
@@ -60,11 +60,13 @@
 </template>
 <script>
 import { listRenwufour } from '@/api/renwu/renwufour'
-import { listRenwufive } from '@/api/renwu/renwufive'
+// import { listRenwufive } from '@/api/renwu/renwufive'
+import { submitDxqd} from "@/api/renwu/dcqz"
 import JcTable from './jcTable.vue'
 import WgTable from './wgTable.vue'
 import CbdTable from './cbdTable.vue'
 import ViewTable from './viewTable.vue'
+
 export default {
   name:"Chubujieguo",
   data(){
@@ -90,11 +92,52 @@ export default {
   },
   created(){
     this.queryInfoFrom = this.$route.query
-     this.getList();
+    this.getList();
   },
   methods:{
-    goBackUpLevel(){
-      
+     /**
+     * 实施网申 
+     */
+    handleAgree(type){
+      if(type===6){
+        this.doSubmit({
+          ids:[this.queryInfoFrom.id],
+          status:type,//提交6，退回4
+          dxqd:'提交',
+          qdbh:''//驳回意见字段
+        },type)
+      } else {
+        this.handleNg()
+      }
+    },
+    /**
+     * 第三方筛查
+     */
+    handleNg(){
+      const self = this
+      this.$prompt('退回意见', '退回意见填写', {
+          inputType:'textarea',
+          confirmButtonText: '确定',
+          cancelButtonText: '返回',
+        }).then(({ value }) => {
+          self.doSubmit({
+            ids:[this.queryInfoFrom.id],
+            status:4,//驳回到4
+            dxqd:'退回',
+            qdbh:value//驳回意见字段
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });       
+        });
+    },
+    doSubmit(params){
+      submitDxqd(params).then(res=>{
+        this.msgSuccess("操作成功")
+        this.getList()
+      })
     },
     /** 查询renwu列表 */
     async getList(query) {
