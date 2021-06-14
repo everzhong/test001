@@ -120,7 +120,7 @@ export const constantRoutes = [{
         children: [{
             component: (resolve) => require(['@/views/renwu/renwulist/index'], resolve),
             hidden: false,
-            meta: { title: "任务列表", noCache: false },
+            meta: { title: "任务列表", noCache: true },
             name: "Renwulist",
             path: "renwulist",
         }, {
@@ -132,7 +132,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "任务管理", icon: "cascader", noCache: false },
+        meta: { title: "任务管理", icon: "cascader", noCache: true },
         name: "Renwu",
         path: "/renwu",
         redirect: "noRedirect"
@@ -142,19 +142,19 @@ export const constantRoutes = [{
         children: [{
             component: (resolve) => require(['@/views/confirmobj/netcheck/index'], resolve),
             hidden: false,
-            meta: { title: "实施网审", noCache: false },
+            meta: { title: "实施网审", noCache: true },
             name: "Netcheck",
             path: "netcheck",
         }, {
             component: (resolve) => require(['@/views/confirmobj/duixqd/index'], resolve),
             hidden: false,
-            meta: { title: "对象确定", noCache: false },
+            meta: { title: "对象确定", noCache: true },
             name: "Duixqd",
             path: "duixqd",
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "确定对象", icon: "validCode", noCache: false },
+        meta: { title: "确定对象", icon: "validCode", noCache: true },
         name: "Confirmobj",
         path: "/confirmobj",
         redirect: "noRedirect"
@@ -164,13 +164,13 @@ export const constantRoutes = [{
         children: [{
             component: (resolve) => require(['@/views/checkup/renwupf/index'], resolve),
             hidden: false,
-            meta: { title: "任务派发", noCache: false },
+            meta: { title: "任务派发", noCache: true },
             name: "Renwupf",
             path: "renwupf",
         }, {
             component: (resolve) => require(['@/views/checkup/dayintz/index'], resolve),
             hidden: false,
-            meta: { title: "打印通知", noCache: false },
+            meta: { title: "打印通知", noCache: true },
             name: "Dayintz",
             path: "dayintz",
         }, {
@@ -182,19 +182,19 @@ export const constantRoutes = [{
         }, {
             component: (resolve) => require(['@/views/checkup/jianchass/index'], resolve),
             hidden: false,
-            meta: { title: "检查实施", noCache: false },
+            meta: { title: "检查实施", noCache: true },
             name: "Jianchass",
             path: "jianchass",
         }, {
             component: (resolve) => require(['@/views/checkup/diaochaqz/index'], resolve),
             hidden: false,
-            meta: { title: "调查取证", noCache: false },
+            meta: { title: "调查取证", noCache: true },
             name: "Diaochaqz",
             path: "diaochaqz"
         }, {
             component: (resolve) => require(['@/views/checkup/xingchengjg/index'], resolve),
             hidden: false,
-            meta: { title: "形成结果", noCache: false },
+            meta: { title: "形成结果", noCache: true },
             name: "Xingchengjg",
             path: "xingchengjg",
         }, {
@@ -218,7 +218,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "实施检查", icon: "monitor", noCache: false },
+        meta: { title: "实施检查", icon: "monitor", noCache: true },
         name: "Checkup",
         path: "/checkup",
         redirect: "noRedirect"
@@ -228,25 +228,25 @@ export const constantRoutes = [{
         children: [{
             component: (resolve) => require(['@/views/system/dept/listd'], resolve),
             hidden: false,
-            meta: { title: "网审人员维护", noCache: false },
+            meta: { title: "网审人员维护", noCache: true },
             name: "Listd",
             path: "system/listd",
         }, {
             component: (resolve) => require(['@/views/system/dept/list'], resolve),
             hidden: false,
-            meta: { title: "检查组维护", noCache: false },
+            meta: { title: "检查组维护", noCache: true },
             name: "List",
             path: "system/list",
         }, {
             component: (resolve) => require(['@/views/system/user/index'], resolve),
             hidden: false,
-            meta: { title: "账号及权限维护", noCache: false },
+            meta: { title: "账号及权限维护", noCache: true },
             name: "User",
             path: "system/user",
         }, {
             component: (resolve) => require(['@/views/baseinfosave/luliwh/index'], resolve),
             hidden: false,
-            meta: { title: "履历维护", noCache: false },
+            meta: { title: "履历维护", noCache: true },
             name: "Luliwh",
             path: "luliwh",
         }, {
@@ -258,7 +258,7 @@ export const constantRoutes = [{
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "基础信息维护", icon: "peoples", noCache: false },
+        meta: { title: "基础信息维护", icon: "peoples", noCache: true },
         name: "Baseinfosave",
         path: "/baseinfosave",
         redirect: "noRedirect"
@@ -268,13 +268,13 @@ export const constantRoutes = [{
         children: [{
             component: (resolve) => require(['@/views/thirdcheck/thirdcheck/index'], resolve),
             hidden: false,
-            meta: { title: "第三方筛查", noCache: false },
+            meta: { title: "第三方筛查", noCache: true },
             name: "Rhirdcheck",
             path: "thirdcheck",
         }],
         component: Layout,
         hidden: false,
-        meta: { title: "第三方筛查", icon: "log", noCache: false },
+        meta: { title: "第三方筛查", icon: "log", noCache: true },
         name: "Thirdcheck",
         path: "/thirdcheck",
         redirect: "noRedirect"

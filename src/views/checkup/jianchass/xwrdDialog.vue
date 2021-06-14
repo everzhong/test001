@@ -1,10 +1,10 @@
 <template>
   <el-dialog width="780px" class="msg-dialog" title="选择行为认定" :visible.sync="options.show">
     <el-select v-model="typeSelect" style="margin-bottom:5px" clearable @change="filterXwrdList">
-      <el-option label="都督管理办法（第31号令）" :value="1"></el-option>
-      <el-option label="都督管理办法（第60号令）" :value="2"></el-option>
+      <el-option label="都督管理办法（第31号令）" value="1"></el-option>
+      <el-option label="都督管理办法（第60号令）" value="2"></el-option>
     </el-select>
-    <el-table size="small" v-loading="loading" :data="filterList" @selection-change="handleSelectionChange" border>
+    <el-table size="small" v-loading="loading" :data="filterList" @selection-change="handleSelectionChange" border height="350px">
       <el-table-column width="40px" align="center">
             <template slot-scope="scope">
               <el-radio :label="scope.row.xwbh" v-model="xwChecked"></el-radio>
@@ -39,7 +39,7 @@ export default {
       //选中的项
       xwChecked:'',
       //条令
-      typeSelect:1,
+      typeSelect:'1',
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -90,21 +90,7 @@ export default {
   },
   props:['options'],
   created() {
-    // this.getList();
-    this.xwrdList =[
-      {id:1,type:2,xwbh:'6169d09',wgxw:'费用是点击',lx:"收费"},
-      {id:2,type:1,xwbh:'6169069',wgxw:'费用是点击',lx:"收费"},
-      {id:3,type:1,xwbh:'t169309',wgxw:'费用是点击',lx:"收费"},
-      {id:4,type:2,xwbh:'1t6909',wgxw:'费用是点击',lx:"收费"},
-      {id:5,type:1,xwbh:'1rf69049',wgxw:'费用是点击',lx:"收费"},
-      {id:6,type:1,xwbh:'16d9d09',wgxw:'费用是点击',lx:"收费"},
-      {id:7,type:1,xwbh:'169c309',wgxw:'费用是点击',lx:"收费"},
-      {id:8,type:2,xwbh:'12909',wgxw:'费sd点击',lx:"收费"},
-      {id:9,type:2,xwbh:'2909',wgxw:'费用是点击',lx:"收费"},
-      {id:10,type:2,xwbh:'66909',wgxw:'费用是点击',lx:"收费"}
-    ]
-    this.filterXwrdList();
-    this.loading = false
+    this.getList();
     this.getDicts("sys_renwu_wgfl").then(response => {
       this.typeOptions = response.data;
     });
@@ -137,7 +123,7 @@ export default {
     xwConfirm(){
       if(this.xwChecked){
         const select = this.filterList.filter(item=>{
-          return item.type === this.typeSelect
+          return item.xwbh === this.xwChecked
         })
         this.$emit('on-checked',select[0])
         this.options.show = false
@@ -154,6 +140,8 @@ export default {
         this.filterXwrdList(response.rows);
         this.total = response.total;
         this.loading = false;
+      }).catch(e=>{
+        this.loading = false
       });
     },
     // 从属哪一号令字典翻译

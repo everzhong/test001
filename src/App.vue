@@ -58,4 +58,7 @@ export default  {
     margin-top:5px;
   }
 }
+.xwrd-table-row {
+  background-color:#FFEBEB !important;
+}
 </style>

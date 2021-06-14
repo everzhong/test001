@@ -81,8 +81,8 @@
             </template>
           </el-table-column>
       </el-table>
-      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @handleSelectionChange="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
-      <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList"></tongliumx>
+      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
+      <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" @radio-change="handleSelectionChange"></tongliumx>
     </div>
     <pagination
        style="margin-top:0;margin-bottom:25px;"
@@ -100,8 +100,8 @@
         <el-form-item label="行为认定" prop="xwrd">
           <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:32px;height:32px;border:1px solid #DCDFE6;border-radius:4px;width:188px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
         </el-form-item>
-        <el-form-item label="备注" prop="beizhu">
-          <el-input v-model="xwrdForm.beizhu" maxlength="50"></el-input>
+        <el-form-item label="备注" prop="bz">
+          <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
         </el-form-item>
          <el-form-item label="追款单价" prop="mxxmdj">
           <el-input v-model="xwrdForm.mxxmdj" :disabled="isDisabled.dj"></el-input>
@@ -190,16 +190,17 @@
       </div>
     </el-dialog>
     <guizeshuom :options="guizeOptions"></guizeshuom>
-    <xwrd-dialog :options="xwrdDialog" @on-checked="onChecked"></xwrd-dialog>
+    <xwrd-dialog :options="xwrdDialog" @on-checked="onChecked" v-if="xwrdDialog.show"></xwrd-dialog>
     <jgheshi :options="heshiOption"></jgheshi>
   </div>
 </template>
 
 <script>
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
-import { listRenwufour } from '@/api/renwu/renwufour'
-import { listRenwufive } from '@/api/renwu/renwufive'
-import { submitDxqd} from "@/api/renwu/dcqz"
+import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
+import { listRenwufive ,updateRenwufive} from '@/api/renwu/renwufive'
+import { submitDxqd } from "@/api/renwu/dcqz"
+import { updateXwrd } from "@/api/renwu/xwrd"
 
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
@@ -233,7 +234,7 @@ export default {
       xwrdForm:{
         gzmc:'',
         xwrd:'',
-        beizhu:'',
+        bz:'',
         mxxmdj:'',
         mxxmsl:'',
         mxxmje:''
@@ -251,6 +252,7 @@ export default {
       chaxunDialog:false,
       isAll:false,
       liushuiSetions:[],
+      selectedId:"",
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -332,6 +334,7 @@ export default {
         xwrd:'',
         jghszt:''
       },
+      
       guizefl:{
         search:'',
         gzfl:[],
@@ -434,8 +437,15 @@ export default {
     // });
   },
   methods: {
-    //点击检查完成状态跳到5
+    tableFourRadioChange(e){
+      console.log(e)
+    },
+    //点击检查完成状态跳到4
     doSubmit() {
+      if(!this.selectedId){
+        this.msgWarning('请选择一项')
+        return
+      }
       const params = {
         ids:[this.queryInfoFrom.id],
         status:4,//检查完成去到状态4，形成结果
@@ -449,6 +459,15 @@ export default {
     },
     //返回上一层
     goBackUpLevel(){
+      this.selectedId = ''
+      this.xwrdForm = {
+        gzmc:'',
+        xwrd:'',
+        bz:'',
+        mxxmdj:'',
+        mxxmsl:'',
+        mxxmje:''
+      }
       switch(this.tabsValue) {
         case 'five':
           this.tabsValue = 'four'
@@ -467,7 +486,7 @@ export default {
     },
     //点击行为认定
     handelXwrdDialog(){
-      if(this.ids.length===0){
+      if(!this.selectedId){
         this.msgError('请选择规则后再点行为认定')
       } else {
         this.xwrdDialog.show = true
@@ -476,7 +495,16 @@ export default {
     xwrdSubmit(){
       this.$refs['xwrdForm'].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            const {type,xwbh,lx} = this.xwrdChecd
+            if(this.tabsValue==='four'){
+              updateRenwufour({id:this.selectedId,...this.xwrdForm,type,xwbh,lx}).then(res=>{
+                if(res.code===200) this.getList()
+              })
+            } else if (this.tabsValue==='five') {//在第五层认定,需要同时更改第四层和第五层
+              updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx}).then(res=>{
+                if(res.code===200) this.getList()
+              })
+            }
           } else {
             return false;
           }
@@ -701,22 +729,24 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       if(selection.length!==0){
-        this.ids = selection.map(item => item.id)
-        this.liushuiSetions= [...selection]
+        // this.ids = selection.map(item => item.id)
         this.isDisabled = this.isDisabledEvent(selection)
-        this.xwrdForm.mxxmdj = selection[0].mxxmdj
-        const shuliangList = selection.map(item=>item.mxxmsl)
-        const feiyong = selection.map(item=>item.mxxmje)
-        this.xwrdForm.mxxmsl = this.sum(shuliangList)
-        this.xwrdForm.mxxmje = this.sum(feiyong)
-        this.single = selection.length!==1
-        this.multiple = !selection.length
+        const {id,mxxmdj,mxxmsl,mxxmje,gzmc} = selection[0]
+        this.selectedId = id
+        this.xwrdForm.gzmc = gzmc
+        this.xwrdForm.mxxmdj = mxxmdj
+        this.xwrdForm.mxxmsl = mxxmsl
+        this.xwrdForm.mxxmje = mxxmje
+        // const shuliangList = selection.map(item=>item.mxxmsl)
+        // const feiyong = selection.map(item=>item.mxxmje)
+        // this.xwrdForm.mxxmsl = this.sum(shuliangList)
+        // this.xwrdForm.mxxmje = this.sum(feiyong)
       } else {
         this.ids=[]
         this.xwrdForm = {
           gzmc:'',
           xwrd:'',
-          beizhu:'',
+          bz:'',
           mxxmdj:'',
           mxxmsl:'',
           mxxmje:''
@@ -727,6 +757,15 @@ export default {
     //同流水下明细
     tongLiushuimx(row){
       this.tabsValue = 'five'
+      this.selectedId = ''
+      this.xwrdForm = {
+        gzmc:'',
+        xwrd:'',
+        bz:'',
+        mxxmdj:'',
+        mxxmsl:'',
+        mxxmje:''
+      }
       this.getList()
     },
     sum(arr){

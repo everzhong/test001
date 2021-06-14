@@ -1,7 +1,12 @@
 /**项目流水号汇总 第四层数据*/
 <template>
-  <el-table ref="multipleTable" :data="tableData" border @selection-change="handleSelectionChange" style="margin-top:10px">
-    <el-table-column type="selection" width="55" align="center" />
+  <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border  style="margin-top:10px">
+    <!-- <el-table-column type="selection" width="55" align="center"  /> -->
+    <el-table-column  align="center" width="55">
+      <template slot-scope="scope">
+        <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
+      </template>
+    </el-table-column>
     <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  show-overflow-tooltip/>
     <el-table-column label="规则名称" align="center" prop="gzmc"  show-overflow-tooltip/>
@@ -29,10 +34,18 @@
 export default {
   name:'LiushuiTable',
   data(){
-    return {}
+    return {
+      wsCheck:''
+    }
   },
   props:['tableData'],
   methods:{
+    radioChange(e){
+      const selection = this.tableData.filter(item=>{
+        return item.id === e
+      })
+      this.$emit('radio-change',selection)
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.$emit('handleSelectionChange',selection)
@@ -50,7 +63,21 @@ export default {
     },
     clearAll(){
       this.$refs.multipleTable.clearSelection()
+    },
+    tableRowClassName({row}){
+      if(row.xwrd){
+        return 'xwrd-table-row'
+      } else {
+        return ''
+      }
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.qztable {
+    &::v-deep .el-radio__label {
+      display: none !important;
+    }
+}
+</style>
