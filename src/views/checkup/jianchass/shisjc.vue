@@ -511,9 +511,9 @@ export default {
      * 
      * 查看流水号项目汇总
     */
-    async fluProject(row){
-      await this.getList({rwpcid:row.rwpcid,jgdm:row.jgdm})
+    fluProject(row){
       this.$set(this,'tabsValue','four')
+      this.getList({rwpcid:row.rwpcid,jgdm:row.jgdm})
     },
     /** 查询renwu列表 */
     async getList(query) {

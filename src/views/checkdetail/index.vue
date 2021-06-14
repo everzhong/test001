@@ -33,7 +33,53 @@
     <div v-loading="loading">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
-      <RenwutwoTable v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
+      <!-- <RenwutwoTable :selectable="selectableFun" v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/> -->
+      <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border>
+        <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return row.status==0}"/>
+        <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="状态" align="center" prop="status"  show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{statusText(scope.row.status)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  show-overflow-tooltip/>
+        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
+        <el-table-column label="行政区" align="center" prop="xzq"  show-overflow-tooltip/>
+        <el-table-column label="结算等级" align="center" prop="jsdj"  show-overflow-tooltip/>
+        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
+        <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
+        <el-table-column label="异地/本地" align="center" prop="ybd"  show-overflow-tooltip/>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="结算金额" align="center" prop="jsje"  show-overflow-tooltip/>
+        <el-table-column label="结算人次" align="center" prop="jsrc"  show-overflow-tooltip/>
+        <el-table-column label="涉及违规数" align="center" prop="sjwgs"  show-overflow-tooltip/>
+        <el-table-column label="第三方查询状态" align="center">
+          <template slot-scope="scope">
+            <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="疑点金额" align="center" prop="ydje"  show-overflow-tooltip/>
+          <!-- <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                @click="checkdetail(scope.row)"
+              >查看明细</el-button>
+            </template>
+          </el-table-column> -->
+        </el-table>
     </div>
     <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
       <el-form-item label="已选机构" prop="yxjg">
@@ -334,7 +380,7 @@ export default {
             res = await listRenwufour(params)
             break;
           default:
-            params.status = 0 //默认查0的数据
+            // params.status = 0 //默认查0的数据
             res = await listRenwutwo(params)
             break;
         }
@@ -686,8 +732,15 @@ export default {
       this.queryParams.pageNum = 1
       this.getList()
       console.log(val)
+    },
+    statusText(status){
+      if(status!==null ||status!==''||status!==undefined){
+        return ['待审查','已实施网审','已对象确定','已派发任务','已打印通知或实施检查','已形成结果'][status]
+      } else {
+        return ''
+      }
     }
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

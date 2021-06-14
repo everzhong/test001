@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" @selection-change="handleSelectionChange" border>
-    <el-table-column type="selection" width="55" align="center" />
+    <el-table-column type="selection" width="55" align="center"/>
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
     <el-table-column label="统一社会信用代码" align="center" prop="xydm"  show-overflow-tooltip/>
