@@ -198,7 +198,6 @@ export default {
         this.$message.warning({message:'请选择',showClose:true})
         return
       }
-      console.log(this.roleSelection,this.addGroup)
       this.roleSelection.forEach(item=>{
         this.addGroup.jczcy.push(item.jgdm)
       })

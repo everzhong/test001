@@ -47,10 +47,10 @@ export function getCodeImg() {
     })
 }
 //
-export function loginApi() {
+export function loginApi(params) {
     return request({
         url: '/loginapi',
         method: 'get',
-        params: { uid: "zhangming" }
+        params: params
     })
 }

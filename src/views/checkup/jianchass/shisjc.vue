@@ -438,7 +438,7 @@ export default {
     doSubmit() {
       const params = {
         ids:[this.queryInfoFrom.id],
-        status:5,//检查完成去到状态5，形成结果
+        status:4,//检查完成去到状态4，形成结果
         dxqd:'检查完成',
         qdbh:''//驳回意见字段
       }

@@ -54,10 +54,9 @@
 </template>
 
 <script>
-import { getCodeImg,loginApi } from "@/api/login";
+import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
-import axios from 'axios'
 export default {
   name: "Login",
   data() {
@@ -97,8 +96,7 @@ export default {
     // this.getCookie();
     const uid = this.$route.query.uid
     Cookies.set("username", uid, { expires: 30 });
-    this.handlerLoginapi({uid:uid}).then(res=>{
-      console.log(res)
+    this.handlerLoginapi({uid:uid}).then(()=>{
       this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
     })
   },

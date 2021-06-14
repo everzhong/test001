@@ -334,7 +334,7 @@ export default {
             res = await listRenwufour(params)
             break;
           default:
-            params.status = query.status//第二层级 需要加status
+            params.status = 0 //默认查0的数据
             res = await listRenwutwo(params)
             break;
         }

@@ -319,7 +319,7 @@ export default {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
-      params.status = '4' //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
+      params.status = 3 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
       this.loading = true
       try {
         const res = await listRenwutwo(params)

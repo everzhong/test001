@@ -10,7 +10,7 @@
         <el-button
           type="primary"
           size="small"
-          @click="handleAgree(3)"
+          @click="handleAgree(2)"
         >同意</el-button>
       </el-col>
       <el-col :span="1.5" v-if="tabsValue==='two'">
@@ -18,7 +18,7 @@
           type="primary"
           size="small"
           plain
-          @click="handleAgree(1)"
+          @click="handleAgree(0)"
         >驳回</el-button>
       </el-col>
       <div class="top-right-btn">
@@ -310,7 +310,7 @@ export default {
             res = await listRenwufour(params)
             break;
           default:
-            params.status = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
+            params.status = 1 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
             res = await listRenwutwo(params)
             break;
         }
@@ -566,17 +566,17 @@ export default {
         })
     },
     /**
-     * 实施网申 type:3同意 1驳回
+     * 实施网申 type:2同意 0驳回
      */
     handleAgree(type){
       if(!this.ids.length){
         this.msgError('请至少选择一项')
         return
       } 
-      if(type===3){
+      if(type===2){
         this.doSubmit({
           ids:this.ids,
-          status:3,//同意3 ，驳回1
+          status:2,//同意2 ，驳回0
           dxqd:'同意',
           qdbh:''//驳回意见字段
         })
@@ -599,7 +599,7 @@ export default {
         }).then(({ value }) => {
           self.doSubmit({
             ids:this.ids,
-            status:1,//同意3 ，驳回1
+            status:0,//同意2 ，驳回0
             dxqd:'驳回',
             qdbh:value//驳回意见字段
           })

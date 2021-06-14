@@ -29,8 +29,8 @@
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
           <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
-            <el-button type="primary" size="mini" @click="handleAgree(4)">回退</el-button>
-            <el-button type="primary" size="mini" @click="handleAgree(6)">提交</el-button>
+            <el-button type="primary" size="mini" @click="handleAgree(3)">回退</el-button>
+            <el-button type="primary" size="mini" @click="handleAgree(5)">提交</el-button>
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
@@ -99,10 +99,10 @@ export default {
      * 实施网申 
      */
     handleAgree(type){
-      if(type===6){
+      if(type===5){
         this.doSubmit({
           ids:[this.queryInfoFrom.id],
-          status:type,//提交6，退回4
+          status:type,//提交5，退回3
           dxqd:'提交',
           qdbh:''//驳回意见字段
         },type)
@@ -122,7 +122,7 @@ export default {
         }).then(({ value }) => {
           self.doSubmit({
             ids:[this.queryInfoFrom.id],
-            status:4,//驳回到4
+            status:3,//驳回到4
             dxqd:'退回',
             qdbh:value//驳回意见字段
           })

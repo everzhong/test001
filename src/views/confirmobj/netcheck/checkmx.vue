@@ -54,9 +54,6 @@ export default {
     }
   },
   props:['options'],
-  created(){
-    this.getList()
-  },
   methods:{
     /** 查询renwuthree列表 */
     async getList() {

@@ -7,7 +7,7 @@ import { getToken, getUid, removeToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/authLogin', '/loginapi', 'authLogin', '/api/sendscreening', '/auth-redirect', '/bind', '/register']
+const whiteList = ['/login', '/authLogin', '/loginapi', '/api/sendscreening', '/auth-redirect', '/bind', '/register']
 
 router.beforeEach((to, from, next) => {
     const uid = getUid()

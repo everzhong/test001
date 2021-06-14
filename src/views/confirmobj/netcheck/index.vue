@@ -350,7 +350,7 @@ export default {
             res = await listRenwufour(params)
             break;
           default:
-            params.status = 1//0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
+            params.status = 0 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
             res = await listRenwutwo(params)
             break;
         }

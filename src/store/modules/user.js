@@ -1,6 +1,6 @@
-import { login, logout, getInfo, loginapi } from '@/api/login'
+import { login, logout, getInfo, loginApi } from '@/api/login'
 import { getToken, setToken, removeToken, setUid } from '@/utils/auth'
-import axios from 'axios'
+// import axios from 'axios'
 const user = {
     state: {
         token: getToken(),
@@ -29,15 +29,28 @@ const user = {
     },
 
     actions: {
+        // LoginApi({ commit }, userInfo) {
+        //     const uid = userInfo.uid
+        //     return new Promise((resolve, reject) => {
+        //         axios.get('http://211.149.254.6:8080/loginapi', {
+        //             params: { uid }
+        //         }).then(res => {
+        //             setToken(res.data.token)
+        //             setUid(uid)
+        //             commit('SET_TOKEN', res.data.token)
+        //             resolve()
+        //         }).catch(error => {
+        //             reject(error)
+        //         })
+        //     })
+        // },
         LoginApi({ commit }, userInfo) {
             const uid = userInfo.uid
             return new Promise((resolve, reject) => {
-                axios.get('/loginapi', {
-                    params: { uid }
-                }).then(res => {
-                    setToken(res.data.token)
+                loginApi({ uid }).then(res => {
+                    setToken(res.token)
                     setUid(uid)
-                    commit('SET_TOKEN', res.data.token)
+                    commit('SET_TOKEN', res.token)
                     resolve()
                 }).catch(error => {
                     reject(error)
