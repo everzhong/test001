@@ -36,7 +36,7 @@
         <el-table-column label="核实时间" align="center" prop="hssj"  show-overflow-tooltip/>
         <el-table-column label="核实人" align="center" prop="hsr"  show-overflow-tooltip/>
         <el-table-column label="核实派发时间" align="center" prop="hspfsj"  show-overflow-tooltip/>
-        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <el-table-column label="已发送回智审" align="center" prop="issend"  show-overflow-tooltip/>
         <!-- <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" show-overflow-tooltipshow-overflow-tooltip/>
@@ -60,7 +60,7 @@
         <el-table-column label="核实时间" align="center" prop="hssj" :formatter="hssjFormat" show-overflow-tooltip/>
         <el-table-column label="核实人" align="center" prop="hsr" :formatter="hsrFormat" show-overflow-tooltip/>
         <el-table-column label="核实派发时间" align="center" prop="hspfsj" :formatter="hspfsjFormat" show-overflow-tooltip/>
-        <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" show-overflow-tooltip/>
         <el-table-column label="已发送回智审" align="center" prop="issend" :formatter="issendFormat" show-overflow-tooltip/> -->
       </el-table>
       <pagination
@@ -292,7 +292,7 @@ export default {
     hspfsjFormat(row, column) {
       return this.selectDictLabel(this.hspfsjOptions, row.hspfsj);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

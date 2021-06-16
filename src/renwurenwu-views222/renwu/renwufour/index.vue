@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -214,7 +214,7 @@
       <el-table-column label="违规数量" align="center" prop="wgsl" :formatter="wgslFormat" />
       <el-table-column label="违规费用" align="center" prop="wgfy" :formatter="wgfyFormat" />
       <el-table-column label="备注" align="center" prop="bz" :formatter="bzFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="机构名称" align="center" prop="jgmc" :formatter="jgmcFormat" />
       <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat" />
       <el-table-column label="结算等级" align="center" prop="jsdj" :formatter="jsdjFormat" />
@@ -268,8 +268,8 @@
     <!-- 添加或修改renwufour对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="机构名称" prop="jgmc">
           <el-input v-model="form.jgmc" placeholder="请输入机构名称" />
@@ -377,7 +377,7 @@ export default {
       wgfyOptions: [],
       // 备注字典
       bzOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 机构名称字典
       jgmcOptions: [],
@@ -567,7 +567,7 @@ export default {
     bzFormat(row, column) {
       return this.selectDictLabel(this.bzOptions, row.bz);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

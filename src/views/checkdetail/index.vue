@@ -37,7 +37,7 @@
       <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border>
         <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return row.status==0}"/>
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <el-table-column label="状态" align="center" prop="status"  show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{statusText(scope.row.status)}}</span>
@@ -170,7 +170,7 @@ export default {
       ybdOptions: [],
       // 数据开始时间字典
       datastarttimeOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 险种字典
       ybbfOptions: [],
@@ -449,7 +449,7 @@ export default {
     datastarttimeFormat(row, column) {
       return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

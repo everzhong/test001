@@ -37,10 +37,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -213,7 +213,7 @@
       <el-table-column label="机构名称" align="center" prop="jgmc" :formatter="jgmcFormat" />
       <el-table-column label="规则分类" align="center" prop="gzfl" :formatter="gzflFormat" />
       <el-table-column label="规则名称" align="center" prop="gzmc" :formatter="gzmcFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :formatter="xjjzrsFormat" />
       <el-table-column label="涉及明细数" align="center" prop="xjmxs" :formatter="xjmxsFormat" />
       <el-table-column label="涉及金额" align="center" prop="xjje" :formatter="xjjeFormat" />
@@ -269,8 +269,8 @@
         <el-form-item label="规则名称" prop="gzmc">
           <el-input v-model="form.gzmc" placeholder="请输入规则名称" />
         </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="涉及就诊人数" prop="xjjzrs">
           <el-input v-model="form.xjjzrs" placeholder="请输入涉及就诊人数" />
@@ -354,7 +354,7 @@ export default {
       gzflOptions: [],
       // 规则名称字典
       gzmcOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 涉及就诊人数字典
       xjjzrsOptions: [],
@@ -489,7 +489,7 @@ export default {
     gzmcFormat(row, column) {
       return this.selectDictLabel(this.gzmcOptions, row.gzmc);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

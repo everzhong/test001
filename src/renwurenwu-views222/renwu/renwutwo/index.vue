@@ -307,10 +307,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -438,7 +438,7 @@
       <el-table-column label="驳回意见" align="center" prop="bhyj" :formatter="bhyjFormat" />
       <el-table-column label="机构等级" align="center" prop="jgdj" :formatter="jgdjFormat" />
       <el-table-column label="机构类型" align="center" prop="jglx" :formatter="jglxFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="机构性质" align="center" prop="jgxz" :formatter="jgxzFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -639,8 +639,8 @@
         <el-form-item label="机构类型" prop="jglx">
           <el-input v-model="form.jglx" placeholder="请输入机构类型" />
         </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="机构性质" prop="jgxz">
           <el-input v-model="form.jgxz" placeholder="请输入机构性质" />
@@ -751,7 +751,7 @@ export default {
       jgdjOptions: [],
       // 机构类型字典
       jglxOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 机构性质字典
       jgxzOptions: [],
@@ -1063,7 +1063,7 @@ export default {
     jglxFormat(row, column) {
       return this.selectDictLabel(this.jglxOptions, row.jglx);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

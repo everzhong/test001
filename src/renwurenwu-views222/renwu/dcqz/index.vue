@@ -93,7 +93,7 @@
     <el-table v-loading="loading" :data="dcqzList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="qzid" :formatter="qzidFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" />
       <el-table-column label="类型" align="center" prop="type" :formatter="typeFormat" />
       <el-table-column label="资料说明" align="center" prop="zlsm" :formatter="zlsmFormat" />
@@ -234,7 +234,7 @@ export default {
       open: false,
       // ID字典
       qzidOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 机构代码字典
       jgdmOptions: [],
@@ -393,7 +393,7 @@ export default {
     qzidFormat(row, column) {
       return this.selectDictLabel(this.qzidOptions, row.qzid);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

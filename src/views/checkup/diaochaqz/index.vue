@@ -84,7 +84,7 @@ export default {
       ybdOptions: [],
       // 数据开始时间字典
       datastarttimeOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 险种字典
       ybbfOptions: [],
@@ -301,7 +301,7 @@ export default {
     datastarttimeFormat(row, column) {
       return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

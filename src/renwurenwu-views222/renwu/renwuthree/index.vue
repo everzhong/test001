@@ -145,10 +145,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -231,7 +231,7 @@
       <el-table-column label="核实时间" align="center" prop="hssj" :formatter="hssjFormat" />
       <el-table-column label="核实人" align="center" prop="hsr" :formatter="hsrFormat" />
       <el-table-column label="核实派发时间" align="center" prop="hspfsj" :formatter="hspfsjFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="已发送回智审" align="center" prop="issend" :formatter="issendFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -312,8 +312,8 @@
         <el-form-item label="结算等级" prop="jsdj">
           <el-input v-model="form.jsdj" placeholder="请输入结算等级" />
         </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -397,7 +397,7 @@ export default {
       hsrOptions: [],
       // 核实派发时间字典
       hspfsjOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 已发送回智审字典
       issendOptions: [],
@@ -613,7 +613,7 @@ export default {
     hspfsjFormat(row, column) {
       return this.selectDictLabel(this.hspfsjOptions, row.hspfsj);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

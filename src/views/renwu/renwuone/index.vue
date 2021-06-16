@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -206,7 +206,7 @@
 
     <el-table v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="机构名称" align="center" prop="rwmc" :formatter="rwmcFormat" />
       <el-table-column label="检查方式" align="center" prop="jcfs" :formatter="jcfsFormat" />
       <el-table-column label="数据开始时间" align="center" prop="datastarttime" width="180">
@@ -271,8 +271,8 @@
     <!-- 添加或修改renwuone对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="机构名称" prop="rwmc">
           <el-input v-model="form.rwmc" placeholder="请输入机构名称" />
@@ -389,7 +389,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 机构名称字典
       rwmcOptions: [],
@@ -453,7 +453,7 @@ export default {
       // 表单校验
       rules: {
         rwpcid: [
-          { required: true, message: "任务批次号不能为空", trigger: "blur" }
+          { required: true, message: "批次号不能为空", trigger: "blur" }
         ],
       }
     };
@@ -525,7 +525,7 @@ export default {
         this.loading = false;
       });
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

@@ -33,7 +33,7 @@
             <span>{{scope.row.isdayin?'是':'否'}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
         <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
@@ -115,7 +115,7 @@ export default {
       ybdOptions: [],
       // 数据开始时间字典
       datastarttimeOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 险种字典
       ybbfOptions: [],
@@ -353,7 +353,7 @@ export default {
     datastarttimeFormat(row, column) {
       return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

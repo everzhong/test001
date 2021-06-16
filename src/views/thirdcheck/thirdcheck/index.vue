@@ -6,7 +6,7 @@
     <el-table :data="renwuthreeList" border>
         <el-table-column type="selection" width="55" align="center" />
         <!-- <el-table-column label="序号" type="index" align="center"  /> -->
-        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <el-table-column label="筛查任务ID" align="center" prop="scrid"  show-overflow-tooltip/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
           <template slot-scope="scope">
@@ -84,7 +84,7 @@ export default {
       ybdOptions: [],
       // 数据开始时间字典
       datastarttimeOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 险种字典
       ybbfOptions: [],
@@ -353,7 +353,7 @@ export default {
     datastarttimeFormat(row, column) {
       return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

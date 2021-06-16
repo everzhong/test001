@@ -18,10 +18,10 @@
           placeholder="选择数据开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -331,7 +331,7 @@
           <span>{{ parseTime(scope.row.datastarttime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="险种" align="center" prop="ybbf" :formatter="ybbfFormat" />
       <el-table-column label="数据结束时间" align="center" prop="dataendtime" width="180">
         <template slot-scope="scope">
@@ -421,8 +421,8 @@
             placeholder="选择数据开始时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="险种" prop="ybbf">
           <el-input v-model="form.ybbf" placeholder="请输入险种" />
@@ -602,7 +602,7 @@ export default {
       ybdOptions: [],
       // 数据开始时间字典
       datastarttimeOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 险种字典
       ybbfOptions: [],
@@ -811,7 +811,7 @@ export default {
     datastarttimeFormat(row, column) {
       return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

@@ -141,10 +141,10 @@
           placeholder="选择更新时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -248,7 +248,7 @@
           <span>{{ parseTime(scope.row.uptime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="任务状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -352,8 +352,8 @@
             placeholder="选择更新时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="任务状态">
           <el-radio-group v-model="form.status">
@@ -436,7 +436,7 @@ export default {
       addtimeOptions: [],
       // 更新时间字典
       uptimeOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 任务状态字典
       statusOptions: [],
@@ -612,7 +612,7 @@ export default {
     uptimeFormat(row, column) {
       return this.selectDictLabel(this.uptimeOptions, row.uptime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

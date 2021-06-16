@@ -70,7 +70,7 @@
       <el-table-column label="最后操作人" align="center" prop="zhczr" :formatter="zhczrFormat" />
       <el-table-column label="最后操作时间" align="center" prop="zhczsj" :formatter="zhczsjFormat" />
       <el-table-column label="备注" align="center" prop="bz" :formatter="bzFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" />
       <el-table-column label="添加记录时间" align="center" prop="addtime" width="180">
         <template slot-scope="scope">
@@ -166,7 +166,7 @@ export default {
       zhczsjOptions: [],
       // 备注字典
       bzOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 机构代码字典
       jgdmOptions: [],
@@ -257,7 +257,7 @@ export default {
     bzFormat(row, column) {
       return this.selectDictLabel(this.bzOptions, row.bz);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

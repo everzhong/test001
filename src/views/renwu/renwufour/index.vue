@@ -136,10 +136,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务批次号" prop="rwpcid">
+      <el-form-item label="批次号" prop="rwpcid">
         <el-input
           v-model="queryParams.rwpcid"
-          placeholder="请输入任务批次号"
+          placeholder="请输入批次号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -228,7 +228,7 @@
       <el-table-column label="明细项目医保结算金额" align="center" prop="mxxmbjsfy" :formatter="mxxmbjsfyFormat" />
       <el-table-column label="费用类别" align="center" prop="fylb" :formatter="fylbFormat" />
       <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" />
-      <el-table-column label="任务批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
+      <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="ID集" align="center" prop="ids" :formatter="idsFormat" />
       <el-table-column label="添加时间" align="center" prop="addtime" width="180">
         <template slot-scope="scope">
@@ -311,8 +311,8 @@
         <el-form-item label="机构代码" prop="jgdm">
           <el-input v-model="form.jgdm" placeholder="请输入机构代码" />
         </el-form-item>
-        <el-form-item label="任务批次号" prop="rwpcid">
-          <el-input v-model="form.rwpcid" placeholder="请输入任务批次号" />
+        <el-form-item label="批次号" prop="rwpcid">
+          <el-input v-model="form.rwpcid" placeholder="请输入批次号" />
         </el-form-item>
         <el-form-item label="ID集" prop="ids">
           <el-input v-model="form.ids" type="textarea" placeholder="请输入内容" />
@@ -403,7 +403,7 @@ export default {
       fylbOptions: [],
       // 机构代码字典
       jgdmOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // ID集字典
       idsOptions: [],
@@ -606,7 +606,7 @@ export default {
     jgdmFormat(row, column) {
       return this.selectDictLabel(this.jgdmOptions, row.jgdm);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

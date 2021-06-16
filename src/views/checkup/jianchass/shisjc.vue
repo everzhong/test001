@@ -319,7 +319,7 @@ export default {
       hsrOptions: [],
       // 核实派发时间字典
       hspfsjOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 已发送回智审字典
       issendOptions: [],
@@ -673,7 +673,7 @@ export default {
     hspfsjFormat(row, column) {
       return this.selectDictLabel(this.hspfsjOptions, row.hspfsj);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

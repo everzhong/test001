@@ -132,7 +132,7 @@ export default {
       open: false,
       // ID字典
       qzidOptions: [],
-      // 任务批次号字典
+      // 批次号字典
       rwpcidOptions: [],
       // 机构代码字典
       jgdmOptions: [],
@@ -214,7 +214,7 @@ export default {
     qzidFormat(row, column) {
       return this.selectDictLabel(this.qzidOptions, row.qzid);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

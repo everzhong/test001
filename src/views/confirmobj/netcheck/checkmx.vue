@@ -24,7 +24,7 @@
         <el-table-column label="核实时间" align="center" prop="hssj"  show-overflow-tooltip/>
         <el-table-column label="核实人" align="center" prop="hsr"  show-overflow-tooltip/>
         <el-table-column label="核实派发时间" align="center" prop="hspfsj"  show-overflow-tooltip/>
-        <el-table-column label="任务批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
         <el-table-column label="已发送回智审" align="center" prop="issend"  show-overflow-tooltip/>
       </el-table>
     </div>
