@@ -6,25 +6,25 @@
       <el-table :data="renwutwoList" border>
         <el-table-column label="序号" type="index" align="center"  />
         <!-- <el-table-column label="状态" align="center" prop="status"></el-table-column> -->
-        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
-        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
-        <el-table-column label="机构等级" align="center" prop="jgdj"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
+        <el-table-column label="机构等级" align="center" prop="jgdj"  :width="flexColumnWidth('jgdj',renwutwoList)"/>
         <el-table-column label="行政区" align="center" prop="xzq"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="监管阶段" align="center" prop="jczid"  show-overflow-tooltip/>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button
               size="mini"

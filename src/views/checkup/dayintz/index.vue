@@ -28,24 +28,24 @@
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return !row.isdayin}"></el-table-column>
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="是否制作" align="center" prop="isdayin"  show-overflow-tooltip>
+        <el-table-column label="是否制作" align="center" prop="isdayin"  :width="flexColumnWidth('isdayin',renwutwoList)">
           <template slot-scope="scope">
             <span>{{scope.row.isdayin?'是':'否'}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
-        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
-        <el-table-column label="检查机构" align="center" prop="jcjg"  show-overflow-tooltip/>
-        <el-table-column label="检查组" align="center" prop="jczname"  show-overflow-tooltip/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
+        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
+        <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
+        <el-table-column label="检查机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
+        <el-table-column label="检查组" align="center" prop="jczname"  :width="flexColumnWidth('jczname',renwutwoList)"/>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>

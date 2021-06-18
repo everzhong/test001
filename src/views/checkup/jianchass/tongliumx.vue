@@ -7,22 +7,34 @@
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
     </el-table-column>
-    <el-table-column label="就医类型" align="center" prop="jglx"  show-overflow-tooltip/>
-    <el-table-column label="险种" align="center" prop="gzfl"  show-overflow-tooltip/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  show-overflow-tooltip/>
-    <el-table-column label="交易流水号" align="center" prop="xwrd"  show-overflow-tooltip/>
-    <el-table-column label="参保人卡号" align="center" prop="beizhu"  show-overflow-tooltip/>
-    <el-table-column label="参保人姓名" align="center" prop="mxxmbm"  show-overflow-tooltip/>
-    <el-table-column label="科室代码" align="center" prop="mxxmmc"  show-overflow-tooltip/>
-    <el-table-column label="科室名称" align="center" prop="tym"  show-overflow-tooltip/>
-    <el-table-column label="医师代码" align="center" prop="mxxmdj"  show-overflow-tooltip/>
-    <el-table-column label="医师姓名" align="center" prop="mxxmsl"  show-overflow-tooltip/>
-    <el-table-column label="结算日期" align="center" prop="mxxmje"  show-overflow-tooltip/>
-    <el-table-column label="结算日期时间" align="center" prop="mxxmjyfy"  show-overflow-tooltip/>
-    <el-table-column label="明细项目使用时间(元)" align="center" prop="mxxmbjsfy"  show-overflow-tooltip/>
-    <el-table-column label="操作" align="center" show-overflow-tooltip width="110px">
+    <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
+    <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
+    <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
+    <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
+    <el-table-column label="参保人卡号" align="center" prop="beizhu"  :width="flexColumnWidth('beizhu',tableData)"/>
+    <el-table-column label="参保人姓名" align="center" prop="xm"  :width="flexColumnWidth('xm',tableData)"/>
+    <el-table-column label="科室代码" align="center" prop="ksdm"  :width="flexColumnWidth('ksdm',tableData)"/>
+    <el-table-column label="科室名称" align="center" prop="ksmc"  :width="flexColumnWidth('ksmc',tableData)"/>
+    <el-table-column label="医师代码" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)"/>
+    <el-table-column label="医师姓名" align="center" prop="mxxmsl"  :width="flexColumnWidth('mxxmsl',tableData)"/>
+    <el-table-column label="结算日期" align="center" prop="jsrqsj"  width="110">
+       <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.jsrqsj, '{y}-{m}-{d}') }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="结算日期时间" align="center" prop="jsrqsj"  :width="flexColumnWidth('jsrqsj',tableData)">
       <template slot-scope="scope">
-        <el-button type="text" @click="checkdetail(scope.row)">操作记录</el-button>
+        <span>{{ parseTime(scope.row.jsrqsj, '{y}-{m}-{d} {h}:{s}:{s}') }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="明细项目使用时间" align="center" prop="mxxmsysj"  :width="flexColumnWidth('mxxmsysj',tableData)">
+      <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.mxxmsysj, '{y}-{m}-{d} {h}:{s}:{s}') }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" align="center" width="80px">
+      <template slot-scope="scope">
+        <el-button type="text" @click="checkdetail(scope.row)" size="mini">操作记录</el-button>
       </template>
     </el-table-column>
   </el-table>

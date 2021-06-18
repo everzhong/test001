@@ -120,7 +120,7 @@
           <el-input v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
         <el-form-item label="行为认定" prop="xwrd" >
-          <el-select v-model="queryForm.xwrd" placeholder="请选择" style="width:360px">
+          <el-select v-model="queryForm.xwrd" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in gzflOptions"
               :key="dict.dictValue"
@@ -130,7 +130,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="机构核实状态" prop="jghszt">
-          <el-select v-model="queryForm.jghszt" placeholder="请选择" style="width:360px">
+          <el-select v-model="queryForm.jghszt" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in gzflOptions"
               :key="dict.dictValue"

@@ -125,7 +125,7 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="info.treeCode" placeholder="请选择">
+          <el-select v-model="info.treeCode" placeholder="全部">
             <el-option
               v-for="(column, index) in info.columns"
               :key="index"
@@ -143,7 +143,7 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="info.treeParentCode" placeholder="请选择">
+          <el-select v-model="info.treeParentCode" placeholder="全部">
             <el-option
               v-for="(column, index) in info.columns"
               :key="index"
@@ -161,7 +161,7 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="info.treeName" placeholder="请选择">
+          <el-select v-model="info.treeName" placeholder="全部">
             <el-option
               v-for="(column, index) in info.columns"
               :key="index"
@@ -182,7 +182,7 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="info.subTableName" placeholder="请选择" @change="subSelectChange">
+          <el-select v-model="info.subTableName" placeholder="全部" @change="subSelectChange">
             <el-option
               v-for="(table, index) in tables"
               :key="index"
@@ -200,7 +200,7 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="info.subTableFkName" placeholder="请选择">
+          <el-select v-model="info.subTableFkName" placeholder="全部">
             <el-option
               v-for="(column, index) in subColumns"
               :key="index"

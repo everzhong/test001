@@ -27,15 +27,15 @@
         <el-table :data="tableData" border>
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <el-table-column label="序号" type="index" align="center"  />
-          <el-table-column label="资料说明" align="center" prop="zlsm"  show-overflow-tooltip/>
-          <el-table-column label="资料文件" align="center" prop="wenjianurl"  show-overflow-tooltip/>
-          <el-table-column label="上传人" align="center" prop="upman" show-overflow-tooltip/>
-          <el-table-column label="上传时间" align="center" prop="addtime"  show-overflow-tooltip>
+          <el-table-column label="资料说明" align="center" prop="zlsm"  :width="flexColumnWidth('zlsm',tableData)"/>
+          <el-table-column label="资料文件" align="center" prop="wenjianurl" />
+          <el-table-column label="上传人" align="center" prop="upman" :width="flexColumnWidth('upman',tableData)"/>
+          <el-table-column label="上传时间" align="center" prop="addtime"  :width="150">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" show-overflow-tooltip>
+          <el-table-column label="操作" align="center" :width="100">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">下载</el-button>
               <el-button type="text" size="mini" @click="deleteDoc(scope.row)">删除</el-button>

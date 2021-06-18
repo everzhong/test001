@@ -7,12 +7,12 @@
     <div class="zhizuo-port">
         <div class="zhizuo">
           <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">
-            <el-table-column label="机构代码" prop="jgdm" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column label="机构名称" prop="jgmc" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column label="行政区" prop="xzq" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column label="检查开始时间" prop="dayinstarttime" align="center" show-overflow-tooltip>
+            <el-table-column label="机构代码" prop="jgdm" align="center" :width="flexColumnWidth('jgdm',zhzList)"></el-table-column>
+            <el-table-column label="机构名称" prop="jgmc" align="center" :width="flexColumnWidth('jgmc',zhzList)"></el-table-column>
+            <el-table-column label="行政区" prop="xzq" align="center" :width="flexColumnWidth('xzq',zhzList)"></el-table-column>
+            <el-table-column fixed="right" label="检查开始时间" prop="dayinstarttime" align="center" :width="flexColumnWidth('dayinstarttime',zhzList)">
               <template slot-scope="scope">
-                <span>{{parseTime(scope.row.dayinstarttime,'{y}年{m}月{d}日}')}}</span>
+                <span>{{parseTime(scope.row.dayinstarttime,'{y}年{m}月{d}日')}}</span>
               </template>
             </el-table-column>
           </el-table>

@@ -139,7 +139,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="公告类型" prop="noticeType">
-              <el-select v-model="form.noticeType" placeholder="请选择">
+              <el-select v-model="form.noticeType" placeholder="全部">
                 <el-option
                   v-for="dict in typeOptions"
                   :key="dict.dictValue"

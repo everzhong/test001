@@ -65,15 +65,15 @@
       <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border style="margin-top:10px">
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <el-table-column label="序号" width="55" type="index" align="center"  />
-          <el-table-column label="行为认定" align="center" prop="xwrd"  show-overflow-tooltip/>
-          <el-table-column label="违规数量" align="center" prop="wgsl"  show-overflow-tooltip/>
-          <el-table-column label="违规费用(元）" align="center" prop="xjje" show-overflow-tooltip/>
-          <el-table-column label="规则分类" align="center" prop="gzfl" show-overflow-tooltip/>
-          <el-table-column label="规则名称" align="center" prop="gzmc" show-overflow-tooltip/>
-          <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" show-overflow-tooltip/>
-          <el-table-column label="涉及明细数" align="center" prop="xjmxs" show-overflow-tooltip/>
-          <el-table-column label="医院核实结果" align="center" prop="yyhsjg" show-overflow-tooltip/>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
+          <el-table-column label="违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',renwuthreeList)"/>
+          <el-table-column label="违规费用(元）" align="center" prop="xjje" :width="flexColumnWidth('xjje',renwuthreeList)"/>
+          <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
+          <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
+          <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
+          <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
+          <el-table-column label="医院核实结果" align="center" prop="yyhsjg" :width="flexColumnWidth('yyhsjg',renwuthreeList)"/>
+          <el-table-column label="操作" align="center" width="110">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click="fluProject(scope.row)">
                 水流号项目汇总
@@ -139,7 +139,7 @@
                 </el-form>
                 <el-table :data="guizefl.data" border="" class="sys-small-table" @selection-change="handleGuizeChange">
                   <el-table-column type="selection" width="50" align="center" />
-                  <el-table-column property="gzmc" label="分类名称" align="center" show-overflow-tooltip></el-table-column>
+                  <el-table-column property="gzmc" label="分类名称" align="center" :width="flexColumnWidth('rwpcid',renwuthreeList)"></el-table-column>
                 </el-table>
               </div>
               <pagination
@@ -164,7 +164,7 @@
           <el-input v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
         <el-form-item label="行为认定" prop="xwrd" >
-          <el-select v-model="queryForm.xwrd" placeholder="请选择" style="width:360px">
+          <el-select v-model="queryForm.xwrd" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in gzflOptions"
               :key="dict.dictValue"
@@ -174,7 +174,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="机构核实状态" prop="jghszt">
-          <el-select v-model="queryForm.jghszt" placeholder="请选择" style="width:360px">
+          <el-select v-model="queryForm.jghszt" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in gzflOptions"
               :key="dict.dictValue"

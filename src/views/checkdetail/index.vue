@@ -36,40 +36,40 @@
       <!-- <RenwutwoTable :selectable="selectableFun" v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/> -->
       <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border>
         <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return row.status==0}"/>
-        <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
-        <el-table-column label="状态" align="center" prop="status"  show-overflow-tooltip>
+        <el-table-column label="序号" type="index" align="center"/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
+        <el-table-column label="状态" align="center" prop="status"  width="96">
           <template slot-scope="scope">
             <span>{{statusText(scope.row.status)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  show-overflow-tooltip/>
-        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
-        <el-table-column label="行政区" align="center" prop="xzq"  show-overflow-tooltip/>
-        <el-table-column label="结算等级" align="center" prop="jsdj"  show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
-        <el-table-column label="异地/本地" align="center" prop="ybd"  show-overflow-tooltip/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
+        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/>
+        <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',renwutwoList)"/>
+        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
+        <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
+        <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',renwutwoList)"/>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结算金额" align="center" prop="jsje"  show-overflow-tooltip/>
-        <el-table-column label="结算人次" align="center" prop="jsrc"  show-overflow-tooltip/>
-        <el-table-column label="涉及违规数" align="center" prop="sjwgs"  show-overflow-tooltip/>
+        <el-table-column label="结算金额" align="center" prop="jsje"  :width="flexColumnWidth('jsje',renwutwoList)"/>
+        <el-table-column label="结算人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
+        <el-table-column label="涉及违规数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
         <el-table-column label="第三方查询状态" align="center">
           <template slot-scope="scope">
             <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="疑点金额" align="center" prop="ydje"  show-overflow-tooltip/>
+        <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)"/>
           <!-- <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button
@@ -92,7 +92,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="网审意见" prop="wsyj">
-        <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
+        <el-select v-model="submitParams.wsyj" placeholder="全部" clearable  style="width: 180px">
           <el-option
             key="1"
             label="建议检查"

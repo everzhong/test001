@@ -13,7 +13,7 @@
             />
           </el-form-item>
           <el-form-item label="机构等级" prop="jgdj">
-            <el-select v-model="query.jgdj" placeholder="请选择" clearable size="small" style="width: 180px">
+            <el-select v-model="query.jgdj" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in rwmcOptions"
                 :key="dict.dictValue"
@@ -23,7 +23,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="就医类型" prop="jylb">
-            <el-select v-model="query.wtjg" placeholder="请选择" clearable size="small" style="width: 180px">
+            <el-select v-model="query.wtjg" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in rwmcOptions"
                 :key="dict.dictValue"
@@ -33,7 +33,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="第三方筛查状态" prop="dsfsc" label-width="113px">
-            <el-select v-model="query.dsfsc" placeholder="请选择" clearable size="small" style="width: 180px">
+            <el-select v-model="query.dsfsc" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in cbjgOptions"
                 :key="dict.dictValue"
@@ -43,7 +43,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="行政区" prop="xzq">
-            <el-select v-model="query.xzq" placeholder="请选择" clearable size="small" style="width: 180px">
+            <el-select v-model="query.xzq" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in statusOptions"
                 :key="dict.dictValue"
@@ -53,7 +53,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="险种" prop="ybbf">
-            <el-select v-model="query.ybbf" placeholder="请选择" clearable size="small" style="width: 180px">
+            <el-select v-model="query.ybbf" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in statusOptions"
                 :key="dict.dictValue"
@@ -63,7 +63,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="任务状态" prop="status">
-            <el-select v-model="query.status" placeholder="请选择" clearable size="small" style="width: 180px">
+            <el-select v-model="query.status" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in statusOptions"
                 :key="dict.dictValue"
@@ -221,7 +221,7 @@ export default {
     datastarttimeFormat(row, column) {
       return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
     },
-    // 任务批次号字典翻译
+    // 批次号字典翻译
     rwpcidFormat(row, column) {
       return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
     },

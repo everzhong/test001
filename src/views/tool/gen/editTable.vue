@@ -98,7 +98,7 @@
           </el-table-column>
           <el-table-column label="字典类型" min-width="12%">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
+              <el-select v-model="scope.row.dictType" clearable filterable placeholder="全部">
                 <el-option
                   v-for="dict in dictOptions"
                   :key="dict.dictType"

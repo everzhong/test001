@@ -6,20 +6,20 @@
     <el-table :data="renwuthreeList" border>
         <el-table-column type="selection" width="55" align="center" />
         <!-- <el-table-column label="序号" type="index" align="center"  /> -->
-        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
         <el-table-column label="筛查任务ID" align="center" prop="scrid"  show-overflow-tooltip/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  show-overflow-tooltip>
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwuthreeList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" show-overflow-tooltip>
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwuthreeList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwuthreeList)"/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwuthreeList)"/>
         <el-table-column label="数据抽取状态" align="center" prop="sccqstatus"  show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{scope.row.sccqstatus==1?'未开始':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':'--'}}</span>
@@ -30,7 +30,7 @@
             <span>{{scope.row.scstatus==1?'未开始':scope.row.scstatus==2?'执行中':scope.row.scstatus==3?'完成':'--'}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" show-overflow-tooltip>
+        <el-table-column label="操作" align="center" width="90">
           <template>
             <el-button type="text" size="mini" @click="openUrl">数据筛查</el-button>
           </template>

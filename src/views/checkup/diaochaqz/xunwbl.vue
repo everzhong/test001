@@ -30,7 +30,7 @@
             <span>
               性别
             </span>
-            <el-select style="width:100%" v-model="zhizuo.sex" placeholder="请选择" clearable size="small">
+            <el-select style="width:100%" v-model="zhizuo.sex" placeholder="全部" clearable size="small">
               <el-option
                 v-for="dict in sexOptions"
                 :key="dict.dictValue"
@@ -112,9 +112,9 @@
             <el-radio :label="scope.row.qzid" v-model="blCheck"></el-radio>
           </template>
         </el-table-column>
-        <el-table-column label="姓名" align="center" prop="xwname"  show-overflow-tooltip/>
+        <el-table-column label="姓名" align="center" prop="xwname"  :width="flexColumnWidth('xwname',tableData)"/>
         <el-table-column label="身份证" align="center" prop="sfz"  show-overflow-tooltip/>
-        <el-table-column label="性别" align="center" prop="sex" :formatter="sexFormat" show-overflow-tooltip></el-table-column>
+        <el-table-column label="性别" align="center" prop="sex" :formatter="sexFormat" width="65"></el-table-column>
         <el-table-column label="工作单位" align="center" prop="dwqc" show-overflow-tooltip/>
         <el-table-column label="联系电话" align="center" prop="tel" show-overflow-tooltip/>
         <el-table-column label="询问内容" align="center" prop="jcqk" show-overflow-tooltip/>

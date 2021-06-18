@@ -44,7 +44,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="网审意见" prop="wsyj">
-        <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
+        <el-select v-model="submitParams.wsyj" placeholder="全部" clearable  style="width: 180px">
           <el-option
             key="1"
             label="建议检查"
@@ -58,7 +58,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="检查人员" prop="wsry">
-        <!-- <el-select v-model="submitParams.wsry" placeholder="请选择" clearable  style="width: 180px">
+        <!-- <el-select v-model="submitParams.wsry" placeholder="全部" clearable  style="width: 180px">
           <el-option label="张三" value="张三"/>
         </el-select> -->
         <el-input readonly :value="submitParams.wsry"></el-input>
