@@ -39,7 +39,7 @@ export function setDytz(data) {
     const { ids } = data
     delete data.ids
     return request({
-        url: '/renwu/setdy/' + ids,
+        url: '/renwu/renwutwo/setdy/' + ids,
         method: 'post',
         data: data
     })
@@ -78,6 +78,24 @@ export function submitJcz(data) {
     delete data.ids
     return request({
         url: '/renwu/renwutwo/setjcz/' + ids,
+        method: 'post',
+        data: data
+    })
+}
+//三方筛查接口
+export function setSancha(data) {
+    const { ids } = data
+    delete data.ids
+    return request({
+        url: '/renwu/renwutwo/setsc/' + ids,
+        method: 'post',
+        data: data
+    })
+}
+//数据筛查/setscrw
+export function setShujusc(data) {
+    return request({
+        url: '/renwu/renwutwo/setscrw',
         method: 'post',
         data: data
     })

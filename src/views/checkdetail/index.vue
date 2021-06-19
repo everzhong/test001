@@ -113,7 +113,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="检查人员" prop="wsry">
+      <el-form-item label="检查人员" prop="wsry" style="margin-left:10px">
        <el-input readonly :value="submitParams.wsry"></el-input>
       </el-form-item>
       <el-form-item>
@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck} from "@/api/renwu/renwutwo"
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck,setSancha} from "@/api/renwu/renwutwo"
 import { listRenwuthree } from '@/api/renwu/renwuthree'
 import { listRenwufour } from '@/api/renwu/renwufour'
 import SearchItem from '../common/searchItems'
@@ -158,6 +158,8 @@ export default {
       exportLoading: false,
       // 选中数组
       ids: [],
+      //选中的数据列表
+      selectionList:[],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -625,16 +627,14 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.selectionList = selection
       const jgmc = selection.map(item => item.jgmc)
-      this.submitParams.wsry = this.$store.getters.name
       this.submitParams.yxjg = jgmc.join(',')
-      
+      this.submitParams.wsry = selection.length?this.$store.getters.name:''
       //第三方查询状态sancha 1已查 0未查
       this.noThirdCheckList  = selection.filter(item => {
         return item.sancha === 0
       });
-      this.single = selection.length!==1
-      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -730,9 +730,38 @@ export default {
      * 第三方筛查
      */
     handleThirdCheck(){
-      this.$router.push({
-        path:'/thirdcheck/thirdcheck'
+      const userNmae = this.$store.getters.name
+      const reqestList = []
+      //轮询发送
+      this.ids.forEach(id=>{
+        const selected = this.selectionList.filter(item=>{
+          return item.id===id && !(item.sccqstatus*1>=1)
+        })
+        if(selected.length){
+          const {rwpcid,jgdm} = selected[0]
+          const time = this.parseTime(new Date().getTime(),'{h}{m}{s}') 
+          reqestList.push(setSancha({
+            ids:id,
+            scrwid:[userNmae,rwpcid,jgdm,time].join('-'),
+            scstatus:1,
+            sccqstatus:1,
+            scname:[jgdm,rwpcid].join('-'),
+            scsqr:userNmae
+          }))
+        }
       })
+      if(reqestList.length){
+        this.loading = true
+        Promise.all(reqestList).then(()=>{
+          this.loading = false
+          this.msgSuccess('操作成功')
+          this.getList()
+        }).catch(e=>{
+          this.loading = false
+        })
+      } else {
+        this.msgSuccess(' ')
+      }
     },
     /**
      * tabs切换

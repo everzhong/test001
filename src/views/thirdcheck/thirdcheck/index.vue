@@ -31,8 +31,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="90">
-          <template>
-            <el-button type="text" size="mini" @click="openUrl">数据筛查</el-button>
+          <template slot-scope="scope">
+            <el-button type="text" size="mini" @click="openUrl(scope.row)">数据筛查</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -47,6 +47,7 @@
   </div>
 </template>
 <script>
+import { setShujusc } from '@/api/renwu/renwutwo'
 import { listRenwuthree } from '@/api/renwu/renwuthree'
 import SearchItem from '../../common/searchItems'
 import RenwuthreeTable from '../../common/renwuthreeTable'
@@ -279,7 +280,16 @@ export default {
     // });
   },
   methods: {
-    openUrl(){
+    openUrl(row){
+      const {scrwid,scname,datastarttime,dataendtime,createby,jgdm} = row
+      setShujusc({
+        scrwid,
+        scname,
+        datastarttime,
+        dataendtime,
+        createby,
+        jgdm
+      })
       window.open('http://192.168.1.122:8087/#/scenarioConfiguration')
     },
     /** 查询renwutwo列表 */
@@ -313,38 +323,7 @@ export default {
       }
       this.loading = false;
     },
-    /**
-     * 规则维度tabsValue=Three
-    */
-    async getRenwThree(params){
-      this.loading = true;
-      try {
-        const res =  await listRenwutwo(params)
-        if(res.code===200){
-          this.renwuthreeList = res.rows;
-          this.total = res.total;
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      this.loading = false;
-    },
-    /**
-     * 项目维度维度tabsValue=Four
-    */
-    async getRenwFour(params){
-      this.loading = true;
-      try {
-        const res =  await listRenwutwo(params)
-        if(res.code===200){
-          this.renwufourList = res.rows;
-          this.total = res.total;
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      this.loading = false;
-    },
+    
     // 异本地字典翻译
     ybdFormat(row, column) {
       return this.selectDictLabel(this.ybdOptions, row.ybd);
@@ -465,47 +444,6 @@ export default {
     dcjgFormat(row, column) {
       return this.selectDictLabel(this.dcjgOptions, row.dcjg);
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        ybd: null,
-        datastarttime: null,
-        rwpcid: null,
-        ybbf: null,
-        dataendtime: null,
-        jslb: null,
-        xzq: null,
-        wsyj: "0",
-        uptime: null,
-        wsry: null,
-        sjwgs: null,
-        ydje: null,
-        jsje: null,
-        jsrc: null,
-        addtime: null,
-        xydm: null,
-        jgdm: null,
-        jgmc: null,
-        jsdj: null,
-        wsry2: null,
-        dxqd: "0",
-        status: "0",
-        jczid: null,
-        isdayin: "0",
-        dayinname: null,
-        dayintel: null,
-        dayinriqi: null,
-        dayinphone: null,
-        dayinstarttime: null,
-        dcjg: "0"
-      };
-      this.resetForm("form");
-    },
     /** 搜索按钮操作 */
     handleQuery(query) {
       this.queryParams.pageNum = 1;
@@ -527,106 +465,6 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加renwutwo";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const ybd = row.id || this.ids
-      getRenwutwo(ybd).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改renwutwo";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.id != null) {
-            updateRenwutwo(this.form).then(response => {
-              this.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addRenwutwo(this.form).then(response => {
-              this.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ybds = row.id || this.ids;
-      this.$confirm('是否确认删除renwutwo编号为"' + ybds + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delRenwutwo(ybds);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有renwutwo数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportRenwutwo(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        })
-    },
-    /**
-     * 实施网申
-     */
-    handleNetCheck(){
-      if(!this.ids.length){
-        this.msgWarning('请至少选择一项')
-      } else if(this.hasThirdUncheck){
-        this.$confirm('当前医药机构任务未实施第三方筛查，请确认不进行第三方筛查直接实施网审/现场检查?', "确认提交", {
-          confirmButtonText: "确认",
-          cancelButtonText: "返回",
-          type: "warning"
-        }).then(() => {
-          //点确认执行
-          //return exportRenwutwo(queryParams);
-        }).then(() => {
-            //执行完成提升成功
-        })
-      }
-      //检查任务中有未执行第三方筛查的
-
-    },
-    /**
-     * 第三方筛查
-     */
-    handleThirdCheck(){
-
-    },
-    /**
-     * tabs切换
-     */
-    tabsLevelChange(val){
-      this.queryParams.pageNum = 1
-      this.getList()
-      console.log(val)
-    }
   }
 };
 </script>

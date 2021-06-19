@@ -629,7 +629,7 @@ export default {
             dayinList.push(imageToPrint)
             newWin.document.write(imageToPrint.outerHTML) // 将需要打印的内容添加进新的窗口
           }
-          const styleSheet = `<style>.print-area{width:669px;height:1021px;margin:auto}</style>`
+          const styleSheet = `<style>.print-area{width:669px;height:1020px;margin:auto}</style>`
           newWin.document.head.innerHTML = styleSheet // 给打印的内容加上样式
           newWin.document.close() // 在IE浏览器中使用必须添加这一句
           newWin.focus() // 在IE浏览器中使用必须添加这一句

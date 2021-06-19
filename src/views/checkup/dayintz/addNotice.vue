@@ -15,7 +15,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="zhizuo-item" v-if="zhzList.length===1">
+          <div class="zhizuo-item">
             <span>检查开始日期</span>
             <el-date-picker
               v-model="zhizuo.dayinstarttime"
@@ -23,6 +23,7 @@
               size="small"
               placeholder="选择检查开始日期"
               format="yyyy-MM-dd"
+              @change="satrtTimeCgange"
               >
             </el-date-picker>
           </div>
@@ -359,7 +360,7 @@ export default {
       } 
       setDytz({
         ids:this.ids,
-        isdayin:1,
+        isdayin:'1',
         dayinstarttime,
         dayintel,
         dayinname,
@@ -453,6 +454,12 @@ export default {
       this.getDicts("${column.dictType}").then(response => {
         this.wenjianOptions = response.data;
       });
+    },
+    satrtTimeCgange(val){
+      this.zhzList = this.zhzList.map(item=>{
+        item.dayinstarttime = val
+        return item
+      })
     }
   }
 };

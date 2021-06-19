@@ -9,30 +9,36 @@
         <el-radio-button label="2">查看核实情况</el-radio-button>
       </el-radio-group>
       <br>
-      <section class="transfer">
+      <section class="transfer" v-loading="loading" v-show="tabsValue==='1'">
         <div class="left-part">
-          <transfer-item @select="selectChange($event,'leftState')" :options="leftOptions" :tableData="leftList"></transfer-item>
+          <transfer-item ref="leftList" @select="selectChange($event,'leftState')" :options="leftOptions"></transfer-item>
         </div>
         <div class="btn">
-          <el-button @click="moveData('leftState','rightList')" type="primary" class="el-icon-arrow-right" size="mini" :disabled="leftState.length==0"></el-button>
-          <el-button @click="moveData('rightState','leftList')" type="primary" class="el-icon-arrow-left" size="mini" :disabled="rightState.length==0"></el-button>
+          <el-button @click="moveToRight" type="primary" class="el-icon-arrow-right" size="mini" :disabled="leftState.length==0"></el-button>
+          <el-button @click="moveToLeft" type="primary" class="el-icon-arrow-left" size="mini" :disabled="rightState.length==0"></el-button>
         </div>
         <div class="right-part">
-          <transfer-item @select="selectChange($event,'rightState')" :options="rightOptions" :tableData="rightList"></transfer-item>
+          <transfer-item-r ref="rightList" @select="selectChange($event,'rightState')" :options="rightOptions"></transfer-item-r>
+          <!-- <transfer-item @select="selectChange($event,'rightState')" :options="rightOptions" :tableData="rightList"></transfer-item> -->
         </div>
       </section>
-      <div style="text-align:right;margin-top:10px"> 
-        <el-button type="primary" size="mini">确定核实数据</el-button>
+      <div v-show="tabsValue==='1'" style="text-align:right;margin-top:10px"> 
+        <el-button type="primary" size="mini" @click="confirmHs">确定核实数据</el-button>
       </div>
+      <check-hssz v-if="tabsValue==='2'"></check-hssz>
     </section>
 </template>
 <script>
 import TransferItem from './transferItem.vue'
+import TransferItemR from './transferItemR.vue'
+import CheckHssz from './checkHssz.vue'
+import { updateRenwuthree } from '@/api/renwu/renwuthree'
 export default {
   name:'Jgheshi',
   data(){
     return {
-      tabsValue:1,
+      loading:false,
+      tabsValue:'1',
       leftList:[],
       rightList:[],
       leftOptions:{
@@ -48,12 +54,51 @@ export default {
     }
   },
   components:{
-    TransferItem
+    TransferItem,
+    TransferItemR,
+    CheckHssz
   },
   props:['options'],
   methods:{
+    confirmHs(){
+      const allSelect = this.$refs.rightList.getAllSelection()
+      if(!allSelect.length){
+        this.msgError('请从待选列表选择需要核实的数据')
+        return
+      }
+      const needHs = allSelect.filter(item=>{
+        return !(item.hszt && item.hszt*1>=1)
+      })
+      if(needHs && needHs.length){//遍历核实
+        const request = []
+        needHs.forEach(need=>{
+          request.push(updateRenwuthree({id:need.id,hszt:1}))
+        })
+        this.loading= true
+        Promise.all(request).then(()=>{
+          this.msgSuccess('核实完成')
+          this.$refs.rightList.clear()
+          this.loading= false
+        }).catch(e=>{
+          this.loading= false
+        })
+      } else {
+        this.msgSuccess('核实完成')
+        this.$refs.rightList.clear()
+      }
+    },
     selectChange(data,type){
       this.$set(this,type,data)
+    },
+    moveToRight(){
+      this.$refs.leftList.filterData(this.leftState)
+      this.$refs.rightList.addData(this.leftState)
+      this.leftState = []
+    },
+    moveToLeft(){
+      this.$refs.leftList.addData(this.rightState)
+      this.$refs.rightList.filterData(this.rightState)
+      this.rightState = []
     },
     moveData(from,to){
       const toList = this[to].concat(this[from])
@@ -70,7 +115,6 @@ export default {
         const hasIn = this[from].filter(sub=>{
           return item.rwpicd===sub.rwpicd
         })
-        console.log(hasIn,78)
         !(hasIn && hasIn.length) && (newList.push(item))
       })
       this[targetDel] = [...newList]
@@ -116,7 +160,7 @@ export default {
     padding-left:15px;
     padding-right:10px;
     border:1px solid #cecece;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     // background-color: #f8f8f9;
     .title {
       font-size: 14px;

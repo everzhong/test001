@@ -127,7 +127,8 @@
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px">
       <el-form ref="chaxunForm" :model="queryForm" :rules="rules" label-width="100px" size="small">
         <el-form-item label="规则分类" prop="gzfl">
-          <el-popover
+          <el-input clearable v-model="guizefl.gzfl" placeholder="请输入" style="width:360px"></el-input>
+          <!-- <el-popover
               ref="tablePopover"
               placement="bottom"
               width="750"
@@ -164,25 +165,26 @@
               <el-select class="select-no-drawdown"  multiple :popper-append-to-body="false" slot="reference" v-model="guizefl.gzfl" style="width:360px">
                 <el-option v-for="item in guizefl.selection" :key="item.gzmc" :value="item.gzmc" :label="item.gzmc"></el-option>
               </el-select>
-            </el-popover>
+            </el-popover> -->
         </el-form-item>
         <el-form-item label="规则名称" prop="gzmc">
-          <el-input v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
+          <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
         <el-form-item label="行为认定" prop="xwrd" >
-          <el-select v-model="queryForm.xwrd" placeholder="全部" style="width:360px">
+          <el-input clearable v-model="queryForm.xwrd" placeholder="请输入" style="width:360px"></el-input>
+          <!-- <el-select v-model="queryForm.xwrd" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in gzflOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
             ></el-option>
-          </el-select>
+          </el-select> -->
         </el-form-item>
-        <el-form-item label="机构核实状态" prop="jghszt">
-          <el-select v-model="queryForm.jghszt" placeholder="全部" style="width:360px">
+        <el-form-item label="机构核实状态" prop="hszt">
+          <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
             <el-option
-              v-for="dict in gzflOptions"
+              v-for="dict in hsztOptions"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -278,56 +280,12 @@ export default {
       renwufiveList:[],
       // 弹出层标题
       title: "",
-      // 是否显示弹出层
-      open: false,
-      // 序号字典
-      idOptions: [],
-      // 机构代码字典
-      jgdmOptions: [],
-      // 机构名称字典
-      jgmcOptions: [],
-      // 规则分类字典
-      gzflOptions: [],
-      // 规则名称字典
-      gzmcOptions: [],
-      // 涉及就诊人数字典
-      xjjzrsOptions: [],
-      // 涉及明细数字典
-      xjmxsOptions: [],
-      // 涉及金额字典
-      xjjeOptions: [],
-      // 结算费用字典
-      jsfyOptions: [],
-      // 险种字典
-      ybbfOptions: [],
-      // 行政区字典
-      xzqOptions: [],
-      // 就医类型字典
-      jslbOptions: [],
-      // 异本地字典
-      ybdOptions: [],
-      // 数据开始时间字典
-      datastarttimeOptions: [],
-      // 信用代码字典
-      xydmOptions: [],
-      // 添加时间字典
-      addtimeOptions: [],
-      // 结算等级字典
-      jsdjOptions: [],
-      // 机构核实意见字典
-      hsyjOptions: [],
       // 核实状态字典
-      hsztOptions: [],
-      // 核实时间字典
-      hssjOptions: [],
-      // 核实人字典
-      hsrOptions: [],
-      // 核实派发时间字典
-      hspfsjOptions: [],
-      // 批次号字典
-      rwpcidOptions: [],
-      // 已发送回智审字典
-      issendOptions: [],
+      hsztOptions:[
+        {dictValue:0,dictLabel:'未核实'},
+        {dictValue:1,dictLabel:'核实中'},
+        {dictValue:2,dictLabel:'已核实'}
+      ],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -337,17 +295,17 @@ export default {
         gzmc:'',
         gzfl:'',
         xwrd:'',
-        jghszt:''
+        hszt:''
       },
       
       guizefl:{
         search:'',
         gzfl:[],
-        data:[{gzmc:'ssdsd'},{gzmc:'规则二'},{gzmc:'规则三'},{gzmc:'规则四'},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
+        data:[],
         selection:[],
-        total:110,
+        total:0,
         pageNum:1,
-        pageSize:10
+        pageSize:50
       },
       // 表单参数
       form: {},
@@ -368,78 +326,6 @@ export default {
   created() {
     this.queryInfoFrom = this.$route.query
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.idOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgdmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.gzflOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.gzmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xjjzrsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xjmxsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xjjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsfyOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybbfOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xzqOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jslbOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.datastarttimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xydmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsdjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.hsyjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.hsztOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.hssjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.hsrOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.hspfsjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.issendOptions = response.data;
-    // });
   },
   methods: {
     tableFourRadioChange(e){

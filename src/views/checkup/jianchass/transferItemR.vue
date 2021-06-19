@@ -3,16 +3,16 @@
     <el-row :gutter="10">
       <el-col :span="1.5">
         <span style="margin-right:10px;">{{options.title||'待选择'}}</span>
-        <el-select v-model="queryForm.ybd" size="small" @change="ybdChange">
-          <el-option label="本地" value="本地"></el-option>
-          <el-option label="异地" value="异地"></el-option>
+        <el-select v-model="queryForm.ybd" size="small">
+          <el-option label="本地" value="1"></el-option>
+          <el-option label="异地" value="2"></el-option>
         </el-select>
       </el-col>
       <el-col :span="1.5">
         <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
     </el-row>
-    <div style="height:400px" v-loading="loading">
+    <div style="height:400px">
       <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="350px"> 
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
@@ -108,16 +108,6 @@
         <el-form-item label="规则名称" prop="gzmc">
           <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="行为认定" prop="xwrd" >
-          <el-select v-model="queryForm.xwrd" placeholder="全部" style="width:360px">
-            <el-option
-              v-for="dict in gzflOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="机构核实状态" prop="hszt">
           <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
             <el-option
@@ -137,19 +127,18 @@
   </div>
 </template>
 <script>
-import { listRenwuthree } from "@/api/renwu/renwuthree"
 export default {
-  name:"TransferItem",
+  name:"TransferItemR",
   props:['options'],
   data(){
     return{
-      loading:false,
+      allSelection:[],
       tableData:[],
-      total:0,
       chaxunDialog:false,
       gzflOptions:[],
+      total:0,
       queryForm:{
-        ybd:'本地',
+        ybd:'',
         gzmc:'',
         gzfl:'',
         xwrd:'',
@@ -176,33 +165,41 @@ export default {
       ]
     }
   },
-  created(){
-    this.getList()
-  },
   methods:{
     filterData(selection){
       selection.forEach(item => {
         this.tableData = this.tableData.filter(subItem=>{
           return item.id!==subItem.id
         })
+        this.allSelection = this.allSelection.filter(subItem=>{
+          return item.id!==subItem.id
+        })
+        this.total = this.allSelection.length
+        if(this.tableData.length===0) {
+          this.queryParams.pageNum=1
+          this.getList()
+        } 
       })
     },
     addData(selection){
-      this.tableData = this.tableData.concat(selection)
-    },
-    async getList(){
-      const params ={...this.queryParams,...this.queryForm}
-      this.loading = true
-      const res = await listRenwuthree(params)
-      if(res.code===200){
-        this.tableData = res.rows;
-        this.total = res.total;
-      }
-      this.loading = false
-    },
-    ybdChange(){
-      this.queryParams.pageNum = 1
+      // this.tableData = this.tableData.concat(selection)
+      this.allSelection = this.allSelection.concat(selection)
+      this.total = this.allSelection.length
       this.getList()
+    },
+    getAllSelection(){
+      return this.allSelection
+    },
+    clear() {
+      this.allSelection = []
+      this.tableData = []
+      this.total = 0
+    },
+    getList(){
+      const pageData = this.allSelection.filter((item,i)=>{
+        return  i>=this.queryParams.pageNum*this.queryParams.pageSize-this.queryParams.pageSize && i< this.queryParams.pageNum*this.queryParams.pageSize
+      })
+      this.tableData = [...pageData]
     },
     getGuizList(){
       console.log(this.guizefl)
