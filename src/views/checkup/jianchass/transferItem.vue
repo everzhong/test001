@@ -2,7 +2,7 @@
   <div style="width:100%">
     <el-row :gutter="10">
       <el-col :span="1.5">
-        <span style="margin-right:10px">{{options.title||'待选择'}}</span>
+        <span style="margin-right:10px;">{{options.title||'待选择'}}</span>
         <el-select v-model="queryForm.ybd" size="small">
           <el-option label="本地" value="1"></el-option>
           <el-option label="异地" value="2"></el-option>
@@ -15,53 +15,37 @@
     <div style="height:400px">
       <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="350px"> 
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
-        <el-table-column label="机构名称" align="center" prop="jgmc" show-overflow-tooltip/>
-        <el-table-column label="规则分类" align="center" prop="gzfl" show-overflow-tooltip/>
-        <el-table-column label="规则名称" align="center" prop="gzmc"  show-overflow-tooltip/>
-        <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs"  show-overflow-tooltip/>
-        <el-table-column label="涉及明细数" align="center" prop="xjmxs"  show-overflow-tooltip/>
-        <el-table-column label="涉及金额" align="center" prop="xjje"  show-overflow-tooltip/>
-        <el-table-column label="结算费用" align="center" prop="jsfy"  show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
-        <el-table-column label="行政区" align="center" prop="xzq"  show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb" show-overflow-tooltip/>
-        <el-table-column label="异本地" align="center" prop="ybd"  show-overflow-tooltip/>
-        <el-table-column label="数据开始时间" align="center" prop="datastarttime"  show-overflow-tooltip/>
-        <el-table-column label="信用代码" align="center" prop="xydm"  show-overflow-tooltip/>
-        <el-table-column label="添加时间" align="center" prop="addtime"  show-overflow-tooltip/>
-        <el-table-column label="结算等级" align="center" prop="jsdj"  show-overflow-tooltip/>
-        <el-table-column label="机构核实意见" align="center" prop="hsyj"  show-overflow-tooltip/>
-        <el-table-column label="核实状态" align="center" prop="hszt"  show-overflow-tooltip/>
-        <el-table-column label="核实时间" align="center" prop="hssj"  show-overflow-tooltip/>
-        <el-table-column label="核实人" align="center" prop="hsr"  show-overflow-tooltip/>
-        <el-table-column label="核实派发时间" align="center" prop="hspfsj"  show-overflow-tooltip/>
-        <el-table-column label="批次号" align="center" prop="rwpcid"  show-overflow-tooltip/>
-        <el-table-column label="已发送回智审" align="center" prop="issend"  show-overflow-tooltip/>
-        <!-- <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" show-overflow-tooltipshow-overflow-tooltip/>
-        <el-table-column label="机构名称" align="center" prop="jgmc" :formatter="jgmcFormat" show-overflow-tooltip/>
-        <el-table-column label="规则分类" align="center" prop="gzfl" :formatter="gzflFormat" show-overflow-tooltip/>
-        <el-table-column label="规则名称" align="center" prop="gzmc" :formatter="gzmcFormat" show-overflow-tooltip/>
-        <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :formatter="xjjzrsFormat" show-overflow-tooltip/>
-        <el-table-column label="涉及明细数" align="center" prop="xjmxs" :formatter="xjmxsFormat" show-overflow-tooltip/>
-        <el-table-column label="涉及金额" align="center" prop="xjje" :formatter="xjjeFormat" show-overflow-tooltip/>
-        <el-table-column label="结算费用" align="center" prop="jsfy" :formatter="jsfyFormat" show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf" :formatter="ybbfFormat" show-overflow-tooltip/>
-        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat" show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb" :formatter="jslbFormat" show-overflow-tooltip/>
-        <el-table-column label="异本地" align="center" prop="ybd" :formatter="ybdFormat" show-overflow-tooltip/>
-        <el-table-column label="数据开始时间" align="center" prop="datastarttime" :formatter="datastarttimeFormat" show-overflow-tooltip/>
-        <el-table-column label="信用代码" align="center" prop="xydm" :formatter="xydmFormat" show-overflow-tooltip/>
-        <el-table-column label="添加时间" align="center" prop="addtime" :formatter="addtimeFormat" show-overflow-tooltip/>
-        <el-table-column label="结算等级" align="center" prop="jsdj" :formatter="jsdjFormat" show-overflow-tooltip/>
-        <el-table-column label="机构核实意见" align="center" prop="hsyj" :formatter="hsyjFormat" show-overflow-tooltip/>
-        <el-table-column label="核实状态" align="center" prop="hszt" :formatter="hsztFormat" show-overflow-tooltip/>
-        <el-table-column label="核实时间" align="center" prop="hssj" :formatter="hssjFormat" show-overflow-tooltip/>
-        <el-table-column label="核实人" align="center" prop="hsr" :formatter="hsrFormat" show-overflow-tooltip/>
-        <el-table-column label="核实派发时间" align="center" prop="hspfsj" :formatter="hspfsjFormat" show-overflow-tooltip/>
-        <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" show-overflow-tooltip/>
-        <el-table-column label="已发送回智审" align="center" prop="issend" :formatter="issendFormat" show-overflow-tooltip/> -->
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
+        <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',tableData)"/>
+        <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',tableData)"/>
+        <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
+        <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
+        <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
+        <el-table-column label="涉及金额" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+          <template slot-scope="scope">
+            <span>{{formatMoney(scope.row.xjje,2)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="结算费用" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',tableData)">
+          <template slot-scope="scope">
+            <span>{{formatMoney(scope.row.jsfy,2)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
+        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
+        <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',tableData)"/>
+        <el-table-column label="异本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
+        <el-table-column label="数据开始时间" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)"/>
+        <el-table-column label="信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
+        <el-table-column label="添加时间" align="center" prop="addtime"  :width="flexColumnWidth('addtime',tableData)"/>
+        <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',tableData)"/>
+        <el-table-column label="机构核实意见" align="center" prop="hsyj"  :width="flexColumnWidth('hsyj',tableData)"/>
+        <el-table-column label="核实状态" align="center" prop="hszt"  :width="flexColumnWidth('hszt',tableData)"/>
+        <el-table-column label="核实时间" align="center" prop="hssj"  :width="flexColumnWidth('hssj',tableData)"/>
+        <el-table-column label="核实人" align="center" prop="hsr"  :width="flexColumnWidth('hsr',tableData)"/>
+        <el-table-column label="核实派发时间" align="center" prop="hspfsj"  :width="flexColumnWidth('hspfsj',tableData)"/>
+        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
+        <el-table-column label="已发送回智审" align="center" prop="issend"  :width="flexColumnWidth('issend',tableData)"/>
       </el-table>
       <pagination
       v-show="options.total>0"
@@ -95,7 +79,7 @@
                 </el-form>
                 <el-table :data="guizefl.data" border="" class="sys-small-table" @selection-change="handleGuizeChange">
                   <el-table-column type="selection" width="50" align="center" />
-                  <el-table-column property="gzmc" label="分类名称" align="center" show-overflow-tooltip></el-table-column>
+                  <el-table-column property="gzmc" label="分类名称" align="center" :width="flexColumnWidth('jczname',tableData)"></el-table-column>
                 </el-table>
               </div>
               <pagination
@@ -167,7 +151,7 @@ export default {
         gzfl:[],
         data:[{gzmc:'ssdsd'},{gzmc:'规则二'},{gzmc:'规则三'},{gzmc:'规则四'},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],
         selection:[],
-        total:110,
+        total:0,
         pageNum:1,
         pageSize:10
       },

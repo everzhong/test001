@@ -317,9 +317,21 @@
 
     <el-table v-loading="loading" :data="renwufiveList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="明细项目金额" align="center" prop="mxxmje" :formatter="mxxmjeFormat" />
-      <el-table-column label="明细项目交易金额" align="center" prop="mxxmjyfy" :formatter="mxxmjyfyFormat" />
-      <el-table-column label="明细项目医保结算金额" align="center" prop="mxxmybjsfy" :formatter="mxxmybjsfyFormat" />
+      <el-table-column label="明细项目金额" align="center" prop="mxxmje" :formatter="mxxmjeFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="明细项目交易金额" align="center" prop="mxxmjyfy" :formatter="mxxmjyfyFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="明细项目医保结算金额" align="center" prop="mxxmybjsfy" :formatter="mxxmybjsfyFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmybjsfy,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="明细项目使用时间" align="center" prop="mxxmsysj" :formatter="mxxmsysjFormat" />
       <el-table-column label="就医类型" align="center" prop="jslb" :formatter="jslbFormat" />
       <el-table-column label="险种" align="center" prop="ybbf" :formatter="ybbfFormat" />
@@ -344,7 +356,11 @@
       <el-table-column label="明细项目数量" align="center" prop="mxxmsl" :formatter="mxxmslFormat" />
       <el-table-column label="追款单价" align="center" prop="zkdj" :formatter="zkdjFormat" />
       <el-table-column label="违规数量" align="center" prop="wgsl" :formatter="wgslFormat" />
-      <el-table-column label="违规费用" align="center" prop="wgfy" :formatter="wgfyFormat" />
+      <el-table-column label="违规费用" align="center" prop="wgfy" :formatter="wgfyFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.wgfy,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="行为认定人" align="center" prop="xwrdr" :formatter="xwrdrFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

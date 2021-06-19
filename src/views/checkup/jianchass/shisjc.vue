@@ -1,122 +1,128 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
-          <el-form-item label="案件来源" prop="ajly">
-            <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
-          </el-form-item>
-          <el-form-item label="险种" prop="ybbf">
-            <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
-          </el-form-item>
-          <el-form-item label="就医类型" prop="jslb">
-            <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
-          </el-form-item>
-          <el-form-item label="批次号" prop="rwpcid">
-            <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-          </el-form-item>
-          <el-form-item label="数据开始日期" prop="datastarttime">
-            <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-          </el-form-item>
-          <el-form-item label="数据结束日期" prop="dataendtime">
-            <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-          </el-form-item>
-          <el-form-item label="机构名称" prop="jgmc">
-            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-          </el-form-item>
-            <el-form-item label="检查机构" prop="cxjg">
-            <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
-          </el-form-item>
-            <el-form-item label="检查组" prop="jcz">
-            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
-          </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
-            <el-button type="primary" plain size="mini" @click="heshiOption.show=true">机构核实</el-button>
-            <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
-            <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-          </div>
-    </el-form>
-    <el-row :gutter="10">
-      <el-col :span="1.5">
-        <span>参保人：</span>
-        <el-select v-model="ybd" size="small">
-          <el-option label="本地" value="1"></el-option>
-          <el-option label="异地" value="2"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll">
-        <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='four'  &&isAll">
-        <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="tabsValue!=='three'">
-        <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
-      </el-col>
-      <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
-        <el-radio-button label="three">规则筛查</el-radio-button>
-      </el-radio-group>
-    </el-row>
-    <div v-loading="loading" style="max-height:400px">
-      <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border style="margin-top:10px">
-          <!-- <el-table-column type="selection" width="55" align="center" /> -->
-          <el-table-column label="序号" width="55" type="index" align="center"  />
-          <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
-          <el-table-column label="违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',renwuthreeList)"/>
-          <el-table-column label="违规费用(元）" align="center" prop="xjje" :width="flexColumnWidth('xjje',renwuthreeList)"/>
-          <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
-          <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
-          <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
-          <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
-          <el-table-column label="医院核实结果" align="center" prop="yyhsjg" :width="flexColumnWidth('yyhsjg',renwuthreeList)"/>
-          <el-table-column label="操作" align="center" width="110">
-            <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="fluProject(scope.row)">
-                水流号项目汇总
-              </el-button>
-            </template>
-          </el-table-column>
-      </el-table>
-      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
-      <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" @radio-change="handleSelectionChange"></tongliumx>
-    </div>
-    <pagination
-       style="margin-top:0;margin-bottom:25px;"
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-    <div v-if="tabsValue!=='three'"  class="xingweirz" style="margin-top:15px;">
-      <el-form inline :model="xwrdForm" :rules="xwRules" size="small" ref="xwrdForm" label-width="100px">
-        <el-form-item label="名称" prop="gzmc">
-          <el-input v-model="xwrdForm.gzmc" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="行为认定" prop="xwrd">
-          <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:32px;height:32px;border:1px solid #DCDFE6;border-radius:4px;width:188px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
-        </el-form-item>
-        <el-form-item label="备注" prop="bz">
-          <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
-        </el-form-item>
-         <el-form-item label="追款单价" prop="mxxmdj">
-          <el-input v-model="xwrdForm.mxxmdj" :disabled="isDisabled.dj"></el-input>
-        </el-form-item>
-         <el-form-item label="违规数量" prop="mxxmsl">
-          <el-input v-model="xwrdForm.mxxmsl" :disabled="isDisabled.sl"></el-input>
-        </el-form-item>
-         <el-form-item label="违规费用(元)" prop="mxxmje" >
-          <el-input v-model="xwrdForm.mxxmje" :disabled="isDisabled.fy"></el-input>
-        </el-form-item>
-         <el-form-item>
-           <el-button type="primary" size="small" @click="xwrdSubmit">确定</el-button>
-        </el-form-item>
+    <section v-show="!heshiOption.show">
+      <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
+            <el-form-item label="案件来源" prop="ajly">
+              <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
+            </el-form-item>
+            <el-form-item label="险种" prop="ybbf">
+              <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
+            </el-form-item>
+            <el-form-item label="就医类型" prop="jslb">
+              <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
+            </el-form-item>
+            <el-form-item label="批次号" prop="rwpcid">
+              <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
+            </el-form-item>
+            <el-form-item label="数据开始日期" prop="datastarttime">
+              <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
+            </el-form-item>
+            <el-form-item label="数据结束日期" prop="dataendtime">
+              <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
+            </el-form-item>
+            <el-form-item label="机构名称" prop="jgmc">
+              <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+            </el-form-item>
+              <el-form-item label="检查机构" prop="cxjg">
+              <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
+            </el-form-item>
+              <el-form-item label="检查组" prop="jcz">
+              <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+            </el-form-item>
+            <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+              <el-button type="primary" plain size="mini" @click="heshiOption.show=true">机构核实</el-button>
+              <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
+              <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+            </div>
       </el-form>
-    </div>
+      <el-row :gutter="10">
+        <el-col :span="1.5">
+          <span>参保人：</span>
+          <el-select v-model="ybd" size="small">
+            <el-option label="本地" value="1"></el-option>
+            <el-option label="异地" value="2"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll">
+          <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='four'  &&isAll">
+          <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue!=='three'">
+          <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
+        </el-col>
+        <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
+          <el-radio-button label="three">规则筛查</el-radio-button>
+        </el-radio-group>
+      </el-row>
+      <div v-loading="loading" style="max-height:400px">
+        <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border style="margin-top:10px">
+            <!-- <el-table-column type="selection" width="55" align="center" /> -->
+            <el-table-column label="序号" width="55" type="index" align="center"  />
+            <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
+            <el-table-column label="违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',renwuthreeList)"/>
+            <el-table-column label="违规费用(元)" align="center" prop="wgfy" :width="flexColumnWidth('wgfy',renwuthreeList)">
+              <template slot-scope="scope">
+                <span>{{formatMoney(scope.row.wgfy,2)}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
+            <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
+            <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
+            <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
+            <el-table-column label="医院核实结果" align="center" prop="yyhsjg" :width="flexColumnWidth('yyhsjg',renwuthreeList)"/>
+            <el-table-column label="操作" align="center" width="110">
+              <template slot-scope="scope">
+                <el-button type="text" size="mini" @click="fluProject(scope.row)">
+                  流水号项目汇总
+                </el-button>
+              </template>
+            </el-table-column>
+        </el-table>
+        <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
+        <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" @radio-change="handleSelectionChange" @checkdetail="checkLog" @on-close="logShow=false"></tongliumx>
+      </div>
+      <pagination
+        style="margin-top:0;margin-bottom:25px;"
+        v-show="total>0 &&!logShow"
+        :total="total"
+        :page.sync="queryParams.pageNum"
+        :limit.sync="queryParams.pageSize"
+        @pagination="getList"
+      />
+      <div v-show="tabsValue!=='three'&&!logShow"  class="xingweirz" style="margin-top:15px;">
+        <el-form inline :model="xwrdForm" :rules="xwRules" size="small" ref="xwrdForm" label-width="100px">
+          <el-form-item label="名称" prop="gzmc">
+            <el-input v-model="xwrdForm.gzmc" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="行为认定" prop="xwrd">
+            <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:32px;height:32px;border:1px solid #DCDFE6;border-radius:4px;width:188px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
+          </el-form-item>
+          <el-form-item label="备注" prop="bz">
+            <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
+          </el-form-item>
+          <el-form-item label="追款单价" prop="mxxmdj">
+            <el-input v-model="xwrdForm.mxxmdj" :disabled="isDisabled.dj"></el-input>
+          </el-form-item>
+          <el-form-item label="违规数量" prop="mxxmsl">
+            <el-input v-model="xwrdForm.mxxmsl" :disabled="isDisabled.sl"></el-input>
+          </el-form-item>
+          <el-form-item label="违规费用(元)" prop="mxxmje" >
+            <el-input v-model="xwrdForm.mxxmje" :disabled="isDisabled.fy"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="small" @click="xwrdSubmit">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </section>
      <!-- 查询条件 -->
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px">
       <el-form ref="chaxunForm" :model="queryForm" :rules="rules" label-width="100px" size="small">
@@ -191,7 +197,7 @@
     </el-dialog>
     <guizeshuom :options="guizeOptions"></guizeshuom>
     <xwrd-dialog :options="xwrdDialog" @on-checked="onChecked" v-if="xwrdDialog.show"></xwrd-dialog>
-    <jgheshi :options="heshiOption"></jgheshi>
+    <jgheshi :options="heshiOption" v-if="heshiOption.show" @on-close="heshiOption.show=false"></jgheshi>
   </div>
 </template>
 
@@ -200,11 +206,9 @@ import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenw
 import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
 import { listRenwufive ,updateRenwufive} from '@/api/renwu/renwufive'
 import { submitDxqd } from "@/api/renwu/dcqz"
-import { updateXwrd } from "@/api/renwu/xwrd"
-
+// import { updateXwrd } from "@/api/renwu/xwrd"
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
-
 import Guizeshuom from './guizeshuom.vue'
 import XwrdDialog from './xwrdDialog.vue'
 import Jgheshi from './jgheshi.vue'
@@ -216,10 +220,11 @@ export default {
     Guizeshuom,
     XwrdDialog,
     Tongliumx,
-    Jgheshi
+    Jgheshi,
   },
   data() {
     return {
+      logShow:false,//操作记录
       heshiOption:{
         show:false
       },
@@ -478,6 +483,7 @@ export default {
         default :
          break
       }
+      this.logShow&&(this.logShow = false)
     },
     //选择行为回调
     onChecked(res){
@@ -767,6 +773,10 @@ export default {
         mxxmje:''
       }
       this.getList()
+    },
+    //操作记录
+    checkLog(row){
+      this.logShow = true
     },
     sum(arr){
       let s = 0

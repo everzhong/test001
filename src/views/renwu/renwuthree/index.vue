@@ -216,7 +216,11 @@
       <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :formatter="xjjzrsFormat" />
       <el-table-column label="涉及明细数" align="center" prop="xjmxs" :formatter="xjmxsFormat" />
-      <el-table-column label="涉及金额" align="center" prop="xjje" :formatter="xjjeFormat" />
+      <el-table-column label="涉及金额" align="center" prop="xjje" :formatter="xjjeFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.xjje,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="结算费用" align="center" prop="jsfy" :formatter="jsfyFormat" />
       <el-table-column label="险种" align="center" prop="ybbf" :formatter="ybbfFormat" />
       <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat" />

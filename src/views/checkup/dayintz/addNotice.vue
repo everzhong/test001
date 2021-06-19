@@ -3,7 +3,6 @@
     <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="dayinBack">返回</el-button>
     </div>
-    
     <div class="zhizuo-port">
         <div class="zhizuo">
           <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">

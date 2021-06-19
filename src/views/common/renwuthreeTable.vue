@@ -24,7 +24,11 @@
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="违反条数(违反规则的明细数量)" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
-    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)"/>
+    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.ydje,2)}}</span>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>

@@ -9,7 +9,11 @@
     <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
     <el-table-column label="涉及规则数" align="center" prop="sjwgs"/>
     <el-table-column label="涉及就诊人数" align="center" prop="sjjzrs"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)"/>
+    <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.xjje,2)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="操作" align="center" width="150">

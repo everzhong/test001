@@ -9,8 +9,16 @@
         <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
         <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
         <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
-        <el-table-column label="涉及金额" align="center" prop="xjje" :width="flexColumnWidth('xjje',renwuthreeList)"/>
-        <el-table-column label="结算费用" align="center" prop="jsfy" :width="flexColumnWidth('jsfy',renwuthreeList)"/>
+        <el-table-column label="涉及金额" align="center" prop="xjje" :width="flexColumnWidth('xjje',renwuthreeList)">
+          <template slot-scope="scope">
+            <span>{{formatMoney(scope.row.xjje,2)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="结算费用" align="center" prop="jsfy" :width="flexColumnWidth('jsfy',renwuthreeList)">
+          <template slot-scope="scope">
+            <span>{{formatMoney(scope.row.jsfy,2)}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwuthreeList)"/>
         <el-table-column label="行政区" align="center" prop="xzq" :width="flexColumnWidth('xzq',renwuthreeList)"/>
         <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwuthreeList)"/>

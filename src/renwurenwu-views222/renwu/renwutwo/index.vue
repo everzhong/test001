@@ -397,10 +397,18 @@
       <el-table-column label="信用代码" align="center" prop="xydm" :formatter="xydmFormat" />
       <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" />
       <el-table-column label="机构名称" align="center" prop="jgmc" :formatter="jgmcFormat" />
-      <el-table-column label="结算金额" align="center" prop="jsje" :formatter="jsjeFormat" />
+      <el-table-column label="结算金额" align="center" prop="jsje" :formatter="jsjeFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.jsje,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="结算人次" align="center" prop="jsrc" :formatter="jsrcFormat" />
       <el-table-column label="涉及违规数" align="center" prop="sjwgs" :formatter="sjwgsFormat" />
-      <el-table-column label="疑点金额" align="center" prop="ydje" :formatter="ydjeFormat" />
+      <el-table-column label="疑点金额" align="center" prop="ydje" :formatter="ydjeFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.ydje,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="添加时间" align="center" prop="addtime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.addtime, '{y}-{m}-{d}') }}</span>

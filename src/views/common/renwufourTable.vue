@@ -27,10 +27,26 @@
     <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  :width="flexColumnWidth('mxxmmc',tableData)"/>
     <el-table-column label="通用名" align="center" prop="tym"  :width="flexColumnWidth('tym',tableData)"/>
     <el-table-column label="明细违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',tableData)"/>
-    <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje"  :width="flexColumnWidth('mxxmje',tableData)"/>
-    <el-table-column label="明细项目交易金额(元)" align="center" prop="mxxmjyfy"  :width="flexColumnWidth('mxxmjyfy',tableData)"/>
-    <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy"  :width="flexColumnWidth('mxxmbjsfy',tableData)"/>
-    <el-table-column label="疑点金额" align="center" prop="wgfy"  :width="flexColumnWidth('wgfy',tableData)"/>
+    <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje"  :width="flexColumnWidth('mxxmje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="明细项目交易金额(元)" align="center" prop="mxxmjyfy"  :width="flexColumnWidth('mxxmjyfy',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy"  :width="flexColumnWidth('mxxmbjsfy',tableData)">
+       <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="疑点金额" align="center" prop="wgfy"  :width="flexColumnWidth('wgfy',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.wgfy,2)}}</span>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 <script>

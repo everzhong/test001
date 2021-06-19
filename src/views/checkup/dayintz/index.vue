@@ -28,7 +28,7 @@
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return !row.isdayin}"></el-table-column>
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="是否制作" align="center" prop="isdayin"  :width="flexColumnWidth('isdayin',renwutwoList)">
+        <el-table-column label="是否制作" align="center" prop="isdayin" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.isdayin?'是':'否'}}</span>
           </template>
@@ -50,23 +50,23 @@
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button
-            v-if="!scope.row.isDo"
-            size="mini"
-            type="text"
-            @click="navigateToAdd(scope.row)"
-          >制作通知</el-button>
-          <el-button
-            v-else
-            size="mini"
-            type="text"
-            @click="printFile(scope.row)"
-          >打印通知</el-button>
-        </template>
-      </el-table-column>
-  </el-table>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              v-if="!scope.row.isDo"
+              size="mini"
+              type="text"
+              @click="navigateToAdd(scope.row)"
+            >制作通知</el-button>
+            <el-button
+              v-else
+              size="mini"
+              type="text"
+              @click="printFile(scope.row)"
+            >打印通知</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <pagination
       v-show="total>0"
@@ -75,20 +75,29 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <div v-for="(item,i) in pildyList" :key="i" :id="'dayin_'+i" style="display:none">
+      <SingleNotice :pageData="item"/>
+    </div>
   </div>
 </template>
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
 import SearchItem from '../../common/objSearchItem'
 import RenwutwoTable from '../../common/renwutwoTable'
+import SingleNotice from './singleNotice.vue'
+import MutilNotice from './mutilNotice.vue'
+
 export default {
   name: "Dayintz",
   components: {
     SearchItem,
     RenwutwoTable,
+    SingleNotice,
+    MutilNotice
   },
   data() {
     return {
+      pildyList:[],
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -520,6 +529,7 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.selectionData = selection
+      this.pildyList = selection
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -602,7 +612,35 @@ export default {
       if(!this.ids.length){
         this.msgWarning('请至少选择一项')
       } else {
-        
+        const pcidList = []
+        this.selectionData.forEach(item=>{
+          item.isdayin*1===1 && (pcidList.push(item.rwpcid))
+        })
+        if(pcidList.length){
+          this.$alert(`任务批次：${pcidList.join(',')}尚未制作通知，请先制作通知`, '提示', {
+            confirmButtonText: '确定'
+          })
+        } else {
+          const dayinList = []
+          var newWin = window.open() // 新打开一个空窗口
+          for (var i = 0; i < this.pildyList.length; i++) {
+            var imageToPrint = document.getElementById(`dayin_${i}`) // 获取需要打印的内容
+            imageToPrint.style.display = 'block'
+            dayinList.push(imageToPrint)
+            newWin.document.write(imageToPrint.outerHTML) // 将需要打印的内容添加进新的窗口
+          }
+          const styleSheet = `<style>.print-area{width:669px;height:1021px;margin:auto}</style>`
+          newWin.document.head.innerHTML = styleSheet // 给打印的内容加上样式
+          newWin.document.close() // 在IE浏览器中使用必须添加这一句
+          newWin.focus() // 在IE浏览器中使用必须添加这一句
+          setTimeout(function() {
+              newWin.print() // 打印
+              newWin.close() // 关闭窗口
+          }, 10)
+          dayinList.forEach(item=>{
+            item.style.display = 'none'
+          })
+        }
       }
     },
     /**

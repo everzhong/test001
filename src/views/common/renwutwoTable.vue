@@ -21,7 +21,11 @@
         <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="结算金额" align="center" prop="jsje"  :width="flexColumnWidth('jsje',tableData)"/>
+    <el-table-column label="结算金额" align="center" prop="jsje"  :width="flexColumnWidth('jsje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.jsje,2)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="结算人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
     <el-table-column label="涉及违规数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',tableData)"/>
     <el-table-column label="第三方查询状态" align="center">
@@ -29,7 +33,11 @@
         <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)"/>
+    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.ydje,2)}}</span>
+      </template>
+    </el-table-column>
     <!-- <el-table-column label="操作" align="center">
       <template slot-scope="scope">
         <el-button

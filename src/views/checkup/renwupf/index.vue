@@ -11,7 +11,7 @@
           type="primary"
           size="small"
           @click="handleNetCheck"
-        >派发组检查</el-button>
+        >派发检查组</el-button>
       </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
@@ -484,6 +484,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery(query) {
+      this.tabsValue = 'two'
       this.queryParams.pageNum = 1;
       this.getList(query);
     },

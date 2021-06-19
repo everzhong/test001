@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div id="printJc" ref="printJc" style="width:595px;padding:10px 20px;flex-shrink:0">
+    <div id="printJc" class="print-area" ref="printJc" style="width:595px;padding:10px 20px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市静安区医疗保障局</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">静医保监督通（2020）01182号</div>
@@ -34,10 +34,10 @@
       </div>
     <div style="text-align:right;padding-right:19px">
       <!-- <el-button type="primary" v-print="printJianchs" size="mini" >打印</el-button> -->
-      <el-button type="primary" size="mini" @click="printEvent('printJc')">打印</el-button>
+      <!-- <el-button type="primary" size="mini" @click="printEvent('printJc')">打印</el-button> -->
 
     </div>
-    <div id="printJl" ref="printJl" style="width:595px;padding:10px 20px;flex-shrink:0">
+    <div id="printJl" class="print-area" ref="printJl" style="width:595px;padding:10px 20px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市静安区医疗保障局</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <section style="padding: 20px;font-size: 14px;border: 1px solid #303313;">
@@ -76,7 +76,7 @@
     </div>
     <div style="text-align:right;padding-right:19px">
       <!-- <el-button size="mini" type="primary" v-print="printJilv">打印</el-button> -->
-      <el-button size="mini" type="primary" @click="printEvent('printJl')">打印</el-button>
+      <!-- <el-button size="mini" type="primary" @click="printEvent('printJl')">打印</el-button> -->
     </div>
   </section>
 </template>

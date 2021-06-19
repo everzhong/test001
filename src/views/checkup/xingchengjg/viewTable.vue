@@ -6,12 +6,28 @@
     <el-table-column label="检查方式" align="center" prop="jcfx"  show-overflow-tooltip/>
     <el-table-column label="医保项目编码" align="center" prop="mxxmbm"  show-overflow-tooltip/>
     <el-table-column label="项目名称" align="center" prop="gzmc"  show-overflow-tooltip/>
-    <el-table-column label="标准单价(元)" align="center" prop="mxxmdj"  show-overflow-tooltip/>
+    <el-table-column label="标准单价(元)" align="center" prop="mxxmdj"  show-overflow-tooltip>
+       <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="计价单位" align="center" prop="mxxmje"  show-overflow-tooltip/>
-    <el-table-column label="医院单价(元)" align="center" prop="mxxmjyfy"  show-overflow-tooltip/>
-    <el-table-column label="追款单价(元)" align="center" prop="mxxmbjsfy"  show-overflow-tooltip/>
+    <el-table-column label="医院单价(元)" align="center" prop="mxxmjyfy"  show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.mxxmjyfy,3)}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="追款单价(元)" align="center" prop="mxxmbjsfy"  show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.mxxmbjsfy,3)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="违规数量" align="center" prop="wgsl"  show-overflow-tooltip/>
-    <el-table-column label="违规费用(元)" align="center" prop="wgfy"  show-overflow-tooltip/>
+    <el-table-column label="违规费用(元)" align="center" prop="wgfy"  show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.wgfy,2)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="行为认定" align="center" prop="xwrd" show-overflow-tooltip/>
     <!-- <el-table-column label="操作" align="center" show-overflow-tooltip width="110px">
       <template slot-scope="scope">

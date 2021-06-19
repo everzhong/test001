@@ -209,23 +209,47 @@
     <el-table v-loading="loading" :data="renwufourList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="行为认定" align="center" prop="xwrd" :formatter="xwrdFormat" />
-      <el-table-column label="追款单价" align="center" prop="zkdj" :formatter="zkdjFormat" />
+      <el-table-column label="追款单价" align="center" prop="zkdj" :formatter="zkdjFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.zkdj,3)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="违规数量" align="center" prop="wgsl" :formatter="wgslFormat" />
-      <el-table-column label="违规费用" align="center" prop="wgfy" :formatter="wgfyFormat" />
+      <el-table-column label="违规费用" align="center" prop="wgfy" :formatter="wgfyFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.wgfy,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="bz" :formatter="bzFormat" />
       <el-table-column label="机构名称" align="center" prop="jgmc" :formatter="jgmcFormat" />
       <el-table-column label="规则分类" align="center" prop="gzfl" :formatter="gzflFormat" />
       <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat" />
-      <el-table-column label="明细项目金额" align="center" prop="mxxmje" :formatter="mxxmjeFormat" />
-      <el-table-column label="明细项目交易金额" align="center" prop="mxxmjyfy" :formatter="mxxmjyfyFormat" />
+      <el-table-column label="明细项目金额" align="center" prop="mxxmje" :formatter="mxxmjeFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="明细项目交易金额" align="center" prop="mxxmjyfy" :formatter="mxxmjyfyFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="规则名称" align="center" prop="gzmc" :formatter="gzmcFormat" />
       <el-table-column label="明细项目编号" align="center" prop="mxxmbm" :formatter="mxxmbmFormat" />
       <el-table-column label="明细项目名称" align="center" prop="mxxmmc" :formatter="mxxmmcFormat" />
       <el-table-column label="通用名" align="center" prop="tym" :formatter="tymFormat" />
-      <el-table-column label="明细项目单价" align="center" prop="mxxmdj" :formatter="mxxmdjFormat" />
+      <el-table-column label="明细项目单价" align="center" prop="mxxmdj" :formatter="mxxmdjFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="结算等级" align="center" prop="jsdj" :formatter="jsdjFormat" />
       <el-table-column label="明细项目数量" align="center" prop="mxxmsl" :formatter="mxxmslFormat" />
-      <el-table-column label="明细项目医保结算金额" align="center" prop="mxxmbjsfy" :formatter="mxxmbjsfyFormat" />
+      <el-table-column label="明细项目医保结算金额" align="center" prop="mxxmbjsfy" :formatter="mxxmbjsfyFormat">
+        <template slot-scope="scope">
+          <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="费用类别" align="center" prop="fylb" :formatter="fylbFormat" />
       <el-table-column label="机构代码" align="center" prop="jgdm" :formatter="jgdmFormat" />
       <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />

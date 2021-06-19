@@ -177,8 +177,8 @@ export default {
 
     },
     radomSelect(){
-      const role = this.roleList[Math.floor(Math.random()*this.roleList.length)]
-      this.roleCheck =  role.id
+      // const role = this.roleList[random]
+      this.roleCheck =  Math.floor(Math.random()*this.roleList.length)
     },
     confirm(){
       this.$emit('on-confirm',this.roleList[this.roleCheck])

@@ -15,7 +15,9 @@
       ref="upload"
     >
       <!-- 上传按钮 -->
-      <el-button size="mini" type="primary" v-if="!needHide||!(needHide&&list.length)">选取文件</el-button>
+      <slot name="select-btn">
+        <el-button size="mini" type="primary" v-if="!needHide||!(needHide&&list.length)">选取文件</el-button>
+      </slot>
       <!-- 上传提示 -->
       <div class="el-upload__tip" slot="tip" v-if="showTip">
         请上传
@@ -54,7 +56,7 @@ export default {
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ["doc", "xls", "ppt", "txt", "pdf"],
+      default: () => ["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"],
     },
     // 是否显示提示
     isShowTip: {

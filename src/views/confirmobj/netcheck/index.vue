@@ -526,6 +526,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery(query) {
+      this.tabsValue = 'two'
       this.queryParams.pageNum = 1;
       this.getList(query);
     },

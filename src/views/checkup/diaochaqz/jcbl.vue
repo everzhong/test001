@@ -96,6 +96,17 @@
       <el-radio-button label="online">在线制作列表</el-radio-button>
       <el-radio-button label="upload">签字上传列表</el-radio-button>
     </el-radio-group>
+    <el-radio-group size="small" class="top-right-btn">
+      <fileUpload
+        v-model="wenjianurl"
+        :fileSize="10"
+        :isShowTip="false"
+        @input="upSuccess"
+        ref="fileUpload"
+      >
+        <el-button slot="select-btn" size="small" type="parmary" plain class="el-icon-plus">上传签字扫描件</el-button>
+      </fileUpload>
+    </el-radio-group>
     <el-table class="qztable" :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
@@ -130,10 +141,13 @@
 </template>
 <script>
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
+import FileUpload from '@/components/FileUpload';
+
 export default {
   name:'Jcbl',
   data(){
     return {
+      wenjianurl:'',
       tableData:[],
       blCheck:false,
       queryParams:{
@@ -275,7 +289,13 @@ export default {
     exportPdf(title){
       const name = title||'检查笔录下载'
       this.$PDFSave(this.$refs['docPart'], name);
+    },
+    upSuccess(){
+      
     }
+  },
+  components:{
+    FileUpload
   }
 }
 </script>

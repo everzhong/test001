@@ -8,7 +8,11 @@
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs"/>
     <el-table-column label="涉及明细数" align="center" prop="xjmxs"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)"/>
+    <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.xjje,2)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
   </el-table>

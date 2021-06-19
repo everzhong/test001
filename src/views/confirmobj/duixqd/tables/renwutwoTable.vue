@@ -36,7 +36,11 @@
     <el-table-column label="任务描述" align="center" prop="rwms"  :width="flexColumnWidth('rwms',tableData)"/>
     <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
     <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)"/>
+    <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.xjje,2)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="状态" align="center" prop="status"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="承办机构" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="状态更新时间" align="center" prop="uptime" :width="flexColumnWidth('uptime',tableData)">

@@ -49,7 +49,7 @@
       <el-radio-group @change="viewTableObj.show = false" v-model="tabsValue" size="small" class="top-right-btn">
         <el-radio-button label="1" :value="1">按检查方式汇总</el-radio-button>
         <el-radio-button label="2" :value="2">按违规类别汇总</el-radio-button>
-        <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button>
+        <!-- <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button> -->
       </el-radio-group>
     </el-row>
     <jc-table v-if="tabsValue==1&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/>

@@ -1,6 +1,7 @@
 /**项目流水号汇总 第5层数据*/
 <template>
-  <el-table class="qztable" :row-class-name="tableRowClassName"  ref="multipleTable" :data="tableData" border style="margin-top:10px">
+<div>
+  <el-table v-show="!showLog" class="qztable" :row-class-name="tableRowClassName"  ref="multipleTable" :data="tableData" border style="margin-top:10px">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column  align="center" width="55">
       <template slot-scope="scope">
@@ -12,7 +13,7 @@
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
     <el-table-column label="参保人卡号" align="center" prop="beizhu"  :width="flexColumnWidth('beizhu',tableData)"/>
-    <el-table-column label="参保人姓名" align="center" prop="xm"  :width="flexColumnWidth('xm',tableData)"/>
+    <el-table-column label="参保人姓名" align="center" prop="xm"  :width="100"/>
     <el-table-column label="科室代码" align="center" prop="ksdm"  :width="flexColumnWidth('ksdm',tableData)"/>
     <el-table-column label="科室名称" align="center" prop="ksmc"  :width="flexColumnWidth('ksmc',tableData)"/>
     <el-table-column label="医师代码" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)"/>
@@ -38,16 +39,21 @@
       </template>
     </el-table-column>
   </el-table>
+  <operate-log v-if="showLog" @on-close="closedetail" :tableData="logList"></operate-log>
+</div>
 </template>
 <script>
+import OperateLog from './operateLog.vue'
 export default {
   name:'Tongliumx',
   data(){
     return {
-      wsCheck:''
+      wsCheck:'',
+      showLog:false,
+      logList:[]
     }
   },
-  props:['tableData'],
+  props:['tableData','options'],
   methods:{
     radioChange(e){
       const selection = this.tableData.filter(item=>{
@@ -63,7 +69,13 @@ export default {
       // this.multiple = !selection.length
     },
     checkdetail(row){
+      this.showLog = true
+      this.logList = [row]
       this.$emit('checkdetail',row)
+    },
+    closedetail(){
+      this.showLog = false
+      this.$emit('on-close')
     },
     selectAll(){
       this.tableData.forEach(row => {
@@ -80,6 +92,9 @@ export default {
         return ''
       }
     }
+  },
+  components:{
+    OperateLog
   }
 }
 </script>

@@ -36,10 +36,10 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="委托机构" prop="wtjg">
-            <el-input placeholder="请输入" v-model="queryParams.wtjg" clearable size="small" style="width: 240px"></el-input>
+            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 240px"></el-input>
           </el-form-item>
           <el-form-item label="承办机构" prop="cbjg">
-            <el-input placeholder="请输入" v-model="queryParams.cbjg" clearable size="small" style="width: 240px"></el-input>
+            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 240px"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="2">
