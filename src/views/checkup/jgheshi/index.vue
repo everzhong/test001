@@ -22,22 +22,28 @@
       </template>
     </el-table-column>
     <el-table-column label="规则分类" align="center" prop="gzfl"/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"/>
+    <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="违反条数(违反规则的明细数量)" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
     <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.ydje,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="操作" align="center"  width="110">
+    <el-table-column label="核实状态" align="center" prop="hszt">
       <template slot-scope="scope">
-        <span @click="submitHsyj(scope.row)">提交核实意见</span>
+        <span>{{scope.row.hszt==='2'?'已核实':'未核实'}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" align="center"  width="110">
+      <template slot-scope="scope" >
+        <el-button v-if="scope.row.hszt!=='2'" size="mini" type="text" primary @click="submitHsyj(scope.row)">提交核实意见</el-button>
       </template> 
     </el-table-column>
   </el-table>
 </template>
 <script>
-import {listjgRenwuthree} from '@/api/renwu/renwuthree'
+import {listjgRenwuthree,updateRenwuthree} from '@/api/renwu/renwuthree'
+
 export default {
   name:'Listjg',
   data(){
@@ -79,6 +85,31 @@ export default {
         console.log(error)
       }
       this.loading = false
+    },
+    submitHsyj(row){
+      this.$prompt('机构核实意见', '核实意见填写', {
+          inputType:'textarea',
+          confirmButtonText: '确定',
+          cancelButtonText: '返回',
+        }).then(({ value }) => {
+          updateRenwuthree({
+            id:row.id,
+            hszt:'2',
+            hsyj:value,
+            hsr:this.$store.getters.name,
+            hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
+          }).then(res=>{
+            if(res.code===200) { 
+              this.msgSuccess('机构核实成功')
+              this.getList()
+            } 
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });       
+        });
     }
   }
 }

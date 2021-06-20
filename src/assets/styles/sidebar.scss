@@ -83,6 +83,12 @@
             &:hover {
                 background-color: $subMenuHover !important;
             }
+            &.is-active {
+                background-color: #001528 !important;
+            }
+        }
+        & .theme-dark .nest-menu .is-active .el-submenu__title {
+            background-color: #001528 !important;
         }
     }
     .hideSidebar {
@@ -149,6 +155,12 @@
         .main-container,
         .sidebar-container {
             transition: none;
+        }
+    }
+    & .el-submenu .el-menu-item {
+        min-width: $sideBarWidth !important;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.06) !important;
         }
     }
 }

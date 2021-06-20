@@ -1,10 +1,10 @@
 <template>
   <section>
-    <div id="printJc" class="print-area" ref="printJc" style="width:595px;padding:0px;flex-shrink:0">
+    <div id="printJc" class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所/××区医疗保障局 </h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/×医保监督通（××××）×号</div>
-        <section style="padding: 20px;font-size: 14px;border: 1px solid #303313;">
+        <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">监督检查通知书</div>
           <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 30px;min-width:80px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
           <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定，决定于
@@ -43,10 +43,10 @@
       <!-- <el-button type="primary" size="mini" @click="printEvent('printJc')">打印</el-button> -->
 
     </div>
-    <div id="printJl" class="print-area" ref="printJl" style="width:595px;padding:0px;flex-shrink:0">
+    <div id="printJl" class="print-area" ref="printJl" style="width:635px;padding:0px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
-      <section style="padding: 20px;font-size: 14px;border: 1px solid #303313;">
+      <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
         <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 30px;">监督检查纪律告知书</div>
         <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 20px;min-width:150px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>
         <div style="text-indent: 2em;letter-spacing: 2px;margin-top: 10px;margin-bottom: 20px;text-align: justify;">根据《上海市基本医疗保险监督管理办法》（市政府第31号令）的有关规定和工作安排，我所自

@@ -181,17 +181,33 @@ export const constantRoutes = [{
                 path: "dayintz/addNotice",
             }, {
                 component: (resolve) => require(['@/views/checkup/jianchass/index'], resolve),
-                hidden: false,
+                alwaysShow: true,
                 meta: { title: "检查实施", noCache: true },
-                name: "Jianchass",
-                path: "jianchass",
-            }, {
-                component: (resolve) => require(['@/views/checkup/diaochaqz/index'], resolve),
-                hidden: false,
-                meta: { title: "调查取证", noCache: true },
-                name: "Diaochaqz",
-                path: "diaochaqz"
-            }, {
+                name: "Jcss",
+                path: "jcss",
+                children: [{
+                        component: (resolve) => require(['@/views/checkup/diaochaqz/index'], resolve),
+                        hidden: false,
+                        meta: { title: "调查取证", noCache: true },
+                        name: "Diaochaqz",
+                        path: "diaochaqz"
+                    },
+                    {
+                        component: (resolve) => require(['@/views/checkup/jianchass/jianchass'], resolve),
+                        hidden: true,
+                        meta: { title: "检查实施", noCache: true },
+                        name: "Jianchass",
+                        path: "jianchass",
+                    }, {
+                        component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz'], resolve),
+                        hidden: true,
+                        meta: { title: "调查取证", noCache: true },
+                        name: "Dcqz",
+                        path: "diaochaqz/dcqz",
+                    }
+                ]
+            },
+            {
                 component: (resolve) => require(['@/views/checkup/xingchengjg/index'], resolve),
                 hidden: false,
                 meta: { title: "形成结果", noCache: true },
@@ -204,19 +220,15 @@ export const constantRoutes = [{
                 meta: { title: "机构核实", noCache: true },
                 name: "Listjg",
                 path: "listjg",
-            }, {
-                component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz'], resolve),
-                hidden: true,
-                meta: { title: "调查取证", noCache: true },
-                name: "Dcqz",
-                path: "diaochaqz/dcqz",
-            }, {
+            },
+            {
                 component: (resolve) => require(['@/views/checkup/jianchass/shisjc'], resolve),
                 hidden: true,
                 meta: { title: "实施检查", noCache: true },
                 name: "Shisjc",
                 path: "jianchass/shisjc",
-            }, {
+            },
+            {
                 component: (resolve) => require(['@/views/checkup/xingchengjg/chubujieguo'], resolve),
                 hidden: true,
                 meta: { title: "初步形成结果", noCache: true },
@@ -229,7 +241,7 @@ export const constantRoutes = [{
         meta: { title: "实施检查", icon: "monitor", noCache: true },
         name: "Checkup",
         path: "/checkup",
-        redirect: "noRedirect"
+        redirect: "checkup/jianchass"
     },
     {
         alwaysShow: true,
@@ -270,8 +282,7 @@ export const constantRoutes = [{
         name: "Baseinfosave",
         path: "/baseinfosave",
         redirect: "noRedirect"
-    },
-    {
+    }, {
         alwaysShow: true,
         children: [{
             component: (resolve) => require(['@/views/thirdcheck/thirdcheck/index'], resolve),

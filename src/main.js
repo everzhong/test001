@@ -24,7 +24,7 @@ import vueToPdf from 'vue-to-pdf'
 
 import Print from '@/utils/print' // 注册
 import mPrint from 'vue-print-nb' // 引入附件的js文件 v-print方式
-
+import { checkRole } from '@/utils/permission'
 Vue.use(Print)
 Vue.use(mPrint)
 
@@ -42,6 +42,7 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.formatMoney = formatMoney
+Vue.prototype.checkRole = checkRole
 
 Vue.prototype.msgSuccess = function(msg) {
     this.$message({ showClose: true, message: msg, type: "success" });

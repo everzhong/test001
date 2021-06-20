@@ -24,7 +24,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .mutil-outer{
-  width: 597px;
+  width: 637px;
   &::v-deep .el-carousel--horizontal {
     padding-top:60px;
     &::before{

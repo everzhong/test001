@@ -2,12 +2,12 @@
   <div class="app-container">
     <SearchItem @handleQuery="handleQuery"/>
     <div v-loading="loading">
+      <!-- <RenwutwoTable :tableData="renwutwoList" /> -->
       <el-table :data="renwutwoList" border>
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column label="状态" align="center" prop="status"></el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <!-- <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ybbf',renwutwoList)"/> -->
-        <!-- <el-table-column label="检查方式" align="center" prop="jsdj"  :width="flexColumnWidth('ybbf',renwutwoList)"/> -->
+        <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
         <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
         <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
@@ -21,20 +21,19 @@
           </template>
         </el-table-column>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc" />
-        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/>
-        <el-table-column label="检查机构" align="center" prop="dcjg"/>
-        <el-table-column label="检查组" align="center" prop="jczname" :width="flexColumnWidth('jczname',renwutwoList)"/>
-      <el-table-column label="操作" align="center" width="100">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            @click="naviGateToQz(scope.row)"
-          >调查取证</el-button>
-        </template>
-      </el-table-column>
-  </el-table>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
+        <el-table-column label="检查机构" align="center" prop="jczid"  :width="flexColumnWidth('jczid',renwutwoList)"/>
+        <el-table-column label="检查组" align="center" prop="jczname"  :width="flexColumnWidth('jczname',renwutwoList)"/>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              @click="doCheck(scope.row)"
+            >实施检查</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <pagination
       v-show="total>0"
@@ -47,14 +46,11 @@
 </template>
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
-
 import SearchItem from '../../common/objSearchItem'
-import RenwutwoTable from '../../common/renwutwoTable'
 export default {
-  name: "Diaochaqz",
+  name: "Jianchass",
   components: {
     SearchItem,
-    RenwutwoTable,
   },
   data() {
     return {
@@ -71,7 +67,7 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 总条数
-      total: 0,
+      total: 10,
       // renwutwo表格数据
       renwutwoList: [],
       renwuthreeList: [],
@@ -281,6 +277,7 @@ export default {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
+      params.status = 3 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
       this.loading = true
       try {
         const res = await listRenwutwo(params)
@@ -459,6 +456,88 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList(query);
     },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "添加renwutwo";
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      const ybd = row.id || this.ids
+      getRenwutwo(ybd).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改renwutwo";
+      });
+    },
+    /** 提交按钮 */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if (this.form.id != null) {
+            updateRenwutwo(this.form).then(response => {
+              this.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            });
+          } else {
+            addRenwutwo(this.form).then(response => {
+              this.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            });
+          }
+        }
+      });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const ybds = row.id || this.ids;
+      this.$confirm('是否确认删除renwutwo编号为"' + ybds + '"的数据项?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return delRenwutwo(ybds);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        })
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      const queryParams = this.queryParams;
+      this.$confirm('是否确认导出所有renwutwo数据项?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.exportLoading = true;
+          return exportRenwutwo(queryParams);
+        }).then(response => {
+          this.download(response.msg);
+          this.exportLoading = false;
+        })
+    },
+    /**
+     * 实施网申
+     */
+    handleNetCheck(){
+      if(!this.ids.length){
+        this.msgWarning('请至少选择一项')
+      } else {
+        
+      }
+      //检查任务中有未执行第三方筛查的
+
+    },
     /**
      * 第三方筛查
      */
@@ -472,12 +551,11 @@ export default {
       this.getList()
       console.log(val)
     },
-    naviGateToQz(row){
-      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczmc} = row
+    doCheck(row){
       this.$router.push({
-        path:'/checkup/jcss/diaochaqz/dcqz',
-        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczmc:jczmc||''}
-      })
+        path:'/checkup/jianchass/shisjc',
+        query:{...row}
+      },()=>{})
     }
   }
 };

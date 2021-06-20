@@ -82,7 +82,6 @@ export default {
           childrenMenus.push(router.children[item]);
         }
       });
-      console.log(constantRoutes.concat(childrenMenus),13331)
       return constantRoutes.concat(childrenMenus);
     },
     // 默认激活的菜单

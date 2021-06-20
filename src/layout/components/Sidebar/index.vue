@@ -11,7 +11,10 @@
                 active-text-color="#fff"
                 :collapse-transition="false"
                 mode="vertical"
-            >
+                @open="memueOpen"
+                @close="memueOpen"
+                @select="menueSelect"
+              >
                 <sidebar-item
                     v-for="(route, index) in sidebarRouters"
                     :key="route.path  + index"
@@ -28,7 +31,6 @@ import { mapGetters, mapState } from "vuex";
 import Logo from "./Logo";
 import SidebarItem from "./SidebarItem";
 import variables from "@/assets/styles/variables.scss";
-
 export default {
     components: { SidebarItem, Logo },
     computed: {
@@ -52,6 +54,24 @@ export default {
         isCollapse() {
             return !this.sidebar.opened;
         }
+    },
+    methods:{
+      memueOpen( index ){
+        if(index==='/checkup/jcss/jcss' && this.$route.fullPath!=='/checkup/jcss/jianchass'){
+          this.$router.push('/checkup/jcss/jianchass')
+          const target =  document.getElementById('jcss').getElementsByClassName('el-submenu__title')[0]
+          target.className = 'new__title'
+        }
+      },
+      menueSelect(index){
+        if(!index.indexOf('jcss')>-1){
+          const jianchass = document.getElementById('jcss')
+          const target = jianchass.getElementsByClassName('new__title')
+          if(target.length>0){
+            target[0].className = "el-submenu__title"
+          }
+        }
+      }
     }
 };
 </script>

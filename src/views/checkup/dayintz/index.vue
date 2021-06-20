@@ -26,8 +26,8 @@
     </div> -->
      <div v-loading="loading">
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return !row.isdayin}"></el-table-column>
-        <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <el-table-column label="序号" type="index" align="center"/>
         <el-table-column label="是否制作" align="center" prop="isdayin" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.isdayin?'是':'否'}}</span>
@@ -53,16 +53,16 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              v-if="!scope.row.isDo"
+              v-if="scope.row.isdayin!=1"
               size="mini"
               type="text"
-              @click="navigateToAdd(scope.row)"
+              @click="navigateToAdd([scope.row])"
             >制作通知</el-button>
             <el-button
               v-else
               size="mini"
               type="text"
-              @click="printFile(scope.row)"
+              @click="printFile([scope.row])"
             >打印通知</el-button>
           </template>
         </el-table-column>
@@ -342,17 +342,21 @@ export default {
       this.loading = false
     },
     navigateToAdd(row){
-      if(row) {
-        window.localStorage.setItem('PRDATA',JSON.stringify([row]))
-      } else {
-        window.localStorage.setItem('PRDATA',JSON.stringify(this.selectionData))
-      }
+      // if(row) {
+      //   window.localStorage.setItem('PRDATA',JSON.stringify(row))
+      // } else {
+      //   window.localStorage.setItem('PRDATA',JSON.stringify(this.selectionData))
+      // }
+      window.localStorage.setItem('PRDATA',JSON.stringify(row))
       this.$router.push({
         path:'/checkup/dayintz/addNotice',
       })
     },
-    printFile(){
-
+    printFile(row){
+      this.pildyList = row
+      setTimeout(() => {
+        this.doPrint(row)
+      }, 50);
     },
     // 异本地字典翻译
     ybdFormat(row, column) {
@@ -530,8 +534,6 @@ export default {
       this.ids = selection.map(item => item.id)
       this.selectionData = selection
       this.pildyList = selection
-      this.single = selection.length!==1
-      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -605,7 +607,21 @@ export default {
       if(!this.ids.length){
         this.msgWarning('请至少选择一项')
       } else {
-        this.navigateToAdd()
+        // cosnt isNoDayin = this.selectionData
+        console.log(this.$store)
+        if(!this.checkRole(['admin'])){
+          const pcidList = []
+          this.selectionData.forEach(item=>{
+            item.isdayin*1===1 && (pcidList.push(item.rwpcid))
+          })
+          if(pcidList.length){
+            this.$alert(`任务批次：${pcidList.join(',')} 已制作通知，请取消选择此项`, '提示', {
+              confirmButtonText: '确定'
+            })
+            return
+          } 
+        }
+        this.navigateToAdd(this.selectionData)
       }
     },
     handeMutilPrint(){
@@ -614,34 +630,40 @@ export default {
       } else {
         const pcidList = []
         this.selectionData.forEach(item=>{
-          item.isdayin*1===1 && (pcidList.push(item.rwpcid))
+          item.isdayin*1!==1 && (pcidList.push(item.rwpcid))
         })
         if(pcidList.length){
-          this.$alert(`任务批次：${pcidList.join(',')}尚未制作通知，请先制作通知`, '提示', {
+          this.$alert(`任务批次：${pcidList.join(',')} 尚未制作通知，请先制作通知`, '提示', {
             confirmButtonText: '确定'
           })
         } else {
-          const dayinList = []
-          var newWin = window.open() // 新打开一个空窗口
-          for (var i = 0; i < this.pildyList.length; i++) {
-            var imageToPrint = document.getElementById(`dayin_${i}`) // 获取需要打印的内容
-            imageToPrint.style.display = 'block'
-            dayinList.push(imageToPrint)
-            newWin.document.write(imageToPrint.outerHTML) // 将需要打印的内容添加进新的窗口
-          }
-          const styleSheet = `<style>.print-area{width:669px;height:1020px;margin:auto}</style>`
-          newWin.document.head.innerHTML = styleSheet // 给打印的内容加上样式
-          newWin.document.close() // 在IE浏览器中使用必须添加这一句
-          newWin.focus() // 在IE浏览器中使用必须添加这一句
-          setTimeout(function() {
-              newWin.print() // 打印
-              newWin.close() // 关闭窗口
-          }, 10)
-          dayinList.forEach(item=>{
-            item.style.display = 'none'
-          })
+          this.doPrint()
         }
       }
+    },
+    /**
+     * 执行打印
+     */
+    doPrint(){
+      const dayinList = []
+      var newWin = window.open() // 新打开一个空窗口
+      for (var i = 0; i < this.pildyList.length; i++) {
+        var imageToPrint = document.getElementById(`dayin_${i}`) // 获取需要打印的内容
+        imageToPrint.style.display = 'block'
+        dayinList.push(imageToPrint)
+        newWin.document.write(imageToPrint.outerHTML) // 将需要打印的内容添加进新的窗口
+      }
+      const styleSheet = `<style>.print-area{width:669px;height:1020px;margin:auto}</style>`
+      newWin.document.head.innerHTML = styleSheet // 给打印的内容加上样式
+      newWin.document.close() // 在IE浏览器中使用必须添加这一句
+      newWin.focus() // 在IE浏览器中使用必须添加这一句
+      setTimeout(function() {
+          newWin.print() // 打印
+          newWin.close() // 关闭窗口
+      }, 10)
+      dayinList.forEach(item=>{
+        item.style.display = 'none'
+      })
     },
     /**
      * 第三方筛查

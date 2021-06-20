@@ -61,4 +61,29 @@ export default  {
 .xwrd-table-row {
   background-color:#FFEBEB !important;
 }
+#app {
+  .el-menu {
+    .new__title {
+      height: 56px;
+      line-height: 58px;
+      font-size: 14px;
+      color: #303133;
+      padding: 0 20px;
+      list-style: none;
+      cursor: pointer;
+      position: relative;
+      background-color: #001528 !important;
+      -webkit-transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+      transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+    .el-submenu.is-opened > .new__title .el-submenu__icon-arrow {
+      -webkit-transform: rotateZ(180deg);
+      transform: rotateZ(180deg);
+    }
+  }
+}
+
 </style>

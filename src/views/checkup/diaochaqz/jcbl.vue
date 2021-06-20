@@ -29,7 +29,7 @@
           <div class="zhizuo-item">
             <span>
               机构代码
-                <el-tooltip class="item" effect="dark" content="非部队医院为“统一社会信用代码”，部队医院为“机构代码" placement="top-start">
+                <el-tooltip style="line-height:36px" effect="dark" content="非部队医院为“统一社会信用代码”，部队医院为“机构代码" placement="top-start">
                   <i class="el-icon-info"></i>
                 </el-tooltip>
             </span>
@@ -69,23 +69,30 @@
         </div>
         <div class="pre-view">
           <p class="top-tip">预览检查笔录</p>
-          <div id="docPart" class="doc-part" ref="docPart">
-            <h1 class="doc-title">上海市静安区医疗保障局</h1>
-            <p class="sub-doc-title">行政执法文书</p>
-            <div class="pagation">第<span></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span></span>页</div>
-            <div class="content">
-              <p class="content-title">检查笔录</p>
-              <div class="item">检查地点：{{zhizuo.jcdd}}</div>
-              <div class="item">检查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div>
-              <p class="item">被检查人（被检查单位）信息：</p>
-              <div class="item item-info">单位全称：{{zhizuo.dwqc}}</div>
-              <div class="item item-info">类别/性质：定点医疗机构</div>
-              <div class="item item-info">单位地址：{{zhizuo.addr}}</div>
-              <div class="item item-info">法定代表人：{{zhizuo.faren}}</div>
-              <div class="item item-info">记录人：{{zhizuo.jlry}}</div>
-              <p class="jianchaqk">我们（至少2人）是上海市医疗保险监督检查所的行政执法人员负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对&nbsp; &nbsp;进行检查。<br>检查情况：{{zhizuo.jcqk}}</p>
-              <div class="sign"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
-              <div class="sign"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
+          <div id="docPart" style="width:655px;padding:0;margin-left:32px" class="doc-part" ref="docPart">
+            <h1 style="margin:0 0 12px 0;font-size:18px;font-weight:normal;text-align:center">上海市医疗保险监督检查所{{urlQuery.dcjg?`/${urlQuery.dcjg}`:''}}</h1>
+            <p style="font-size:14px;text-align:center;letter-spacing:5px">行政执法文书</p>
+            <div style="text-align:right;font-size: 12px;margin-bottom: 10px;margin-right: 10px;margin-top: 10px;">
+              第<span style="padding:0 8px"></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span style="padding:0 8px"></span>页</div>
+            <div class="content" style="padding:30px 35px;font-size:16px;border:1px solid #303313;letter-spacing:1px">
+              <p style="font-weight:600;text-align: center;">检查笔录</p>
+              <div style="line-height:36px">检查地点：{{zhizuo.jcdd}}</div>
+              <div style="line-height:36px">检查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div>
+              <p style="line-height:36px">被检查人（被检查单位）信息：</p>
+              <div style="line-height:36px;margin-left:16px;">姓名（单位全称）：<span>{{zhizuo.dwqc}}</span></div>
+              <div style="line-height:36px;margin-left:16px;">性别（类别/性质）：<span></span></div>
+              <div style="line-height:36px;margin-left:16px;">住址（单位地址）：<span>{{zhizuo.addr}}</span></div>
+              <div style="line-height:36px;margin-left:16px;">工作单位（法定代表人）：<span>{{zhizuo.faren}}</span></div>
+              <div style="line-height:36px;margin-left:16px;">执法人员：<span>{{zhizuo.zfry}}</span></div>
+              <div style="line-height:36px;margin-left:16px;">记录人：<span>{{zhizuo.jlry}}</span></div>
+              <br/>
+              <br/>
+              <div style="text-indent:2em;letter-spacing:2px;margin-top:10px;margin-bottom:40px;text-align:justify;line-height: 28px;">
+                我们（至少2人）是上海市医疗保险监督检查所的行政执法人员{{urlQuery.dcjg?`/${urlQuery.dcjg}`:''}}的行政执法人员，负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;"> {{zhizuo.jcnr}} </span>进行检查。
+              <br/>检查情况：{{zhizuo.jcqk}}</div>
+              <br/>
+              <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
+              <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
             </div>
           </div>
         </div>
@@ -165,7 +172,7 @@ export default {
         jcdd:'',
         jlry:'',
         jcnr:'',
-        jcqk:''
+        jcqk:'',
       },
       total:0,
       urlQuery:{},
@@ -332,6 +339,7 @@ export default {
   }
   .pre-view {
     padding-left:60px;
+    margin-bottom: 20px;
     p {
       padding: 0;
       margin: 0;
@@ -340,62 +348,7 @@ export default {
       font-size: 12px;
       color:#606266;
       padding-left: 30px;
-    }
-    .doc-part {
-      width: 595px;
-      padding:20px 30px;
-      flex-shrink: 0;
-      .doc-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: normal;
-        text-align: center;
-        margin-bottom: 12px;
-      }
-      .sub-doc-title {
-        font-size: 14px;
-        text-align: center;
-        letter-spacing:5px;
-      }
-      .pagation{
-        text-align: right;
-        font-size: 12px;
-        margin-bottom: 10px;
-        margin-right: 10px;
-        margin-top: 10px;
-        >span {
-          padding:0 5px;
-        }
-      }
-      .content {
-        padding:20px;
-        font-size: 16px;
-        border:1px solid #303313;
-        letter-spacing:1px;
-        .content-title {
-          font-weight: 600;
-          text-align: center;
-        }
-        .item {
-          line-height: 36px;
-          &.item-info {
-            margin-left: 16px;
-          }
-        }
-        .jianchaqk {
-          text-indent: 2em;
-          letter-spacing:2px;
-          margin-top:10px;
-          margin-bottom: 40px;
-          text-align: justify;
-        }
-        .sign {
-          margin-bottom: 40px;
-          padding-right:90px;
-          display: flex;
-          justify-content: space-between;
-        }
-      }
+      margin-bottom: 10px;
     }
   }
   .qz-title {

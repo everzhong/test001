@@ -23,6 +23,7 @@
               size="small"
               placeholder="选择检查开始日期"
               format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd hh:mm:ss"
               @change="satrtTimeCgange"
               >
             </el-date-picker>
@@ -44,6 +45,7 @@
               size="small"
               placeholder="选择制作日期"
               format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd hh:mm:ss"
               >
             </el-date-picker>
           </div>
@@ -53,7 +55,7 @@
             <span>(纪律告知书)</span>
           </div>
           <div style="text-align:right;padding:5px 15px 0 0">
-            <el-button size="mini" type="primary" @click="submitForm">保存</el-button>
+            <el-button :disabled="(!!zhizuo.isdayin && !this.checkRole(['admin']))" size="mini" type="primary" @click="submitForm">保存</el-button>
           </div>
         </div>
         <div class="pre-view">
@@ -370,7 +372,8 @@ export default {
         jgdm:this.zhizuo.jgdm
         }).then(response => {
         this.msgSuccess("制作成功");
-        this.getList();
+        this.zhizuo.isdayin = true
+        // this.getList();
       });
     },
     /** 删除按钮操作 */
