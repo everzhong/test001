@@ -36,7 +36,7 @@ const user = {
         // LoginApi({ commit }, userInfo) {
         //     const uid = userInfo.uid
         //     return new Promise((resolve, reject) => {
-        //         axios.get('http://211.149.254.6:8080/loginapi', {
+        //         axios.get('http://211.149.254.6:8010/loginapi', {
         //             params: { uid }
         //         }).then(res => {
         //             setToken(res.data.token)

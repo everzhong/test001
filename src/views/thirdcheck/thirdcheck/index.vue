@@ -47,8 +47,7 @@
   </div>
 </template>
 <script>
-import { setShujusc } from '@/api/renwu/renwutwo'
-import { listRenwuthree } from '@/api/renwu/renwuthree'
+import { setShujusc,listRenwutwo} from '@/api/renwu/renwutwo'
 import SearchItem from '../../common/searchItems'
 import RenwuthreeTable from '../../common/renwuthreeTable'
 export default {
@@ -281,23 +280,24 @@ export default {
   },
   methods: {
     openUrl(row){
-      const {scrwid,scname,datastarttime,dataendtime,createby,jgdm} = row
+      const {scrwid,scname,datastarttime,dataendtime,jgdm} = row
       setShujusc({
         scrwid,
         scname,
         datastarttime,
         dataendtime,
-        createby,
+        createby:this.$store.getters.name,
         jgdm
       })
-      window.open('http://192.168.1.122:8087/#/scenarioConfiguration')
+      window.open(`${location.protocol}//${location.hostname}:8012/#/scenarioConfiguration`)
     },
     /** 查询renwutwo列表 */
     async getList(options) {
       const params = options?{...options,...this.queryParams}:this.queryParams
+      params.scstatus=1
       this.loading = true
       try {
-        const res = await listRenwuthree(params)
+        const res = await listRenwutwo(params)
         if(res.code===200){
           this[`renwuthreeList`] = res.rows;
           this.total = res.total;

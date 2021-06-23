@@ -5,9 +5,18 @@ import { getToken, getUid } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
     // 创建axios实例
+let baseUrl = ''
+if (process.env.NODE_ENV !== 'production') {
+    baseUrl = process.env.VUE_APP_BASE_API
+} else {
+    const urlList = location.origin.split(':')
+    urlList[2] = '8010'
+    baseUrl = urlList.join(':')
+}
 const service = axios.create({
         // axios中请求配置有baseURL选项，表示请求URL公共部分
-        baseURL: process.env.VUE_APP_BASE_API,
+        // baseURL: process.env.VUE_APP_BASE_API,
+        baseURL: baseUrl,
         // 超时
         timeout: 10000
     })

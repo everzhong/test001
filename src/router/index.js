@@ -216,7 +216,7 @@ export const constantRoutes = [{
             },
             {
                 component: (resolve) => require(['@/views/checkup/jgheshi/index'], resolve),
-                hidden: false,
+                hidden: true,
                 meta: { title: "机构核实", noCache: true },
                 name: "Listjg",
                 path: "listjg",

@@ -75,7 +75,7 @@
         </div>
         <div class="pre-view">
           <p class="top-tip">预览询问笔录</p>
-          <div id="docPart" style="width:655px;padding:0;margin-left:32px" ref="docPart">
+          <!-- <div id="docPart" style="width:655px;padding:0;margin-left:32px" ref="docPart">
             <h1 style="margin:0 0 12px 0;font-size:18px;font-weight:normal;text-align:center">上海市静安区医疗保障局</h1>
             <p style="font-size:14px;text-align:center;letter-spacing:5px">行政执法文书</p>
             <div style="text-align:right;font-size: 12px;margin-bottom: 10px;margin-right: 10px;margin-top: 10px;">
@@ -102,7 +102,8 @@
                 <span>被调查人（签名）：</span><span>承办人（签名）：</span>
               </div>
             </div>
-          </div>
+          </div> -->
+          <xw-doc :pageData="{dcjg:urlQuery.dcjg,...zhizuo}"/>
         </div>
       </div>
     </section>
@@ -122,6 +123,7 @@
         <el-button slot="select-btn" size="small" type="parmary" plain class="el-icon-plus">上传签字扫描件</el-button>
       </fileUpload>
     </el-radio-group>
+    <div v-show="tabsValue==='online'">
     <el-table class="qztable" :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
@@ -139,9 +141,11 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="opertation(scope.row,'editQz')">修改</el-button>
             <!-- <el-button type="text" size="mini" @click="opertation(scope.row,'downloadQz')">下载</el-button> -->
-            <el-button type="text" size="mini" v-print="{id:'docPart',popTitle:'询问笔录'}">下载</el-button>
+            <el-button type="text" size="mini" @click="printDoc(scope.row)">下载</el-button>
             <el-button type="text" size="mini" @click="opertation(scope.row,'deleteQz')">删除</el-button>
-            <el-button type="text" size="mini" v-print="{id:'docPart',popTitle:'询问笔录'}">打印</el-button>
+            <!-- <el-button type="text" size="mini" v-print="{id:'docPart',popTitle:'询问笔录'}">打印</el-button> -->
+            <el-button type="text" size="mini" @click="printDoc(scope.row)">打印</el-button>
+
           </template>
         </el-table-column>
       </el-table>
@@ -151,11 +155,40 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
+    </div>
+    <div v-show="tabsValue==='upload'">
+      <el-table  class="qztable" :data="uploadList" border style="margin-top:10px">
+        <el-table-column label="序号" type="index" align="center"  />
+          <el-table-column label="资料文件" align="center" prop="wenjianurl" :width="flexColumnWidth('wenjianurl',uploadList)"/>
+          <el-table-column label="上传人" align="center" prop="upman" />
+          <el-table-column label="上传时间" align="center" prop="addtime"  :width="150">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="操作" align="center" :width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">下载</el-button>
+              <el-button type="text" size="mini" @click="deleteDoc(scope.row)">删除</el-button>
+            </template>
+        </el-table-column> -->
+      </el-table>
+      <pagination
+        :total="uploadTotal"
+        :page.sync="uploadQuery.pageNum"
+        :limit.sync="uploadQuery.pageSize"
+        @pagination="getList"
+      />
+    </div>
+    <div id="printDoc" style="display:none;">
+      <xw-doc :pageData="{dcjg:urlQuery.dcjg, ...printData}"/>
+    </div>
   </div>
 </template>
 <script>
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
 import FileUpload from '@/components/FileUpload';
+import XwDoc from './xwDoc.vue'
 
 export default {
   name:'Xunwbl',
@@ -163,9 +196,14 @@ export default {
     return {
       wenjianurl:'',
       tableData:[],
+      uploadList:[],
       blCheck:'',
       sexOptions:[],
       queryParams:{
+        pageNum: 1,
+        pageSize: 10
+      },
+      uploadQuery:{
         pageNum: 1,
         pageSize: 10
       },
@@ -184,9 +222,11 @@ export default {
         
       },
       total:0,
+      uploadTotal:0,
       urlQuery:{},
       tabsValue:'online',
-      opertationType:'add'
+      opertationType:'add',
+      printData:{}
     }
   },
   created(){
@@ -310,6 +350,22 @@ export default {
     opertation(row,type){
       this[type](row)
     },
+    printDoc(row){
+      this.printData = row
+      setTimeout(()=>{
+        const newWin = window.open() // 新打开一个空窗口
+        const print = document.getElementById('printDoc') // 获取需要打印的内容
+        print.style.display = 'block'
+        newWin.document.write(print.outerHTML) // 将需要打印的内容添加进新的窗口
+        const styleSheet = `<style>#printDoc{margin:auto}</style>`
+        newWin.document.head.innerHTML = styleSheet // 给打印的内容加上样式
+        newWin.document.close() // 在IE浏览器中使用必须添加这一句
+        newWin.focus() // 在IE浏览器中使用必须添加这一句
+        newWin.print() // 打印
+        newWin.close() // 关闭窗口
+        print.style.display = 'none'
+      },10)
+    },
     exportPdf(title){
       const name = title+'询问笔录下载'
       this.$PDFSave(this.$refs['docPart'], name);
@@ -323,7 +379,8 @@ export default {
     }
   },
   components:{
-    FileUpload
+    FileUpload,
+    XwDoc
   }
 }
 </script>

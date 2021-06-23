@@ -6,13 +6,13 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
         >实施网审</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
@@ -89,7 +89,7 @@
           </el-table-column> -->
         </el-table>
     </div>
-    <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
+    <!-- <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
       <el-form-item label="已选机构" prop="yxjg">
         <el-input
           style="width:280px;margin-right:30px"
@@ -119,7 +119,7 @@
       <el-form-item>
         <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
       </el-form-item>
-    </el-form>
+    </el-form> -->
     <pagination
       v-show="total>0"
       :total="total"
@@ -730,6 +730,10 @@ export default {
      * 第三方筛查
      */
     handleThirdCheck(){
+      if(this.ids.length<1){
+        this.msgError('请至少选择一项')
+        return 
+      }
       const userNmae = this.$store.getters.name
       const reqestList = []
       //轮询发送
