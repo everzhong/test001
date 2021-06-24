@@ -222,13 +222,13 @@ export function flexColumnWidth(str, tableData, flag = 'max') {
         for (const char of columnContent) {
             if ((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z')) {
                 // 如果是英文字符，为字符分配8个单位宽度
-                flexWidth += 15
+                flexWidth += 13
             } else if (char >= '\u4e00' && char <= '\u9fa5') {
                 // 如果是中文字符，为字符分配15个单位宽度
                 flexWidth += 17
             } else {
                 // 其他种类字符，为字符分配8个单位宽度
-                flexWidth += 11
+                flexWidth += 13
             }
         }
         if (flexWidth < 80) {
@@ -237,7 +237,7 @@ export function flexColumnWidth(str, tableData, flag = 'max') {
         }
         if (flexWidth > 280) {
             // 设置最大宽度
-            flexWidth = 280
+            // flexWidth = 280
         }
         return flexWidth + 'px'
     } catch (e) {}

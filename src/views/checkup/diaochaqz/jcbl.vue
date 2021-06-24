@@ -95,7 +95,7 @@
               <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
             </div>
           </div> -->
-          <bl-doc :pageData="{...zhizuo,dcjg:urlQuery.dcjg}"/>
+          <bl-doc :pageData="{...zhizuo,dcjg:urlQuery.dcjg,jcstarttime:zhizuo.jcsj[0]||'',jcendtime:zhizuo.jcsj[1]||''}"/>
         </div>
       </div>
     </section>
@@ -394,7 +394,8 @@ export default {
     }
   }
   .pre-view {
-    padding-left:60px;
+    padding-left:50px;
+    padding-right:20px;
     margin-bottom: 20px;
     p {
       padding: 0;

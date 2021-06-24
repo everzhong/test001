@@ -505,7 +505,8 @@ export default {
     }
   }
   .pre-view {
-    padding-left:60px;
+    padding-left:50px;
+    padding-right:20px;
     p {
       padding: 0;
       margin: 0;

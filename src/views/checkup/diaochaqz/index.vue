@@ -180,8 +180,6 @@ export default {
       // 表单校验
       rules: {
       },
-      //
-      tabsValue:'two'
     };
   },
   created() {
@@ -281,11 +279,12 @@ export default {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
+      params.status = 3
       this.loading = true
       try {
         const res = await listRenwutwo(params)
         if(res.code===200){
-          this[`renwu${this.tabsValue}List`] = res.rows;
+          this.renwutwoList = res.rows;
           this.total = res.total;
         }
       } catch (error) {

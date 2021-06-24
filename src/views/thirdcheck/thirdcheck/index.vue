@@ -7,7 +7,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <!-- <el-table-column label="序号" type="index" align="center"  /> -->
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
-        <el-table-column label="筛查任务ID" align="center" prop="scrid"  show-overflow-tooltip/>
+        <el-table-column label="筛查任务ID" align="center" prop="scrwid"  :width="flexColumnWidth('scrwid',renwuthreeList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwuthreeList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>

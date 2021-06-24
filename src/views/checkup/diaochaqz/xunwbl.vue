@@ -103,7 +103,7 @@
               </div>
             </div>
           </div> -->
-          <xw-doc :pageData="{dcjg:urlQuery.dcjg,...zhizuo}"/>
+          <xw-doc :pageData="{dcjg:urlQuery.dcjg,...zhizuo,jcstarttime:zhizuo.jcsj[0]||'',jcendtime:zhizuo.jcsj[1]||''}"/>
         </div>
       </div>
     </section>
@@ -416,7 +416,8 @@ export default {
     }
   }
   .pre-view {
-    padding-left:60px;
+    padding-left:50px;
+    padding-right:20px;
     margin-bottom: 20px;
     p {
       padding: 0;
