@@ -35,7 +35,7 @@
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <!-- <RenwutwoTable :selectable="selectableFun" v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/> -->
       <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border>
-        <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return row.status==0}"/>
+        <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return row.sccqstatus*1==0}"/>
         <el-table-column label="序号" type="index" align="center"/>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="状态" align="center" prop="status"  width="96">
@@ -742,18 +742,19 @@ export default {
           return item.id===id && !(item.sccqstatus*1>=1)
         })
         if(selected.length){
-          const {rwpcid,jgdm} = selected[0]
+          const {rwpcid,jgdm,jgmc} = selected[0]
           const time = this.parseTime(new Date().getTime(),'{h}{m}{s}') 
           reqestList.push(setSancha({
             ids:id,
             scrwid:[userNmae,rwpcid,jgdm,time].join('-'),
             scstatus:1,
             sccqstatus:1,
-            scname:[jgdm,rwpcid].join('-'),
+            scname:[rwpcid,jgmc].join('-'),
             scsqr:userNmae
           }))
         }
       })
+      console.log(reqestList,1212)
       if(reqestList.length){
         this.loading = true
         Promise.all(reqestList).then(()=>{
@@ -763,8 +764,6 @@ export default {
         }).catch(e=>{
           this.loading = false
         })
-      } else {
-        this.msgSuccess(' ')
       }
     },
     /**

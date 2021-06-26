@@ -286,7 +286,7 @@ export default {
         scname,
         datastarttime,
         dataendtime,
-        createby:this.$store.getters.name,
+        createBy:this.$store.getters.name,
         jgdm
       })
       window.open(`${location.protocol}//${location.hostname}:8012/#/scenarioConfiguration`)

@@ -97,6 +97,7 @@ export function setShujusc(data) {
     return request({
         url: '/renwu/renwutwo/setscrw',
         method: 'post',
-        data: data
+        data: data,
+        noToken: true
     })
 }
