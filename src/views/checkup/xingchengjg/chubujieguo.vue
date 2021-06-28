@@ -94,7 +94,7 @@ export default {
   },
   created(){
     this.queryInfoFrom = this.$route.query
-    this.getList();
+    // this.getList();
   },
   methods:{
      /**
