@@ -52,10 +52,10 @@
         <!-- <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button> -->
       </el-radio-group>
     </el-row>
-    <jc-table :tableData="listjc" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/>
-    <wg-table :tableData="listjg" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/>
+    <jc-table :tableData="listjc" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
+    <wg-table :tableData="listjg" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
-    <ViewTable v-if="viewTableObj.show" :tableData="viewTableObj.tdata"/>
+    <ViewTable v-if="viewTableObj.show" :options="viewTableObj.options"/>
   </div>
 </template>
 <script>
@@ -80,7 +80,7 @@ export default {
       },
       viewTableObj:{
         show:false,
-        tdata:[]
+        options:{}
       },
       listjc:[],
       listjg:[]
@@ -97,6 +97,21 @@ export default {
     // this.getList();
   },
   methods:{
+    viewHanddle(row,type){
+      if(this.tabsValue==="listjc"){
+        this.viewTableObj.options = {
+          ybbf:type,
+          jslb:row.label
+        }
+      } else {
+        this.viewTableObj.options = {
+          wglx:row.wglx,
+          jslb:type
+        }
+      }
+      this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
+      this.viewTableObj.show = true
+    },
      /**
      * 实施网申 
      */

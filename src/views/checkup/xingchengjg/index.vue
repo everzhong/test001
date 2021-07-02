@@ -459,7 +459,6 @@ export default {
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
       this.getList()
-      console.log(val)
     },
     doCheck(row){
       this.$router.push({

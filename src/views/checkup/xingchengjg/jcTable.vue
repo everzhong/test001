@@ -24,7 +24,7 @@
         label="费用（元）"
         >
         <template slot-scope="scope">
-          <span @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{scope.row.zhibaofy}}</span>
+          <span @click="viewDetail(scope.row,'职保')" style="color:#1B65B9;cursor:pointer;">{{scope.row.zhibaofy}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -44,7 +44,7 @@
         label="费用（元）"
         >
         <template slot-scope="scope">
-          <span @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{scope.row.jubaofy}}</span>
+          <span @click="viewDetail(scope.row,'居保')" style="color:#1B65B9;cursor:pointer;">{{scope.row.jubaofy}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -64,7 +64,7 @@
         label="费用（元）"
         >
         <template slot-scope="scope">
-          <span @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{(scope.row.xiaoji*1).toFixed(2)}}</span>
+          <span @click="viewDetail(scope.row,'')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.xiaoji*1).toFixed(2)}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -140,8 +140,8 @@ export default {
         }
       }
     },
-    viewDetail(row){
-      this.$emit('view-detail',row)
+    viewDetail(row,ybbf){
+      this.$emit('view-detail',row,ybbf)
     },
     initList(data){
       const list = []
@@ -153,14 +153,14 @@ export default {
           total:zkdj,
           xiaoji:0
         }
-        const menzhenhj = {guize:"小计",total:zkdj,xiaoji:0}
+        const menzhenhj = {guize:"小计",total:zkdj,xiaoji:0,label:"门诊"}
         const zhuyuan = {
           label:"住院",
           guize:"规则筛查",
           total:zkdj,
           xiaoji:0
         }
-        const zhuyuanhj = {guize:"小计",total:zkdj,xiaoji:0}
+        const zhuyuanhj = {guize:"小计",total:zkdj,xiaoji:0,label:"住院"}
         data.forEach(element => {
           const {tym,bz} = element
           menzhen.xiaoji += tym*1

@@ -1,9 +1,13 @@
 <template>
   <el-table v-loading="loading" ref="multipleTable" :data="renwufourList" border style="margin-top:10px">
     <el-table-column label="序号" type="index" width="55" align="center" />
-    <el-table-column label="险种" align="ybbf" prop="jgmc"  :width="flexColumnWidth('jgmc',renwufourList)"/>
+    <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwufourList)"/>
     <el-table-column label="就医类别" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwufourList)"/>
-    <el-table-column label="检查方式" align="center" prop="jcfx"  :width="flexColumnWidth('jcfx',renwufourList)"/>
+    <el-table-column label="检查方式" align="center" prop="jcfx">
+      <template>
+        <span>规则筛查</span>
+      </template>
+    </el-table-column>
     <el-table-column label="医保项目编码" align="center" prop="mxxmbm"  :width="flexColumnWidth('mxxmbm',renwufourList)"/>
     <el-table-column label="项目名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',renwufourList)"/>
     <el-table-column label="标准单价(元)" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',renwufourList)">
@@ -56,7 +60,8 @@ export default {
   },
   methods:{
     getList(){
-     listRenwufour(this.queryParams).then(response => {
+      const params = {...this.queryParams,...this.options}
+     listRenwufour(params).then(response => {
         this.renwufourList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -65,6 +70,6 @@ export default {
       });
     }
   },
-  props:['tableData']
+  props:['options']
 }
 </script>

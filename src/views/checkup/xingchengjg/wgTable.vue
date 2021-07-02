@@ -24,7 +24,7 @@
         label="费用（元）"
         >
         <template slot-scope="scope">
-          <span @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{scope.row.tym}}</span>
+          <span @click="viewDetail(scope.row,'门诊')" style="color:#1B65B9;cursor:pointer;">{{scope.row.tym}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -43,7 +43,7 @@
         label="费用（元）"
         >
         <template slot-scope="scope">
-          <span @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{scope.row.bz}}</span>
+          <span @click="viewDetail(scope.row,'住院')" style="color:#1B65B9;cursor:pointer;">{{scope.row.bz}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -62,7 +62,7 @@
         label="费用（元）"
         >
         <template slot-scope="scope">
-          <span @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{scope.row.xiaoji}}</span>
+          <span @click="viewDetail(scope.row,'')" style="color:#1B65B9;cursor:pointer;">{{scope.row.xiaoji}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -138,8 +138,8 @@ export default {
         }
       }
     },
-    viewDetail(row){
-      this.$emit('view-detail',row)
+    viewDetail(row,type){
+      this.$emit('view-detail',row,type)
     },
      initList(data){
       const result = []
@@ -149,7 +149,6 @@ export default {
         data.forEach(item=>{
           wglx.indexOf(item.wglx)<0&&(wglx.push(item.wglx))
         })
-        console.log(wglx)
         wglx.forEach((lx,i)=>{
           let lxs = data.filter(subitem=>{
             return subitem.wglx===lx
@@ -175,8 +174,6 @@ export default {
             zkdj:item[0].zkdj
           })
         })
-        console.log(list)
-        console.log(result)
         // const {zkdj} = data[0]
         // const menzhen = {
         //   label:"门诊",
