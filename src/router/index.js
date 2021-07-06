@@ -216,8 +216,8 @@ export const constantRoutes = [{
             },
             {
                 component: (resolve) => require(['@/views/checkup/jgheshi/index'], resolve),
-                hidden: true,
-                meta: { title: "机构核实", noCache: true },
+                hidden: false,
+                meta: { title: "机构核实", noCache: true, role: 'admin' },
                 name: "Listjg",
                 path: "listjg",
             },
@@ -290,6 +290,12 @@ export const constantRoutes = [{
             meta: { title: "第三方筛查", noCache: true },
             name: "Rhirdcheck",
             path: "thirdcheck",
+        }, {
+            component: (resolve) => require(['@/views/thirdcheck/dataLog/index'], resolve),
+            hidden: false,
+            meta: { title: "数据抽取", noCache: true, role: 'admin' },
+            name: "DataLog",
+            path: "dataLog",
         }],
         component: Layout,
         hidden: false,
