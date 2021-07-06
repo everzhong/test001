@@ -180,9 +180,9 @@
 
     <el-table v-loading="loading" :data="logList" @selection-change="handleSelectionChange" border>
       <el-table-column label="序号" type="index" width="55" align="center"/>
-      <el-table-column label="创建时间" align="center" prop="createDate" width="150px">
+      <el-table-column label="创建时间" align="center" prop="createDate" width="180px">
          <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="开始时间" align="center" prop="stime" width="150">
@@ -194,14 +194,22 @@
       <el-table-column label="日志路径" align="center" prop="logFilePath" :width="flexColumnWidth('logFilePath',logList)"/>
       <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{m}') }}</span>
+          <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="抽取分类" align="center" prop="type" />
+      <el-table-column label="抽取分类" align="center" prop="type" width="150px">
+        <template slot-scope="scope">
+          <span>{{scope.row.type==1?'机构时间段抽取':scope.row.type==2?'明细抽取':scope.row.type==3?'是主单抽取':''}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="成功条数" align="center" prop="succ" />
       <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',logList)"/>
       <el-table-column label="年月份" align="center" prop="ny" show-overflow-tooltip width="300px"/>
-      <el-table-column label="状态" align="center" prop="status"  />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <span>{{scope.row.status==1?'正常':scope.row.status==2?'禁用':''}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="总耗时" align="center" prop="ztime"  />
       <el-table-column label="结束时间" align="center" prop="etime" width="150">
         <template slot-scope="scope">
@@ -211,7 +219,7 @@
       <el-table-column label="失败条数" align="center" prop="fucc" />
       <el-table-column label="抽取状态" align="center" prop="ends" width="150px">
         <template slot-scope="scope">
-          <span>{{['未开始抽取数据','抽取中','成功抽取数据'][scope.row.ends*1]}}</span>
+          <span>{{['未开始抽取数据','抽取中','成功抽取数据','抽取失败'][scope.row.ends*1]}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -236,11 +244,11 @@
     />
 
     <!-- 添加或修改数据抽取日志对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="创建时间" prop="createDate">
+        <!-- <el-form-item label="创建时间" prop="createDate">
           <el-input v-model="form.createDate" placeholder="请输入创建时间" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="开始时间" prop="stime">
           <el-date-picker clearable size="small"
             v-model="form.stime"
@@ -359,7 +367,11 @@ export default {
       // 更新时间字典
       updateDateOptions: [],
       // 抽取分类字典
-      typeOptions: [],
+      typeOptions: [
+        {dictLabel:'机构时间段抽取',dictValue:1},
+        {dictLabel:'明细抽取',dictValue:2},
+        {dictLabel:'是主单抽取',dictValue:3},
+      ],
       // 成功条数字典
       succOptions: [],
       // 机构代码字典
@@ -367,7 +379,10 @@ export default {
       // 年月份字典
       nyOptions: [],
       // 状态字典
-      statusOptions: [],
+      statusOptions: [
+        {dictLabel:'正常',dictValue:1},
+        {dictLabel:'禁用',dictValue:2}
+      ],
       // 创建人字典
       createByOptions: [],
       // 总耗时字典
@@ -381,6 +396,7 @@ export default {
         {dictLabel:'未开始抽取数据',dictValue:0},
         {dictLabel:'抽取中',dictValue:1},
         {dictLabel:'成功抽取数据',dictValue:2},
+        {dictLabel:'抽取失败',dictValue:3}
       ],
       // 查询参数
       queryParams: {
@@ -431,9 +447,9 @@ export default {
     this.getDicts("${column.dictType}").then(response => {
       this.updateDateOptions = response.data;
     });
-    this.getDicts("${column.dictType}").then(response => {
-      this.typeOptions = response.data;
-    });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.typeOptions = response.data;
+    // });
     this.getDicts("${column.dictType}").then(response => {
       this.succOptions = response.data;
     });
@@ -443,9 +459,9 @@ export default {
     this.getDicts("${column.dictType}").then(response => {
       this.nyOptions = response.data;
     });
-    this.getDicts("${column.dictType}").then(response => {
-      this.statusOptions = response.data;
-    });
+    // this.getDicts("${column.dictType}").then(response => {
+    //   this.statusOptions = response.data;
+    // });
     this.getDicts("${column.dictType}").then(response => {
       this.createByOptions = response.data;
     });
@@ -605,7 +621,12 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateLog(this.form).then(response => {
+            const params = {...this.form}
+            // params.createDate = this.parseTime(this.form.createDate, '{y}-{m}-{d} {h}:{m}:{s}')
+            // params.updateDate = this.parseTime(this.form.updateDate, '{y}-{m}-{d} {h}:{m}:{s}')
+            delete params.createDate
+            delete params.updateDate
+            updateLog(params).then(response => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
