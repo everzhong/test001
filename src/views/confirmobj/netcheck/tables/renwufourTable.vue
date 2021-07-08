@@ -13,7 +13,7 @@
       </template>
     </el-table-column>
     <el-table-column label="明细项目数量" align="center" prop="mxxmsl"  :width="flexColumnWidth('mxxmsl',tableData)"/>
-    <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje"  :width="flexColumnWidth('mxxmje',tableData)">
+    <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje" >
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
       </template>

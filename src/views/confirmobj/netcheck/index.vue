@@ -73,7 +73,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <checkmx :options="mingxOptios"/>
+    <checkmx :options="mingxOptios" v-if="mingxOptios.show"/>
   </div>
 </template>
 <script>
