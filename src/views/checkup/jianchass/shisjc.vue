@@ -62,7 +62,7 @@
           <el-radio-button label="three">规则筛查</el-radio-button>
         </el-radio-group>
       </el-row>
-      <div v-loading="loading" style="max-height:400px">
+      <div v-loading="loading">
         <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border style="margin-top:10px">
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column label="序号" width="55" type="index" align="center"  />

@@ -349,7 +349,7 @@ export default {
       // }
       window.localStorage.setItem('PRDATA',JSON.stringify(row))
       this.$router.push({
-        path:'/checkup/dayintz/addNotice',
+        path:'/checkup/addNotice',
       })
     },
     printFile(row){

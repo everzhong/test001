@@ -55,255 +55,244 @@ export const constantRoutes = [{
         component: (resolve) => require(['@/views/error/401'], resolve),
         hidden: true
     },
-    // {
-    //     path: '',
-    //     component: Layout,
-    //     redirect: 'index',
-    //     children: [{
-    //         path: 'index',
-    //         component: (resolve) => require(['@/views/index'], resolve),
-    //         name: '首页',
-    //         meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
-    //     }]
-    // },
     {
         path: '',
         redirect: 'renwu/renwulist'
     },
-    {
-        path: '/user',
-        component: Layout,
-        hidden: true,
-        redirect: 'noredirect',
-        children: [{
-            path: 'profile',
-            component: (resolve) => require(['@/views/system/user/profile/index'], resolve),
-            name: 'Profile',
-            meta: { title: '个人中心', icon: 'user' }
-        }]
-    },
-    {
-        path: '/dict',
-        component: Layout,
-        hidden: true,
-        children: [{
-            path: 'type/data/:dictId(\\d+)',
-            component: (resolve) => require(['@/views/system/dict/data'], resolve),
-            name: 'Data',
-            meta: { title: '字典数据', icon: '' }
-        }]
-    },
-    {
-        path: '/job',
-        component: Layout,
-        hidden: true,
-        children: [{
-            path: 'log',
-            component: (resolve) => require(['@/views/monitor/job/log'], resolve),
-            name: 'JobLog',
-            meta: { title: '调度日志' }
-        }]
-    },
-    {
-        path: '/gen',
-        component: Layout,
-        hidden: true,
-        children: [{
-            path: 'edit/:tableId(\\d+)',
-            component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
-            name: 'GenEdit',
-            meta: { title: '修改生成配置' }
-        }]
-    },
-    {
-        alwaysShow: true,
-        children: [{
-            component: (resolve) => require(['@/views/renwu/renwulist/index'], resolve),
-            hidden: false,
-            meta: { title: "任务列表", noCache: true },
-            name: "Renwulist",
-            path: "renwulist",
-        }, {
-            component: (resolve) => require(['@/views/checkdetail/index'], resolve),
-            hidden: true,
-            meta: { title: "查看明细", noCache: true },
-            name: "Checkdetail",
-            path: "/renwu/checkdetail",
-        }],
-        component: Layout,
-        hidden: false,
-        meta: { title: "任务管理", icon: "cascader", noCache: true },
-        name: "Renwu",
-        path: "/renwu",
-        redirect: "noRedirect"
-    },
-    {
-        alwaysShow: true,
-        children: [{
-            component: (resolve) => require(['@/views/confirmobj/netcheck/index'], resolve),
-            hidden: false,
-            meta: { title: "实施网审", noCache: true },
-            name: "Netcheck",
-            path: "netcheck",
-        }, {
-            component: (resolve) => require(['@/views/confirmobj/duixqd/index'], resolve),
-            hidden: false,
-            meta: { title: "对象确定", noCache: true },
-            name: "Duixqd",
-            path: "duixqd",
-        }],
-        component: Layout,
-        hidden: false,
-        meta: { title: "确定对象", icon: "validCode", noCache: true },
-        name: "Confirmobj",
-        path: "/confirmobj",
-        redirect: "noRedirect"
-    },
-    {
-        alwaysShow: true,
-        children: [{
-                component: (resolve) => require(['@/views/checkup/renwupf/index'], resolve),
-                hidden: false,
-                meta: { title: "任务派发", noCache: true },
-                name: "Renwupf",
-                path: "renwupf",
-            }, {
-                component: (resolve) => require(['@/views/checkup/dayintz/index'], resolve),
-                hidden: false,
-                meta: { title: "打印通知", noCache: true },
-                name: "Dayintz",
-                path: "dayintz",
-            }, {
-                component: (resolve) => require(['@/views/checkup/dayintz/addNotice'], resolve),
-                hidden: true,
-                meta: { title: "制作通知", noCache: true },
-                name: "AddNotice",
-                path: "dayintz/addNotice",
-            }, {
-                component: (resolve) => require(['@/views/checkup/jianchass/index'], resolve),
-                alwaysShow: true,
-                meta: { title: "检查实施", noCache: true },
-                name: "Jcss",
-                path: "jcss",
-                children: [{
-                        component: (resolve) => require(['@/views/checkup/diaochaqz/index'], resolve),
-                        hidden: false,
-                        meta: { title: "调查取证", noCache: true },
-                        name: "Diaochaqz",
-                        path: "diaochaqz"
-                    },
-                    {
-                        component: (resolve) => require(['@/views/checkup/jianchass/jianchass'], resolve),
-                        hidden: true,
-                        meta: { title: "检查实施", noCache: true },
-                        name: "Jianchass",
-                        path: "jianchass",
-                    }, {
-                        component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz'], resolve),
-                        hidden: true,
-                        meta: { title: "调查取证", noCache: true },
-                        name: "Dcqz",
-                        path: "diaochaqz/dcqz",
-                    }
-                ]
-            },
-            {
-                component: (resolve) => require(['@/views/checkup/xingchengjg/index'], resolve),
-                hidden: false,
-                meta: { title: "形成结果", noCache: true },
-                name: "Xingchengjg",
-                path: "xingchengjg",
-            },
-            {
-                component: (resolve) => require(['@/views/checkup/jgheshi/index'], resolve),
-                hidden: false,
-                meta: { title: "机构核实", noCache: true, role: 'admin' },
-                name: "Listjg",
-                path: "listjg",
-            },
-            {
-                component: (resolve) => require(['@/views/checkup/jianchass/shisjc'], resolve),
-                hidden: true,
-                meta: { title: "实施检查", noCache: true },
-                name: "Shisjc",
-                path: "jianchass/shisjc",
-            },
-            {
-                component: (resolve) => require(['@/views/checkup/xingchengjg/chubujieguo'], resolve),
-                hidden: true,
-                meta: { title: "初步形成结果", noCache: true },
-                name: "Chubujieguo",
-                path: "xingchengjg/chubujieguo",
-            }
-        ],
-        component: Layout,
-        hidden: false,
-        meta: { title: "实施检查", icon: "monitor", noCache: true },
-        name: "Checkup",
-        path: "/checkup",
-        redirect: "checkup/jianchass"
-    },
-    {
-        alwaysShow: true,
-        children: [{
-            component: (resolve) => require(['@/views/system/dept/listd'], resolve),
-            hidden: false,
-            meta: { title: "网审人员维护", noCache: true },
-            name: "Listd",
-            path: "system/listd",
-        }, {
-            component: (resolve) => require(['@/views/system/dept/list'], resolve),
-            hidden: false,
-            meta: { title: "检查组维护", noCache: true },
-            name: "List",
-            path: "system/list",
-        }, {
-            component: (resolve) => require(['@/views/system/user/index'], resolve),
-            hidden: false,
-            meta: { title: "账号及权限维护", noCache: true },
-            name: "User",
-            path: "system/user",
-        }, {
-            component: (resolve) => require(['@/views/baseinfosave/luliwh/index'], resolve),
-            hidden: false,
-            meta: { title: "履历维护", noCache: true },
-            name: "Luliwh",
-            path: "luliwh",
-        }, {
-            component: (resolve) => require(['@/views/baseinfosave/luliwh/luliDetail'], resolve),
-            hidden: true,
-            meta: { title: "履历维护详情", noCache: true },
-            name: "Lulidetail",
-            path: "luliwh/lulidetail",
-        }],
-        component: Layout,
-        hidden: false,
-        meta: { title: "基础信息维护", icon: "peoples", noCache: true },
-        name: "Baseinfosave",
-        path: "/baseinfosave",
-        redirect: "noRedirect"
-    }, {
-        alwaysShow: true,
-        children: [{
-            component: (resolve) => require(['@/views/thirdcheck/thirdcheck/index'], resolve),
-            hidden: false,
-            meta: { title: "第三方筛查", noCache: true },
-            name: "Rhirdcheck",
-            path: "thirdcheck",
-        }, {
-            component: (resolve) => require(['@/views/thirdcheck/dataLog/index'], resolve),
-            hidden: false,
-            meta: { title: "数据抽取", noCache: true, role: 'admin' },
-            name: "DataLog",
-            path: "dataLog",
-        }],
-        component: Layout,
-        hidden: false,
-        meta: { title: "第三方筛查", icon: "log", noCache: true },
-        name: "Thirdcheck",
-        path: "/thirdcheck",
-        redirect: "noRedirect"
-    },
+    // {
+    //     path: '/user',
+    //     component: Layout,
+    //     hidden: true,
+    //     redirect: 'noredirect',
+    //     children: [{
+    //         path: 'profile',
+    //         component: (resolve) => require(['@/views/system/user/profile/index'], resolve),
+    //         name: 'Profile',
+    //         meta: { title: '个人中心', icon: 'user' }
+    //     }]
+    // },
+    // {
+    //     path: '/dict',
+    //     component: Layout,
+    //     hidden: true,
+    //     children: [{
+    //         path: 'type/data/:dictId(\\d+)',
+    //         component: (resolve) => require(['@/views/system/dict/data'], resolve),
+    //         name: 'Data',
+    //         meta: { title: '字典数据', icon: '' }
+    //     }]
+    // },
+    // {
+    //     path: '/job',
+    //     component: Layout,
+    //     hidden: true,
+    //     children: [{
+    //         path: 'log',
+    //         component: (resolve) => require(['@/views/monitor/job/log'], resolve),
+    //         name: 'JobLog',
+    //         meta: { title: '调度日志' }
+    //     }]
+    // },
+    // {
+    //     path: '/gen',
+    //     component: Layout,
+    //     hidden: true,
+    //     children: [{
+    //         path: 'edit/:tableId(\\d+)',
+    //         component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
+    //         name: 'GenEdit',
+    //         meta: { title: '修改生成配置' }
+    //     }]
+    // },
+    // {
+    //     alwaysShow: true,
+    //     children: [{
+    //         component: (resolve) => require(['@/views/renwu/renwulist/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "任务列表", noCache: true },
+    //         name: "Renwulist",
+    //         path: "renwulist",
+    //     }, {
+    //         component: (resolve) => require(['@/views/checkdetail/index'], resolve),
+    //         hidden: true,
+    //         meta: { title: "查看明细", noCache: true },
+    //         name: "Checkdetail",
+    //         path: "/renwu/checkdetail",
+    //     }],
+    //     component: Layout,
+    //     hidden: false,
+    //     meta: { title: "任务管理", icon: "cascader", noCache: true },
+    //     name: "Renwu",
+    //     path: "/renwu",
+    //     redirect: "noRedirect"
+    // },
+    // {
+    //     alwaysShow: true,
+    //     children: [{
+    //         component: (resolve) => require(['@/views/confirmobj/netcheck/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "实施网审", noCache: true },
+    //         name: "Netcheck",
+    //         path: "netcheck",
+    //     }, {
+    //         component: (resolve) => require(['@/views/confirmobj/duixqd/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "对象确定", noCache: true },
+    //         name: "Duixqd",
+    //         path: "duixqd",
+    //     }],
+    //     component: Layout,
+    //     hidden: false,
+    //     meta: { title: "确定对象", icon: "validCode", noCache: true },
+    //     name: "Confirmobj",
+    //     path: "/confirmobj",
+    //     redirect: "noRedirect"
+    // },
+    // {
+    //     alwaysShow: true,
+    //     children: [{
+    //             component: (resolve) => require(['@/views/checkup/renwupf/index'], resolve),
+    //             hidden: false,
+    //             meta: { title: "任务派发", noCache: true },
+    //             name: "Renwupf",
+    //             path: "renwupf",
+    //         }, {
+    //             component: (resolve) => require(['@/views/checkup/dayintz/index'], resolve),
+    //             hidden: false,
+    //             meta: { title: "打印通知", noCache: true },
+    //             name: "Dayintz",
+    //             path: "dayintz",
+    //         }, {
+    //             component: (resolve) => require(['@/views/checkup/dayintz/addNotice'], resolve),
+    //             hidden: true,
+    //             meta: { title: "制作通知", noCache: true },
+    //             name: "AddNotice",
+    //             path: "dayintz/addNotice",
+    //         }, {
+    //             component: (resolve) => require(['@/views/checkup/jianchass/index'], resolve),
+    //             alwaysShow: true,
+    //             meta: { title: "检查实施", noCache: true },
+    //             name: "Jcss",
+    //             path: "jcss",
+    //             children: [{
+    //                     component: (resolve) => require(['@/views/checkup/diaochaqz/index'], resolve),
+    //                     hidden: false,
+    //                     meta: { title: "调查取证", noCache: true },
+    //                     name: "Diaochaqz",
+    //                     path: "diaochaqz"
+    //                 },
+    //                 {
+    //                     component: (resolve) => require(['@/views/checkup/jianchass/jianchass'], resolve),
+    //                     hidden: true,
+    //                     meta: { title: "检查实施", noCache: true },
+    //                     name: "Jianchass",
+    //                     path: "jianchass",
+    //                 }, {
+    //                     component: (resolve) => require(['@/views/checkup/diaochaqz/dcqz'], resolve),
+    //                     hidden: true,
+    //                     meta: { title: "调查取证", noCache: true },
+    //                     name: "Dcqz",
+    //                     path: "dcqz",
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             component: (resolve) => require(['@/views/checkup/xingchengjg/index'], resolve),
+    //             hidden: false,
+    //             meta: { title: "形成结果", noCache: true },
+    //             name: "Xingchengjg",
+    //             path: "xingchengjg",
+    //         },
+    //         {
+    //             component: (resolve) => require(['@/views/checkup/jgheshi/index'], resolve),
+    //             hidden: false,
+    //             meta: { title: "机构核实", noCache: true, role: 'admin' },
+    //             name: "Listjg",
+    //             path: "listjg",
+    //         },
+    //         {
+    //             component: (resolve) => require(['@/views/checkup/jianchass/shisjc'], resolve),
+    //             hidden: true,
+    //             meta: { title: "实施检查", noCache: true },
+    //             name: "Shisjc",
+    //             path: "shisjc",
+    //         },
+    //         {
+    //             component: (resolve) => require(['@/views/checkup/xingchengjg/chubujieguo'], resolve),
+    //             hidden: true,
+    //             meta: { title: "初步形成结果", noCache: true },
+    //             name: "Chubujieguo",
+    //             path: "chubujieguo",
+    //         }
+    //     ],
+    //     component: Layout,
+    //     hidden: false,
+    //     meta: { title: "实施检查", icon: "monitor", noCache: true },
+    //     name: "Checkup",
+    //     path: "/checkup",
+    //     redirect: "checkup/jianchass"
+    // },
+    // {
+    //     alwaysShow: true,
+    //     children: [{
+    //         component: (resolve) => require(['@/views/system/dept/listd'], resolve),
+    //         hidden: false,
+    //         meta: { title: "网审人员维护", noCache: true },
+    //         name: "Listd",
+    //         path: "listd",
+    //     }, {
+    //         component: (resolve) => require(['@/views/system/dept/list'], resolve),
+    //         hidden: false,
+    //         meta: { title: "检查组维护", noCache: true },
+    //         name: "List",
+    //         path: "list",
+    //     }, {
+    //         component: (resolve) => require(['@/views/system/user/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "账号及权限维护", noCache: true },
+    //         name: "User",
+    //         path: "user",
+    //     }, {
+    //         component: (resolve) => require(['@/views/baseinfosave/luliwh/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "履历维护", noCache: true },
+    //         name: "Luliwh",
+    //         path: "luliwh",
+    //     }, {
+    //         component: (resolve) => require(['@/views/baseinfosave/luliwh/luliDetail'], resolve),
+    //         hidden: true,
+    //         meta: { title: "履历维护详情", noCache: true },
+    //         name: "Lulidetail",
+    //         path: "lulidetail",
+    //     }],
+    //     component: Layout,
+    //     hidden: false,
+    //     meta: { title: "基础信息维护", icon: "peoples", noCache: true },
+    //     name: "Baseinfosave",
+    //     path: "/baseinfosave",
+    //     redirect: "noRedirect"
+    // }, {
+    //     alwaysShow: true,
+    //     children: [{
+    //         component: (resolve) => require(['@/views/thirdcheck/thirdcheck/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "第三方筛查", noCache: true },
+    //         name: "Rhirdcheck",
+    //         path: "thirdcheck",
+    //     }, {
+    //         component: (resolve) => require(['@/views/thirdcheck/dataLog/index'], resolve),
+    //         hidden: false,
+    //         meta: { title: "数据抽取", noCache: true, role: 'admin' },
+    //         name: "DataLog",
+    //         path: "dataLog",
+    //     }],
+    //     component: Layout,
+    //     hidden: false,
+    //     meta: { title: "第三方筛查", icon: "log", noCache: true },
+    //     name: "Thirdcheck",
+    //     path: "/thirdcheck",
+    //     redirect: "noRedirect"
+    // },
 ]
 
 export default new Router({

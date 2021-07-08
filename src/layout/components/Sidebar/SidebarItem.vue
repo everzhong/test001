@@ -19,7 +19,6 @@
         :item="child"
         :base-path="resolvePath(child.path)"
         :id="child.path"
-        v-show="!child.meta.role||child.meta.role===role"
         class='nest-menu'
       />
     </el-submenu>
@@ -54,13 +53,11 @@ export default {
   },
   data() {
     this.onlyOneChild = null
-    return {
-      role:''
-    }
+    return {}
   },
-  created(){
-    this.role = this.$store.getters.roles[0]
-  },
+  // created(){
+  //   this.role = this.$store.getters.roles[0]
+  // },
   methods: {
     hasOneShowingChild(children = [], parent) {
       if (!children) {

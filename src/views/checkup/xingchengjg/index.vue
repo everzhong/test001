@@ -462,7 +462,7 @@ export default {
     },
     doCheck(row){
       this.$router.push({
-        path:'/checkup/xingchengjg/chubujieguo',
+        path:'/checkup/chubujieguo',
         query:{...row}
       },()=>{})
     }

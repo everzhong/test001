@@ -553,7 +553,7 @@ export default {
     },
     doCheck(row){
       this.$router.push({
-        path:'/checkup/jianchass/shisjc',
+        path:'/checkup/jcss/shisjc',
         query:{...row}
       },()=>{})
     }

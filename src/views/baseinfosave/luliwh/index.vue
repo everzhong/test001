@@ -553,7 +553,7 @@ export default {
     },
     doCheck(row){
       this.$router.push({
-        path:'/baseinfosave/luliwh/lulidetail',
+        path:'/baseinfosave/lulidetail',
         query:{...row}
       },()=>{})
     }
