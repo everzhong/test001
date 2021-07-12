@@ -21,6 +21,14 @@
           @click="handleAgree(0)"
         >驳回</el-button>
       </el-col>
+      <el-col :span="1.5" v-if="tabsValue==='two'&&mingxOptios.show">
+        <el-button
+          type="warning"
+          size="small"
+          plain
+          @click="mingxOptios.show=false"
+        >返回上一层</el-button>
+      </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
           <el-radio-button label="two">医疗机构列表</el-radio-button>
@@ -29,13 +37,13 @@
         </el-radio-group>
       </div>
     </el-row>
-    <div v-loading="loading">
+    <div v-loading="loading" v-show="!mingxOptios.show">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <RenwutwoTable v-else :tableData="renwutwoList" @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <pagination
-      v-show="total>0"
+      v-show="total>0&&!mingxOptios.show"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"

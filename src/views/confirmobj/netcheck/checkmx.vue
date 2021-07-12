@@ -1,5 +1,5 @@
 <template>
-  <el-drawer :show-close="false" class="sys-drawer" direction="btt"  width="100%" :visible.sync="options.show">
+  <!-- <el-drawer :show-close="false" class="sys-drawer" direction="btt"  width="100%" :visible.sync="options.show"> -->
     <div style="height:320px" v-loading="loading">
       <el-table border v-loading="loading" :data="renwuthreeList" height="100%">
         <el-table-column label="序号" align="center" width="50" prop="id"/>
@@ -35,8 +35,7 @@
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
         <el-table-column label="已发送回智审" align="center" prop="issend"  :width="flexColumnWidth('issend',renwuthreeList)"/>
       </el-table>
-    </div>
-    <pagination
+      <pagination
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
@@ -44,7 +43,9 @@
         size="small"
         @pagination="getList"
       />
-    </el-drawer>
+    </div>
+
+    <!-- </el-drawer> -->
 </template>
 <script>
 import { listRenwuthree } from "@/api/renwu/renwuthree";

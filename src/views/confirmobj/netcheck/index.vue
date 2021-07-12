@@ -6,14 +6,15 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5" v-if="tabsValue==='two'&&mingxOptios.show">
         <el-button
-          type="primary"
+          type="warning"
           size="small"
-          @click="handleNetCheck"
-        >实施网审</el-button>
+          plain
+          @click="mingxOptios.show=false"
+        >返回上一层</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
           size="small"
@@ -28,15 +29,15 @@
         </el-radio-group>
       </div>
     </el-row>
-    <div v-loading="loading" class="sys-table">
+    <div v-loading="loading"  v-show="!mingxOptios.show">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @handleSelectionChange="handleSelectionChange"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @handleSelectionChange="handleSelectionChange"/>
       <RenwutwoTable v-else :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
-    <el-form size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
+    <el-form v-show="!mingxOptios.show" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
       <el-form-item label="已选机构" prop="yxjg">
         <el-input
-          style="width:280px;margin-right:30px"
+          style="width:280px;"
           disabled
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4}"
@@ -68,6 +69,7 @@
       </el-form-item>
     </el-form>
     <pagination
+      v-show="total>0&&!mingxOptios.show"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -637,16 +639,21 @@ export default {
      * tabs切换
      */
     tabsLevelChange(val){
+      val!=='two'&&(this.mingxOptios.show=false)
       this.queryParams.pageNum = 1
       this.getList()
       this.submitParams.yxjg = ''
       this.ids = ''
-      console.log(val)
     },
   }
 };
 </script>
 <style lang="scss" scoped>
+.app-container {
+  &::v-deep .el-form-item {
+    margin-bottom: 0px;
+  }
+}
 .tabs-part {
   clear: both;
   
