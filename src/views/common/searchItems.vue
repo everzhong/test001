@@ -111,7 +111,7 @@ export default {
   },
   props:[],
   created(){
-    // this.getDic()
+    this.getDic()
   },
   methods:{
     /** 搜索按钮操作 */
@@ -124,21 +124,20 @@ export default {
       this.handleQuery();
     },
     getDic(){
-      //调查取证
-      this.getDicts("sys_renwu_status").then(response => {
-        this.statusOptions = response.data;
+      this.getDicts("renwu_ss_ybbf").then(response => {
+        this.ybbfOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
-        this.ybdOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
+      this.getDicts("renwu_ss_jslb").then(response => {
         this.jslbOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
+      this.getDicts("renwu_ss_xzq").then(response => {
         this.xzqOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
+      this.getDicts("renwu_ss_jgdj").then(response => {
         this.jsdjOptions = response.data;
+      });
+      this.getDicts("sys_job_status").then(response => {
+        this.statusOptions = response.data;
       });
     }
   }

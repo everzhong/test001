@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { listDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from "@/api/system/dept";
+import { listdDept, getDept, delDept, addDept, updateDept, listDeptExcludeChild } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -207,7 +207,7 @@ export default {
     /** 查询组列表 */
     getList() {
       this.loading = true;
-      listDept(this.queryParams).then(response => {
+      listdDept(this.queryParams).then(response => {
         this.deptList = this.handleTree(response.data, "deptId");
         this.loading = false;
       });
@@ -263,7 +263,7 @@ export default {
       }
       this.open = true;
       this.title = "添加组";
-      listDept().then(response => {
+      listdDept().then(response => {
 	        this.deptOptions = this.handleTree(response.data, "deptId");
       });
     },

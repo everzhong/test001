@@ -280,8 +280,9 @@ export default {
   },
   methods: {
     openUrl(row){
-      const {scrwid,scname,datastarttime,dataendtime,jgdm} = row
+      const {scrwid,scname,datastarttime,dataendtime,jgdm,id} = row
       setShujusc({
+        id,
         scrwid,
         scname,
         datastarttime,

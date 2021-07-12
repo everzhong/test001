@@ -199,7 +199,7 @@
       </el-table-column>
       <el-table-column label="抽取分类" align="center" prop="type" width="150px">
         <template slot-scope="scope">
-          <span>{{scope.row.type==1?'机构时间段抽取':scope.row.type==2?'明细抽取':scope.row.type==3?'是主单抽取':''}}</span>
+          <span>{{scope.row.type==1?'住院明细抽取':scope.row.type==2?'住院主单抽取':scope.row.type==3?'门诊明细抽取':scope.row.type==4?'门诊主单抽取':scope.row.type==5?'据ID抽取明细':''}}</span>
         </template>
       </el-table-column>
       <el-table-column label="成功条数" align="center" prop="succ" />
@@ -368,9 +368,11 @@ export default {
       updateDateOptions: [],
       // 抽取分类字典
       typeOptions: [
-        {dictLabel:'机构时间段抽取',dictValue:1},
-        {dictLabel:'明细抽取',dictValue:2},
-        {dictLabel:'是主单抽取',dictValue:3},
+        {dictLabel:'住院明细抽取',dictValue:1},
+        {dictLabel:'住院主单抽取',dictValue:2},
+        {dictLabel:'门诊明细抽取',dictValue:3},
+        {dictLabel:'门诊主单抽取',dictValue:4},
+        {dictLabel:'据ID抽取明细',dictValue:5}
       ],
       // 成功条数字典
       succOptions: [],

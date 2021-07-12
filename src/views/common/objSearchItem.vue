@@ -151,14 +151,17 @@ export default {
       this.handleQuery();
     },
     getDic(){
-      this.getDicts("${column.dictType}").then(response => {
-        this.ybdOptions = response.data;
+      this.getDicts("renwu_ss_ybbf").then(response => {
+        this.ybbfOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
+      this.getDicts("renwu_ss_jslb").then(response => {
         this.jslbOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
+      this.getDicts("renwu_ss_xzq").then(response => {
         this.xzqOptions = response.data;
+      });
+      this.getDicts("renwu_ss_jgdj").then(response => {
+        this.jsdjOptions = response.data;
       });
       this.getDicts("${column.dictType}").then(response => {
         this.jglbOptions = response.data;
@@ -166,9 +169,7 @@ export default {
       this.getDicts("${column.dictType}").then(response => {
         this.jgxzOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jsdjOptions = response.data;
-      });
+      
     },
     // // 异本地字典翻译
     // ybdFormat(row, column) {
