@@ -23,9 +23,13 @@
             <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
           </template>
         </el-table-column>
-        <el-table-column label="检查组编号" prop="deptId" align="center"></el-table-column>
+        <el-table-column label="检查组编号" prop="jczbh" align="center"></el-table-column>
         <el-table-column label="检查组名称" prop="deptName" align="center"></el-table-column>
-        <el-table-column label="检查组成员" prop="jczcy" align="center"></el-table-column>
+        <el-table-column label="检查组成员" prop="jczcy" align="center">
+          <template slot-scope="scope">
+            <span>{{formateNickName(scope.row.jczcy)}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="editRole(scope.row)">更改组成员</el-button>
@@ -59,15 +63,15 @@
       :modal="false"
       :close-on-click-modal="false"
       class="msg-dialog inner"
-      title="新增检查组"
+      :title="isEditInner?'修改检查成员':'新增检查组'"
       :visible.sync="innerDialogShow"
       width="500px">
-        <el-form size="small" inline :model="addGroup">
+        <el-form size="small" inline :model="addGroup"  ref="innerForm">
           <el-form-item label="检查组编号" prop="jczbh">
             <el-input style="width:370px" v-model="addGroup.jczbh"></el-input>
           </el-form-item>
-          <el-form-item label="检查组名称" prop="jczmc">
-            <el-input style="width:370px" v-model="addGroup.jczmc"></el-input>
+          <el-form-item label="检查组名称" prop="deptName">
+            <el-input style="width:370px" v-model="addGroup.deptName" :disabled="isEditInner"></el-input>
           </el-form-item>
           <el-form-item label="检查组成员" prop="jczcy">
             <el-popover
@@ -81,7 +85,7 @@
                   <el-table-column type="selection" width="50" align="center" />
                   <el-table-column property="jgdm" label="承办机构ID" align="center" show-overflow-tooltip></el-table-column>
                   <el-table-column property="jgmc" label="承办机构名称" align="center" show-overflow-tooltip></el-table-column>
-                  <el-table-column property="ryxm" label="人员姓名" align="center" show-overflow-tooltip></el-table-column>
+                  <el-table-column property="nickName" label="人员姓名" align="center" show-overflow-tooltip></el-table-column>
                 </el-table>
               </div>
               <div style="text-align:right;margin-top:10px">
@@ -89,20 +93,22 @@
                 <el-button size="mini" type="primary" @click="selectedRole">确定</el-button>
               </div>
               <el-select multiple :popper-append-to-body="false" slot="reference" style="width:370px" v-model="addGroup.jczcy">
-                <el-option v-for="item in roleSelection" :key="item.jgdm" :value="item.jgdm" :label="item.ryxm"></el-option>
+                <el-option v-for="item in gridData" :key="item.userId" :value="item.userId" :label="item.nickName"></el-option>
               </el-select>
             </el-popover>
           </el-form-item>
         </el-form>
         <div slot="footer" class="msg-footer-inner">
-          <el-button size="mini" type="primary" plain @click="innerDialogShow=false">返回</el-button>
+          <el-button size="mini" type="primary" plain @click="innerBack">返回</el-button>
           <el-button size="mini" type="primary" @click="innerConfirm">确定</el-button>
       </div>
     </el-dialog>
   </el-dialog>
 </template>
 <script>
-import {listDept,listdDept} from '@/api/system/dept.js'
+import {listDept,addDept,updateDept,delDept} from '@/api/system/dept.js'
+import { listUser } from "@/api/system/user";
+
 export default {
   name:'SendMessage',
   data(){
@@ -111,13 +117,14 @@ export default {
       roleCheck:'',
       searchName:'',
       innerDialogShow:false,
+      isEditInner:false,
       roleList:[],
       currentPage:1,
       total:0,
       pageSize:50,
       addGroup:{
         jczbh:'',
-        jczmc:'',
+        deptName:'',
         jczcy:[]
       },
       roleSelection:[],
@@ -126,7 +133,7 @@ export default {
   },
   mounted(){
     this.getJanChaxz() //检查组
-    // this.getJanChacy() //检查组成员
+    this.getJanChacy() //检查组成员
   },
   methods:{
     async getJanChaxz(){
@@ -143,9 +150,9 @@ export default {
     },
     async getJanChacy(){
       try {
-        const res = await listdDept()
+        const res = await listUser({pageNum:1,pageSize: 10000})
       if(res.code === 200) {
-        this.gridData = res.data
+        this.gridData = res.rows
       }
       } catch (error) { 
         console.log(error)
@@ -157,13 +164,36 @@ export default {
       console.log(11)
     },
     editRole(row){
-      console.log(row)
+      const chengyuan = row.jczcy?JSON.parse(row.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')):''
       this.addGroup = {...row}
-      this.addGroup.jczcy = row.jczcy?row.jczcy.split(','):''
+      this.addGroup.jczcy = []
+      if(chengyuan){
+        chengyuan.forEach(item=>{
+          let has = this.gridData.filter(subItem=>{
+            return subItem.userId===item.userId
+          })
+          if(!(has&&has.length)){
+            this.gridData.push(item)
+          }
+          this.addGroup.jczcy.push(item.userId*1)
+        })
+      }
       this.innerDialogShow = true
+      this.isEditInner = true
     },
     deleteRole(row){
-
+      this.$confirm('确定删除该检查组？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delDept(row.deptId).then(res=>{
+          if(res.code===200) {
+            this.msgSuccess('删除成功')
+            this.getJanChaxz();
+          }
+        })
+      })
     },
     handleSizeChange(val){
       this.pageSize = val
@@ -189,22 +219,62 @@ export default {
     },
     addNewGroup(){
       this.innerDialogShow = true
+      this.isEditInner = false
     },
-    innerConfirm(){
-
+    async innerConfirm(){
+      const {jczbh,deptName,jczcy,deptId} = this.addGroup
+      let res = null
+      if(this.isEditInner){
+        res = await updateDept({
+          parentId: 101,
+          deptId,
+          jczbh,
+          deptName,
+          jczcy:jczcy.join(',')
+        })
+      } else {
+        res = await addDept({jczbh,deptName,parentId: 101,jczcy:jczcy.join(',')})
+      }
+      if(res.code===200) {
+        this.msgSuccess(`${this.isEditInner?'修改':'新增'}成功`)
+        this.getJanChaxz()
+        this.innerBack()
+      }
+    },
+    innerBack(){
+      this.innerDialogShow=false
+      this.addGroup = {
+        jczbh:'',
+        deptName:'',
+        jczcy:[]
+      }
     },
     selectedRole(){
       if(this.roleSelection.length<1){
         this.$message.warning({message:'请选择',showClose:true})
         return
       }
+      const roleList = []
       this.roleSelection.forEach(item=>{
-        this.addGroup.jczcy.push(item.jgdm)
+        roleList.push(item.userId)
       })
+      this.addGroup.jczcy = Array.from(new Set([...this.addGroup.jczcy,...roleList]))
       this.$refs.tablePopover.doClose()
     },
     handleSelectionChange(val){
       this.roleSelection = val
+    },
+    formateNickName(jczcy){
+      if(!jczcy){
+        return ''
+      }
+      const str = jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')
+      const cyObj = JSON.parse(str)
+      const names = []
+      cyObj.forEach(item=>{
+        names.push(item.nickName)
+      })
+      return names.join('，')
     }
   },
   props:['options']

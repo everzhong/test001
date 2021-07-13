@@ -25,7 +25,7 @@
               @click="addComponent(element)"
             >
               <div class="components-body">
-                <svg-icon :icon-class="element.tagIcon" />
+                <svg-icon :icon-class="element.tagIcon||''" />
                 {{ element.label }}
               </div>
             </div>
@@ -49,7 +49,7 @@
               @click="addComponent(element)"
             >
               <div class="components-body">
-                <svg-icon :icon-class="element.tagIcon" />
+                <svg-icon :icon-class="element.tagIcon||''" />
                 {{ element.label }}
               </div>
             </div>
@@ -67,7 +67,7 @@
               @click="addComponent(element)"
             >
               <div class="components-body">
-                <svg-icon :icon-class="element.tagIcon" />
+                <svg-icon :icon-class="element.tagIcon||''" />
                 {{ element.label }}
               </div>
             </div>

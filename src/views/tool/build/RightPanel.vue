@@ -25,7 +25,7 @@
                   :label="item.label"
                   :value="item.tagIcon"
                 >
-                  <svg-icon class="node-icon" :icon-class="item.tagIcon" />
+                  <svg-icon class="node-icon" :icon-class="item.tagIcon||''" />
                   <span> {{ item.label }}</span>
                 </el-option>
               </el-option-group>
@@ -479,7 +479,7 @@
             >
               <span slot-scope="{ node, data }">
                 <span class="node-label">
-                  <svg-icon class="node-icon" :icon-class="data.tagIcon" />
+                  <svg-icon class="node-icon" :icon-class="data.tagIcon||''" />
                   {{ node.label }}
                 </span>
               </span>
