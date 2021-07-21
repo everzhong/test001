@@ -26,9 +26,8 @@
         <span>{{formatMoney(scope.row.jsje,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="结算人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
-    <el-table-column label="涉及违规数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',tableData)"/>
-    <el-table-column label="第三方查询状态" align="center">
+    <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',tableData)"/>
+    <el-table-column label="第三方筛查状态" align="center">
       <template slot-scope="scope">
         <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
       </template>
@@ -38,6 +37,7 @@
         <span>{{formatMoney(scope.row.ydje,2)}}</span>
       </template>
     </el-table-column>
+    <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
     <!-- <el-table-column label="操作" align="center">
       <template slot-scope="scope">
         <el-button

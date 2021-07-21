@@ -94,11 +94,9 @@ export default {
   created() {
     // this.getCode();
     // this.getCookie();
-    const uid = this.$route.query.uid
+    const uid = this.$route.query.uid;
     Cookies.set("username", uid, { expires: 30 });
-    this.handlerLoginapi({uid:uid}).then(()=>{
-      this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
-    })
+    this.handlerLoginapi({uid:uid});
   },
   methods: {
     getCode() {

@@ -89,10 +89,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="涉及违规数" prop="sjwgs">
+      <el-form-item label="涉及规则数" prop="sjwgs">
         <el-input
           v-model="queryParams.sjwgs"
-          placeholder="请输入涉及违规数"
+          placeholder="请输入涉及规则数"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -116,10 +116,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="结算人次" prop="jsrc">
+      <el-form-item label="涉及就诊人次" prop="jsrc">
         <el-input
           v-model="queryParams.jsrc"
-          placeholder="请输入结算人次"
+          placeholder="请输入涉及就诊人次"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -347,10 +347,10 @@
         </template>
       </el-table-column>
       <el-table-column label="网审人员" align="center" prop="wsry" :formatter="wsryFormat" />
-      <el-table-column label="涉及违规数" align="center" prop="sjwgs" :formatter="sjwgsFormat" />
+      <el-table-column label="涉及规则数" align="center" prop="sjwgs" :formatter="sjwgsFormat" />
       <el-table-column label="疑点金额" align="center" prop="ydje" :formatter="ydjeFormat" />
       <el-table-column label="结算金额" align="center" prop="jsje" :formatter="jsjeFormat" />
-      <el-table-column label="结算人次" align="center" prop="jsrc" :formatter="jsrcFormat" />
+      <el-table-column label="涉及就诊人次" align="center" prop="jsrc" :formatter="jsrcFormat" />
       <el-table-column label="添加时间" align="center" prop="addtime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.addtime, '{y}-{m}-{d}') }}</span>
@@ -461,8 +461,8 @@
         <el-form-item label="网审人员" prop="wsry">
           <el-input v-model="form.wsry" placeholder="请输入网审人员" />
         </el-form-item>
-        <el-form-item label="涉及违规数" prop="sjwgs">
-          <el-input v-model="form.sjwgs" placeholder="请输入涉及违规数" />
+        <el-form-item label="涉及规则数" prop="sjwgs">
+          <el-input v-model="form.sjwgs" placeholder="请输入涉及规则数" />
         </el-form-item>
         <el-form-item label="疑点金额" prop="ydje">
           <el-input v-model="form.ydje" placeholder="请输入疑点金额" />
@@ -470,8 +470,8 @@
         <el-form-item label="结算金额" prop="jsje">
           <el-input v-model="form.jsje" placeholder="请输入结算金额" />
         </el-form-item>
-        <el-form-item label="结算人次" prop="jsrc">
-          <el-input v-model="form.jsrc" placeholder="请输入结算人次" />
+        <el-form-item label="涉及就诊人次" prop="jsrc">
+          <el-input v-model="form.jsrc" placeholder="请输入涉及就诊人次" />
         </el-form-item>
         <el-form-item label="添加时间" prop="addtime">
           <el-date-picker clearable size="small"
@@ -618,13 +618,13 @@ export default {
       uptimeOptions: [],
       // 网审人员字典
       wsryOptions: [],
-      // 涉及违规数字典
+      // 涉及规则数字典
       sjwgsOptions: [],
       // 疑点金额字典
       ydjeOptions: [],
       // 结算金额字典
       jsjeOptions: [],
-      // 结算人次字典
+      // 涉及就诊人次字典
       jsrcOptions: [],
       // 添加时间字典
       addtimeOptions: [],
@@ -843,7 +843,7 @@ export default {
     wsryFormat(row, column) {
       return this.selectDictLabel(this.wsryOptions, row.wsry);
     },
-    // 涉及违规数字典翻译
+    // 涉及规则数字典翻译
     sjwgsFormat(row, column) {
       return this.selectDictLabel(this.sjwgsOptions, row.sjwgs);
     },
@@ -855,7 +855,7 @@ export default {
     jsjeFormat(row, column) {
       return this.selectDictLabel(this.jsjeOptions, row.jsje);
     },
-    // 结算人次字典翻译
+    // 涉及就诊人次字典翻译
     jsrcFormat(row, column) {
       return this.selectDictLabel(this.jsrcOptions, row.jsrc);
     },

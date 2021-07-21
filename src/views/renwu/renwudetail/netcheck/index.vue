@@ -1,5 +1,5 @@
 <template>
-  <div>ne't</div>
+  <div>net</div>
 </template>
 <script>
 export default {

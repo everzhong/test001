@@ -140,13 +140,13 @@ export default {
       uptimeOptions: [],
       // 网审人员字典
       wsryOptions: [],
-      // 涉及违规数字典
+      // 涉及规则数字典
       sjwgsOptions: [],
       // 疑点金额字典
       ydjeOptions: [],
       // 结算金额字典
       jsjeOptions: [],
-      // 结算人次字典
+      // 涉及就诊人次字典
       jsrcOptions: [],
       // 添加时间字典
       addtimeOptions: [],
@@ -398,7 +398,7 @@ export default {
     wsryFormat(row, column) {
       return this.selectDictLabel(this.wsryOptions, row.wsry);
     },
-    // 涉及违规数字典翻译
+    // 涉及规则数字典翻译
     sjwgsFormat(row, column) {
       return this.selectDictLabel(this.sjwgsOptions, row.sjwgs);
     },
@@ -410,7 +410,7 @@ export default {
     jsjeFormat(row, column) {
       return this.selectDictLabel(this.jsjeOptions, row.jsje);
     },
-    // 结算人次字典翻译
+    // 涉及就诊人次字典翻译
     jsrcFormat(row, column) {
       return this.selectDictLabel(this.jsrcOptions, row.jsrc);
     },

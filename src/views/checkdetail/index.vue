@@ -6,13 +6,13 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
-        >实施网审</el-button>
-      </el-col> -->
+        >提交网审</el-button>
+      </el-col>
       <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
@@ -23,7 +23,7 @@
       
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two">医疗机构列表</el-radio-button>
+          <el-radio-button label="two">任务列表</el-radio-button>
           <el-radio-button label="three">任务列表-规则列表</el-radio-button>
           <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
         </el-radio-group>
@@ -35,20 +35,20 @@
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <!-- <RenwutwoTable :selectable="selectableFun" v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/> -->
       <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border>
-        <el-table-column type="selection" width="55" align="center" :selectable="(row)=>{return row.sccqstatus*1==0}"/>
+        <el-table-column type="selection" width="55" align="center"/>
         <el-table-column label="序号" type="index" align="center"/>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <el-table-column label="状态" align="center" prop="status"  width="96">
+        <!-- <el-table-column label="状态" align="center" prop="status"  width="96">
           <template slot-scope="scope">
             <span>{{statusText(scope.row.status)}}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/>
         <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',renwutwoList)"/>
-        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
+        <el-table-column label="险种" align="center" prop="ybbf" />
         <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
         <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
@@ -66,11 +66,10 @@
           <span>{{formatMoney(scope.row.jsje,2)}}</span>
         </template>
       </el-table-column>
-        <el-table-column label="结算人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
-        <el-table-column label="涉及违规数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
-        <el-table-column label="第三方查询状态" align="center">
+        <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
+        <el-table-column label="第三方筛查状态" align="center" width="150">
           <template slot-scope="scope">
-            <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
+            <span>{{scope.row.sccqstatus?(scope.row.sccqstatus==0?'未生成筛查任务':scope.row.sccqstatus==1?'未开始筛查':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':''):''}}</span>
           </template>
         </el-table-column>
         <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)">
@@ -78,6 +77,8 @@
           <span>{{formatMoney(scope.row.ydje,2)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
+
           <!-- <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button
@@ -89,7 +90,7 @@
           </el-table-column> -->
         </el-table>
     </div>
-    <!-- <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
+    <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
       <el-form-item label="已选机构" prop="yxjg">
         <el-input
           style="width:280px;margin-right:30px"
@@ -119,7 +120,7 @@
       <el-form-item>
         <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
       </el-form-item>
-    </el-form> -->
+    </el-form>
     <pagination
       v-show="total>0"
       :total="total"
@@ -196,13 +197,13 @@ export default {
       uptimeOptions: [],
       // 网审人员字典
       wsryOptions: [],
-      // 涉及违规数字典
+      // 涉及规则数字典
       sjwgsOptions: [],
       // 疑点金额字典
       ydjeOptions: [],
       // 结算金额字典
       jsjeOptions: [],
-      // 结算人次字典
+      // 涉及就诊人次字典
       jsrcOptions: [],
       // 添加时间字典
       addtimeOptions: [],
@@ -491,7 +492,7 @@ export default {
     wsryFormat(row, column) {
       return this.selectDictLabel(this.wsryOptions, row.wsry);
     },
-    // 涉及违规数字典翻译
+    // 涉及规则数字典翻译
     sjwgsFormat(row, column) {
       return this.selectDictLabel(this.sjwgsOptions, row.sjwgs);
     },
@@ -503,7 +504,7 @@ export default {
     jsjeFormat(row, column) {
       return this.selectDictLabel(this.jsjeOptions, row.jsje);
     },
-    // 结算人次字典翻译
+    // 涉及就诊人次字典翻译
     jsrcFormat(row, column) {
       return this.selectDictLabel(this.jsrcOptions, row.jsrc);
     },
@@ -631,7 +632,7 @@ export default {
       const jgmc = selection.map(item => item.jgmc)
       this.submitParams.yxjg = jgmc.join(',')
       this.submitParams.wsry = selection.length?this.$store.getters.name:''
-      //第三方查询状态sancha 1已查 0未查
+      //第三方筛查状态sancha 1已查 0未查
       this.noThirdCheckList  = selection.filter(item => {
         return item.sancha === 0
       });
@@ -754,7 +755,6 @@ export default {
           }))
         }
       })
-      console.log(reqestList,1212)
       if(reqestList.length){
         this.loading = true
         Promise.all(reqestList).then(()=>{
@@ -764,6 +764,8 @@ export default {
         }).catch(e=>{
           this.loading = false
         })
+      } else {
+        this.msgSuccess('已提交过筛查')
       }
     },
     /**

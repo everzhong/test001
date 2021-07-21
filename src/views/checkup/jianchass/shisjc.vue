@@ -30,9 +30,9 @@
               <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
             </el-form-item>
             <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
-              <el-button type="primary" plain size="mini" @click="heshiOption.show=true">机构核实</el-button>
+              <el-button type="primary" size="mini" @click="heshiOption.show=true">机构核实</el-button>
               <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
-              <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+              <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
             </div>
       </el-form>
       <el-row :gutter="10">
@@ -44,15 +44,18 @@
           </el-select>
         </el-col>
         <el-col :span="1.5">
-          <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
+          <el-button type="primary" size="small" @click="chaxunDialog = true">查询条件</el-button>
         </el-col>
         <el-col :span="1.5">
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll">
+        <el-col :span="1.5">
+          <el-button type="primary" size="small" @click="handleThirdCheck" style="margin-right:50px">第三方筛查</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
           <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="tabsValue==='four'  &&isAll">
+        <el-col :span="1.5" v-if="tabsValue==='four'&&isAll">
           <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue!=='three'">
@@ -75,7 +78,7 @@
             </el-table-column>
             <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
             <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
-            <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
+            <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
             <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
             <el-table-column label="医院核实结果" align="center" prop="yyhsjg" :width="flexColumnWidth('yyhsjg',renwuthreeList)"/>
             <el-table-column label="操作" align="center" width="110">
@@ -127,7 +130,7 @@
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px">
       <el-form ref="chaxunForm" :model="queryForm" :rules="rules" label-width="100px" size="small">
         <el-form-item label="规则分类" prop="gzfl">
-          <el-input clearable v-model="guizefl.gzfl" placeholder="请输入" style="width:360px"></el-input>
+          <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
           <!-- <el-popover
               ref="tablePopover"
               placement="bottom"
@@ -205,6 +208,7 @@
 
 <script>
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
+import { setSancha } from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
 import { listRenwufive ,updateRenwufive} from '@/api/renwu/renwufive'
 import { submitDxqd } from "@/api/renwu/dcqz"
@@ -295,12 +299,12 @@ export default {
         gzmc:'',
         gzfl:'',
         xwrd:'',
-        hszt:''
+        hszt:null
       },
       
       guizefl:{
         search:'',
-        gzfl:[],
+        gzfl:'',
         data:[],
         selection:[],
         total:0,
@@ -328,6 +332,34 @@ export default {
     this.getList();
   },
   methods: {
+    /**
+     * 第三方筛查
+     */
+    handleThirdCheck(){
+      if(this.queryInfoFrom.sccqstatus*1>=1){
+        this.msgSuccess('已提交过筛查')
+        return
+      }
+      const userNmae = this.$store.getters.name
+      const time = this.parseTime(new Date().getTime(),'{h}{m}{s}') 
+      const {id,rwpcid,jgdm,jgmc} = this.queryInfoFrom
+      const requireParams = {
+        ids:id,
+        scrwid:[userNmae,rwpcid,jgdm,time].join('-'),
+        scstatus:1,
+        sccqstatus:1,
+        scname:[rwpcid,jgmc].join('-'),
+        scsqr:userNmae
+      }
+      console.log(requireParams)
+      setSancha(requireParams).then(()=>{
+        this.loading = false
+        this.msgSuccess('操作成功')
+        this.getList()
+      }).catch(e=>{
+        this.loading = false
+      })
+    },
     tableFourRadioChange(e){
       console.log(e)
     },
@@ -497,7 +529,7 @@ export default {
     gzmcFormat(row, column) {
       return this.selectDictLabel(this.gzmcOptions, row.gzmc);
     },
-    // 涉及就诊人数字典翻译
+    // 涉及就诊人员数字典翻译
     xjjzrsFormat(row, column) {
       return this.selectDictLabel(this.xjjzrsOptions, row.xjjzrs);
     },

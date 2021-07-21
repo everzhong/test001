@@ -73,7 +73,7 @@
             <span>{{ parseTime(scope.row.rwtssj,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="任务截止日期" align="center" prop="rwendtime" :width="flexColumnWidth('rwendtime',renwuoneList)">
+        <el-table-column label="计划完成日期" align="center" prop="rwendtime" :width="flexColumnWidth('rwendtime',renwuoneList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.rwendtime,'{y}-{m}-{d}') }}</span>
           </template>
@@ -82,13 +82,13 @@
         <el-table-column label="任务描述" align="center" prop="rwms" :width="flexColumnWidth('rwms',renwuoneList)"/>
         <el-table-column label="异地/本地" align="center" prop="ybd" :width="flexColumnWidth('ybd',renwuoneList)"/>
         <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwuoneList)"/>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="text"
               @click="checkdetail(scope.row)"
-            >查看明细</el-button>
+            >查看任务详情</el-button>
           </template>
         </el-table-column>
       </el-table>

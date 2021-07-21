@@ -57,6 +57,8 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
+import { removeToken } from '@/utils/auth'
+
 export default {
   name: "Login",
   data() {
@@ -111,6 +113,7 @@ export default {
         password: password === undefined ? this.loginForm.password : decrypt(password),
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
+      removeToken()
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {

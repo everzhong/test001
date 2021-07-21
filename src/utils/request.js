@@ -3,7 +3,11 @@ import { Notification, MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken, getUid } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
+import Qs from 'qs'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+axios.defaults.paramsSerializer = (params) => {
+        return Qs.stringify(params, { arrayFormat: 'brackets' });
+    }
     // 创建axios实例
 let baseUrl = ''
 if (process.env.NODE_ENV !== 'production') {

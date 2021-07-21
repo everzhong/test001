@@ -7,7 +7,7 @@
         <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',renwuthreeList)"/>
         <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',renwuthreeList)"/>
         <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
-        <el-table-column label="涉及就诊人数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
+        <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
         <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
         <el-table-column label="涉及金额" align="center" prop="xjje" :width="flexColumnWidth('xjje',renwuthreeList)"/>
         <el-table-column label="结算费用" align="center" prop="jsfy" :width="flexColumnWidth('jgdm',renwuthreeList)"/>
