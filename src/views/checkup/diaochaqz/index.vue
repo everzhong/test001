@@ -8,8 +8,8 @@
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <!-- <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ybbf',renwutwoList)"/> -->
         <!-- <el-table-column label="检查方式" align="center" prop="jsdj"  :width="flexColumnWidth('ybbf',renwutwoList)"/> -->
-        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
-        <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
+        <el-table-column label="险种" align="center" prop="ybbf" />
+        <el-table-column label="就医类型" align="center" prop="jslb"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
@@ -21,7 +21,7 @@
           </template>
         </el-table-column>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc" />
+        <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/>
         <el-table-column label="检查机构" align="center" prop="dcjg"/>
         <el-table-column label="检查组" align="center" prop="jczname" :width="flexColumnWidth('jczname',renwutwoList)"/>
