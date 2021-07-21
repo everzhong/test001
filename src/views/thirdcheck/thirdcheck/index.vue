@@ -8,12 +8,12 @@
         <!-- <el-table-column label="序号" type="index" align="center"  /> -->
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
         <el-table-column label="筛查任务ID" align="center" prop="scrwid"  :width="flexColumnWidth('scrwid',renwuthreeList)"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwuthreeList)">
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwuthreeList)">
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
