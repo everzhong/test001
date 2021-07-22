@@ -341,17 +341,16 @@ export default {
         return
       }
       const userNmae = this.$store.getters.name
-      const time = this.parseTime(new Date().getTime(),'{h}{m}{s}') 
-      const {id,rwpcid,jgdm,jgmc} = this.queryInfoFrom
+      const {id,rwpcid,jgdm,jgmc,datastarttime,dataendtime} = this.queryInfoFrom
+      const time = (datastarttime && dataendtime)?(this.parseTime(new Date(datastarttime).getTime(),'{y}{m}')+this.parseTime(new Date(dataendtime).getTime(),'{y}{m}')):''
       const requireParams = {
         ids:id,
-        scrwid:[userNmae,rwpcid,jgdm,time].join('-'),
+        scrwid:[rwpcid,jgdm,time].join('-'),
         scstatus:1,
         sccqstatus:1,
         scname:[rwpcid,jgmc].join('-'),
         scsqr:userNmae
       }
-      console.log(requireParams)
       setSancha(requireParams).then(()=>{
         this.loading = false
         this.msgSuccess('操作成功')

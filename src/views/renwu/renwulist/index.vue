@@ -360,7 +360,7 @@ export default {
         this.queryParams.rwtssj = ''
         this.queryParams.rwendtime = ''
       }
-      listRenwuone(this.queryParams).then(response => {
+      listRenwuone({...this.queryParams,status:0}).then(response => {
         this.renwuoneList = response.rows;
         this.total = response.total;
         this.loading = false;

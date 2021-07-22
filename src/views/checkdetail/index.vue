@@ -743,11 +743,11 @@ export default {
           return item.id===id && !(item.sccqstatus*1>=1)
         })
         if(selected.length){
-          const {rwpcid,jgdm,jgmc} = selected[0]
-          const time = this.parseTime(new Date().getTime(),'{h}{m}{s}') 
+          const {rwpcid,jgdm,jgmc,datastarttime,dataendtime} = selected[0]
+          const time = (datastarttime && dataendtime)?(this.parseTime(new Date(datastarttime).getTime(),'{y}{m}')+this.parseTime(new Date(dataendtime).getTime(),'{y}{m}')):''
           reqestList.push(setSancha({
             ids:id,
-            scrwid:[userNmae,rwpcid,jgdm,time].join('-'),
+            scrwid:[rwpcid,jgdm,time].join('-'),
             scstatus:1,
             sccqstatus:1,
             scname:[rwpcid,jgmc].join('-'),
