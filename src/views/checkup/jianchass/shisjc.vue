@@ -689,7 +689,7 @@ export default {
         mxxmsl:'',
         mxxmje:''
       }
-      this.getList()
+      this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm})
     },
     //操作记录
     checkLog(row){
