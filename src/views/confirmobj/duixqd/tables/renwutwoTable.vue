@@ -5,12 +5,16 @@
     <el-table-column label="网审意见" align="center" prop="wsyj"  :width="flexColumnWidth('wsyj',tableData)"/>
     <el-table-column label="网审人员" align="center" prop="wsry"  :width="flexColumnWidth('wsry',tableData)"/>
     <el-table-column label="监管状态" align="center" prop="jgzt"  :width="flexColumnWidth('jgzt',tableData)"/>
-    <!-- <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',tableData)"/>
-    <el-table-column label="检查方式" align="center" prop="jcfs"  :width="flexColumnWidth('jcfs',tableData)"/> -->
-    <!-- <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/> -->
-     <!-- <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/> -->
+    
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
-    <el-table-column label="任务名称" align="center" prop="rwmc"  :width="flexColumnWidth('rwmc',tableData)"/>
+    <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
+     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
+    <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
+    <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
+    <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',tableData)"/>
+    <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
+    <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
+    <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
     <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)">
       <template slot-scope="scope">
         <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
@@ -21,34 +25,23 @@
         <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="机构数量" align="center" prop="jgsl"  :width="flexColumnWidth('jgsl',tableData)"/>
-    <el-table-column label="任务推送日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',tableData)">
+    <el-table-column label="结算金额" align="center" prop="jsje"  :width="flexColumnWidth('jsje',tableData)">
       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+        <span>{{formatMoney(scope.row.jsje,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="任务截止日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',tableData)">
+    <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',tableData)"/>
+    <el-table-column label="第三方筛查状态" align="center">
       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+        <span>{{(scope.row.sancha && scope.row.sancha==1)?'已查':'未查'}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
-    <el-table-column label="任务描述" align="center" prop="rwms"  :width="flexColumnWidth('rwms',tableData)"/>
-    <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
-    <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
       <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.xjje,2)}}</span>
+        <span>{{formatMoney(scope.row.ydje,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="状态" align="center" prop="status"  :width="flexColumnWidth('rwpcid',tableData)"/>
-    <el-table-column label="承办机构" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
-    <el-table-column label="状态更新时间" align="center" prop="uptime" :width="flexColumnWidth('uptime',tableData)">
-      <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.uptime,'{y}-{m}-{d}') }}</span>
-      </template>
-    </el-table-column>
-
+    <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
     <el-table-column label="操作" align="center" width="150">
       <template slot-scope="scope">
         <el-button

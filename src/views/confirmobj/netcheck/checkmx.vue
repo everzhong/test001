@@ -33,7 +33,11 @@
         <el-table-column label="核实人" align="center" prop="hsr"  :width="flexColumnWidth('hsr',renwuthreeList)"/>
         <el-table-column label="核实派发时间" align="center" prop="hspfsj"  :width="flexColumnWidth('hspfsj',renwuthreeList)"/>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
-        <el-table-column label="已发送回智审" align="center" prop="issend"  :width="flexColumnWidth('issend',renwuthreeList)"/>
+        <el-table-column label="已发送回智审" align="center" prop="issend">
+          <template slot-scope="scope">
+            <span>{{scope.row.issend*1===1?'是':'否'}}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <pagination
         :total="total"

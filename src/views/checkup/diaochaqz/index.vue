@@ -6,7 +6,7 @@
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <!-- <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ybbf',renwutwoList)"/> -->
+        <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
         <!-- <el-table-column label="检查方式" align="center" prop="jsdj"  :width="flexColumnWidth('ybbf',renwutwoList)"/> -->
         <el-table-column label="险种" align="center" prop="ybbf" />
         <el-table-column label="就医类型" align="center" prop="jslb"/>

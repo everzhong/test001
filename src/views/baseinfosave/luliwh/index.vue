@@ -23,7 +23,7 @@
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="监管阶段" align="center" prop="jczid"  show-overflow-tooltip/>
+        <el-table-column label="监管阶段" align="center" prop="jgzt"  show-overflow-tooltip/>
         <el-table-column label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button
