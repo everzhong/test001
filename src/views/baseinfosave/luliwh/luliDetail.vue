@@ -39,15 +39,11 @@
           </div>
     </el-form>
     <el-table :data="jcflList" style="margin-top:10px" border>
-        <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column width="150" label="监管流程" align="center" prop="jglc"  show-overflow-tooltip/>
-        <el-table-column label="关键信息" align="center" prop="jgdm" show-overflow-tooltip />
-        <el-table-column label="最新操作人" align="center" prop="jgmc"  show-overflow-tooltip width="200"/>
-        <el-table-column label="最新操作时间" align="center" prop="datastarttime"  show-overflow-tooltip width="250">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="序号" type="index" align="center"  width="100"/>
+        <el-table-column label="监管流程" align="center" prop="jglc"  show-overflow-tooltip/>
+        <el-table-column label="关键信息" align="center" prop="gjxx" show-overflow-tooltip />
+        <el-table-column label="最新操作人" align="center" prop="zhczr"  show-overflow-tooltip width="250"/>
+        <el-table-column label="最新操作时间" align="center" prop="zhczsj"  show-overflow-tooltip width="300"></el-table-column>
         <!-- <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button
