@@ -1,6 +1,68 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery"/>
+    <!-- <SearchItem @handleQuery="handleQuery"/> -->
+    <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
+    <el-row>
+      <el-col :span="22">
+        <el-form-item label="批次号" prop="rwpcid">
+            <el-input
+              v-model="query.rwpcid"
+              placeholder="请输入"
+              clearable
+              size="small"
+              style="width: 180px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="机构名称" prop="jgmc">
+            <el-input
+              v-model="query.jgmc"
+              placeholder="请输入"
+              clearable
+              size="small"
+              style="width: 180px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="机构代码 " prop="jgdm">
+             <el-input
+              v-model="query.jgdm"
+              placeholder="请输入"
+              clearable
+              size="small"
+              style="width: 180px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="抽取状态" prop="sccqstatus">
+            <el-select v-model="query.sccqstatus" placeholder="全部" clearable size="small" style="width: 180px">
+              <el-option
+                v-for="dict in chouquOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="执行状态" prop="scstatus">
+            <el-select v-model="query.scstatus" placeholder="全部" clearable size="small" style="width: 180px">
+              <el-option
+                v-for="dict in zhixOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+      </el-col>
+      <el-col :span="2">
+        <el-form-item style="margin-right:0;text-align:right">
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
     <div v-loading="loading">
       <!-- <RenwuthreeTable :tableData="renwuthreeList"/> -->
     <el-table :data="renwuthreeList" border>
@@ -8,12 +70,12 @@
         <!-- <el-table-column label="序号" type="index" align="center"  /> -->
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
         <el-table-column label="筛查任务ID" align="center" prop="scrwid"  :width="flexColumnWidth('scrwid',renwuthreeList)"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime">
+        <el-table-column label="数据开始日期" align="center" prop="datastarttime" width="150">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime">
+        <el-table-column label="数据结束日期" align="center" prop="dataendtime" width="150">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
@@ -30,7 +92,7 @@
             <span>{{scope.row.scstatus==1?'未开始':scope.row.scstatus==2?'执行中':scope.row.scstatus==3?'完成':'--'}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="90">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="openUrl(scope.row)">数据筛查</el-button>
           </template>
@@ -47,13 +109,13 @@
   </div>
 </template>
 <script>
-import { setShujusc,listRenwutwo} from '@/api/renwu/renwutwo'
-import SearchItem from '../../common/searchItems'
+import { setShujusc,listRenwutwosc} from '@/api/renwu/renwutwo'
+// import SearchItem from '../../common/searchItems'
 import RenwuthreeTable from '../../common/renwuthreeTable'
 export default {
   name: "Thirdcheck",
   components: {
-    SearchItem,
+    // SearchItem,
     RenwuthreeTable,
   },
   data() {
@@ -124,6 +186,17 @@ export default {
       dxqdOptions: [],
       // 流程识别ID字典
       statusOptions: [],
+      chouquOptions: [
+        {dictValue:1,dictLabel:'未开始'},
+        {dictValue:2,dictLabel:'执行中'},
+        {dictValue:3,dictLabel:'完成'},
+        {dictValue:4,dictLabel:'无需抽取'}
+      ],
+      zhixOptions: [
+        {dictValue:1,dictLabel:'未开始'},
+        {dictValue:2,dictLabel:'执行中'},
+        {dictValue:3,dictLabel:'完成'},
+      ],
       // 检查组ID字典
       jczidOptions: [],
       // 是否打印了通知字典
@@ -175,6 +248,13 @@ export default {
         dayinstarttime: null,
         dcjg: null
       },
+      query:{
+        rwpcid:'',//任务批次号
+        jgmc:'',//机构名称
+        jgdm:'',//机构代码
+        sccqstatus:'',//抽取状态
+        scstatus:''//执行状态
+      },
       // 表单参数
       form: {},
       // 表单校验
@@ -187,96 +267,6 @@ export default {
   },
   created() {
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.datastarttimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybbfOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dataendtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jslbOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xzqOptions = response.data;
-    // });
-    // this.getDicts("sys_common_check").then(response => {
-    //   this.wsyjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.uptimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsryOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.sjwgsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ydjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsrcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xydmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgdmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsdjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsry2Options = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dxqdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.statusOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jczidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.isdayinOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinnameOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayintelOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinriqiOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinphoneOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinstarttimeOptions = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dcjgOptions = response.data;
-    // });
   },
   methods: {
     openUrl(row){
@@ -294,11 +284,11 @@ export default {
     },
     /** 查询renwutwo列表 */
     async getList(options) {
-      const params = options?{...options,...this.queryParams}:this.queryParams
-      params.scstatus=1
+      const params = options?{...this.queryParams,...options}:this.queryParams
+      // params.scstatus=1
       this.loading = true
       try {
-        const res = await listRenwutwo(params)
+        const res = await listRenwutwosc(params)
         if(res.code===200){
           this[`renwuthreeList`] = res.rows;
           this.total = res.total;
@@ -446,15 +436,16 @@ export default {
       return this.selectDictLabel(this.dcjgOptions, row.dcjg);
     },
     /** 搜索按钮操作 */
-    handleQuery(query) {
+    handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList(query);
+      !this.query.sccqstatus&&(delete this.query.sccqstatus);
+      this.getList(this.query);
     },
     /** 重置按钮操作 */
-    // resetQuery() {
-    //   this.resetForm("queryForm");
-    //   this.handleQuery();
-    // },
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)

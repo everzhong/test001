@@ -8,7 +8,14 @@ export function listRenwutwo(query) {
         params: query
     })
 }
-
+// 查询renwutwo列表
+export function listRenwutwosc(query) {
+    return request({
+        url: '/renwu/renwutwo/listsc',
+        method: 'get',
+        params: query
+    })
+}
 // 查询renwutwo详细
 export function getRenwutwo(ybd) {
     return request({
