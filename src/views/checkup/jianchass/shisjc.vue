@@ -464,14 +464,14 @@ export default {
     */
     fluProject(row){
       this.$set(this,'tabsValue','four')
-      this.getList({rwpcid:row.rwpcid,jgdm:row.jgdm})
+      this.getList({rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc})
     },
     /** 查询renwu列表 */
     async getList(query) {
       // const params = query?{...query,...this.queryParams}:this.queryParams
       let params = {...this.queryForm,...this.queryParams}
       if(query){
-        params = {...query,...params}
+        params = {...params,...query}
       } else {
         const {rwpcid,jgdm} = this.queryInfoFrom
         params = {rwpcid,jgdm,...params}
