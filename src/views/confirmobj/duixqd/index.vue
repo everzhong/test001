@@ -83,6 +83,7 @@ export default {
       exportLoading: false,
       // 选中数组
       ids: [],
+      selectionList:[],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -506,6 +507,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.selectionList = selection
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -623,6 +625,15 @@ export default {
       submitDxqd(params).then(res=>{
         this.msgSuccess("操作成功")
         this.getList()
+        this.selectionList.forEach(item=>{
+            this.addJcfl({
+              jglc:'对象确定',
+              gjxx:`对象确定 ${params.status?'同意':'驳回'}：批号为${item.rwpcid}机构代码为${item.jgdm}`,
+              rwpcid:item.rwpcid,
+              jgdm:item.jgdm,
+              zhczr:this.$store.getters.name,
+            })
+        })
       })
     },
     /**

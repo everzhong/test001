@@ -4,8 +4,7 @@
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="网审意见" align="center" prop="wsyj"  :width="flexColumnWidth('wsyj',tableData)"/>
     <el-table-column label="网审人员" align="center" prop="wsry"  :width="flexColumnWidth('wsry',tableData)"/>
-    <el-table-column label="监管状态" align="center" prop="jgzt"  :width="flexColumnWidth('jgzt',tableData)"/>
-    
+    <el-table-column label="监管状态" align="center" width="150"><template>待对象确定</template></el-table-column>
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
      <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>

@@ -79,6 +79,15 @@ export default {
           this.msgSuccess('核实完成')
           this.$refs.rightList.clear()
           this.loading= false
+          needHs.forEach(item=>{
+            this.addJcfl({
+              jglc:'机构核实',
+              gjxx:`批号为${item.rwpcid}机构代码为${item.jgdm}的机构核实`,
+              rwpcid:item.rwpcid,
+              jgdm:item.jgdm,
+              zhczr:this.$store.getters.name,
+            })
+          })
         }).catch(e=>{
           this.loading= false
         })

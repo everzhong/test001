@@ -24,9 +24,9 @@
     <el-table-column label="规则分类" align="center" prop="gzfl"/>
     <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="违反条数(违反规则的明细数量)" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
-    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
+    <el-table-column label="涉及金额" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
       <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.ydje,2)}}</span>
+        <span>{{formatMoney(scope.row.xjje,2)}}</span>
       </template>
     </el-table-column>
     <el-table-column label="核实状态" align="center" prop="hszt">
@@ -102,6 +102,13 @@ export default {
             if(res.code===200) { 
               this.msgSuccess('机构核实成功')
               this.getList()
+              this.addJcfl({
+                jglc:'机构核实',
+                gjxx:`提交机构核实：批号为${row.rwpcid}机构代码为${row.jgdm}`,
+                rwpcid:row.rwpcid,
+                jgdm:row.jgdm,
+                zhczr:this.$store.getters.name,
+              })
             } 
           })
         }).catch(() => {

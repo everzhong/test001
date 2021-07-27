@@ -373,7 +373,15 @@ export default {
         }).then(response => {
         this.msgSuccess("制作成功");
         this.zhizuo.isdayin = true
-        // this.getList();
+        this.zhzList.forEach(item=>{
+          this.addJcfl({
+            jglc:'制作通知',
+            gjxx:`制作批号为${item.rwpcid}机构代码为${item.jgdm}的通知`,
+            rwpcid:item.rwpcid,
+            jgdm:item.jgdm,
+            zhczr:this.$store.getters.name,
+          })
+        })
       });
     },
     /** 删除按钮操作 */

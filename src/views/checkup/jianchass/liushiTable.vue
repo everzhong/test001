@@ -37,7 +37,7 @@
       </template>
     </el-table-column>
     <el-table-column label="费用类别" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
-    <el-table-column label="批次号" align="center" prop="fylb"  :width="flexColumnWidth('fylb',tableData)"/>
+    <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="操作" align="center"  width="110px">
       <template slot-scope="scope">

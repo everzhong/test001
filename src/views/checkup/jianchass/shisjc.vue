@@ -264,6 +264,7 @@ export default {
       isAll:false,
       liushuiSetions:[],
       selectedId:"",
+      selectionList:[],
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -364,10 +365,10 @@ export default {
     },
     //点击检查完成状态跳到4
     doSubmit() {
-      if(!this.selectedId){
-        this.msgWarning('请选择一项')
-        return
-      }
+      // if(!this.selectedId){
+      //   this.msgWarning('请选择一项')
+      //   return
+      // }
       const params = {
         ids:[this.queryInfoFrom.id],
         status:4,//检查完成去到状态4，形成结果
@@ -377,6 +378,13 @@ export default {
       submitDxqd(params).then(res=>{
         this.msgSuccess("操作成功")
         this.getList()
+        this.addJcfl({
+          jglc:'检查实施完成',
+          gjxx:`检查实施完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+          rwpcid:this.queryInfoFrom.rwpcid,
+          jgdm:this.queryInfoFrom.jgdm,
+          zhczr:this.$store.getters.name,
+        })
       })
     },
     //返回上一层
@@ -416,17 +424,27 @@ export default {
       }
     },
     xwrdSubmit(){
-      this.$refs['xwrdForm'].validate((valid) => {
+      this.$refs['xwrdForm'].validate(async valid => {
           if (valid) {
             const {type,xwbh,lx} = this.xwrdChecd
+            let res = ''
             if(this.tabsValue==='four'){
-              updateRenwufour({id:this.selectedId,...this.xwrdForm,type,xwbh,lx}).then(res=>{
-                if(res.code===200) this.getList()
-              })
+              res = await updateRenwufour({id:this.selectedId,...this.xwrdForm,type,xwbh,lx})
             } else if (this.tabsValue==='five') {//在第五层认定,需要同时更改第四层和第五层
-              updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx}).then(res=>{
-                if(res.code===200) this.getList()
+              res = await updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx})
+            }
+            if(res.code===200) {
+              this.getList()
+              this.selectionList.forEach(item=>{
+                this.addJcfl({
+                  jglc:'行为认定',
+                  gjxx:`行为认定：批号为${item.rwpcid}机构代码为${item.jgdm}`,
+                  rwpcid:item.rwpcid,
+                  jgdm:item.jgdm,
+                  zhczr:this.$store.getters.name,
+                })
               })
+
             }
           } else {
             return false;
@@ -656,6 +674,7 @@ export default {
         this.isDisabled = this.isDisabledEvent(selection)
         const {id,mxxmdj,mxxmsl,mxxmje,gzmc} = selection[0]
         this.selectedId = id
+        this.selectionList = selection
         this.xwrdForm.gzmc = gzmc
         this.xwrdForm.mxxmdj = mxxmdj
         this.xwrdForm.mxxmsl = mxxmsl

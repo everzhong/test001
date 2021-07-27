@@ -279,7 +279,7 @@ export default {
       },
       //
       tabsValue:'two',
-      noThirdCheckList:false
+      noThirdCheckList:[]
     };
   },
   created() {
@@ -717,15 +717,27 @@ export default {
           type: "warning"
         }).then(() => {
           //点确认执行
-          return submitNetCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
-        }).then(() => {
-            //执行完成提升成功
-            this.msgSuccess('提交成功')
-            this.getList()
+          this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
+        })
+      } else {
+        this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
+      }
+    },
+    async netCheck(data){
+      const res = await submitNetCheck(data);
+      if(res.code===200) {
+        this.msgSuccess('提交成功')
+        this.getList()
+        this.selectionList.forEach(item=>{
+          this.addJcfl({
+            jglc:'提交网审',
+            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+            rwpcid:item.rwpcid,
+            jgdm:item.jgdm,
+            zhczr:this.$store.getters.name,
+          })
         })
       }
-      //检查任务中有未执行第三方筛查的
-
     },
     /**
      * 第三方筛查
@@ -738,8 +750,9 @@ export default {
       const userNmae = this.$store.getters.name
       const reqestList = []
       //轮询发送
+      let selected = []
       this.ids.forEach(id=>{
-        const selected = this.selectionList.filter(item=>{
+        selected = this.selectionList.filter(item=>{
           return item.id===id && !(item.sccqstatus*1>=1)
         })
         if(selected.length){
@@ -761,6 +774,15 @@ export default {
           this.loading = false
           this.msgSuccess('操作成功')
           this.getList()
+          selected.forEach(item=>{
+            this.addJcfl({
+              jglc:'第三方筛查',
+              gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
+              rwpcid:item.rwpcid,
+              jgdm:item.jgdm,
+              zhczr:this.$store.getters.name,
+            })
+          })
         }).catch(e=>{
           this.loading = false
         })

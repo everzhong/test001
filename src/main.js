@@ -25,6 +25,8 @@ import vueToPdf from 'vue-to-pdf'
 import Print from '@/utils/print' // 注册
 import mPrint from 'vue-print-nb' // 引入附件的js文件 v-print方式
 import { checkRole } from '@/utils/permission'
+import { addJcfl } from '@/api/renwu/jcfl.js' //新增检查履历
+
 Vue.use(Print)
 Vue.use(mPrint)
 
@@ -43,6 +45,15 @@ Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.formatMoney = formatMoney
 Vue.prototype.checkRole = checkRole
+Vue.prototype.addJcfl = function(query) {
+    const params = {
+        ...query,
+        zhczsj: this.parseTime(new Date(), '{y}-{m}-{d}'),
+        addtime: this.parseTime(new Date(), '{y}-{m}-{d}')
+    }
+    addJcfl(params)
+}
+
 
 Vue.prototype.msgSuccess = function(msg) {
     this.$message({ showClose: true, message: msg, type: "success" });

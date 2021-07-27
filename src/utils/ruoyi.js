@@ -195,30 +195,28 @@ export function flexColumnWidth(str, tableData, flag = 'max') {
         if (flag === 'equal') {
             // 获取该列中第一个不为空的数据(内容)
             for (let i = 0; i < tableData.length; i++) {
-                if (tableData[i][str] && tableData[i][str].length > 0) {
+                if (tableData[i][str]) {
                     // console.log('该列数据[0]:', tableData[0][str])
-                    columnContent = tableData[i][str]
+                    columnContent = tableData[i][str] + ''
                     break
                 }
             }
         } else {
             // 获取该列中最长的数据(内容)
             let index = 0
+            let max_temp = ''
             for (let i = 0; i < tableData.length; i++) {
-                // if (tableData[i][str] === null) {
-                //     return
-                // }
                 const now_temp = tableData[i][str] + ''
-                const max_temp = tableData[index][str] + ''
+                max_temp = tableData[index][str] + ''
                 if (now_temp.length >= max_temp.length) {
                     index = i
                 }
             }
-            columnContent = tableData[index][str]
+            columnContent = tableData[index][str] + ''
         }
         // console.log('该列数据[i]:', columnContent)
         // 以下分配的单位长度可根据实际需求进行调整
-        let flexWidth = 0
+        let flexWidth = 80
         for (const char of columnContent) {
             if ((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z')) {
                 // 如果是英文字符，为字符分配8个单位宽度
@@ -239,7 +237,7 @@ export function flexColumnWidth(str, tableData, flag = 'max') {
             // 设置最大宽度
             flexWidth = 350
         }
-        return flexWidth + 'px'
+        return flexWidth
     } catch (e) {}
 
 }

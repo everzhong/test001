@@ -608,7 +608,6 @@ export default {
         this.msgWarning('请至少选择一项')
       } else {
         // cosnt isNoDayin = this.selectionData
-        console.log(this.$store)
         if(!this.checkRole(['admin'])){
           const pcidList = []
           this.selectionData.forEach(item=>{

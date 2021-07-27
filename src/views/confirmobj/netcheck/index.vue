@@ -30,11 +30,11 @@
       </div>
     </el-row>
     <div v-loading="loading"  v-show="!mingxOptios.show">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @handleSelectionChange="handleSelectionChange"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @handleSelectionChange="handleSelectionChange"/>
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
+      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <RenwutwoTable v-else :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
-    <el-form v-show="!mingxOptios.show" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
+    <el-form v-show="!mingxOptios.show && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
       <el-form-item label="已选机构" prop="yxjg">
         <el-input
           style="width:280px;"
@@ -109,6 +109,7 @@ export default {
       exportLoading: false,
       // 选中数组
       ids: [],
+      selectionList:[],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -542,6 +543,7 @@ export default {
       this.submitParams.yxjg = (selection.map(item => item.jgmc)).join(' ')
       this.submitParams.wsry = this.$store.getters.name
       this.ids = selection.map(item => item.id)
+      this.selectionList = selection
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -623,6 +625,15 @@ export default {
           if(res.code===200){
             this.msgSuccess('提交成功')
             this.getList()
+            this.selectionList.forEach(item=>{
+              this.addJcfl({
+                jglc:'提交网审',
+                gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+                rwpcid:item.rwpcid,
+                jgdm:item.jgdm,
+                zhczr:this.$store.getters.name,
+              })
+            })
           }
         })
       }

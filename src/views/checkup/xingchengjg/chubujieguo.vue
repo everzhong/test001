@@ -113,7 +113,7 @@ export default {
       this.viewTableObj.show = true
     },
      /**
-     * 实施网申 
+     *  
      */
     handleAgree(type){
       if(type===5){
@@ -154,6 +154,13 @@ export default {
       submitDxqd(params).then(res=>{
         this.msgSuccess("操作成功")
         this.getList()
+        this.addJcfl({
+          jglc:'初步形成结果',
+          gjxx:`初步形成结果 ${params.status===5?'提交':'退回'}：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+          rwpcid:this.queryInfoFrom.rwpcid,
+          jgdm:this.queryInfoFrom.jgdm,
+          zhczr:this.$store.getters.name,
+        })
       })
     },
     /** 查询renwu列表 */

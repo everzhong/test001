@@ -2,12 +2,12 @@
   <el-table :data="tableData" @selection-change="handleSelectionChange" border>
     <el-table-column type="selection" width="55" align="center" />
     <el-table-column label="序号" type="index" align="center"  />
-    <el-table-column label="监管状态" align="center" prop="jgzt"/>
+    <el-table-column label="监管状态" align="center"><template>待网审</template></el-table-column>
     <el-table-column label="案件来源" align="center" prop="ajly" />
     <el-table-column label="机构名称 " align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
     <el-table-column label="涉及规则数" align="center" prop="sjwgs"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
+    <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.ydje,2)}}</span>
       </template>

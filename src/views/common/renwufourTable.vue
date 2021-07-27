@@ -42,7 +42,7 @@
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="疑点金额" align="center" prop="wgfy"  :width="flexColumnWidth('wgfy',tableData)">
+    <el-table-column label="违规费用" align="center" prop="wgfy"  :width="flexColumnWidth('wgfy',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.wgfy,2)}}</span>
       </template>

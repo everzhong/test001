@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="editRole(scope.row)">更改组成员</el-button>
+            <el-button type="text" size="mini" @click="editRole(scope.row,scope.$index)">更改组成员</el-button>
             <el-button type="text" size="mini" @click="deleteRole(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -107,6 +107,7 @@
 </template>
 <script>
 import {listDept,addDept,updateDept,delDept} from '@/api/system/dept.js'
+import {updateRenwutwo} from '@/api/renwu/renwutwo.js'
 import { listUser } from "@/api/system/user";
 
 export default {
@@ -128,7 +129,8 @@ export default {
         jczcy:[]
       },
       roleSelection:[],
-      gridData:[]
+      gridData:[],
+      editTarget:null,//更改组成员（哪一组）
     }
   },
   mounted(){
@@ -161,12 +163,15 @@ export default {
     handleQuery(){
       this.currentPage = 1
       this.getRoleList()
-      console.log(11)
     },
-    editRole(row){
-      const chengyuan = row.jczcy?JSON.parse(row.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')):''
+    editRole(row,index){
+      let chengyuan = null
+      if(row.jczcy){
+        chengyuan = typeof(row.jczcy)==="object"?row.jczcy:(JSON.parse(row.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')))
+      }
       this.addGroup = {...row}
       this.addGroup.jczcy = []
+      this.editTarget = index;
       if(chengyuan){
         chengyuan.forEach(item=>{
           let has = this.gridData.filter(subItem=>{
@@ -211,8 +216,12 @@ export default {
       this.roleCheck =  Math.floor(Math.random()*this.roleList.length)
     },
     confirm(){
-      this.$emit('on-confirm',this.roleList[this.roleCheck])
-      this.cancel()
+      if(this.roleCheck!==''){
+        this.$emit('on-confirm',this.roleList[this.roleCheck])
+        this.cancel()
+      } else {
+        this.msgError('请选择一个小组')
+      }
     },
     cancel(){
       this.options.show = false
@@ -222,23 +231,36 @@ export default {
       this.isEditInner = false
     },
     async innerConfirm(){
-      const {jczbh,deptName,jczcy,deptId} = this.addGroup
-      let res = null
-      if(this.isEditInner){
-        res = await updateDept({
-          parentId: 101,
-          deptId,
-          jczbh,
-          deptName,
-          jczcy:jczcy.join(',')
+      if(this.addGroup.jczcy.length) {
+        const selected = []
+        this.addGroup.jczcy.forEach(item=>{
+          let has = this.roleList[this.editTarget].jczcy = this.gridData.filter(sitem=>{
+            return item == sitem.userId
+          })
+          selected.push(has[0])
         })
-      } else {
-        res = await addDept({jczbh,deptName,parentId: 101,jczcy:jczcy.join(',')})
+        this.roleList[this.editTarget].jczcy = [...selected]
       }
-      if(res.code===200) {
-        this.msgSuccess(`${this.isEditInner?'修改':'新增'}成功`)
-        this.getJanChaxz()
-        this.innerBack()
+      const {jczbh,deptName,jczcy,deptId} = this.addGroup
+      if(this.isEditInner){
+        this.options.ids.forEach(id=>{
+          updateRenwutwo({
+            // parentId: 101,
+            // jczbh,
+            // deptName,
+            id,
+            deptId,
+            jczid:jczcy.join(',')
+          })
+        })
+        this.innerDialogShow=false
+      } else {
+        const res = await addDept({jczbh,deptName,parentId: 101,jczcy:jczcy.join(',')})
+        if(res.code===200) {
+          this.msgSuccess('新增成功')
+          this.getJanChaxz()
+          this.innerBack()
+        }
       }
     },
     innerBack(){
@@ -268,9 +290,14 @@ export default {
       if(!jczcy){
         return ''
       }
-      const str = jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')
-      const cyObj = JSON.parse(str)
+      let cyObj = null
       const names = []
+      if(typeof(jczcy)==="object"){
+        cyObj = jczcy
+      } else {
+        const str = jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')
+        cyObj = JSON.parse(str)
+      }
       cyObj.forEach(item=>{
         names.push(item.nickName)
       })

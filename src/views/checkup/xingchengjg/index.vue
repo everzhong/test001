@@ -5,7 +5,7 @@
       <!-- <RenwutwoTable :tableData="renwutwoList" /> -->
       <el-table :data="renwutwoList" border>
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="状态" align="center" prop="status"></el-table-column>
+        <el-table-column label="状态" align="center" prop="status" width="150"><template>待结果复核</template></el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>

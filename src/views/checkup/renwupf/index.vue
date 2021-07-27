@@ -62,6 +62,7 @@ export default {
       exportLoading: false,
       // 选中数组
       ids: [],
+      selection:[],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -182,7 +183,8 @@ export default {
       tabsValue:'two',
       //派发检查组
       sendNotice:{
-        show:false
+        show:false,
+        ids:[]
       }
     };
   },
@@ -281,14 +283,31 @@ export default {
   },
   methods: {
     submitQd(xiaozu){
+      const jczlist = typeof(xiaozu.jczcy)==="object"?xiaozu.jczcy:(JSON.parse(xiaozu.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')))
+      let userIdList = []
+      let nameList = []
+      if(jczlist.length){
+        userIdList = jczlist.map(item=>item.userId)
+        nameList = jczlist.map(item=>item.nickName)
+      }
       submitJcz({
         ids:this.ids,
-        jczid:xiaozu.deptId,
+        jczid:userIdList.join(','),
+        deptId:xiaozu.deptId,
         jczname:xiaozu.deptName
       }).then(res=>{
         if(res.code===200){
           this.msgSuccess('派发成功')
           this.getList()
+          this.selection.forEach(item=>{
+            this.addJcfl({
+              jglc:'任务派发',
+              gjxx:`派发任务到 ${xiaozu.deptName} 检查组，成员：${nameList.join('，')}`,
+              rwpcid:item.rwpcid,
+              jgdm:item.jgdm,
+              zhczr:this.$store.getters.name,
+            })
+          })
         } else {
           this.msgError('派发失败')
         }
@@ -496,6 +515,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.selection = selection
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -571,6 +591,7 @@ export default {
       if(!this.ids.length){
         this.msgWarning('请至少选择一项')
       } else {
+        this.sendNotice.ids = this.ids
         this.sendNotice.show = true
       }
       //检查任务中有未执行第三方筛查的

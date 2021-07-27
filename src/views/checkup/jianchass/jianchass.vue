@@ -5,10 +5,10 @@
       <!-- <RenwutwoTable :tableData="renwutwoList" /> -->
       <el-table :data="renwutwoList" border>
         <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="状态" align="center" prop="status"></el-table-column>
+        <el-table-column label="状态" align="center" width="150"><template>待检查实施</template></el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
-        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
+        <el-table-column label="险种" align="center" prop="ybbf" />
         <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
@@ -23,7 +23,7 @@
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="检查机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
-        <el-table-column label="检查组" align="center" prop="jczname"  :width="flexColumnWidth('jczname',renwutwoList)"/>
+        <el-table-column label="检查组" align="center" prop="jczname" />
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
