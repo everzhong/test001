@@ -3,11 +3,13 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+
 import { getToken, getUid, removeToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login', '/authLogin', '/loginapi', '/api/sendscreening', '/auth-redirect', '/bind', '/register']
+
 
 router.beforeEach((to, from, next) => {
     const uid = getUid()
@@ -24,11 +26,17 @@ router.beforeEach((to, from, next) => {
         } else {
             if (store.getters.roles.length === 0) {
                 // 判断当前用户是否已拉取完user_info信息
-                store.dispatch('GetInfo').then(() => {
+                store.dispatch('GetInfo').then((res) => {
+                    const roles = res.roles;
                     store.dispatch('GenerateRoutes').then(accessRoutes => {
-                        // 根据roles权限生成可访问的路由表
                         router.addRoutes(accessRoutes) // 动态添加可访问路由表
-                        next({...to, replace: true }) // hack方法 确保addRoutes已完成
+                        if (roles.indexOf('jigou') > -1) {
+                            next({ path: '/checkup/listjg', replace: true })
+                        } else if (roles.indexOf('xianchangjc') > -1) {
+                            next({ path: '/checkup/dayintz', replace: true })
+                        } else {
+                            next({ path: '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成
+                        }
                     })
                 }).catch(err => {
                     store.dispatch('LogOut').then(() => {

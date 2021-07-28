@@ -120,6 +120,14 @@ export default {
       Cookies.remove('username')
       this.$store.dispatch('ClearInfo')
       this.$store.dispatch("LoginApi", info).then(() => {
+          const roles = this.$store.getters.roles
+          if(roles.indexOf('jigou')>-1){
+            this.redirect='/checkup/listjg'
+          } else if(roles.indexOf('xianchangjc')>-1){
+            this.redirect = '/checkup/dayintz'
+          } else {
+            this.redirect = '/renwu/renwulist'
+          }
           this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
         }).catch(() => {
           this.loading = false;

@@ -59,14 +59,17 @@ export default {
       memueOpen( index ){
         if(index==='/checkup/jcss/jcss' && this.$route.fullPath!=='/checkup/jcss/jianchass'){
           this.$router.push('/checkup/jcss/jianchass')
-          const target =  document.getElementById('jcss').getElementsByClassName('el-submenu__title')[0]
-          target.className = 'new__title'
+          const jcss =  document.getElementById('jcss')
+          if(jcss.length>0){
+            const target =  jcss.getElementsByClassName('el-submenu__title')[0]
+            target.className = 'new__title'
+          }
         }
       },
       menueSelect(index){
         if(!index.indexOf('jcss')>-1){
           const jianchass = document.getElementById('jcss')
-          const target = jianchass.getElementsByClassName('new__title')
+          const target = (jianchass && jianchass.length>0)?(jianchass.getElementsByClassName('new__title')):[]
           if(target.length>0){
             target[0].className = "el-submenu__title"
           }

@@ -194,8 +194,8 @@
             :props="defaultProps"
           ></el-tree>
         </el-form-item>
-        <el-form-item label="指定默认页路径" label-width="112px">
-          <el-input v-model="form.remark"  placeholder="如需指定默认路径，请输入"></el-input>
+        <el-form-item label="备注">
+          <el-input v-model="form.remark" type="textarea"  placeholder="请输入备注内容"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

@@ -1,12 +1,12 @@
 <template>
   <div class="app-container home">
-   index
+    欢迎使用第三方监管系统！
   </div>
 </template>
 
 <script>
 export default {
-  name: "index",
+  name: "Index",
   data() {
     return {
       // 版本号
