@@ -126,9 +126,9 @@ export default {
           } else if(roles.indexOf('xianchangjc')>-1){
             this.redirect = '/checkup/dayintz'
           } else {
-            this.redirect = '/renwu/renwulist'
+            !this.redirect && (this.redirect='/renwu/renwulist')
           }
-          this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+          this.$router.push({ path: this.redirect}).catch(()=>{});
         }).catch(() => {
           this.loading = false;
         });
