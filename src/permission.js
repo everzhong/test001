@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
                         router.addRoutes(accessRoutes) // 动态添加可访问路由表
                         if (roles.indexOf('jigou') > -1) {
                             next({ path: '/checkup/listjg', replace: true })
-                        } else if (roles.indexOf('xianchangjc') > -1) {
+                        } else if (roles.indexOf('xianchangjc') > -1 || roles.indexOf('jiancha') > -1) {
                             next({ path: '/checkup/dayintz', replace: true })
                         } else {
                             next({ path: '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成

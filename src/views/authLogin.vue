@@ -129,6 +129,14 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
+            const roles = this.$store.getters.roles
+            if(roles.indexOf('jigou')>-1){
+              this.redirect='/checkup/listjg'
+            } else if(roles.indexOf('xianchangjc')>-1||roles.indexOf('jiancha')>-1){
+              this.redirect = '/checkup/dayintz'
+            } else {
+              !this.redirect && (this.redirect='/renwu/renwulist')
+            }
             this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
           }).catch(() => {
             this.loading = false;

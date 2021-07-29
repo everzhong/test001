@@ -123,7 +123,7 @@ export default {
           const roles = this.$store.getters.roles
           if(roles.indexOf('jigou')>-1){
             this.redirect='/checkup/listjg'
-          } else if(roles.indexOf('xianchangjc')>-1){
+          } else if(roles.indexOf('xianchangjc')>-1||roles.indexOf('jiancha')>-1){
             this.redirect = '/checkup/dayintz'
           } else {
             !this.redirect && (this.redirect='/renwu/renwulist')
