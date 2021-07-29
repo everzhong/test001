@@ -19,8 +19,8 @@
           <el-form-item label="机构名称" prop="jgmc">
             <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
           </el-form-item>
-            <el-form-item label="检查机构" prop="cxjg">
-            <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
+            <el-form-item label="检查机构" prop="jcjg">
+            <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
           </el-form-item>
             <el-form-item label="检查组" prop="jcz">
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
