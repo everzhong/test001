@@ -202,7 +202,11 @@
           <span>{{scope.row.type==1?'住院明细抽取':scope.row.type==2?'住院主单抽取':scope.row.type==3?'门诊明细抽取':scope.row.type==4?'门诊主单抽取':scope.row.type==5?'据ID抽取明细':''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="成功条数" align="center" prop="succ" />
+      <el-table-column label="成功条数" align="center" prop="succ">
+        <template slot-scope="scope">
+          <span>{{scope.row.succ?(scope.row.succ.replace(/[^0-9]/ig,"")):''}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',logList)"/>
       <el-table-column label="年月份" align="center" prop="ny" show-overflow-tooltip width="300px"/>
       <el-table-column label="状态" align="center" prop="status">
@@ -428,57 +432,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("${column.dictType}").then(response => {
-      this.idOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.createDateOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.updateByOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.stimeOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jobIdOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.logFilePathOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.updateDateOptions = response.data;
-    });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.typeOptions = response.data;
-    // });
-    this.getDicts("${column.dictType}").then(response => {
-      this.succOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.jgdmOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.nyOptions = response.data;
-    });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.statusOptions = response.data;
-    // });
-    this.getDicts("${column.dictType}").then(response => {
-      this.createByOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.ztimeOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.etimeOptions = response.data;
-    });
-    this.getDicts("${column.dictType}").then(response => {
-      this.fuccOptions = response.data;
-    });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.endsOptions = response.data;
-    // });
   },
   methods: {
     /** 查询数据抽取日志列表 */

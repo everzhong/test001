@@ -86,15 +86,14 @@ export default {
     };
   },
   watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
-      },
-      immediate: true
-    }
+    // $route: {
+    //   handler: function(route) {
+    //     this.redirect = route.query && route.query.redirect;
+    //   },
+    //   immediate: true
+    // }
   },
   created() {
-    // this.getCode();
     this.getCookie();
   },
   methods: {
@@ -107,13 +106,14 @@ export default {
     getCookie() {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
-      const rememberMe = Cookies.get('rememberMe')
+      const rememberMe = Cookies.get('rememberMe');
       this.loginForm = {
         username: username === undefined ? this.loginForm.username : username,
         password: password === undefined ? this.loginForm.password : decrypt(password),
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
-      removeToken()
+      this.$store.commit('SET_ROLES', []);
+      removeToken();
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
@@ -129,15 +129,7 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
-            const roles = this.$store.getters.roles
-            if(roles.indexOf('jigou')>-1){
-              this.redirect='/checkup/listjg'
-            } else if(roles.indexOf('xianchangjc')>-1||roles.indexOf('jiancha')>-1){
-              this.redirect = '/checkup/dayintz'
-            } else {
-              !this.redirect && (this.redirect='/renwu/renwulist')
-            }
-            this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+            this.$router.push({ path: this.redirect || "/renwu/renwulist" }).catch(()=>{});
           }).catch(() => {
             this.loading = false;
           });

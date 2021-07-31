@@ -35,9 +35,10 @@ router.beforeEach((to, from, next) => {
                         } else if (roles.indexOf('xianchangjc') > -1 || roles.indexOf('jiancha') > -1) {
                             next({ path: '/checkup/dayintz', replace: true })
                         } else {
-                            next({ path: '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成
+                            next({ path: to.path || '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成
                         }
                     })
+
                 }).catch(err => {
                     store.dispatch('LogOut').then(() => {
                         Message.error(err)
