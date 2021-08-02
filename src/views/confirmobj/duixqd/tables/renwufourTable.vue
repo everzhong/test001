@@ -2,12 +2,13 @@
   <el-table :data="tableData" border @selection-change="handleSelectionChange">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="序号" type="index" align="center"  />
+    <el-table-column label="案件来源" align="center" prop="ajly" />
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="明细项目编号" align="center" prop="mxxmbm"  :width="flexColumnWidth('mxxmbm',tableData)"/>
     <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  :width="flexColumnWidth('mxxmmc',tableData)"/>
-    <el-table-column label="通用名" align="center" prop="tym"  :width="flexColumnWidth('tym',tableData)"/>
+    <el-table-column label="通用名" align="center" prop="tym"/>
     <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>

@@ -70,7 +70,8 @@
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column label="序号" width="55" type="index" align="center"  />
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
-            <el-table-column label="违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',renwuthreeList)"/>
+            <el-table-column label="案件来源"  prop="ajly"  align="center"/>
+            <el-table-column label="违规数量" align="center" prop="wgsl"/>
             <el-table-column label="违规费用(元)" align="center" prop="wgfy" :width="flexColumnWidth('wgfy',renwuthreeList)">
               <template slot-scope="scope">
                 <span>{{formatMoney(scope.row.wgfy,2)}}</span>
@@ -111,14 +112,14 @@
           <el-form-item label="备注" prop="bz">
             <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="追款单价" prop="mxxmdj">
-            <el-input v-model="xwrdForm.mxxmdj" :disabled="isDisabled.dj"></el-input>
+          <el-form-item label="追款单价" prop="zkdj">
+            <el-input v-model="xwrdForm.zkdj" :disabled="isDisabled.dj"></el-input>
           </el-form-item>
-          <el-form-item label="违规数量" prop="mxxmsl">
-            <el-input v-model="xwrdForm.mxxmsl" :disabled="isDisabled.sl"></el-input>
+          <el-form-item label="违规数量" prop="wgsl">
+            <el-input v-model="xwrdForm.wgsl" :disabled="isDisabled.sl"></el-input>
           </el-form-item>
-          <el-form-item label="违规费用(元)" prop="mxxmje" >
-            <el-input v-model="xwrdForm.mxxmje" :disabled="isDisabled.fy"></el-input>
+          <el-form-item label="违规费用(元)" prop="wgfy" >
+            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="small" @click="xwrdSubmit">确定</el-button>
@@ -246,16 +247,14 @@ export default {
         gzmc:'',
         xwrd:'',
         bz:'',
-        mxxmdj:'',
-        mxxmsl:'',
-        mxxmje:''
+        zkdj:'',
+        wgsl:'',
+        wgfy:''
       },
       //选中的违规行为对象
       xwrdChecd:{},
       xwRules:{
-        xwrd:[{required:true,message:'必填项'}],
-        zkdj:[{required:true,message:'必填项'}],
-        wgsl:[{required:true,message:'必填项'}]
+        xwrd:[{required:true,message:'必填项'}]
       },
       guizeOptions:{
         show:false
@@ -394,9 +393,9 @@ export default {
         gzmc:'',
         xwrd:'',
         bz:'',
-        mxxmdj:'',
-        mxxmsl:'',
-        mxxmje:''
+        zkdj:'',
+        wgsl:'',
+        wgfy:''
       }
       switch(this.tabsValue) {
         case 'five':
@@ -431,7 +430,8 @@ export default {
             if(this.tabsValue==='four'){
               res = await updateRenwufour({id:this.selectedId,...this.xwrdForm,type,xwbh,lx})
             } else if (this.tabsValue==='five') {//在第五层认定,需要同时更改第四层和第五层
-              res = await updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx})
+              const { rwpcid,jgdm,mxxmbm } = this.selectionList[0]
+              res = await updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx, rwpcid,jgdm,mxxmbm})
             }
             if(res.code===200) {
               this.getList()
@@ -672,13 +672,14 @@ export default {
       if(selection.length!==0){
         // this.ids = selection.map(item => item.id)
         this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,gzmc} = selection[0]
+        const {id,mxxmdj,mxxmsl,mxxmje,gzmc,bz} = selection[0]
         this.selectedId = id
         this.selectionList = selection
+        this.xwrdForm.bz = bz
         this.xwrdForm.gzmc = gzmc
-        this.xwrdForm.mxxmdj = mxxmdj
-        this.xwrdForm.mxxmsl = mxxmsl
-        this.xwrdForm.mxxmje = mxxmje
+        this.xwrdForm.zkdj = mxxmdj
+        this.xwrdForm.wgsl = mxxmsl
+        this.xwrdForm.wgfy = mxxmje
         // const shuliangList = selection.map(item=>item.mxxmsl)
         // const feiyong = selection.map(item=>item.mxxmje)
         // this.xwrdForm.mxxmsl = this.sum(shuliangList)
@@ -689,9 +690,9 @@ export default {
           gzmc:'',
           xwrd:'',
           bz:'',
-          mxxmdj:'',
-          mxxmsl:'',
-          mxxmje:''
+          zkdj:'',
+          wgsl:'',
+          wgfy:''
         }
       }
 
@@ -704,9 +705,9 @@ export default {
         gzmc:'',
         xwrd:'',
         bz:'',
-        mxxmdj:'',
-        mxxmsl:'',
-        mxxmje:''
+        zkdj:'',
+        wgsl:'',
+        wgfy:''
       }
       this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm})
     },

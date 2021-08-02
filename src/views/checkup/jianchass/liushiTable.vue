@@ -7,6 +7,7 @@
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
     </el-table-column>
+    <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
@@ -15,12 +16,12 @@
     <el-table-column label="明细项目编号" align="center" prop="mxxmbm"  :width="flexColumnWidth('mxxmbm',tableData)"/>
     <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  :width="flexColumnWidth('mxxmmc',tableData)"/>
     <el-table-column label="通用名" align="center" prop="tym"  :width="flexColumnWidth('tym',tableData)"/>
-    <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)">
+    <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="明细项目数量" align="center" prop="mxxmsl"  :width="flexColumnWidth('mxxmsl',tableData)"/>
+    <el-table-column label="明细项目数量" align="center" prop="mxxmsl" />
     <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje"  :width="flexColumnWidth('mxxmje',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
@@ -36,7 +37,7 @@
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="费用类别" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
+    <el-table-column label="费用类别" align="center" prop="xydm"/>
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="操作" align="center"  width="110px">

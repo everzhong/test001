@@ -8,12 +8,13 @@
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
     </el-table-column>
-    <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
-    <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
+    <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
+    <el-table-column label="就医类型" align="center" prop="jslb" />
+    <el-table-column label="险种" align="center" prop="ybbf" />
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
     <el-table-column label="参保人卡号" align="center" prop="beizhu"  :width="flexColumnWidth('beizhu',tableData)"/>
-    <el-table-column label="参保人姓名" align="center" prop="xm"  :width="100"/>
+    <el-table-column label="参保人姓名" align="center" prop="xm"/>
     <el-table-column label="科室代码" align="center" prop="ksdm"  :width="flexColumnWidth('ksdm',tableData)"/>
     <el-table-column label="科室名称" align="center" prop="ksmc"  :width="flexColumnWidth('ksmc',tableData)"/>
     <el-table-column label="医师代码" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)"/>

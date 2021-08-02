@@ -223,7 +223,7 @@ export function flexColumnWidth(str, tableData, flag = 'max') {
                 flexWidth += 13
             } else if (char >= '\u4e00' && char <= '\u9fa5') {
                 // 如果是中文字符，为字符分配15个单位宽度
-                flexWidth += 20
+                flexWidth += 17
             } else {
                 // 其他种类字符，为字符分配8个单位宽度
                 flexWidth += 13

@@ -16,6 +16,14 @@ export function listRenwuthreeTab(query) {
         params: query
     })
 }
+// 查询renwuthree列表
+export function listRenwuthreeRj(query) {
+    return request({
+        url: '/renwu/renwuthree/listrj',
+        method: 'post',
+        data: query
+    })
+}
 // 查询机构列表
 export function listjgRenwuthree(params) {
     return request({

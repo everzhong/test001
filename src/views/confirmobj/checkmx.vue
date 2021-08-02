@@ -3,6 +3,7 @@
     <div>
       <el-table border v-loading="loading" :data="renwuthreeList">
         <el-table-column label="序号" align="center" width="50" prop="id" show-overflow-tooltip=""/>
+        <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',renwuthreeList)"/>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwuthreeList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',renwuthreeList)"/>
         <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',renwuthreeList)"/>

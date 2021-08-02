@@ -132,8 +132,8 @@
 </template>
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck,setSancha} from "@/api/renwu/renwutwo"
-import { listRenwuthree } from '@/api/renwu/renwuthree'
-import { listRenwufour } from '@/api/renwu/renwufour'
+import { listRenwuthreeTab } from '@/api/renwu/renwuthree'
+import { listRenwufourTab } from '@/api/renwu/renwufour'
 import SearchItem from '../common/searchItems'
 import RenwutwoTable from '../common/renwutwoTable'
 import RenwuthreeTable from '../common/renwuthreeTable'
@@ -240,37 +240,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
-        ybd: null,
-        datastarttime: null,
-        rwpcid: null,
-        ybbf: null,
-        dataendtime: null,
-        jslb: null,
-        xzq: null,
-        wsyj: null,
-        uptime: null,
-        wsry: null,
-        sjwgs: null,
-        ydje: null,
-        jsje: null,
-        jsrc: null,
-        addtime: null,
-        xydm: null,
-        jgdm: null,
-        jgmc: null,
-        jsdj: null,
-        wsry2: null,
-        dxqd: null,
-        status: null,
-        jczid: null,
-        isdayin: null,
-        dayinname: null,
-        dayintel: null,
-        dayinriqi: null,
-        dayinphone: null,
-        dayinstarttime: null,
-        dcjg: null
+        pageSize: 10
       },
       // 表单参数
       form: {},
@@ -279,116 +249,26 @@ export default {
       },
       //
       tabsValue:'two',
-      noThirdCheckList:[]
+      noThirdCheckList:[],
     };
   },
   created() {
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.datastarttimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybbfOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dataendtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jslbOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xzqOptions = response.data;
-    // });
-    // this.getDicts("sys_common_check").then(response => {
-    //   this.wsyjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.uptimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsryOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.sjwgsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ydjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsrcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xydmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgdmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsdjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsry2Options = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dxqdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.statusOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jczidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.isdayinOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinnameOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayintelOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinriqiOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinphoneOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinstarttimeOptions = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dcjgOptions = response.data;
-    // });
   },
   methods: {
     /** 查询renwutwo列表 */
     async getList(options) {
-      const params = options?{...options,...this.queryParams}:this.queryParams
+      const params = options?{...this.queryParams,...options}:this.queryParams
       const { query } = this.$route
       params.rwpcid = query?.rwpcid
       try {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
-            res = await listRenwuthree(params)
+            res = await listRenwuthreeTab(params)
             break;
           case 'four':
-            res = await listRenwufour(params)
+            res = await listRenwufourTab(params)
             break;
           default:
             // params.status = 0 //默认查0的数据
@@ -795,8 +675,13 @@ export default {
      */
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
-      this.getList()
-      console.log(val)
+      if(this.ids.length && val!=='two'){
+        const jgdmList = this.selectionList.map(item=>item.jgdm)
+        this.getList({jgdm:jgdmList.join(',')})
+      } else {
+        this.ids = []
+        this.getList()
+      }
     },
     statusText(status){
       if(status!==null ||status!==''||status!==undefined){

@@ -2,6 +2,7 @@
   <el-table :data="tableData" border @selection-change="handleSelectionChange">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="序号" type="index" align="center"  />
+    <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
     <el-table-column label="疑点类型" align="center" prop="ybbf" />
     <el-table-column label="疑点说明" align="center" prop="remark" />
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
