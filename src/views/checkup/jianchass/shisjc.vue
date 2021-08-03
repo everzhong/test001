@@ -434,6 +434,7 @@ export default {
               res = await updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx, rwpcid,jgdm,mxxmbm})
             }
             if(res.code===200) {
+              this.msgSuccess('操作成功')
               this.getList()
               this.selectionList.forEach(item=>{
                 this.addJcfl({

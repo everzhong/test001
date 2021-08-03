@@ -140,36 +140,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        ybd: null,
-        datastarttime: null,
-        rwpcid: null,
-        ybbf: null,
-        dataendtime: null,
-        jslb: null,
-        xzq: null,
-        wsyj: null,
-        uptime: null,
-        wsry: null,
-        sjwgs: null,
-        ydje: null,
-        jsje: null,
-        jsrc: null,
-        addtime: null,
-        xydm: null,
-        jgdm: null,
-        jgmc: null,
-        jsdj: null,
-        wsry2: null,
-        dxqd: null,
-        status: null,
-        jczid: null,
-        isdayin: null,
-        dayinname: null,
-        dayintel: null,
-        dayinriqi: null,
-        dayinphone: null,
-        dayinstarttime: null,
-        dcjg: null
       },
       // 表单参数
       form: {},
@@ -182,102 +152,12 @@ export default {
   },
   created() {
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.datastarttimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybbfOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dataendtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jslbOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xzqOptions = response.data;
-    // });
-    // this.getDicts("sys_common_check").then(response => {
-    //   this.wsyjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.uptimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsryOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.sjwgsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ydjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsrcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xydmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgdmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsdjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsry2Options = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dxqdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.statusOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jczidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.isdayinOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinnameOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayintelOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinriqiOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinphoneOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinstarttimeOptions = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dcjgOptions = response.data;
-    // });
   },
   methods: {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...query,...this.queryParams}:this.queryParams
-      params.status = '4' //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
+      // params.status = '4' //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
       this.loading = true
       try {
         const res = await listRenwutwo(params)

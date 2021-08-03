@@ -184,36 +184,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        ybd: null,
-        datastarttime: null,
-        rwpcid: null,
-        ybbf: null,
-        dataendtime: null,
-        jslb: null,
-        xzq: null,
-        wsyj: null,
-        uptime: null,
-        wsry: null,
-        sjwgs: null,
-        ydje: null,
-        jsje: null,
-        jsrc: null,
-        addtime: null,
-        xydm: null,
-        jgdm: null,
-        jgmc: null,
-        jsdj: null,
-        wsry2: null,
-        dxqd: null,
-        status: null,
-        jczid: null,
-        isdayin: null,
-        dayinname: null,
-        dayintel: null,
-        dayinriqi: null,
-        dayinphone: null,
-        dayinstarttime: null,
-        dcjg: null
       },
       // 表单参数
       form: {},
@@ -672,10 +642,9 @@ export default {
     /**
      * tabs切换
      */
-    tabsLevelChange(val){
+    tabsLevelChange(){
       this.queryParams.pageNum = 1
       this.getList()
-      console.log(val)
     }
   }
 };
