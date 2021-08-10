@@ -45,7 +45,7 @@
           </div>
           <div class="zhizuo-item">
             <span>联系电话</span>
-            <el-input maxlength="11" size="small" v-model="zhizuo.tel"></el-input>
+            <el-input maxlength="12" size="small" v-model="zhizuo.tel"></el-input>
           </div>
           <div class="zhizuo-item">
             <span>执法人员</span>

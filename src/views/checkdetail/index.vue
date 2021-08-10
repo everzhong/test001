@@ -6,13 +6,13 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
         >提交网审</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
@@ -72,7 +72,7 @@
             <span>{{scope.row.sccqstatus?(scope.row.sccqstatus==0?'未生成筛查任务':scope.row.sccqstatus==1?'未开始筛查':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':''):''}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="疑点金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)">
+        <el-table-column label="涉及金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)">
           <template slot-scope="scope">
           <span>{{formatMoney(scope.row.ydje,2)}}</span>
         </template>
@@ -90,7 +90,7 @@
           </el-table-column> -->
         </el-table>
     </div>
-    <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
+    <!-- <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
       <el-form-item label="已选机构" prop="yxjg">
         <el-input
           style="width:280px;margin-right:30px"
@@ -120,7 +120,7 @@
       <el-form-item>
         <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
       </el-form-item>
-    </el-form>
+    </el-form> -->
     <pagination
       v-show="total>0"
       :total="total"
@@ -138,6 +138,7 @@ import SearchItem from '../common/searchItems'
 import RenwutwoTable from '../common/renwutwoTable'
 import RenwuthreeTable from '../common/renwuthreeTable'
 import RenwufourTable from '../common/renwufourTable'
+import {bossRand} from '@/utils/ruoyi'
 export default {
   name: "Renwutwo",
   components: {
@@ -585,40 +586,40 @@ export default {
     /**
      * 实施网申
      */
-    handleNetCheck(){
-      if(!this.ids.length){
-        this.msgError('请至少选择一项')
-      } else if(!this.submitParams.wsyj){
-        this.msgError('请选择网审意见')
-      } else if(this.noThirdCheckList.length){
-        this.$confirm('当前医药机构任务未实施第三方筛查，请确认不进行第三方筛查直接实施网审/现场检查?', "确认提交", {
-          confirmButtonText: "确认",
-          cancelButtonText: "返回",
-          type: "warning"
-        }).then(() => {
-          //点确认执行
-          this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
-        })
-      } else {
-        this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
-      }
-    },
-    async netCheck(data){
-      const res = await submitNetCheck(data);
-      if(res.code===200) {
-        this.msgSuccess('提交成功')
-        this.getList()
-        this.selectionList.forEach(item=>{
-          this.addJcfl({
-            jglc:'提交网审',
-            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
-            rwpcid:item.rwpcid,
-            jgdm:item.jgdm,
-            zhczr:this.$store.getters.name,
-          })
-        })
-      }
-    },
+    // handleNetCheck(){
+    //   if(!this.ids.length){
+    //     this.msgError('请至少选择一项')
+    //   } else if(!this.submitParams.wsyj){
+    //     this.msgError('请选择网审意见')
+    //   } else if(this.noThirdCheckList.length){
+    //     this.$confirm('当前医药机构任务未实施第三方筛查，请确认不进行第三方筛查直接实施网审/现场检查?', "确认提交", {
+    //       confirmButtonText: "确认",
+    //       cancelButtonText: "返回",
+    //       type: "warning"
+    //     }).then(() => {
+    //       //点确认执行
+    //       this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
+    //     })
+    //   } else {
+    //     this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
+    //   }
+    // },
+    // async netCheck(data){
+    //   const res = await submitNetCheck(data);
+    //   if(res.code===200) {
+    //     this.msgSuccess('提交成功')
+    //     this.getList()
+    //     this.selectionList.forEach(item=>{
+    //       this.addJcfl({
+    //         jglc:'提交网审',
+    //         gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+    //         rwpcid:item.rwpcid,
+    //         jgdm:item.jgdm,
+    //         zhczr:this.$store.getters.name,
+    //       })
+    //     })
+    //   }
+    // },
     /**
      * 第三方筛查
      */
@@ -633,11 +634,11 @@ export default {
       let selected = []
       this.ids.forEach(id=>{
         selected = this.selectionList.filter(item=>{
-          return item.id===id && !(item.sccqstatus*1>=1)
+          return item.id===id;
         })
         if(selected.length){
-          const {rwpcid,jgdm,jgmc,datastarttime,dataendtime} = selected[0]
-          const time = (datastarttime && dataendtime)?(this.parseTime(new Date(datastarttime).getTime(),'{y}{m}')+this.parseTime(new Date(dataendtime).getTime(),'{y}{m}')):''
+          const {rwpcid,jgdm,jgmc} = selected[0];
+          const time = bossRand();
           reqestList.push(setSancha({
             ids:id,
             scrwid:[rwpcid,jgdm,time].join('-'),
@@ -648,27 +649,23 @@ export default {
           }))
         }
       })
-      if(reqestList.length){
-        this.loading = true
-        Promise.all(reqestList).then(()=>{
-          this.loading = false
-          this.msgSuccess('操作成功')
-          this.getList()
-          selected.forEach(item=>{
-            this.addJcfl({
-              jglc:'第三方筛查',
-              gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
-              rwpcid:item.rwpcid,
-              jgdm:item.jgdm,
-              zhczr:this.$store.getters.name,
-            })
+      this.loading = true
+      Promise.all(reqestList).then(()=>{
+        this.loading = false
+        this.msgSuccess('操作成功')
+        this.getList()
+        selected.forEach(item=>{
+          this.addJcfl({
+            jglc:'第三方筛查',
+            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
+            rwpcid:item.rwpcid,
+            jgdm:item.jgdm,
+            zhczr:this.$store.getters.name,
           })
-        }).catch(e=>{
-          this.loading = false
         })
-      } else {
-        this.msgSuccess('已提交过筛查')
-      }
+      }).catch(e=>{
+        this.loading = false
+      })
     },
     /**
      * tabs切换

@@ -65,6 +65,7 @@
       class="msg-dialog inner"
       :title="isEditInner?'修改检查成员':'新增检查组'"
       :visible.sync="innerDialogShow"
+      @close="innerBack"
       width="500px">
         <el-form size="small" inline :model="addGroup"  ref="innerForm">
           <el-form-item label="检查组编号" prop="jczbh">
@@ -231,10 +232,10 @@ export default {
       this.isEditInner = false
     },
     async innerConfirm(){
-      if(this.addGroup.jczcy.length) {
+      if(this.addGroup.jczcy.length&&this.isEditInner) {
         const selected = []
         this.addGroup.jczcy.forEach(item=>{
-          let has = this.roleList[this.editTarget].jczcy = this.gridData.filter(sitem=>{
+          let has  = this.gridData.filter(sitem=>{
             return item == sitem.userId
           })
           selected.push(has[0])

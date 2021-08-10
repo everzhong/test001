@@ -15,7 +15,7 @@
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="涉及就诊人员数" align="center" prop="jsrc"/>
-    <el-table-column label="驳回意见" align="center" prop="dxqd"  :width="flexColumnWidth('dxqd',tableData)"/>
+    <el-table-column label="驳回意见" align="center" prop="dxqdbh"  :width="flexColumnWidth('dxqdbh',tableData)"/>
     <el-table-column label="操作" align="center" width="150">
       <template slot-scope="scope">
         <el-button

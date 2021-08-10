@@ -61,16 +61,16 @@
         <el-col :span="1.5" v-if="tabsValue!=='three'">
           <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
-        <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
+        <!-- <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
           <el-radio-button label="three">规则筛查</el-radio-button>
-        </el-radio-group>
+        </el-radio-group> -->
       </el-row>
       <div v-loading="loading">
         <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border style="margin-top:10px">
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column label="序号" width="55" type="index" align="center"  />
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
-            <el-table-column label="案件来源"  prop="ajly"  align="center"/>
+            <el-table-column label="案件来源"  prop="ajly"  align="center" :width="flexColumnWidth('ajly',renwuthreeList)"/>
             <el-table-column label="违规数量" align="center" prop="wgsl"/>
             <el-table-column label="违规费用(元)" align="center" prop="wgfy" :width="flexColumnWidth('wgfy',renwuthreeList)">
               <template slot-scope="scope">
@@ -213,7 +213,7 @@ import { setSancha } from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
 import { listRenwufive ,updateRenwufive} from '@/api/renwu/renwufive'
 import { submitDxqd } from "@/api/renwu/dcqz"
-// import { updateXwrd } from "@/api/renwu/xwrd"
+import { bossRand } from "@/utils/ruoyi"
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
 import Guizeshuom from './guizeshuom.vue'
@@ -336,13 +336,13 @@ export default {
      * 第三方筛查
      */
     handleThirdCheck(){
-      if(this.queryInfoFrom.sccqstatus*1>=1){
-        this.msgSuccess('已提交过筛查')
-        return
-      }
+      // if(this.queryInfoFrom.sccqstatus*1>=1){
+      //   this.msgSuccess('已提交过筛查')
+      //   return
+      // }
       const userNmae = this.$store.getters.name
-      const {id,rwpcid,jgdm,jgmc,datastarttime,dataendtime} = this.queryInfoFrom
-      const time = (datastarttime && dataendtime)?(this.parseTime(new Date(datastarttime).getTime(),'{y}{m}')+this.parseTime(new Date(dataendtime).getTime(),'{y}{m}')):''
+      const {id,rwpcid,jgdm,jgmc} = this.queryInfoFrom
+      const time = bossRand();
       const requireParams = {
         ids:id,
         scrwid:[rwpcid,jgdm,time].join('-'),
@@ -710,7 +710,7 @@ export default {
         wgsl:'',
         wgfy:''
       }
-      this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm})
+      this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm})
     },
     //操作记录
     checkLog(row){

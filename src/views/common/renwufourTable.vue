@@ -27,7 +27,7 @@
     <el-table-column label="明细项目编号" align="center" prop="mxxmbm"  :width="flexColumnWidth('mxxmbm',tableData)"/>
     <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  :width="flexColumnWidth('mxxmmc',tableData)"/>
     <el-table-column label="通用名" align="center" prop="tym"  :width="flexColumnWidth('tym',tableData)"/>
-    <el-table-column label="明细违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',tableData)"/>
+    <el-table-column label="涉及违规数量" align="center" prop="wgsl"  :width="flexColumnWidth('wgsl',tableData)"/>
     <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje"  :width="flexColumnWidth('mxxmje',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
@@ -43,7 +43,7 @@
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="违规费用" align="center" prop="wgfy"  :width="flexColumnWidth('wgfy',tableData)">
+    <el-table-column label="涉及金额" align="center" prop="wgfy"  :width="flexColumnWidth('wgfy',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.wgfy,2)}}</span>
       </template>

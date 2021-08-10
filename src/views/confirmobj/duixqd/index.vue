@@ -469,7 +469,7 @@ export default {
           ids:this.ids,
           status:2,//同意2 ，驳回0
           dxqd:'同意',
-          qdbh:''//驳回意见字段
+          dxqdbh:''//驳回意见字段
         })
       } else {
         this.handleNg()
@@ -492,7 +492,7 @@ export default {
             ids:this.ids,
             status:0,//同意2 ，驳回0
             dxqd:'驳回',
-            qdbh:value//驳回意见字段
+            dxqdbh:value//驳回意见字段
           })
         }).catch(() => {
           this.$message({

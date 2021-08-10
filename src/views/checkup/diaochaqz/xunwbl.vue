@@ -42,7 +42,7 @@
           </div>
           <div class="zhizuo-item">
             <span>联系电话</span>
-            <el-input size="small" v-model="zhizuo.tel" maxlength="11"></el-input>
+            <el-input size="small" v-model="zhizuo.tel" maxlength="12"></el-input>
           </div>
           <div class="zhizuo-item">
             <span>身份证号</span>

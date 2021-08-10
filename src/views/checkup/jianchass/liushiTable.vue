@@ -37,7 +37,7 @@
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="费用类别" align="center" prop="xydm"/>
+    <el-table-column label="费用类别" align="center" prop="fylb"/>
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="操作" align="center"  width="110px">

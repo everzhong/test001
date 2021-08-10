@@ -50,7 +50,7 @@
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.isdayin!=1"
@@ -64,6 +64,12 @@
               type="text"
               @click="printFile([scope.row])"
             >打印通知</el-button>
+            <el-button
+              v-if="scope.row.isdayin==1"
+              size="mini"
+              type="text"
+              @click="navigateToAdd([scope.row],true)"
+            >查看通知</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -311,7 +317,7 @@ export default {
       }
       this.loading = false
     },
-    navigateToAdd(row){
+    navigateToAdd(row,isView){
       // if(row) {
       //   window.localStorage.setItem('PRDATA',JSON.stringify(row))
       // } else {
@@ -320,6 +326,7 @@ export default {
       window.localStorage.setItem('PRDATA',JSON.stringify(row))
       this.$router.push({
         path:'/checkup/addNotice',
+        query:{isView}
       })
     },
     printFile(row){
@@ -577,19 +584,25 @@ export default {
       if(!this.ids.length){
         this.msgWarning('请至少选择一项')
       } else {
-        // cosnt isNoDayin = this.selectionData
-        if(!this.checkRole(['admin'])){
-          const pcidList = []
-          this.selectionData.forEach(item=>{
-            item.isdayin*1===1 && (pcidList.push(item.rwpcid))
-          })
-          if(pcidList.length){
-            this.$alert(`任务批次：${pcidList.join(',')} 已制作通知，请取消选择此项`, '提示', {
-              confirmButtonText: '确定'
-            })
-            return
-          } 
-        }
+        // // cosnt isNoDayin = this.selectionData
+        // var nozhizuo = this.selectionData.filter(item=>{
+        //   return item.item.isdayin*1!==1
+        // })
+        // if(nozhizuo&&nozhizuo.length){
+        //   this.msgWarning('取消已制作/已打印的项目后再进行操作')
+        // }
+        // if(!this.checkRole(['admin'])){
+        const pcidList = []
+        this.selectionData.forEach(item=>{
+          item.isdayin*1===1 && (pcidList.push(item.rwpcid))
+        })
+        if(pcidList.length){
+          this.$alert(`取消 已制作/已打印 的项目后再进行操作。`, '提示', {
+            confirmButtonText: '确定'
+          }).catch(_=>{});
+          return
+        } 
+        // }
         this.navigateToAdd(this.selectionData)
       }
     },
@@ -602,9 +615,9 @@ export default {
           item.isdayin*1!==1 && (pcidList.push(item.rwpcid))
         })
         if(pcidList.length){
-          this.$alert(`任务批次：${pcidList.join(',')} 尚未制作通知，请先制作通知`, '提示', {
+          this.$alert(`取消 未制作 通知的项目后再进行操作。`, '提示', {
             confirmButtonText: '确定'
-          })
+          }).catch(_=>{});
         } else {
           this.doPrint()
         }

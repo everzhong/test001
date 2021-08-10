@@ -28,7 +28,7 @@
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="费用类别" align="center" prop="xydm"  show-overflow-tooltip/>
+    <el-table-column label="费用类别" align="center" prop="fylb"  show-overflow-tooltip/>
     <el-table-column label="批次号" align="center" prop="fylb"  show-overflow-tooltip/>
     <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip/>
     <el-table-column label="机构代码" align="center" prop="jgdm" show-overflow-tooltip>

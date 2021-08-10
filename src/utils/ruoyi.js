@@ -260,3 +260,14 @@ export function formatMoney(value, num) {
     const money = valueString.split("").reverse().join("") + "." + valueFloat; //拼接上小数位
     return money
 }
+/**
+ * 
+ * @param {*} len 生成位数,默认6位
+ */
+export function bossRand(len = 6) {
+    let t = '';
+    for (let i = 0; i < len; i++) {
+        t += Math.floor(Math.random() * 10);
+    }
+    return t;
+}
