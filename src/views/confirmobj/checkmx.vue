@@ -64,9 +64,10 @@ export default {
   },
   methods:{
     /** 查询renwuthree列表 */
-    async getList() {
+    async getList(query) {
       this.loading = true
-      const params = {...this.options.query,...this.queryParams}
+      let params = {...this.options.query,...this.queryParams}
+      query && (params={...params,...query})
       try {
         const res = await listRenwuthree(params)
         this.renwuthreeList = res.rows;

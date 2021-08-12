@@ -351,7 +351,7 @@ export default {
   },
   methods: {
     /** 查询renwuone列表 */
-    getList() {
+    getList(query) {
       this.loading = true;
       if(this.dateRange && this.dateRange.length){
         this.queryParams.rwtssj = this.dateRange[0]
@@ -360,7 +360,8 @@ export default {
         this.queryParams.rwtssj = ''
         this.queryParams.rwendtime = ''
       }
-      listRenwuone({...this.queryParams,status:0}).then(response => {
+      const params =  query?{...this.queryParams,status:0,...query}:{...this.queryParams,status:0}
+      listRenwuone(params).then(response => {
         this.renwuoneList = response.rows;
         this.total = response.total;
         this.loading = false;

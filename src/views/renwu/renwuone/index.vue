@@ -517,9 +517,10 @@ export default {
   },
   methods: {
     /** 查询renwuone列表 */
-    getList() {
+    getList(query) {
       this.loading = true;
-      listRenwuone(this.queryParams).then(response => {
+      const params = query?{...this.queryParams,...query}:this.queryParams
+      listRenwuone(params).then(response => {
         this.renwuoneList = response.rows;
         this.total = response.total;
         this.loading = false;

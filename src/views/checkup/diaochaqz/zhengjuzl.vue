@@ -81,9 +81,10 @@ export default {
   },
   methods:{
     /** 查询调查取证列表 type:1*/
-    async getList() {
+    async getList(options) {
       const {rwpcid,jgdm} = this.$route.query
-      const params = {rwpcid,jgdm,...this.queryParams,type:1}
+      let params = {rwpcid,jgdm,...this.queryParams,type:1}
+      options && (params={...params,...options})
       this.loading = true;
       try {
         const res = await listDcqz(params)

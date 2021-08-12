@@ -85,5 +85,8 @@ export default  {
     }
   }
 }
+::v-deep .el-table--medium td {
+  padding:5px 0 !important;
+}
 
 </style>

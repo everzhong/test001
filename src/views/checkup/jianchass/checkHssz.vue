@@ -125,8 +125,9 @@ export default {
     console.log(this.$store)
   },
   methods:{
-    async getList(){
-      const params ={...this.queryParams,...this.queryForm}
+    async getList(query){
+      let params ={...this.queryParams,...this.queryForm}
+      query&&(params = {...params,...query})
       this.loading = true
       const res = await listRenwuthree(params)
       if(res.code===200){

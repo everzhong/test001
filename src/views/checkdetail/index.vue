@@ -644,7 +644,7 @@ export default {
             scrwid:[rwpcid,jgdm,time].join('-'),
             scstatus:1,
             sccqstatus:1,
-            scname:[rwpcid,jgmc].join('-'),
+            scname:[rwpcid,time,jgmc].join('-'),
             scsqr:userNmae
           }))
         }

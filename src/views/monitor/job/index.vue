@@ -334,9 +334,10 @@ export default {
   },
   methods: {
     /** 查询定时任务列表 */
-    getList() {
+    getList(query) {
       this.loading = true;
-      listJob(this.queryParams).then(response => {
+      let params = query?{...this.queryParams,...query}:this.queryParams
+      listJob(params).then(response => {
         this.jobList = response.rows;
         this.total = response.total;
         this.loading = false;

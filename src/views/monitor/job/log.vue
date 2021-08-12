@@ -219,9 +219,11 @@ export default {
   },
   methods: {
     /** 查询调度日志列表 */
-    getList() {
+    getList(query) {
       this.loading = true;
-      listJobLog(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      let params = this.addDateRange(this.queryParams, this.dateRange)
+      query && (params = {...params,query})
+      listJobLog(params).then(response => {
           this.jobLogList = response.rows;
           this.total = response.total;
           this.loading = false;

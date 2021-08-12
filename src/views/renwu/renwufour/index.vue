@@ -542,9 +542,10 @@ export default {
   },
   methods: {
     /** 查询renwufour列表 */
-    getList() {
+    getList(query) {
       this.loading = true;
-      listRenwufour(this.queryParams).then(response => {
+      const params = query?{...this.queryParams,query}:this.queryParams
+      listRenwufour(params).then(response => {
         this.renwufourList = response.rows;
         this.total = response.total;
         this.loading = false;

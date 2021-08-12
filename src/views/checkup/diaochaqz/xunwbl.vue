@@ -1,5 +1,5 @@
 <template>
-  <div class="jcbl">
+  <div class="jcbl" v-loading="loading">
     <section class="zhizuo-outer">
       <p class="qz-title has-bg">制作询问笔录</p>
       <div class="zhizuo-port">
@@ -58,19 +58,19 @@
           </div>
           <div class="zhizuo-item">
             <span>记录人</span>
-            <el-input size="small" v-model="zhizuo.jlry"></el-input>
+            <el-input size="small" v-model="zhizuo.upman"></el-input>
           </div>
           <div class="zhizuo-item">
             <span>调查事项</span>
-            <el-input type="textarea" :rows="2" resize="none" v-model="zhizuo.jcnr"></el-input>
+            <el-input type="textarea" :rows="2" resize="none" v-model="zhizuo.z1"></el-input>
           </div>
           <div class="zhizuo-item">
             <span>询问内容：</span>
-            <el-input type="textarea" :rows="4" resize="none" v-model="zhizuo.jcqk"></el-input>
+            <el-input type="textarea" :rows="4" resize="none" v-model="zhizuo.z2"></el-input>
           </div>
           <div style="text-align:right">
             <!-- <el-button size="mini" type="primary" plain @click="exportPdf">导出PDF</el-button> -->
-            <el-button v-loading="loading" size="mini" type="primary" @click="saveSubmit">保存</el-button>
+            <el-button size="mini" type="primary" @click="saveSubmit">保存</el-button>
           </div>
         </div>
         <div class="pre-view">
@@ -91,11 +91,11 @@
               <div style="line-height:36px;margin-left:16px;">工作单位：{{zhizuo.dwqc}}</div>
               <div style="line-height:36px;margin-left:16px;">联系电话：{{zhizuo.tel}}</div>
               <div style="line-height:36px;margin-left:16px;">身份证号：{{zhizuo.sfz}}</div>
-              <div style="line-height:36px;margin-left:16px;">记录人：{{zhizuo.jlry}}</div>
+              <div style="line-height:36px;margin-left:16px;">记录人：{{zhizuo.upman}}</div>
               <br/>
               <p style="text-indent:2em;letter-spacing:2px;margin-top:10px;margin-bottom:40px;text-align:justify;line-height: 28px;">
-                告知（宣读）：我们是上海市医疗保险监督检查所的行政执法人员{{urlQuery.dcjg?`/${urlQuery.dcjg}`:''}}，这是我们的执法证件，现在对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;">{{zhizuo.jcnr}}</span>之事进行调查。你享有以下权利：执法人员少于两人或执法证件与身份不符的，有权拒绝调查询问；同时你应承担以下义务：如实提供有关材料、回答询问，不得拒绝、阻挠调查。请你配合我们。
-              <br>询问内容：{{zhizuo.xwnr}}
+                告知（宣读）：我们是上海市医疗保险监督检查所的行政执法人员{{urlQuery.dcjg?`/${urlQuery.dcjg}`:''}}，这是我们的执法证件，现在对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;">{{zhizuo.z1}}</span>之事进行调查。你享有以下权利：执法人员少于两人或执法证件与身份不符的，有权拒绝调查询问；同时你应承担以下义务：如实提供有关材料、回答询问，不得拒绝、阻挠调查。请你配合我们。
+              <br>询问内容：{{zhizuo.z2}}
               </p>
               <br/>
               <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;">
@@ -108,22 +108,22 @@
       </div>
     </section>
     <p class="qz-title has-bg">询问笔录列表</p>
-    <el-radio-group v-model="tabsValue" size="small">
-      <el-radio-button label="online">在线制作列表</el-radio-button>
-      <el-radio-button label="upload">签字上传列表</el-radio-button>
+    <el-radio-group v-model="tabsValue" size="small" @change="radioChange">
+      <el-radio-button label="3">在线制作列表</el-radio-button>
+      <el-radio-button label="4">签字上传列表</el-radio-button>
     </el-radio-group>
     <el-radio-group size="small" class="top-right-btn">
       <fileUpload
-        v-model="wenjianurl"
         :fileSize="10"
         :isShowTip="false"
+        :hideFileList="true"
         @input="upSuccess"
         ref="fileUpload"
       >
         <el-button slot="select-btn" size="small" type="parmary" plain class="el-icon-plus">上传签字扫描件</el-button>
       </fileUpload>
     </el-radio-group>
-    <div v-show="tabsValue==='online'">
+    <div v-show="tabsValue==='3'">
     <el-table class="qztable" :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
@@ -136,7 +136,7 @@
         <el-table-column label="性别" align="center" prop="sex" :formatter="sexFormat" width="65"></el-table-column>
         <el-table-column label="工作单位" align="center" prop="dwqc" show-overflow-tooltip/>
         <el-table-column label="联系电话" align="center" prop="tel" show-overflow-tooltip/>
-        <el-table-column label="询问内容" align="center" prop="jcqk" show-overflow-tooltip/>
+        <el-table-column label="询问内容" align="center" prop="z2" show-overflow-tooltip/>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="opertation(scope.row,'editQz')">修改</el-button>
@@ -153,14 +153,15 @@
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
+        :autoScroll="false"
         @pagination="getList"
       />
     </div>
-    <div v-show="tabsValue==='upload'">
+    <div v-show="tabsValue==='4'">
       <el-table  class="qztable" :data="uploadList" border style="margin-top:10px">
         <el-table-column label="序号" type="index" align="center"  />
-          <el-table-column label="资料文件" align="center" prop="wenjianurl" :width="flexColumnWidth('wenjianurl',uploadList)"/>
-          <el-table-column label="上传人" align="center" prop="upman" />
+          <el-table-column label="资料文件" align="center" prop="wenjianurl" />
+          <el-table-column label="上传人" align="center" prop="upman" :width="flexColumnWidth('upman',uploadList)"/>
           <el-table-column label="上传时间" align="center" prop="addtime"  :width="150">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
@@ -174,9 +175,10 @@
         </el-table-column> -->
       </el-table>
       <pagination
-        :total="uploadTotal"
+        :total="total"
         :page.sync="uploadQuery.pageNum"
         :limit.sync="uploadQuery.pageSize"
+        :autoScroll="false"
         @pagination="getList"
       />
     </div>
@@ -194,6 +196,7 @@ export default {
   name:'Xunwbl',
   data(){
     return {
+      loading:false,
       wenjianurl:'',
       tableData:[],
       uploadList:[],
@@ -215,16 +218,16 @@ export default {
         lxdz:'',
         dwqc:'',
         tel:'',
-        jlry:'',
+        upman:'',
         sfz:'',
-        jcnr:'',
-        xwnr:'',
+        z1:'',
+        z2:'',
         
       },
       total:0,
       uploadTotal:0,
       urlQuery:{},
-      tabsValue:'online',
+      tabsValue:'3',
       opertationType:'add',
       printData:{}
     }
@@ -238,14 +241,15 @@ export default {
   },
   methods:{
      /** 查询调查取证列表 type=3*/
-    async getList() {
+    async getList(options) {
       const {rwpcid,jgdm} = this.urlQuery
-      const params = {rwpcid,jgdm,...this.queryParams,type:3}
+      let params = {rwpcid,jgdm,...this.queryParams,type:this.tabsValue}
+      options && (params={...params,...options})
       this.loading = true;
       try {
         const res = await listDcqz(params)
         if(res.code===200){
-          this.tableData = res.rows;
+          this.tabsValue==='3'?this.tableData = res.rows:this.uploadList = res.rows;
           this.total = res.total;
         }
       } catch (error) {
@@ -299,10 +303,10 @@ export default {
             lxdz:'',
             dwqc:'',
             tel:'',
-            jlry:'',
+            upman:'',
             sfz:'',
-            jcnr:'',
-            xwnr:'',
+            z1:'',
+            z2:'',
           }
           this.getList()
         }
@@ -343,6 +347,8 @@ export default {
         row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
       }
       this.zhizuo = {...row}
+      window.scrollTo(0,100);
+      document.getElementsByClassName('zhizuo-outer')[0].scrollTop = 0
     },
     printQz(){
 
@@ -374,9 +380,27 @@ export default {
     sexFormat(row, column) {
       return this.selectDictLabel(this.sexOptions, row.sex);
     },
-    upSuccess(){
-      
-    }
+    radioChange(){
+      this.getList()
+    },
+    upSuccess(fileUrl,file){
+      if(fileUrl) {
+        addDcqz({
+          type:4,//扫描文件资料type:4
+          rwpcid:this.$route.query.rwpcid,
+          jgdm:this.$route.query.jgdm,
+          upman:this.$store.getters.name,
+          addtime: new Date().getTime(),
+          wenjian:file.name,
+          wenjianurl:fileUrl
+        }).then(res=>{
+          if(res.code===200) {
+            this.msgSuccess('上传成功')
+            this.tabsValue==='4'&&(this.getList())
+          }
+        })
+      }
+    },
   },
   components:{
     FileUpload,

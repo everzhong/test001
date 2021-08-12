@@ -28,7 +28,7 @@
     </el-upload>
 
     <!-- 文件列表 -->
-    <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
+    <transition-group v-if="!hideFileList" class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
       <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in list">
         <el-link :href="file.url" :underline="false" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
@@ -43,7 +43,8 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-
+import axios from 'axios'
+import { Loading } from 'element-ui';
 export default {
   props: {
     // 值
@@ -71,15 +72,18 @@ export default {
     needHide:{
       type: Boolean,
       default: false
+    },
+    hideFileList:{
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      uploadFileUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
+      uploadFileUrl: axios.defaults.baseURL + "/common/upload", // 上传的图片服务器地址
+      headers: {},
       fileList: [],
+      loading:''
     };
   },
   computed: {
@@ -134,6 +138,7 @@ export default {
           return false;
         }
       }
+      this.loading = Loading.service();
       return true;
     },
     // 文件个数超出
@@ -142,12 +147,15 @@ export default {
     },
     // 上传失败
     handleUploadError(err) {
+      this.loading.close();
       this.$message.error("上传失败, 请重试");
     },
     // 上传成功回调
     handleUploadSuccess(res, file) {
       // this.$message.success("上传成功");
+      this.loading.close();
       this.$emit("input", res.url,file);
+      this.fileList = [];
     },
     // 删除文件
     handleDelete(index) {

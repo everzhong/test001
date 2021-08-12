@@ -191,7 +191,8 @@ export default {
       this.tableData = this.tableData.concat(selection)
     },
     async getList(){
-      const params ={...this.queryParams,...this.queryForm}
+      let params ={...this.queryParams,...this.queryForm}
+      query&&(params = {...params,...query})
       this.loading = true
       const res = await listRenwuthree(params)
       if(res.code===200){

@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Notification, MessageBox, Message } from 'element-ui'
-import store from '@/store'
 import { getToken, getUid } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import Qs from 'qs'
@@ -17,6 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
     urlList[2] = '8010'
     baseUrl = urlList.join(':')
 }
+axios.defaults.baseURL = baseUrl;
 const service = axios.create({
         // axios中请求配置有baseURL选项，表示请求URL公共部分
         // baseURL: process.env.VUE_APP_BASE_API,

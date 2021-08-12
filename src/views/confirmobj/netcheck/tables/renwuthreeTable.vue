@@ -2,8 +2,23 @@
   <el-table :data="tableData" border @selection-change="handleSelectionChange">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
-    <el-table-column label="疑点类型" align="center" prop="ybbf" />
-    <el-table-column label="疑点说明" align="center" prop="remark" />
+    <el-table-column label="疑点类型" align="center" prop="ydlx" width="250">
+      <template slot-scope="scope">
+        <el-select v-model="scope.row.ydlx" size="mini" @change="ydChange(scope.row)">
+          <el-option
+            v-for="item in ydlxOptions"
+            :key="item.dictValue"
+            :label="item.dictLabel"
+            :value="item.dictValue">
+          </el-option>
+      </el-select>
+      </template>
+    </el-table-column>
+    <el-table-column label="疑点说明" align="center" prop="ydsm" width="250">
+      <template slot-scope="scope">
+        <el-input v-model="scope.row.ydsm" size="mini" @blur="ydChange(scope.row)"></el-input>
+      </template>
+    </el-table-column>
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
@@ -19,10 +34,18 @@
   </el-table>
 </template>
 <script>
+import {updateRenwuthree} from '@/api/renwu/renwuthree'
 export default {
   name:'RenwuthreeTable',
   data(){
-    return {}
+    return {
+      ydlxOptions:[]
+    }
+  },
+  created(){
+    this.getDicts("renwu_ss_ydlx").then(response => {
+      this.ydlxOptions = response.data||[]
+    });
   },
   props:['tableData'],
   methods:{
@@ -35,6 +58,9 @@ export default {
     },
     checkdetail(row){
       this.$emit('checkdetail',row)
+    },
+    ydChange(row){
+      updateRenwuthree({id:row.id,ydlx:row.ydlx||'',ydsm:row.ydsm||''})
     }
   }
 }
