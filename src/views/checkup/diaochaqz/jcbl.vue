@@ -166,7 +166,7 @@
         </el-table-column> -->
       </el-table>
       <pagination
-        :total="uploadTotal"
+        :total="total"
         :page.sync="uploadQuery.pageNum"
         :limit.sync="uploadQuery.pageSize"
         :autoScroll="false"

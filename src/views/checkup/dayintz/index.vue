@@ -324,9 +324,9 @@ export default {
       //   window.localStorage.setItem('PRDATA',JSON.stringify(this.selectionData))
       // }
       window.localStorage.setItem('PRDATA',JSON.stringify(row))
+      const path =`/checkup/${isView?'viewNotice':'addNotice'}`
       this.$router.push({
-        path:'/checkup/addNotice',
-        query:{isView}
+        path:path,
       })
     },
     printFile(row){

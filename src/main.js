@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import 'babel-polyfill'
 
 import Cookies from 'js-cookie'
 
@@ -11,7 +12,6 @@ import App from './App'
 import store from './store'
 import router from './router'
 import permission from './directive/permission'
-
 import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";

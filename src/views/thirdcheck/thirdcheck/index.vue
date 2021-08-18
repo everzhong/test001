@@ -240,7 +240,7 @@ export default {
   },
   methods: {
     openUrl(row){
-      const {scrwid,scname,datastarttime,dataendtime,jgdm,id} = row
+      const {scrwid,scname,datastarttime,dataendtime,jgdm,id,jczid} = row
       setShujusc({
         id,
         scrwid,
@@ -248,7 +248,9 @@ export default {
         datastarttime,
         dataendtime,
         createBy:this.$store.getters.name,
-        jgdm
+        jgdm,
+        jczid,
+        deptId:this.$store.getters.userId
       })
       window.open(`${location.protocol}//${location.hostname}:8012/#/scenarioConfiguration`)
     },

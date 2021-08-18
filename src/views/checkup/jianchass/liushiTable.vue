@@ -82,7 +82,9 @@ export default {
       this.$refs.multipleTable.clearSelection()
     },
     tableRowClassName({row}){
-      if(row.xwrd){
+      if(row.xwrd.indexOf('未发现违规')>-1){
+        return 'xwrd-table-row-normal'
+      } else if(row.xwrd) {
         return 'xwrd-table-row'
       } else {
         return ''

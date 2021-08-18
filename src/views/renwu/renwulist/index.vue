@@ -54,6 +54,9 @@
       <el-table v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border>
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column label="接收状态" align="center" prop="jsstatus">
+          <template slot-scope="scope"><span>{{['未接收','抽取中','已抽取'][scope.row.jsstatus||0]}}</span></template>
+        </el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',renwuoneList)" />
         <el-table-column label="任务名称" align="center" prop="rwmc" :width="flexColumnWidth('rwmc',renwuoneList)"/>
         <el-table-column label="检查方式" align="center" prop="jcfs" :width="flexColumnWidth('jcfs',renwuoneList)"/>

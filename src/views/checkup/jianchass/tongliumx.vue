@@ -11,7 +11,9 @@
     <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
     <el-table-column label="就医类型" align="center" prop="jslb" />
     <el-table-column label="险种" align="center" prop="ybbf" />
-    <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
+    <el-table-column label="规则名称" align="center" :width="flexColumnWidth('gzmc',[{gzmc}])">
+      <template><span>{{gzmc}}</span></template>
+    </el-table-column>
     <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
     <el-table-column label="参保人卡号" align="center" prop="beizhu"  :width="flexColumnWidth('beizhu',tableData)"/>
     <el-table-column label="参保人姓名" align="center" prop="xm"/>
@@ -54,7 +56,7 @@ export default {
       logList:[]
     }
   },
-  props:['tableData','options'],
+  props:['tableData','gzmc'],
   methods:{
     radioChange(e){
       const selection = this.tableData.filter(item=>{
@@ -87,7 +89,9 @@ export default {
       this.$refs.multipleTable.clearSelection()
     },
     tableRowClassName({row}){
-      if(row.xwrd){
+      if(row.xwrd.indexOf('未发现违规')>-1){
+        return 'xwrd-table-row-normal'
+      } else if(row.xwrd) {
         return 'xwrd-table-row'
       } else {
         return ''

@@ -61,6 +61,9 @@ export default  {
 .xwrd-table-row {
   background-color:#FFEBEB !important;
 }
+.xwrd-table-row-normal {
+  background-color:rgb(142,234,170) !important;
+}
 #app {
   .el-menu {
     .new__title {

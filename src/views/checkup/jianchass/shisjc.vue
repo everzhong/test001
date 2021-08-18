@@ -91,7 +91,7 @@
             </el-table-column>
         </el-table>
         <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
-        <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" @radio-change="handleSelectionChange" @checkdetail="checkLog" @on-close="logShow=false"></tongliumx>
+        <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @checkdetail="checkLog" @on-close="logShow=false"></tongliumx>
       </div>
       <pagination
         style="margin-top:0;margin-bottom:25px;"
@@ -113,10 +113,10 @@
             <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
           </el-form-item>
           <el-form-item label="追款单价" prop="zkdj">
-            <el-input v-model="xwrdForm.zkdj" :disabled="isDisabled.dj"></el-input>
+            <el-input v-model="xwrdForm.zkdj" :disabled="isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl">
-            <el-input v-model="xwrdForm.wgsl" :disabled="isDisabled.sl"></el-input>
+            <el-input v-model="xwrdForm.wgsl" :disabled="isDisabled.sl" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规费用(元)" prop="wgfy" >
             <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
@@ -132,58 +132,12 @@
       <el-form ref="chaxunForm" :model="queryForm" :rules="rules" label-width="100px" size="small">
         <el-form-item label="规则分类" prop="gzfl">
           <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
-          <!-- <el-popover
-              ref="tablePopover"
-              placement="bottom"
-              width="750"
-              popper-class="sys-popup"
-              trigger="click">
-              <div style="min-height:150px;max-height:210px;overflow:auto">
-                <el-form size="small" inline>
-                  <el-form-item label="规则分类">
-                    <el-input style="width:230px" v-model="guizefl.search" clearable></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary" plain>重置 </el-button>
-                  </el-form-item>
-                </el-form>
-                <el-table :data="guizefl.data" border="" class="sys-small-table" @selection-change="handleGuizeChange">
-                  <el-table-column type="selection" width="50" align="center" />
-                  <el-table-column property="gzmc" label="分类名称" align="center" :width="flexColumnWidth('rwpcid',renwuthreeList)"></el-table-column>
-                </el-table>
-              </div>
-              <pagination
-                  style="margin-top:0;margin-bottom:30px"
-                  v-show="guizefl.total>0"
-                  :total="guizefl.total"
-                  size="small"
-                  :page.sync="guizefl.pageNum"
-                  :limit.sync="guizefl.pageSize"
-                  @pagination="getGuizList"
-                />
-              <div style="text-align:right;margin-top:10px">
-                <el-button size="mini" type="primary" @click="$refs.tablePopover.doClose()" plain>返回</el-button>
-                <el-button size="mini" type="primary" @click="selectedGuize">确定</el-button>
-              </div>
-              <el-select class="select-no-drawdown"  multiple :popper-append-to-body="false" slot="reference" v-model="guizefl.gzfl" style="width:360px">
-                <el-option v-for="item in guizefl.selection" :key="item.gzmc" :value="item.gzmc" :label="item.gzmc"></el-option>
-              </el-select>
-            </el-popover> -->
         </el-form-item>
         <el-form-item label="规则名称" prop="gzmc">
           <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
         <el-form-item label="行为认定" prop="xwrd" >
           <el-input clearable v-model="queryForm.xwrd" placeholder="请输入" style="width:360px"></el-input>
-          <!-- <el-select v-model="queryForm.xwrd" placeholder="全部" style="width:360px">
-            <el-option
-              v-for="dict in gzflOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select> -->
         </el-form-item>
         <el-form-item label="机构核实状态" prop="hszt">
           <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
@@ -423,15 +377,22 @@ export default {
       }
     },
     xwrdSubmit(){
+      const mxxmbjsfy = this.tabsValue==='foue'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
+      if(this.xwrdForm.wgfy>mxxmbjsfy){
+        this.msgError('违规费用不能大于明细项目医保结算金额')
+        return
+      }
       this.$refs['xwrdForm'].validate(async valid => {
           if (valid) {
-            const {type,xwbh,lx} = this.xwrdChecd
             let res = ''
             if(this.tabsValue==='four'){
+              const {type,xwbh,lx} = this.xwrdChecd
               res = await updateRenwufour({id:this.selectedId,...this.xwrdForm,type,xwbh,lx})
             } else if (this.tabsValue==='five') {//在第五层认定,需要同时更改第四层和第五层
-              const { rwpcid,jgdm,mxxmbm } = this.selectionList[0]
-              res = await updateRenwufive({id:this.selectedId,...this.xwrdForm,type,xwbh,lx, rwpcid,jgdm,mxxmbm})
+              const { rwpcid,jgdm,mxxmbm,fid } = this.selectionList[0]
+              const params = {id:this.selectedId,...this.xwrdForm,rwpcid,jgdm,mxxmbm,fid,xwrdr:this.$store.getters.name}
+              delete params.gzmc
+              res = await updateRenwufive(params)
             }
             if(res.code===200) {
               this.msgSuccess('操作成功')
@@ -677,7 +638,7 @@ export default {
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
-        this.xwrdForm.gzmc = gzmc
+        this.tabsValue==='four' && (this.xwrdForm.gzmc = gzmc)//第五层使用上一层带过来的规则名称
         this.xwrdForm.zkdj = mxxmdj
         this.xwrdForm.wgsl = mxxmsl
         this.xwrdForm.wgfy = mxxmje
@@ -703,14 +664,14 @@ export default {
       this.tabsValue = 'five'
       this.selectedId = ''
       this.xwrdForm = {
-        gzmc:'',
+        gzmc:row.gzmc,
         xwrd:'',
         bz:'',
         zkdj:'',
         wgsl:'',
         wgfy:''
       }
-      this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm})
+      this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm,fid:row.id})
     },
     //操作记录
     checkLog(row){
@@ -819,6 +780,13 @@ export default {
           this.download(response.msg);
           this.exportLoading = false;
         })
+    },
+    handleDjslChange(){
+      if(this.xwrdForm.zkdj!==''&&this.xwrdForm.wgsl!==''){
+        this.xwrdForm.wgfy = this.xwrdForm.zkdj*this.xwrdForm.wgsl
+      } else {
+        this.xwrdForm.wgfy = ''
+      }
     }
   }
 };

@@ -103,6 +103,18 @@ export const constantRoutes = [{
             name: 'GenEdit',
             meta: { title: '修改生成配置' }
         }]
+    },
+    {
+        path: '/checkup',
+        component: Layout,
+        hidden: true,
+        meta: { title: '实施检查' },
+        children: [{
+            path: '/checkup/viewNotice',
+            component: (resolve) => require(['@/views/checkup/dayintz/viewNotice'], resolve),
+            name: 'ViewNotice',
+            meta: { title: '查看通知' }
+        }]
     }
     // {
     //     alwaysShow: true,
