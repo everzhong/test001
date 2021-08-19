@@ -278,7 +278,8 @@ export default {
       //本地或异地
       ybd:'1',
       //上页带过来的数据
-      queryInfoFrom:{}
+      queryInfoFrom:{},
+      searchNextParams:{}
     }
   },
   created() {
@@ -308,7 +309,8 @@ export default {
       setSancha(requireParams).then(()=>{
         this.loading = false
         this.msgSuccess('操作成功')
-        this.getList()
+        console.log(this.searchNextParams);
+        this.getList(this.searchNextParams)
       }).catch(e=>{
         this.loading = false
       })
@@ -444,7 +446,8 @@ export default {
     */
     fluProject(row){
       this.$set(this,'tabsValue','four')
-      this.getList({rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc})
+      this.searchNextParams = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc}
+      this.getList(this.searchNextParams)
     },
     /** 查询renwu列表 */
     async getList(query) {
@@ -671,7 +674,8 @@ export default {
         wgsl:'',
         wgfy:''
       }
-      this.getList({gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm,fid:row.id})
+      this.searchNextParams = {gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm,fid:row.id}
+      this.getList(this.searchNextParams)
     },
     //操作记录
     checkLog(row){

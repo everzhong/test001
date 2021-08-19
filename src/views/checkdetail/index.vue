@@ -637,16 +637,19 @@ export default {
           return item.id===id;
         })
         if(selected.length){
-          const {rwpcid,jgdm,jgmc} = selected[0];
+          const {rwpcid,jgdm,jgmc,sccqstatus} = selected[0];
           const time = bossRand();
-          reqestList.push(setSancha({
+          const scParams = {
             ids:id,
             scrwid:[rwpcid,jgdm,time].join('-'),
             scstatus:1,
-            sccqstatus:1,
             scname:[rwpcid,time,jgmc].join('-'),
             scsqr:userNmae
-          }))
+          }
+          if(sccqstatus!=1) {
+            scParams.sccqstatus = 1
+          }
+          reqestList.push(setSancha(scParams))
         }
       })
       this.loading = true

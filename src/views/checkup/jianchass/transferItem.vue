@@ -190,7 +190,7 @@ export default {
     addData(selection){
       this.tableData = this.tableData.concat(selection)
     },
-    async getList(){
+    async getList(query){
       let params ={...this.queryParams,...this.queryForm}
       query&&(params = {...params,...query})
       this.loading = true

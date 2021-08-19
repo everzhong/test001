@@ -82,13 +82,13 @@ export default {
       this.$refs.multipleTable.clearSelection()
     },
     tableRowClassName({row}){
-      if(row.xwrd.indexOf('未发现违规')>-1){
-        return 'xwrd-table-row-normal'
-      } else if(row.xwrd) {
-        return 'xwrd-table-row'
+      let className = ''
+      if(row.xwrd){
+        className = row.xwrd.indexOf('未发现违规')>-1?'xwrd-table-row-normal':'xwrd-table-row';
       } else {
-        return ''
+        className = ''
       }
+      return  className    
     }
   }
 }
