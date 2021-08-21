@@ -122,7 +122,6 @@ export default {
   },
   created(){
     this.getList()
-    console.log(this.$store)
   },
   methods:{
     async getList(query){

@@ -646,7 +646,7 @@ export default {
             scname:[rwpcid,time,jgmc].join('-'),
             scsqr:userNmae
           }
-          if(sccqstatus!=1) {
+          if(sccqstatus==0) {
             scParams.sccqstatus = 1
           }
           reqestList.push(setSancha(scParams))

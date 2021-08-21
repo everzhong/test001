@@ -296,21 +296,22 @@ export default {
       //   return
       // }
       const userNmae = this.$store.getters.name
-      const {id,rwpcid,jgdm,jgmc} = this.queryInfoFrom
+      const {id,rwpcid,jgdm,jgmc,sccqstatus} = this.queryInfoFrom
       const time = bossRand();
       const requireParams = {
         ids:id,
         scrwid:[rwpcid,jgdm,time].join('-'),
         scstatus:1,
-        sccqstatus:1,
         scname:[rwpcid,time,jgmc].join('-'),
         scsqr:userNmae
+      }
+      if(sccqstatus==0){
+        requireParams.sccqstatus = 1
       }
       setSancha(requireParams).then(()=>{
         this.loading = false
         this.msgSuccess('操作成功')
-        console.log(this.searchNextParams);
-        this.getList(this.searchNextParams)
+        this.getList()
       }).catch(e=>{
         this.loading = false
       })
@@ -398,7 +399,8 @@ export default {
             }
             if(res.code===200) {
               this.msgSuccess('操作成功')
-              this.getList()
+              this.getList({...this.searchNextParams})
+              this.searchNextParams = {}
               this.selectionList.forEach(item=>{
                 this.addJcfl({
                   jglc:'行为认定',
