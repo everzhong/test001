@@ -295,53 +295,60 @@ export default {
       //   this.msgSuccess('已提交过筛查')
       //   return
       // }
-      const userNmae = this.$store.getters.name
-      const {id,rwpcid,jgdm,jgmc,sccqstatus} = this.queryInfoFrom
-      const time = bossRand();
-      const requireParams = {
-        ids:id,
-        scrwid:[rwpcid,jgdm,time].join('-'),
-        scstatus:1,
-        scname:[rwpcid,time,jgmc].join('-'),
-        scsqr:userNmae
-      }
-      if(sccqstatus==0){
-        requireParams.sccqstatus = 1
-      }
-      setSancha(requireParams).then(()=>{
-        this.loading = false
-        this.msgSuccess('操作成功')
-        this.getList()
-      }).catch(e=>{
-        this.loading = false
-      })
+      this.$confirm('是否对当前机构进行数据筛查', "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(()=> {
+          const userNmae = this.$store.getters.name
+          const {id,rwpcid,jgdm,jgmc,sccqstatus} = this.queryInfoFrom
+          const time = bossRand();
+          const requireParams = {
+            ids:id,
+            scrwid:[rwpcid,jgdm,time].join('-'),
+            scstatus:1,
+            scname:[rwpcid,time,jgmc].join('-'),
+            scsqr:userNmae
+          }
+          if(sccqstatus==0){
+            requireParams.sccqstatus = 1
+          }
+          setSancha(requireParams).then(()=>{
+            this.loading = false
+            this.msgSuccess('操作成功')
+            this.getList()
+          }).catch(e=>{
+            this.loading = false
+          })
+      }).catch(_=>{})
     },
     tableFourRadioChange(e){
       console.log(e)
     },
     //点击检查完成状态跳到4
     doSubmit() {
-      // if(!this.selectedId){
-      //   this.msgWarning('请选择一项')
-      //   return
-      // }
-      const params = {
-        ids:[this.queryInfoFrom.id],
-        status:4,//检查完成去到状态4，形成结果
-        dxqd:'检查完成',
-        qdbh:''//驳回意见字段
-      }
-      submitDxqd(params).then(res=>{
-        this.msgSuccess("操作成功")
-        this.getList()
-        this.addJcfl({
-          jglc:'检查实施完成',
-          gjxx:`检查实施完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
-          rwpcid:this.queryInfoFrom.rwpcid,
-          jgdm:this.queryInfoFrom.jgdm,
-          zhczr:this.$store.getters.name,
-        })
-      })
+      this.$confirm("请确认所有规则均已完成检查，是否提交？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(()=>{
+          const params = {
+            ids:[this.queryInfoFrom.id],
+            status:4,//检查完成去到状态4，形成结果
+            dxqd:'检查完成',
+          }
+          return submitDxqd(params);
+        }).then(()=>{
+          this.msgSuccess("操作成功")
+          this.getList()
+          this.addJcfl({
+            jglc:'检查实施完成',
+            gjxx:`检查实施完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+            rwpcid:this.queryInfoFrom.rwpcid,
+            jgdm:this.queryInfoFrom.jgdm,
+            zhczr:this.$store.getters.name,
+          })
+        }).catch(_=>{})
     },
     //返回上一层
     goBackUpLevel(){
@@ -770,7 +777,7 @@ export default {
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
+        }).catch(_=>{})
     },
     /** 导出按钮操作 */
     handleExport() {

@@ -62,7 +62,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="任务状态" prop="status">
+          <!-- <el-form-item label="任务状态" prop="status">
             <el-select v-model="query.status" placeholder="全部" clearable size="small" style="width: 180px">
               <el-option
                 v-for="dict in statusOptions"
@@ -71,7 +71,7 @@
                 :value="dict.dictValue"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
       </el-col>
       <el-col :span="2">
         <el-form-item style="margin-right:0;text-align:right">

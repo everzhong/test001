@@ -6,13 +6,13 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
         >提交网审</el-button>
-      </el-col> -->
+      </el-col>
       <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
@@ -134,6 +134,7 @@
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck,setSancha} from "@/api/renwu/renwutwo"
 import { listRenwuthreeTab } from '@/api/renwu/renwuthree'
 import { listRenwufourTab } from '@/api/renwu/renwufour'
+import { submitDxqd} from "@/api/renwu/dcqz"
 import SearchItem from '../common/searchItems'
 import RenwutwoTable from '../common/renwutwoTable'
 import RenwuthreeTable from '../common/renwuthreeTable'
@@ -241,7 +242,8 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        status:-1
       },
       // 表单参数
       form: {},
@@ -586,40 +588,33 @@ export default {
     /**
      * 实施网申
      */
-    // handleNetCheck(){
-    //   if(!this.ids.length){
-    //     this.msgError('请至少选择一项')
-    //   } else if(!this.submitParams.wsyj){
-    //     this.msgError('请选择网审意见')
-    //   } else if(this.noThirdCheckList.length){
-    //     this.$confirm('当前医药机构任务未实施第三方筛查，请确认不进行第三方筛查直接实施网审/现场检查?', "确认提交", {
-    //       confirmButtonText: "确认",
-    //       cancelButtonText: "返回",
-    //       type: "warning"
-    //     }).then(() => {
-    //       //点确认执行
-    //       this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
-    //     })
-    //   } else {
-    //     this.netCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj});
-    //   }
-    // },
-    // async netCheck(data){
-    //   const res = await submitNetCheck(data);
-    //   if(res.code===200) {
-    //     this.msgSuccess('提交成功')
-    //     this.getList()
-    //     this.selectionList.forEach(item=>{
-    //       this.addJcfl({
-    //         jglc:'提交网审',
-    //         gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
-    //         rwpcid:item.rwpcid,
-    //         jgdm:item.jgdm,
-    //         zhczr:this.$store.getters.name,
-    //       })
-    //     })
-    //   }
-    // },
+    handleNetCheck(){
+      if(!this.ids.length){
+        this.msgError('请至少选择一项')
+        return
+      }
+      submitDxqd({ids:this.ids,status:0}).then(res=>{
+        this.msgSuccess("操作成功")
+        this.getList()
+      })
+
+    },
+    async netCheck(data){
+      const res = await submitNetCheck(data);
+      if(res.code===200) {
+        this.msgSuccess('提交成功')
+        this.getList()
+        this.selectionList.forEach(item=>{
+          this.addJcfl({
+            jglc:'提交网审',
+            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+            rwpcid:item.rwpcid,
+            jgdm:item.jgdm,
+            zhczr:this.$store.getters.name,
+          })
+        })
+      }
+    },
     /**
      * 第三方筛查
      */
@@ -628,47 +623,53 @@ export default {
         this.msgError('请至少选择一项')
         return 
       }
-      const userNmae = this.$store.getters.name
-      const reqestList = []
-      //轮询发送
-      let selected = []
-      this.ids.forEach(id=>{
-        selected = this.selectionList.filter(item=>{
-          return item.id===id;
-        })
-        if(selected.length){
-          const {rwpcid,jgdm,jgmc,sccqstatus} = selected[0];
-          const time = bossRand();
-          const scParams = {
-            ids:id,
-            scrwid:[rwpcid,jgdm,time].join('-'),
-            scstatus:1,
-            scname:[rwpcid,time,jgmc].join('-'),
-            scsqr:userNmae
-          }
-          if(sccqstatus==0) {
-            scParams.sccqstatus = 1
-          }
-          reqestList.push(setSancha(scParams))
-        }
-      })
-      this.loading = true
-      Promise.all(reqestList).then(()=>{
-        this.loading = false
-        this.msgSuccess('操作成功')
-        this.getList()
-        selected.forEach(item=>{
-          this.addJcfl({
-            jglc:'第三方筛查',
-            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
-            rwpcid:item.rwpcid,
-            jgdm:item.jgdm,
-            zhczr:this.$store.getters.name,
+      this.$confirm('是否对所选机构进行数据筛查', "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(()=> {
+        const userNmae = this.$store.getters.name
+        const reqestList = []
+        //轮询发送
+        let selected = []
+        this.ids.forEach(id=>{
+          selected = this.selectionList.filter(item=>{
+            return item.id===id;
           })
+          if(selected.length){
+            const {rwpcid,jgdm,jgmc,sccqstatus} = selected[0];
+            const time = bossRand();
+            const scParams = {
+              ids:id,
+              scrwid:[rwpcid,jgdm,time].join('-'),
+              scstatus:1,
+              scname:[rwpcid,time,jgmc].join('-'),
+              scsqr:userNmae
+            }
+            if(sccqstatus==0) {
+              scParams.sccqstatus = 1
+            }
+            reqestList.push(setSancha(scParams))
+          }
         })
-      }).catch(e=>{
-        this.loading = false
-      })
+        this.loading = true
+        Promise.all(reqestList).then(()=>{
+          this.loading = false
+          this.msgSuccess('操作成功')
+          this.getList()
+          selected.forEach(item=>{
+            this.addJcfl({
+              jglc:'第三方筛查',
+              gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
+              rwpcid:item.rwpcid,
+              jgdm:item.jgdm,
+              zhczr:this.$store.getters.name,
+            })
+          })
+        }).catch(e=>{
+          this.loading = false
+        })
+      }).catch(_=>{})
     },
     /**
      * tabs切换
