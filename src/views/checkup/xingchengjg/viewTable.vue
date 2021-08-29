@@ -35,13 +35,13 @@
     <el-table-column label="行为认定" align="center" prop="xwrd" :width="flexColumnWidth('xwrd',renwufourList)"/>
     <!-- <el-table-column label="操作" align="center" :width="flexColumnWidth('jgdm',renwufourList)" width="110px">
       <template slot-scope="scope">
-        <el-button type="text" @click="checkdetail(scope.row)">同流水下明细</el-button>
+        <el-button type="text" @click="checkdetail(scope.row)">相关明细</el-button>
       </template>
     </el-table-column> -->
   </el-table>
 </template>
 <script>
-import { listRenwufour, getRenwufour, delRenwufour, addRenwufour, updateRenwufour, exportRenwufour } from "@/api/renwu/renwufour";
+import { listRenwufour } from "@/api/renwu/renwufour";
  
 export default {
   name:'ViewTable',

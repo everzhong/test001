@@ -174,47 +174,6 @@ export default {
             zkdj:item[0].zkdj
           })
         })
-        // const {zkdj} = data[0]
-        // const menzhen = {
-        //   label:"门诊",
-        //   guize:"规则筛查",
-        //   total:zkdj,
-        //   xiaoji:0
-        // }
-        // const menzhenhj = {guize:"小计",total:zkdj,xiaoji:0}
-        // const zhuyuan = {
-        //   label:"住院",
-        //   guize:"规则筛查",
-        //   total:zkdj,
-        //   xiaoji:0
-        // }
-        // const zhuyuanhj = {guize:"小计",total:zkdj,xiaoji:0}
-        // data.forEach(element => {
-        //   const {tym,bz} = element
-        //   menzhen.xiaoji += tym*1
-        //   zhuyuan.xiaoji += bz*1
-        //   menzhenhj.xiaoji += tym*1
-        //   zhuyuanhj.xiaoji += bz*1
-        //   if(element.ybbf==='职保'){
-        //     menzhen.zhibaofy = tym
-        //     zhuyuan.zhibaofy = bz
-        //     menzhenhj.zhibaofy = tym
-        //     zhuyuanhj.zhibaofy = bz
-        //   } else {
-        //     menzhen.jubaofy = tym
-        //     zhuyuan.jubaofy = bz
-        //     menzhenhj.jubaofy = tym
-        //     zhuyuanhj.jubaofy = bz
-        //   }
-        // });
-        // if(menzhen.zhibaofy*1!==0 || menzhen.jubaofy*1!==0){
-        //   list.push(menzhen);
-        //   list.push(menzhenhj);
-        // }
-        // if(zhuyuan.zhibaofy*1!==0 || zhuyuanhj.jubaofy*1!==0) {
-        //   list.push(zhuyuan);
-        //   list.push(zhuyuanhj);
-        // }
       }
       return result
     },

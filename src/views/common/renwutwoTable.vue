@@ -38,15 +38,15 @@
       </template>
     </el-table-column>
     <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
-    <!-- <el-table-column label="操作" align="center">
+    <el-table-column label="操作" align="center" v-if="showEdit">
       <template slot-scope="scope">
         <el-button
           size="mini"
           type="text"
           @click="checkdetail(scope.row)"
-        >查看明细</el-button>
+        >全明细</el-button>
       </template>
-    </el-table-column> -->
+    </el-table-column>
   </el-table>
 </template>
 <script>
@@ -55,7 +55,7 @@ export default {
   data(){
     return {}
   },
-  props:['tableData'],
+  props:['tableData','showEdit'],
   methods:{
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -65,7 +65,7 @@ export default {
       // this.multiple = !selection.length
     },
     checkdetail(row){
-      this.$emit('checkdetail',row)
+      this.$emit('check-mx',row)
     }
   }
 }

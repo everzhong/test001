@@ -157,7 +157,7 @@ export default {
         const zhuyuan = {
           label:"住院",
           guize:"规则筛查",
-          total:zkdj,
+          total:zkdj*1,
           xiaoji:0
         }
         const zhuyuanhj = {guize:"小计",total:zkdj,xiaoji:0,label:"住院"}
@@ -168,25 +168,39 @@ export default {
           menzhenhj.xiaoji += tym*1
           zhuyuanhj.xiaoji += bz*1
           if(element.ybbf==='职保'){
-            menzhen.zhibaofy = tym
-            zhuyuan.zhibaofy = bz
-            menzhenhj.zhibaofy = tym
-            zhuyuanhj.zhibaofy = bz
+            menzhen.zhibaofy = (tym*1).toFixed(2)
+            zhuyuan.zhibaofy = (bz*1).toFixed(2)
+            menzhenhj.zhibaofy = (tym*1).toFixed(2)
+            zhuyuanhj.zhibaofy = (bz*1).toFixed(2)
           } else {
-            menzhen.jubaofy = tym
-            zhuyuan.jubaofy = bz
-            menzhenhj.jubaofy = tym
-            zhuyuanhj.jubaofy = bz
+            menzhen.jubaofy = (tym*1).toFixed(2)
+            zhuyuan.jubaofy = (bz*1).toFixed(2)
+            menzhenhj.jubaofy = (tym*1).toFixed(2)
+            zhuyuanhj.jubaofy = (bz*1).toFixed(2)
           }
         });
-        if(menzhen.zhibaofy*1!==0 || menzhen.jubaofy*1!==0){
-          list.push(menzhen);
-          list.push(menzhenhj);
-        }
-        if(zhuyuan.zhibaofy*1!==0 || zhuyuanhj.jubaofy*1!==0) {
-          list.push(zhuyuan);
-          list.push(zhuyuanhj);
-        }
+        !menzhen.zhibaofy && (menzhen.zhibaofy='0.00')
+        !menzhen.jubaofy && (menzhen.jubaofy='0.00')
+        !zhuyuan.zhibaofy && (zhuyuan.zhibaofy='0.00')
+        !zhuyuan.jubaofy && (zhuyuan.jubaofy='0.00')
+        
+        !menzhenhj.zhibaofy && (menzhenhj.zhibaofy='0.00')
+        !menzhenhj.jubaofy && (menzhenhj.jubaofy='0.00')
+        !zhuyuanhj.zhibaofy && (zhuyuanhj.zhibaofy='0.00')
+        !zhuyuanhj.jubaofy && (zhuyuanhj.jubaofy='0.00')
+       
+        // if(menzhen.zhibaofy*1!==0 || menzhen.jubaofy*1!==0){
+        //   list.push(menzhen);
+        //   list.push(menzhenhj);
+        // }
+        // if(zhuyuan.zhibaofy*1!==0 || zhuyuanhj.jubaofy*1!==0) {
+        //   list.push(zhuyuan);
+        //   list.push(zhuyuanhj);
+        // }
+        list.push(menzhen)
+        list.push(menzhenhj)
+        list.push(zhuyuan)
+        list.push(zhuyuanhj)
       }
       return list
     },

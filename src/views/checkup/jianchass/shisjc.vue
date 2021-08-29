@@ -29,10 +29,13 @@
               <el-form-item label="检查组" prop="jcz">
               <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
             </el-form-item>
-            <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
-              <el-button type="primary" size="mini" @click="heshiOption.show=true">机构核实</el-button>
+            <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
+              <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
               <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
               <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+            </div>
+            <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-else>
+              <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
             </div>
       </el-form>
       <el-row :gutter="10">
@@ -46,18 +49,18 @@
         <el-col :span="1.5">
           <el-button type="primary" size="small" @click="chaxunDialog = true">查询条件</el-button>
         </el-col>
-        <el-col :span="1.5">
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli">
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
-        <el-col :span="1.5">
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli">
           <el-button type="primary" size="small" @click="handleThirdCheck" style="margin-right:50px">第三方筛查</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
+        <!-- <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
           <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='four'&&isAll">
           <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
-        </el-col>
+        </el-col> -->
         <el-col :span="1.5" v-if="tabsValue!=='three'">
           <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
@@ -65,8 +68,8 @@
           <el-radio-button label="three">规则筛查</el-radio-button>
         </el-radio-group> -->
       </el-row>
-      <div v-loading="loading">
-        <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border style="margin-top:10px">
+      <div v-loading="loading" style="margin-top:10px">
+        <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border>
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column label="序号" width="55" type="index" align="center"  />
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
@@ -90,18 +93,19 @@
               </template>
             </el-table-column>
         </el-table>
-        <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx"></liushui-table>
-        <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @checkdetail="checkLog" @on-close="logShow=false"></tongliumx>
+        <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+        <tongliumx ref="tongLiumx" v-if="tabsValue==='five'&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
+        <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <pagination
         style="margin-top:0;margin-bottom:25px;"
-        v-show="total>0 &&!logShow"
+        v-show="total>0 &&!logShow&&!qmxOptions.show"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      <div v-show="tabsValue!=='three'&&!logShow"  class="xingweirz" style="margin-top:15px;">
+      <div v-show="tabsValue!=='three'&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:15px;">
         <el-form inline :model="xwrdForm" :rules="xwRules" size="small" ref="xwrdForm" label-width="100px">
           <el-form-item label="名称" prop="gzmc">
             <el-input v-model="xwrdForm.gzmc" disabled></el-input>
@@ -158,6 +162,7 @@
     <guizeshuom :options="guizeOptions"></guizeshuom>
     <xwrd-dialog :options="xwrdDialog" @on-checked="onChecked" v-if="xwrdDialog.show"></xwrd-dialog>
     <jgheshi :options="heshiOption" v-if="heshiOption.show" @on-close="heshiOption.show=false"></jgheshi>
+    <operate-log v-if="logOption.show" :options="logOption"></operate-log>
   </div>
 </template>
 
@@ -166,14 +171,15 @@ import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenw
 import { setSancha } from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
 import { listRenwufive ,updateRenwufive} from '@/api/renwu/renwufive'
-import { submitDxqd } from "@/api/renwu/dcqz"
+import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
 import Guizeshuom from './guizeshuom.vue'
 import XwrdDialog from './xwrdDialog.vue'
 import Jgheshi from './jgheshi.vue'
-
+import operateLog from './operateLog.vue'
+import Quanmingxi from '../../common/quanmingxi.vue'
 export default {
   name: "Shisjc",
   components: {
@@ -182,9 +188,15 @@ export default {
     XwrdDialog,
     Tongliumx,
     Jgheshi,
+    operateLog,
+    Quanmingxi
   },
   data() {
     return {
+      qmxOptions:{
+        show:false,
+        query:{}
+      },
       logShow:false,//操作记录
       heshiOption:{
         show:false
@@ -279,7 +291,12 @@ export default {
       ybd:'1',
       //上页带过来的数据
       queryInfoFrom:{},
-      searchNextParams:{}
+      searchNextParams:{},
+      logOption:{
+        show:false,
+        xwrd:'',
+        type:''
+      }
     }
   },
   created() {
@@ -317,6 +334,14 @@ export default {
             this.loading = false
             this.msgSuccess('操作成功')
             this.getList()
+            this.addJcfl({
+              jglc:'数据筛查',
+              gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
+              rwpcid:rwpcid,
+              jgdm:jgdm,
+              zhczr:this.$store.getters.name,
+              sort:1
+            })
           }).catch(e=>{
             this.loading = false
           })
@@ -342,19 +367,20 @@ export default {
           this.msgSuccess("操作成功")
           this.getList()
           this.addJcfl({
-            jglc:'检查实施完成',
-            gjxx:`检查实施完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+            jglc:'检查实施',
+            gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
             rwpcid:this.queryInfoFrom.rwpcid,
             jgdm:this.queryInfoFrom.jgdm,
             zhczr:this.$store.getters.name,
+            sort:7
           })
         }).catch(_=>{})
     },
     //返回上一层
     goBackUpLevel(){
       this.selectedId = ''
+      const {gzmc} = this.xwrdForm
       this.xwrdForm = {
-        gzmc:'',
         xwrd:'',
         bz:'',
         zkdj:'',
@@ -363,10 +389,17 @@ export default {
       }
       switch(this.tabsValue) {
         case 'five':
-          this.tabsValue = 'four'
+          if(this.qmxOptions.show){
+            this.qmxOptions.show = false
+            this.xwrdForm.gzmc=gzmc
+          } else {
+            this.tabsValue = 'four'
+            this.xwrdForm.gzmc=''
+          }
           break
         case 'four':
           this.tabsValue = 'three'
+          this.xwrdForm.gzmc=''
           break
         default :
          break
@@ -409,12 +442,19 @@ export default {
               this.getList({...this.searchNextParams})
               this.searchNextParams = {}
               this.selectionList.forEach(item=>{
-                this.addJcfl({
-                  jglc:'行为认定',
-                  gjxx:`行为认定：批号为${item.rwpcid}机构代码为${item.jgdm}`,
-                  rwpcid:item.rwpcid,
+                rendingAdd({
+                  bjr: this.$store.getters.name,
+                  bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
+                  zkdj:this.xwrdForm.zkdj,
+                  wgsl:this.xwrdForm.wgsl,
+                  wgfy:this.xwrdForm.wgfy,
+                  xwrd:this.xwrdForm.xwrd,
+                  xwbh:this.xwrdChecd.xwbh,
+                  bz:this.xwrdForm.bz,
+                  rid:item.rwpcid,
                   jgdm:item.jgdm,
-                  zhczr:this.$store.getters.name,
+                  fid:this.tabsValue=='four'?item.id:item.fid,
+                  type:this.tabsValue=='four'?4:5,
                 })
               })
 
@@ -671,7 +711,7 @@ export default {
       }
 
     },
-    //同流水下明细
+    //相关明细
     tongLiushuimx(row){
       this.tabsValue = 'five'
       this.selectedId = ''
@@ -687,8 +727,20 @@ export default {
       this.getList(this.searchNextParams)
     },
     //操作记录
-    checkLog(row){
-      this.logShow = true
+    checkLog(row,type){
+      this.logOption.type = type
+      this.logOption.rwpcid = row.rwpcid
+      this.logOption.fid = row.fid
+      this.logOption.xwrd = row.xwrd
+      this.logOption.show = true
+    },
+    //全明细
+    checkMx(row){
+      this.qmxOptions.query = {
+        rwpcid:row.rwpcid,
+        jgdm:row.jgdm
+      }
+      this.qmxOptions.show = true
     },
     sum(arr){
       let s = 0

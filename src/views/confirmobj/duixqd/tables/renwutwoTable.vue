@@ -41,7 +41,7 @@
       </template>
     </el-table-column>
     <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
-    <el-table-column label="操作" align="center" width="150">
+    <!-- <el-table-column label="操作" align="center" width="150">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -54,7 +54,7 @@
           @click="checkdetail(scope.row)"
         >全明细</el-button>
       </template>
-    </el-table-column>
+    </el-table-column> -->
   </el-table>
 </template>
 <script>

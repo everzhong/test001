@@ -382,6 +382,7 @@ export default {
             rwpcid:item.rwpcid,
             jgdm:item.jgdm,
             zhczr:this.$store.getters.name,
+            sort:6
           })
         })
       });

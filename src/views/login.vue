@@ -94,7 +94,15 @@ export default {
   created() {
     // this.getCode();
     // this.getCookie();
-    const uid = this.$route.query.uid;
+    let uid = ''
+    window.onmessage = function(e){
+      if(e.data['userToken']){
+        uid = e.data['userToken']
+      }
+    }
+    if(this.$route.query.uid){
+      uid = this.$route.query.uid;
+    }
     Cookies.set("username", uid, { expires: 30 });
     this.handlerLoginapi({uid:uid});
   },

@@ -1,10 +1,13 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery"/>
+    <SearchItem @handleQuery="handleQuery" v-if="!isFromLuli"/>
     <!-- <div class="tabs-part">
       <div class="left-btn"></div>
       <div class="tabs"></div>
     </div> -->
+    <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+      <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+    </div>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
@@ -23,7 +26,7 @@
       
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two">任务列表</el-radio-button>
+          <el-radio-button label="two" v-if="!isFromLuli">任务列表</el-radio-button>
           <el-radio-button label="three">任务列表-规则列表</el-radio-button>
           <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
         </el-radio-group>
@@ -150,6 +153,7 @@ export default {
   },
   data() {
     return {
+      isFromLuli:false,//从履历查询过来
       submitParams:{
         yxjg:'',
         wsry:'',
@@ -256,6 +260,8 @@ export default {
     };
   },
   created() {
+    this.isFromLuli = this.$route.query.fromLuli
+    this.isFromLuli && (this.tabsValue='three')
     this.getList();
   },
   methods: {
@@ -595,6 +601,16 @@ export default {
       }
       submitDxqd({ids:this.ids,status:0}).then(res=>{
         this.msgSuccess("操作成功")
+        this.selectionList.forEach(item=>{
+          this.addJcfl({
+            jglc:'提交网审',
+            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+            rwpcid:item.rwpcid,
+            jgdm:item.jgdm,
+            zhczr:this.$store.getters.name,
+            sort:2
+          })
+        })
         this.getList()
       })
 
@@ -659,11 +675,12 @@ export default {
           this.getList()
           selected.forEach(item=>{
             this.addJcfl({
-              jglc:'第三方筛查',
+              jglc:'数据筛查',
               gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,
+              sort:1
             })
           })
         }).catch(e=>{

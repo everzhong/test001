@@ -38,22 +38,30 @@
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
-    <el-table :data="jcflList" style="margin-top:10px" border>
+    <el-table :data="jcflList" style="margin-top:10px" border v-loading="loading">
         <el-table-column label="序号" type="index" align="center"  width="100"/>
-        <el-table-column label="监管流程" align="center" prop="jglc"  show-overflow-tooltip/>
-        <el-table-column label="关键信息" align="center" prop="gjxx" show-overflow-tooltip />
-        <el-table-column label="最新操作人" align="center" prop="zhczr"  show-overflow-tooltip width="250"/>
+        <el-table-column label="监管流程" align="center" prop="jglc" :width="flexColumnWidth('jglc',jcflList)"/>
+        <el-table-column label="关键信息" align="center" prop="gjxx" show-overflow-tooltip/>
+        <el-table-column label="最新操作人" align="center" prop="zhczr" :width="flexColumnWidth('zhczr',jcflList)"/>
         <el-table-column label="最新操作时间" align="center" prop="zhczsj"  show-overflow-tooltip width="300"></el-table-column>
-        <!-- <el-table-column label="操作" align="center" width="150">
+        <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button
+             v-if="[1,7,8].indexOf(scope.row.sort*1)>-1||(scope.row.sort==6&&queryInfoFrom.isdayin==1)"
               size="mini"
               type="text"
               @click="doCheck(scope.row)"
             >查看详情</el-button>
           </template>
-        </el-table-column> -->
+        </el-table-column>
     </el-table>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
   </div>
 </template>
 <script>
@@ -66,7 +74,7 @@ export default {
   data() {
     return {
       // 遮罩层
-      loading: true,
+      loading: false,
       // 导出遮罩层
       exportLoading: false,
       // 选中数组
@@ -119,45 +127,32 @@ export default {
   created() {
     this.queryInfoFrom = this.$route.query
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.idOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jglcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.gjxxOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.zhczrOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.zhczsjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.bzOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgdmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
   },
   methods: {
-    /** 查询jcfl列表 */
-    getList() {
-      this.loading = true;
-      listJcfl(this.queryParams).then(response => {
-        this.jcflList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+    doCheck(row){
+      const {sort}= row
+      if(sort==1) {
+        this.$router.push({
+          path:`/renwu/checkdetail?rwpcid=${this.queryInfoFrom.rwpcid}&fromLuli=1`,
+        },()=>{})
+      } else if(sort==6){
+        window.localStorage.setItem('PRDATA',JSON.stringify([this.queryInfoFrom]))
+        this.$router.push({
+          path:'/checkup/viewNotice',
+        },()=>{})
+      } else if(sort==7){
+        this.$router.push({
+          path:'/checkup/jcss/shisjc',
+          query:{...this.queryInfoFrom,fromLuli:1}
+        },()=>{})
+      } else if(sort==8){
+        this.$router.push({
+          path:'/checkup/chubujieguo',
+          query:{...this.queryInfoFrom,fromLuli:1}
+      },()=>{})
+      }
     },
-    /** 查询renwutwo列表 */
+    /** 查询jcfl列表 */
     async getList() {
       const {rwpcid,jgdm} = this.$route.query
       const params = {...this.queryParams,rwpcid,jgdm}

@@ -60,3 +60,19 @@ export function submitDxqd(data) {
         data: data
     })
 }
+//新增行为认定记录
+export function rendingAdd(data) {
+    return request({
+        url: '/renwu/rending',
+        method: 'post',
+        data: data
+    })
+}
+//查看行为认定记录
+export function getRending(data) {
+    return request({
+        url: '/renwu/rending/list',
+        method: 'get',
+        params: data
+    })
+}

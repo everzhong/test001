@@ -15,12 +15,12 @@
       <template><span>{{gzmc}}</span></template>
     </el-table-column>
     <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
-    <el-table-column label="参保人卡号" align="center" prop="beizhu"  :width="flexColumnWidth('beizhu',tableData)"/>
+    <el-table-column label="参保人卡号" align="center" prop="kh"  :width="flexColumnWidth('kh',tableData)"/>
     <el-table-column label="参保人姓名" align="center" prop="xm"/>
     <el-table-column label="科室代码" align="center" prop="ksdm"  :width="flexColumnWidth('ksdm',tableData)"/>
     <el-table-column label="科室名称" align="center" prop="ksmc"  :width="flexColumnWidth('ksmc',tableData)"/>
-    <el-table-column label="医师代码" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)"/>
-    <el-table-column label="医师姓名" align="center" prop="mxxmsl"  :width="flexColumnWidth('mxxmsl',tableData)"/>
+    <el-table-column label="医师代码" align="center" prop="ysgh"  :width="flexColumnWidth('ysgh',tableData)"/>
+    <el-table-column label="医师姓名" align="center" prop="ysxm"  :width="flexColumnWidth('ysxm',tableData)"/>
     <el-table-column label="结算日期" align="center" prop="jsrqsj"  width="110">
        <template slot-scope="scope">
         <span>{{ parseTime(scope.row.jsrqsj, '{y}-{m}-{d}') }}</span>
@@ -36,17 +36,18 @@
         <span>{{ parseTime(scope.row.mxxmsysj, '{y}-{m}-{d} {h}:{s}:{s}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="操作" align="center" width="80px">
+    <el-table-column label="操作" align="center" width="150">
       <template slot-scope="scope">
-        <el-button type="text" @click="checkdetail(scope.row)" size="mini">操作记录</el-button>
+        <el-button type="text" @click="checkLog(scope.row)" size="mini">操作记录</el-button>
+        <el-button type="text" @click="checkMx(scope.row)" size="mini">全明细</el-button>
       </template>
     </el-table-column>
   </el-table>
-  <operate-log v-if="showLog" @on-close="closedetail" :tableData="logList"></operate-log>
+  <!-- <operate-log v-if="showLog" @on-close="closedetail" :tableData="logList"></operate-log> -->
 </div>
 </template>
 <script>
-import OperateLog from './operateLog.vue'
+// import OperateLog from './operateLog.vue'
 export default {
   name:'Tongliumx',
   data(){
@@ -71,15 +72,18 @@ export default {
       // this.single = selection.length!==1
       // this.multiple = !selection.length
     },
-    checkdetail(row){
-      this.showLog = true
-      this.logList = [row]
-      this.$emit('checkdetail',row)
+    checkLog(row){
+      // this.showLog = true
+      // this.logList = [row]
+      this.$emit('on-log',row,5)
     },
-    closedetail(){
-      this.showLog = false
-      this.$emit('on-close')
+    checkMx(row){
+      this.$emit('check-mx',row)
     },
+    // closedetail(){
+    //   this.showLog = false
+    //   this.$emit('on-close')
+    // },
     selectAll(){
       this.tableData.forEach(row => {
         this.$refs.multipleTable.toggleRowSelection(row)
@@ -99,7 +103,7 @@ export default {
     }
   },
   components:{
-    OperateLog
+    // OperateLog
   }
 }
 </script>

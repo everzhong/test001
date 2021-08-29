@@ -6,12 +6,12 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'&&mingxOptios.show">
+      <el-col :span="1.5" v-if="tabsValue==='two'&&mxShow">
         <el-button
           type="warning"
           size="small"
           plain
-          @click="mingxOptios.show=false"
+          @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
         >返回上一层</el-button>
       </el-col>
       <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
@@ -29,12 +29,12 @@
         </el-radio-group>
       </div>
     </el-row>
-    <div v-loading="loading"  v-show="!mingxOptios.show">
+    <div v-loading="loading"  v-show="!mxShow">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <RenwutwoTable v-else :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
-    <el-form v-show="!mingxOptios.show && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
+    <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
       <el-form-item label="已选机构" prop="yxjg">
         <el-input
           style="width:280px;"
@@ -69,13 +69,14 @@
       </el-form-item>
     </el-form>
     <pagination
-      v-show="total>0&&!mingxOptios.show"
+      v-show="total>0&&!mxShow"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <checkmx :options="mingxOptios" v-if="mingxOptios.show"/>
+    <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+    <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
   </div>
 </template>
 <script>
@@ -87,7 +88,7 @@ import RenwutwoTable from './tables/renwutwoTable'
 import RenwuthreeTable from './tables/renwuthreeTable'
 import RenwufourTable from './tables/renwufourTable'
 import Checkmx from '../checkmx.vue'
-
+import Quanmingxi from '../../common/quanmingxi.vue'
 export default {
   name: "Netcheck",
   components: {
@@ -95,14 +96,20 @@ export default {
     RenwutwoTable,
     RenwuthreeTable,
     RenwufourTable,
-    Checkmx
+    Checkmx,
+    Quanmingxi
   },
   data() {
     return {
-      mingxOptios:{
+      xgmxOptions:{
         show:false,
         query:{}
       },
+      qmxOptions:{
+        show:false,
+        query:{}
+      },
+      mxShow:false,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -212,12 +219,14 @@ export default {
     this.getList();
   },
   methods: {
-    checkMix(row){
-      this.mingxOptios.query = {
+    checkMix(row,key){
+      const keyw = `${key}Options`
+      this[keyw].query = {
         rwpcid:row.rwpcid,
         jgdm:row.jgdm
       }
-      this.mingxOptios.show = true
+      this[keyw].show = true
+      this.mxShow = true
     },
     /** 查询renwutwo列表 */
     async getList(query) {
@@ -507,11 +516,12 @@ export default {
             this.getList()
             this.selectionList.forEach(item=>{
               this.addJcfl({
-                jglc:'提交网审',
-                gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+                jglc:'实施网审',
+                gjxx:`实施批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
                 rwpcid:item.rwpcid,
                 jgdm:item.jgdm,
                 zhczr:this.$store.getters.name,
+                sort:3
               })
             })
           }
@@ -532,7 +542,9 @@ export default {
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
       if(val!=='two'){
-        this.mingxOptios.show=false
+        this.xgmxOptions.show=false
+        this.mxShow = false
+        this.qmxOptions.show=false
         if(this.ids.length) {
           const resql = []
           this.selectionList.forEach(item=>{

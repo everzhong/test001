@@ -13,6 +13,14 @@
           @click="handleNetCheck"
         >派发检查组</el-button>
       </el-col>
+      <el-col :span="1.5" v-if="tabsValue==='two'&&qmxOptions.show">
+        <el-button
+          type="warning"
+          size="small"
+          plain
+          @click="qmxOptions.show=false"
+        >返回上一层</el-button>
+      </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
           <el-radio-button label="two" value="two">任务列表</el-radio-button>
@@ -23,11 +31,12 @@
     </el-row>
     <div v-loading="loading">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
-      <RenwutwoTable v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
+      <RenwufourTable v-if="tabsValue==='four'" :tableData="renwufourList"/>
+      <RenwutwoTable v-if="tabsValue==='two' && !qmxOptions.show" :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange" @check-mx="checkMingx" :showEdit="true"/>
+      <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
     </div>
     <pagination
-      v-show="total>0"
+      v-show="total>0 && !qmxOptions.show"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -45,6 +54,7 @@ import RenwutwoTable from '../../common/renwutwoTable'
 import RenwuthreeTable from '../../common/renwuthreeTable'
 import RenwufourTable from '../../common/renwufourTable'
 import sendMessage from './sendMessage.vue'
+import Quanmingxi from '../../common/quanmingxi.vue'
 export default {
   name: "Renwupf",
   components: {
@@ -52,10 +62,15 @@ export default {
     RenwutwoTable,
     RenwuthreeTable,
     RenwufourTable,
-    sendMessage
+    sendMessage,
+    Quanmingxi
   },
   data() {
     return {
+      qmxOptions:{
+        show:false,
+        query:{}
+      },
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -186,6 +201,7 @@ export default {
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,
+              sort:5
             })
           })
         } else {
@@ -488,6 +504,7 @@ export default {
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
       if(val!=='two'){
+        this.qmxOptions.show=false
         if(this.ids.length) {
           const resql = []
           this.selection.forEach(item=>{
@@ -500,6 +517,13 @@ export default {
       } else {
         this.ids = []
       }
+    },
+    checkMingx(row){
+      this.qmxOptions.query = {
+        rwpcid:row.rwpcid,
+        jgdm:row.jgdm
+      }
+      this.qmxOptions.show = true
     }
   }
 };

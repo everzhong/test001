@@ -40,9 +40,10 @@
     <el-table-column label="费用类别" align="center" prop="fylb"/>
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-    <el-table-column label="操作" align="center"  width="110px">
+    <el-table-column label="操作" align="center"  width="180px">
       <template slot-scope="scope">
-        <el-button type="text" @click="checkdetail(scope.row)" size="mini">同流水下明细</el-button>
+        <el-button type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
+        <el-button type="text" @click="checkdetail(scope.row)" size="mini">相关明细</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -69,6 +70,10 @@ export default {
       // this.ids = selection.map(item => item.rwpcid)
       // this.single = selection.length!==1
       // this.multiple = !selection.length
+    },
+    //操作记录
+    operateLog(row){
+      this.$emit('on-log',row,4)
     },
     checkdetail(row){
       this.$emit('checkdetail',row)

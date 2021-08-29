@@ -66,16 +66,22 @@ service.interceptors.response.use(res => {
         // 获取错误信息
         const msg = errorCode[code] || res.data.msg || errorCode['default']
         if (code === 401) {
-            const uid = getUid()
-            location.href = `/#/login?uid=${uid}`
-                // router.push({ path: '/login', query: { uid } })
-                // MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
-                //     confirmButtonText: '重新登录',
-                //     cancelButtonText: '取消',
-                //     type: 'warning'
-                // }).then(() => {
-                //     store.dispatch('LogOut').then(() => {
-                //         location.href = '/index';
+            window.parent.postMessage({
+                'loginFailed': {
+                    'systemName': '登录',
+                    'redirectUrl': 'http:172.16.10.10:8081/#/login'
+                }
+            }, '*');
+            // const uid = getUid()
+            // location.href = `/#/login?uid=${uid}`
+            // router.push({ path: '/login', query: { uid } })
+            // MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
+            //     confirmButtonText: '重新登录',
+            //     cancelButtonText: '取消',
+            //     type: 'warning'
+            // }).then(() => {
+            //     store.dispatch('LogOut').then(() => {
+            //         location.href = '/index';
 
             //     })
             // })

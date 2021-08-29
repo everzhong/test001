@@ -21,12 +21,12 @@
         <el-button
           size="mini"
           type="text"
-          @click="checkdetail(scope.row)"
+          @click="checkdetail(scope.row,'xgmx')"
         >查看相关明细</el-button>
         <el-button
           size="mini"
           type="text"
-          @click="checkdetail(scope.row)"
+          @click="checkdetail(scope.row,'qmx')"
         >全明细</el-button>
       </template>
     </el-table-column>
@@ -47,11 +47,11 @@ export default {
       // this.single = selection.length!==1
       // this.multiple = !selection.length
     },
-    checkdetail(row){
-      this.$emit('check-mx',row)
+    checkdetail(row,key){
+      this.$emit('check-mx',row,key)
     },
     checkdetailAll(row){
-      this.$emit('check-mx',row)
+      this.$emit('check-mx',row,key)
     }
   }
 }

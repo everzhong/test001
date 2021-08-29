@@ -28,10 +28,13 @@
             <el-form-item label="检查组" prop="jcz">
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+          <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
             <el-button type="primary" size="mini" @click="handleAgree(5)">提交</el-button>
             <el-button type="primary" size="mini" @click="handleAgree(3)">回退</el-button>
             <el-button type="primary" plain icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
+          </div>
+          <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-else>
+            <el-button type="primary" icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
     <p style="font-size:12px;margin:0px 0 10px 0;color:#606626">初步结果-预览</p>
@@ -160,6 +163,7 @@ export default {
           rwpcid:this.queryInfoFrom.rwpcid,
           jgdm:this.queryInfoFrom.jgdm,
           zhczr:this.$store.getters.name,
+          sort:8
         })
       })
     },

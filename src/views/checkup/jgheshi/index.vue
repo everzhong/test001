@@ -102,13 +102,13 @@ export default {
             if(res.code===200) { 
               this.msgSuccess('机构核实成功')
               this.getList()
-              this.addJcfl({
-                jglc:'机构核实',
-                gjxx:`提交机构核实：批号为${row.rwpcid}机构代码为${row.jgdm}`,
-                rwpcid:row.rwpcid,
-                jgdm:row.jgdm,
-                zhczr:this.$store.getters.name,
-              })
+              // this.addJcfl({
+              //   jglc:'机构核实',
+              //   gjxx:`提交机构核实：批号为${row.rwpcid}机构代码为${row.jgdm}`,
+              //   rwpcid:row.rwpcid,
+              //   jgdm:row.jgdm,
+              //   zhczr:this.$store.getters.name,
+              // })
             } 
           })
         }).catch(() => {
