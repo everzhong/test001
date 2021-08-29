@@ -69,7 +69,7 @@ service.interceptors.response.use(res => {
             window.parent.postMessage({
                 'loginFailed': {
                     'systemName': '登录',
-                    'redirectUrl': 'http:172.16.10.10:8081/#/login'
+                    'redirectUrl': baseUrl + '/#/login'
                 }
             }, '*');
             // const uid = getUid()
