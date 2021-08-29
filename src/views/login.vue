@@ -57,6 +57,8 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
+import axios from 'axios'
+
 export default {
   name: "Login",
   data() {
@@ -95,16 +97,23 @@ export default {
     // this.getCode();
     // this.getCookie();
     let uid = ''
-    window.onmessage = function(e){
-      if(e.data['userToken']){
-        uid = e.data['userToken']
-      }
-    }
-    if(uid = '' && this.$route.query.uid){
+    if(window.onmessage){
+      window.onmessage = function(e){
+        if(e.data['userToken']){
+          uid = e.data['userToken']
+        }
+      } 
+    } else if( this.$route.query.uid){
       uid = this.$route.query.uid;
     }
-    Cookies.set("username", uid, { expires: 30 });
-    this.handlerLoginapi({uid:uid});
+    if(uid){
+      Cookies.set("username", uid, { expires: 30 });
+      this.handlerLoginapi({uid:uid});
+    } else {
+      this.$router.push({
+        path:'/authLogin',
+      })
+    }
   },
   methods: {
     getCode() {
@@ -130,6 +139,12 @@ export default {
       this.$store.dispatch("LoginApi", info).then(() => {
           this.$router.push({ path: this.redirect}).catch(()=>{});
         }).catch(() => {
+          window.parent.postMessage({
+            'loginFailed': {
+                'systemName': '第三方监管',
+                'redirectUrl': axios.defaults.baseURL + '/#/login'
+            }
+          }, '*');
           this.loading = false;
         });
       },

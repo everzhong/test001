@@ -66,10 +66,16 @@ service.interceptors.response.use(res => {
         // 获取错误信息
         const msg = errorCode[code] || res.data.msg || errorCode['default']
         if (code === 401) {
+            var redirectUrl = baseUrl + '/#/'
+            if (window.location.href.split('/#/')[1]) {
+                redirectUrl += window.location.href.split('/#/')[1]
+            } else {
+                redirectUrl += 'login'
+            }
             window.parent.postMessage({
                 'loginFailed': {
-                    'systemName': '登录',
-                    'redirectUrl': baseUrl + '/#/login'
+                    'systemName': '第三方监管',
+                    'redirectUrl': redirectUrl
                 }
             }, '*');
             // const uid = getUid()
