@@ -100,7 +100,7 @@ export default {
         uid = e.data['userToken']
       }
     }
-    if(this.$route.query.uid){
+    if(uid = '' && this.$route.query.uid){
       uid = this.$route.query.uid;
     }
     Cookies.set("username", uid, { expires: 30 });
