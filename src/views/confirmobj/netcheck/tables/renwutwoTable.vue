@@ -1,5 +1,6 @@
 <template>
-  <el-table :data="tableData" @selection-change="handleSelectionChange" border>
+<div :style="{minHeight:'300px',height:tableHeight}">
+  <el-table :data="tableData" @selection-change="handleSelectionChange" height="100%" border>
     <el-table-column type="selection" width="55" align="center" />
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="监管状态" align="center"><template>待网审</template></el-table-column>
@@ -31,21 +32,24 @@
       </template>
     </el-table-column>
   </el-table>
+</div>
 </template>
 <script>
 export default {
   name:'RenwutwoTable',
   data(){
-    return {}
+    return {
+      tableHeight:0
+    }
   },
   props:['tableData'],
+  mounted(){
+    this.tableHeight = document.body.offsetHeight - 50-34-118-32-70-50-40+'px';
+  },
   methods:{
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.$emit('handleSelectionChange',selection)
-      // this.ids = selection.map(item => item.rwpcid)
-      // this.single = selection.length!==1
-      // this.multiple = !selection.length
     },
     checkdetail(row,key){
       this.$emit('check-mx',row,key)

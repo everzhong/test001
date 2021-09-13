@@ -1,6 +1,7 @@
 /**项目流水号汇总 第四层数据*/
 <template>
-  <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border  style="margin-top:10px">
+<div class="liushui-table" :style="{height:tableHeight}">
+  <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"  style="margin-top:10px">
     <!-- <el-table-column type="selection" width="55" align="center"  /> -->
     <el-table-column  align="center" width="55">
       <template slot-scope="scope">
@@ -13,9 +14,22 @@
     <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
     <el-table-column label="认定行为" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',tableData)"/>
     <el-table-column label="备注" align="center" prop="beizhu"  :width="flexColumnWidth('beizhu',tableData)"/>
+    
+    <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
+    <el-table-column label="险种" align="center" prop="ybbf" />
+
+    <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
+    <el-table-column label="参保人卡号" align="center" prop="kh"  :width="flexColumnWidth('kh',tableData)"/>
+    <el-table-column label="参保人姓名" align="center" prop="xm"  :width="flexColumnWidth('xm',tableData)"/>
+    <el-table-column label="身份证号" align="center" prop="sfzh"  :width="flexColumnWidth('sfzh',tableData)"/>
+    <el-table-column label="科室代码" align="center" prop="ksbm"  :width="flexColumnWidth('ksbm',tableData)"/>
+    <el-table-column label="科室名称" align="center" prop="ksmc"  :width="flexColumnWidth('ksmc',tableData)"/>
+
+    
     <el-table-column label="明细项目编号" align="center" prop="mxxmbm"  :width="flexColumnWidth('mxxmbm',tableData)"/>
     <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  :width="flexColumnWidth('mxxmmc',tableData)"/>
     <el-table-column label="通用名" align="center" prop="tym"  :width="flexColumnWidth('tym',tableData)"/>
+    <el-table-column label="明细项目单位(次)" align="center" prop="mxxmdw"  :width="flexColumnWidth('mxxmdw',tableData)"/>
     <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
@@ -27,14 +41,28 @@
         <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="明细项目交易金额(元)" align="center" prop="mxxmjyfy"  :width="flexColumnWidth('mxxmjyfy',tableData)">
+    <el-table-column label="明细项目交易费用(元)" align="center" prop="mxxmjyfy"  :width="flexColumnWidth('mxxmjyfy',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy"  :width="flexColumnWidth('mxxmbjsfy',tableData)">
+    <el-table-column label="明细项目医保结算费用(元)" align="center" prop="mxxmbjsfy"  :width="flexColumnWidth('mxxmbjsfy',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column label="结算日期" align="center" prop="jsrq"/>
+
+    <el-table-column label="追款单价" align="center" prop="zkdj" :width="flexColumnWidth('zkdj',tableData)">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.zkdj,3)}}</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="违规数量" align="center" prop="wgsl"/>
+    <el-table-column label="违规费用(元)" align="center" prop="wgfy">
+      <template slot-scope="scope">
+        <span>{{formatMoney(scope.row.wgfy,2)}}</span>
       </template>
     </el-table-column>
     <el-table-column label="费用类别" align="center" prop="fylb"/>
@@ -43,20 +71,25 @@
     <el-table-column label="操作" align="center"  width="180px">
       <template slot-scope="scope">
         <el-button type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
-        <el-button type="text" @click="checkdetail(scope.row)" size="mini">相关明细</el-button>
+        <el-button type="text" @click="checkdetail(scope.row)" size="mini">同流水号明细</el-button>
       </template>
     </el-table-column>
   </el-table>
+</div>
 </template>
 <script>
 export default {
   name:'LiushuiTable',
   data(){
     return {
-      wsCheck:''
+      wsCheck:'',
+      tableHeight:0
     }
   },
   props:['tableData'],
+  mounted(){
+    this.tableHeight = document.body.offsetHeight - 50-34-138-32-152-40 +'px';
+  },
   methods:{
     radioChange(e){
       const selection = this.tableData.filter(item=>{
@@ -67,9 +100,6 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.$emit('handleSelectionChange',selection)
-      // this.ids = selection.map(item => item.rwpcid)
-      // this.single = selection.length!==1
-      // this.multiple = !selection.length
     },
     //操作记录
     operateLog(row){
@@ -99,6 +129,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.liushui-table {
+  min-height: 300px;
+}
 .qztable {
     &::v-deep .el-radio__label {
       display: none !important;

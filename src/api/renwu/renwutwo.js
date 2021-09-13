@@ -108,3 +108,11 @@ export function setShujusc(data) {
         noToken: true
     })
 }
+//接收数据
+export function setYd(data) {
+    return request({
+        url: '/renwu/renwutwo/setyd',
+        method: 'post',
+        data: data,
+    })
+}

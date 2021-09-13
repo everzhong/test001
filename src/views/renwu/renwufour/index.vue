@@ -209,13 +209,13 @@
     <el-table v-loading="loading" :data="renwufourList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="行为认定" align="center" prop="xwrd" :formatter="xwrdFormat" />
-      <el-table-column label="追款单价" align="center" prop="zkdj" :formatter="zkdjFormat">
+      <el-table-column label="追款单价" align="center" prop="zkdj">
         <template slot-scope="scope">
           <span>{{formatMoney(scope.row.zkdj,3)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="违规数量" align="center" prop="wgsl" :formatter="wgslFormat" />
-      <el-table-column label="违规费用" align="center" prop="wgfy" :formatter="wgfyFormat">
+      <el-table-column label="违规费用" align="center" prop="wgfy">
         <template slot-scope="scope">
           <span>{{formatMoney(scope.row.wgfy,2)}}</span>
         </template>

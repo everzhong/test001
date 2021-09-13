@@ -4,6 +4,20 @@
       :background="background"
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
+      layout="total, sizes,slot"
+      :total="total"
+      :small="small"
+      :pager-count="5"
+      v-bind="$attrs"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    >
+      <el-button :disabled="firstDisabled" @click="toFirstPage" size="mini">首页</el-button>
+    </el-pagination>
+    <el-pagination
+      :background="background"
+      :current-page.sync="currentPage"
+      :page-size.sync="pageSize"
       :layout="layout"
       :total="total"
       :small="small"
@@ -11,7 +25,9 @@
       v-bind="$attrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-    />
+    >
+     <el-button :disabled="isLastDisabled" @click="toLastPage" size="mini">尾页</el-button>
+    </el-pagination>
   </div>
 </template>
 
@@ -41,7 +57,7 @@ export default {
     },
     layout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper'
+      default: 'prev, pager, next, slot,jumper'
     },
     background: {
       type: Boolean,
@@ -60,6 +76,12 @@ export default {
       default:false
     }
   },
+  data(){
+    return {
+      totalPage: Math.ceil(this.total / this.limit),
+      firstDisabled: true
+    }
+  },
   computed: {
     currentPage: {
       get() {
@@ -76,6 +98,12 @@ export default {
       set(val) {
         this.$emit('update:limit', val)
       }
+    },
+    isLastDisabled () {
+      if(this.totalPage <= 0){
+        return true;
+      }
+      return this.currentPage == this.totalPage ? true : false;
     }
   },
   methods: {
@@ -86,10 +114,19 @@ export default {
       }
     },
     handleCurrentChange(val) {
+      this.firstDisabled = val == 1 ? true : false;
       this.$emit('pagination', { pageNum: val, pageSize: this.pageSize })
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
+    },
+    toFirstPage () {
+      this.currentPage = 1;
+      this.handleCurrentChange(1);
+    },
+    toLastPage () {
+      this.currentPage = this.totalPage;
+      this.handleCurrentChange(this.totalPage);
     }
   }
 }

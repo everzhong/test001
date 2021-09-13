@@ -106,6 +106,14 @@
      margin-bottom: 10px;
      margin-top: 5px;
      padding: 10px 20px !important;
+     display: flex;
+     justify-content: right;
+     .el-pagination__jump {
+         margin-left: 5px;
+     }
+     .el-pagination__sizes {
+         margin-right: 5px;
+     }
  }
  /* tree border */
  
@@ -117,8 +125,9 @@
  }
  
  .pagination-container .el-pagination {
-     right: 0;
-     position: absolute;
+     padding: 0;
+     //  right: 0;
+     //  position: absolute;
  }
  
  .el-table .fixed-width .el-button--mini {

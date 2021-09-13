@@ -105,7 +105,7 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      <div v-show="tabsValue!=='three'&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:15px;">
+      <div v-show="tabsValue=='four'&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:15px;">
         <el-form inline :model="xwrdForm" :rules="xwRules" size="small" ref="xwrdForm" label-width="100px">
           <el-form-item label="名称" prop="gzmc">
             <el-input v-model="xwrdForm.gzmc" disabled></el-input>

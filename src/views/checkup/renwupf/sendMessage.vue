@@ -38,20 +38,6 @@
         </el-table-column>
       </el-table>
     </div>
-      <!-- <div class="paganation">
-        <el-pagination
-          small
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[50, 100, 150, 200]"
-          :page-size="pageSize"
-          :pager-count="5"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-        </el-pagination>
-      </div> -->
     <div slot="footer" class="msg-footer flex">
       <el-button size="mini" type="primary" @click="addNewGroup">新增检查组</el-button>
       <div>

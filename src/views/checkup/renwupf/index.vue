@@ -201,6 +201,8 @@ export default {
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,
+              xydm:item.xydm,
+              jgmc:item.jgmc,
               sort:5
             })
           })

@@ -50,9 +50,24 @@
         </el-col>
       </el-row>
     </el-form>
+
+     <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          size="small"
+          @click="handleRecive"
+        >接收数据</el-button>
+      </el-col>
+    </el-row>
     <div>
-      <el-table v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border>
+      <el-table class="qztable" v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border>
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
+        <el-table-column  align="center" width="55">
+          <template slot-scope="scope">
+            <el-radio :label="scope.row.id" v-model="radioCheck" @change="radioChange"></el-radio>
+          </template>
+        </el-table-column>
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="接收状态" align="center" prop="jsstatus">
           <template slot-scope="scope"><span>{{['未接收','抽取中','已抽取'][scope.row.jsstatus||0]}}</span></template>
@@ -108,7 +123,7 @@
 
 <script>
 import { listRenwuone, getRenwuone, delRenwuone, addRenwuone, updateRenwuone, exportRenwuone } from "@/api/renwu/renwuone";
-
+import {setYd} from "@/api/renwu/renwutwo"
 export default {
   name: "Renwuone",
   components: {
@@ -202,66 +217,13 @@ export default {
         rwpcid: [
           { required: true, message: "批次号不能为空", trigger: "blur" }
         ],
-      }
+      },
+      radioCheck:'',
+      radioSelection:{}
     };
   },
   created() {
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jcfsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.datastarttimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgslOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwendtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jslbOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwmsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybbfOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.disanchaOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.cbjgOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwtssjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
-    //任务状态字典
-    // this.getDicts("sys_renwu_status").then(response => {
-    //   this.statusOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dataendtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ajlyOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.uptimeOptions = response.data;
-    // });
   },
   methods: {
     /** 查询renwuone列表 */
@@ -472,7 +434,30 @@ export default {
           this.download(response.msg);
           this.exportLoading = false;
         })
+    },
+    radioChange(id){
+      this.radioSelection = this.renwuoneList.filter(item=>{
+        return item.id == id
+      })[0]
+    },
+    //数据提交
+    handleRecive(){
+      if(this.radioCheck==''){
+        this.msgError("请选择一项");
+        return
+      }
+      setYd({
+        id:this.radioCheck,
+        rwpcid:this.radioSelection.rwpcid
+      })
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+.qztable {
+    &::v-deep .el-radio__label {
+      display: none !important;
+    }
+}
+</style>
