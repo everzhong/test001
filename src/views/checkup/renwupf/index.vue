@@ -1,42 +1,41 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery"/>
-    <!-- <div class="tabs-part">
-      <div class="left-btn"></div>
-      <div class="tabs"></div>
-    </div> -->
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'">
-        <el-button
-          type="primary"
-          size="small"
-          @click="handleNetCheck"
-        >派发检查组</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'&&qmxOptions.show">
-        <el-button
-          type="warning"
-          size="small"
-          plain
-          @click="qmxOptions.show=false"
-        >返回上一层</el-button>
-      </el-col>
-      <div class="top-right-btn">
-        <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two" value="two">任务列表</el-radio-button>
-          <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>
-          <el-radio-button label="four" value="four">规则筛查-项目汇总</el-radio-button>
-        </el-radio-group>
-      </div>
-    </el-row>
-    <div v-loading="loading">
+    <SearchItem @handleQuery="handleQuery" style="height:94px"/>
+    <div class="middle-btn">
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5" v-if="tabsValue==='two'">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleNetCheck"
+          >派发检查组</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='two'&&qmxOptions.show">
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            @click="qmxOptions.show=false"
+          >返回上一层</el-button>
+        </el-col>
+        <div class="top-right-btn">
+          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+            <el-radio-button label="two" value="two">任务列表</el-radio-button>
+            <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>
+            <el-radio-button label="four" value="four">规则筛查-项目汇总</el-radio-button>
+          </el-radio-group>
+        </div>
+      </el-row>
+    </div>
+    <div v-loading="loading" class="table-main">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-if="tabsValue==='four'" :tableData="renwufourList"/>
       <RenwutwoTable v-if="tabsValue==='two' && !qmxOptions.show" :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange" @check-mx="checkMingx" :showEdit="true"/>
       <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
     </div>
     <pagination
-      v-show="total>0 && !qmxOptions.show"
+      class="fixed-bottom"
+      v-show="!qmxOptions.show"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -505,6 +504,7 @@ export default {
      */
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
+      this.total = 0
       if(val!=='two'){
         this.qmxOptions.show=false
         if(this.ids.length) {
@@ -522,8 +522,9 @@ export default {
     },
     checkMingx(row){
       this.qmxOptions.query = {
-        rwpcid:row.rwpcid,
-        jgdm:row.jgdm
+        jgdm:row.jgdm,
+        zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
+        zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}')
       }
       this.qmxOptions.show = true
     }
@@ -531,9 +532,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.middle-btn {
+ margin-top: 5px;
+}
 .tabs-part {
   clear: both;
-  
-  
+}
+.table-main {
+  position: absolute;
+  top:160px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
 }
 </style>

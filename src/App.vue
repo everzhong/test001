@@ -14,7 +14,7 @@ export default  {
   display: table-cell !important;
 }
 .top-search {
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
   .el-form-item {
     margin-bottom: 10px;
     margin-right: 20px;
@@ -60,6 +60,9 @@ export default  {
 }
 .xwrd-table-row {
   background-color:#FFEBEB !important;
+}
+.isyd-row {
+  color:#f00 !important;
 }
 .xwrd-table-row-normal {
   background-color:rgb(142,234,170) !important;

@@ -1,5 +1,6 @@
 <template>
-  <el-table :data="tableData" border @selection-change="handleSelectionChange">
+<div :style="{minHeight:'360px',height:tableHeight}">
+  <el-table :data="tableData" border @selection-change="handleSelectionChange" height="100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
@@ -33,14 +34,20 @@
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
   </el-table>
+</div>
 </template>
 <script>
 export default {
   name:'RenwufourTable',
   data(){
-    return {}
+    return {
+      tableHeight:0
+    }
   },
   props:['tableData'],
+  mounted(){
+    this.tableHeight = document.body.offsetHeight - 50-34-118-40-70-20+'px';
+  },
   methods:{
     // 多选框选中数据
     handleSelectionChange(selection) {

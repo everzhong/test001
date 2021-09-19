@@ -1,4 +1,5 @@
 <template>
+<div style="max-height:102px;overflow:auto">
   <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
     <el-row>
       <el-col :span="22">
@@ -81,6 +82,7 @@
       </el-col>
     </el-row>
   </el-form>
+</div>
 </template>
 <script>
 export default {

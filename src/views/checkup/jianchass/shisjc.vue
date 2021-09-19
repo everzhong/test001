@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <section v-show="!heshiOption.show">
-      <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
+    <section v-show="!heshiOption.show" >
+      <el-form style="height:80px;overflow:auto;margin-bottom:20px" size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
             <el-form-item label="案件来源" prop="ajly">
               <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
             </el-form-item>
@@ -68,10 +68,10 @@
           <el-radio-button label="three">规则筛查</el-radio-button>
         </el-radio-group> -->
       </el-row>
-      <div v-loading="loading" style="margin-top:10px">
-        <el-table v-if="tabsValue==='three'" class="qztable" :data="renwuthreeList" border>
+      <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'">
+        <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable">
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
-            <el-table-column label="序号" width="55" type="index" align="center"  />
+            <el-table-column label="序号" width="55" type="index" align="center"/>
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
             <el-table-column label="案件来源"  prop="ajly"  align="center" :width="flexColumnWidth('ajly',renwuthreeList)"/>
             <el-table-column label="违规数量" align="center" prop="wgsl"/>
@@ -81,11 +81,11 @@
               </template>
             </el-table-column>
             <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
-            <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',renwuthreeList)"/>
+            <el-table-column label="规则名称" align="center" prop="gzmc" width="350" show-overflow-tooltip/>
             <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
             <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
             <el-table-column label="医院核实结果" align="center" prop="yyhsjg" :width="flexColumnWidth('yyhsjg',renwuthreeList)"/>
-            <el-table-column label="操作" align="center" width="110">
+            <el-table-column label="操作" align="center" width="160">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="fluProject(scope.row)">
                   流水号项目汇总
@@ -93,12 +93,14 @@
               </template>
             </el-table-column>
         </el-table>
-        <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
         <tongliumx ref="tongLiumx" v-if="tabsValue==='five'&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
+      <div v-loading="loading" v-else>
+        <liushui-table ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+      </div>
       <pagination
-        style="margin-top:0;margin-bottom:25px;"
+        class="fixed-bottom"
         v-show="total>0 &&!logShow&&!qmxOptions.show"
         :total="total"
         :page.sync="queryParams.pageNum"
@@ -170,7 +172,8 @@
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
 import { setSancha } from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
-import { listRenwufive ,updateRenwufive} from '@/api/renwu/renwufive'
+import { updateRenwufive} from '@/api/renwu/renwufive'
+import { getTLS } from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
 import LiushuiTable from './liushiTable.vue'
@@ -519,7 +522,7 @@ export default {
             res = await listRenwufour(params)
             break;
           case 'five':
-            res = await listRenwufive(params)
+            res = await getTLS({...this.queryParams,...query})
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
@@ -528,6 +531,7 @@ export default {
         }
         if(res.code===200){
           this[`renwu${this.tabsValue}List`] = res.rows;
+          // this[`renwu${this.tabsValue}List`] = [{ajly:1111}];
           this.total = res.total;
           if(this.chaxunDialog){
             this.$refs['chaxunForm'].resetFields()
@@ -711,7 +715,7 @@ export default {
       }
 
     },
-    //相关明细
+    //同流水明细
     tongLiushuimx(row){
       this.tabsValue = 'five'
       this.selectedId = ''
@@ -723,8 +727,9 @@ export default {
         wgsl:'',
         wgfy:''
       }
-      this.searchNextParams = {gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm,fid:row.id}
-      this.getList(this.searchNextParams)
+      // this.searchNextParams = {gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm,fid:row.id}
+      console.log(111)
+      this.getList({lsh:row.lsh||''})
     },
     //操作记录
     checkLog(row,type){
@@ -856,3 +861,17 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.table-main {
+  position: absolute;
+  top:152px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
+}
+</style>

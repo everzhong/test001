@@ -3,6 +3,7 @@ import { Notification, MessageBox, Message } from 'element-ui'
 import { getToken, getUid } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import Qs from 'qs'
+// axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 axios.defaults.paramsSerializer = (params) => {
         return Qs.stringify(params, { arrayFormat: 'brackets' });
@@ -22,7 +23,7 @@ const service = axios.create({
         // baseURL: process.env.VUE_APP_BASE_API,
         baseURL: baseUrl,
         // 超时
-        timeout: 10000
+        timeout: 90000
     })
     // request拦截器
 service.interceptors.request.use(config => {
@@ -30,6 +31,10 @@ service.interceptors.request.use(config => {
     const isToken = (config.headers || {}).isToken === false
     if (getToken() && !isToken && !config.noToken) {
         config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    }
+    console.log(config.contentType)
+    if (config.contentType) {
+        config.headers['ContentType'] = config.contentType
     }
     // get请求映射params参数
     if (config.method === 'get' && config.params) {

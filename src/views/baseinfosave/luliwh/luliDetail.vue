@@ -1,62 +1,115 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true">
-           <el-form-item label="批次号" prop="rwpcid">
-            <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-          </el-form-item>
-          <el-form-item label="案件来源" prop="ajly">
-            <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
-          </el-form-item>
-          <el-form-item label="险种" prop="ybbf">
-            <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
-          </el-form-item>
-          <el-form-item label="就医类型" prop="jslb">
-            <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
-          </el-form-item>
-          <el-form-item label="数据开始日期" prop="datastarttime">
-            <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-          </el-form-item>
-          <el-form-item label="数据结束日期" prop="dataendtime">
-            <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-          </el-form-item>
-          <el-form-item label="机构代码" prop="jgmc">
-            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-          </el-form-item>
-          <el-form-item label="机构名称" prop="jgmc">
-            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-          </el-form-item>
-            <el-form-item label="机构等级" prop="jgdj">
-            <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
-          </el-form-item>
-            <el-form-item label="行政区" prop="xzq">
-            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
-          </el-form-item>
-          <el-form-item label="监管阶段" prop="jgjd">
-            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
-          </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
-            <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-          </div>
+    <el-form
+      size="small"
+      label-width="100px"
+      class="top-search"
+      ref="queryForm"
+      :inline="true"
+    >
+      <el-form-item label="批次号" prop="rwpcid">
+        <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
+      </el-form-item>
+      <el-form-item label="案件来源" prop="ajly">
+        <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
+      </el-form-item>
+      <el-form-item label="险种" prop="ybbf">
+        <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
+      </el-form-item>
+      <el-form-item label="就医类型" prop="jslb">
+        <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
+      </el-form-item>
+      <el-form-item label="数据开始日期" prop="datastarttime">
+        <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
+      </el-form-item>
+      <el-form-item label="数据结束日期" prop="dataendtime">
+        <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
+      </el-form-item>
+      <el-form-item label="机构代码" prop="jgmc">
+        <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+      </el-form-item>
+      <el-form-item label="机构名称" prop="jgmc">
+        <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+      </el-form-item>
+      <el-form-item label="机构等级" prop="jgdj">
+        <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
+      </el-form-item>
+      <el-form-item label="行政区" prop="xzq">
+        <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+      </el-form-item>
+      <el-form-item label="监管阶段" prop="jgjd">
+        <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+      </el-form-item>
+      <div
+        style="
+          position: absolute;
+          right: 20px;
+          top: -31px;
+          background-color: #fff;
+        "
+      >
+        <el-button
+          type="primary"
+          icon="el-icon-back"
+          size="mini"
+          @click="$router.back(-1)"
+          >返回</el-button
+        >
+      </div>
     </el-form>
-    <el-table :data="jcflList" style="margin-top:10px" border v-loading="loading">
-        <el-table-column label="序号" type="index" align="center"  width="100"/>
-        <el-table-column label="监管流程" align="center" prop="jglc" :width="flexColumnWidth('jglc',jcflList)"/>
-        <el-table-column label="关键信息" align="center" prop="gjxx" show-overflow-tooltip/>
-        <el-table-column label="最新操作人" align="center" prop="zhczr" :width="flexColumnWidth('zhczr',jcflList)"/>
-        <el-table-column label="最新操作时间" align="center" prop="zhczsj"  show-overflow-tooltip width="300"></el-table-column>
+    <div class="table-main">
+      <el-table
+        :data="jcflList"
+        style="width: 100%"
+        height="100%"
+        border
+        v-loading="loading"
+      >
+        <el-table-column label="序号" type="index" align="center" width="100" />
+        <el-table-column
+          label="监管流程"
+          align="center"
+          prop="jglc"
+          :width="flexColumnWidth('jglc', jcflList)"
+        />
+        <el-table-column
+          label="关键信息"
+          align="center"
+          prop="gjxx"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="最新操作人"
+          align="center"
+          prop="zhczr"
+          :width="flexColumnWidth('zhczr', jcflList)"
+        />
+        <el-table-column
+          label="最新操作时间"
+          align="center"
+          prop="zhczsj"
+          show-overflow-tooltip
+          width="300"
+        ></el-table-column>
         <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button
-             v-if="[1,7,8].indexOf(scope.row.sort*1)>-1||(scope.row.sort==6&&queryInfoFrom.isdayin==1)"
+              v-if="
+                [1, 7, 8].indexOf(scope.row.sort * 1) > -1 ||
+                (scope.row.sort == 6 && queryInfoFrom.isdayin == 1)
+              "
               size="mini"
               type="text"
               @click="doCheck(scope.row)"
-            >查看详情</el-button>
+              >查看详情</el-button
+            >
           </template>
         </el-table-column>
-    </el-table>
+      </el-table>
+    </div>
     <pagination
-      v-show="total>0"
+      class="fixed-bottom"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -65,12 +118,18 @@
   </div>
 </template>
 <script>
-import { listJcfl, getJcfl, delJcfl, addJcfl, updateJcfl, exportJcfl } from "@/api/renwu/jcfl";
+import {
+  listJcfl,
+  getJcfl,
+  delJcfl,
+  addJcfl,
+  updateJcfl,
+  exportJcfl,
+} from "@/api/renwu/jcfl";
 
 export default {
   name: "Lulidetail",
-  components: {
-  },
+  components: {},
   data() {
     return {
       // 遮罩层
@@ -119,54 +178,68 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      },
-      queryInfoFrom:{}
+      rules: {},
+      queryInfoFrom: {},
     };
   },
   created() {
-    this.queryInfoFrom = this.$route.query
+    this.queryInfoFrom = this.$route.query;
     this.getList();
   },
   methods: {
-    doCheck(row){
-      const {sort}= row
-      if(sort==1) {
-        this.$router.push({
-          path:`/renwu/checkdetail?rwpcid=${this.queryInfoFrom.rwpcid}&fromLuli=1`,
-        },()=>{})
-      } else if(sort==6){
-        window.localStorage.setItem('PRDATA',JSON.stringify([this.queryInfoFrom]))
-        this.$router.push({
-          path:'/checkup/viewNotice',
-        },()=>{})
-      } else if(sort==7){
-        this.$router.push({
-          path:'/checkup/jcss/shisjc',
-          query:{...this.queryInfoFrom,fromLuli:1}
-        },()=>{})
-      } else if(sort==8){
-        this.$router.push({
-          path:'/checkup/chubujieguo',
-          query:{...this.queryInfoFrom,fromLuli:1}
-      },()=>{})
+    doCheck(row) {
+      const { sort } = row;
+      if (sort == 1) {
+        this.$router.push(
+          {
+            path: `/renwu/checkdetail?rwpcid=${this.queryInfoFrom.rwpcid}&fromLuli=1`,
+          },
+          () => {}
+        );
+      } else if (sort == 6) {
+        window.localStorage.setItem(
+          "PRDATA",
+          JSON.stringify([this.queryInfoFrom])
+        );
+        this.$router.push(
+          {
+            path: "/checkup/viewNotice",
+          },
+          () => {}
+        );
+      } else if (sort == 7) {
+        this.$router.push(
+          {
+            path: "/checkup/jcss/shisjc",
+            query: { ...this.queryInfoFrom, fromLuli: 1 },
+          },
+          () => {}
+        );
+      } else if (sort == 8) {
+        this.$router.push(
+          {
+            path: "/checkup/chubujieguo",
+            query: { ...this.queryInfoFrom, fromLuli: 1 },
+          },
+          () => {}
+        );
       }
     },
     /** 查询jcfl列表 */
     async getList() {
-      const {rwpcid,jgdm} = this.$route.query
-      const params = {...this.queryParams,rwpcid,jgdm}
-      this.loading = true
+      const { rwpcid, jgdm } = this.$route.query;
+      const params = { ...this.queryParams, rwpcid, jgdm };
+      this.loading = true;
       try {
-        const res = await listJcfl(params)
-        if(res.code===200){
+        const res = await listJcfl(params);
+        if (res.code === 200) {
           this.jcflList = res.rows;
           this.total = res.total;
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      this.loading = false
+      this.loading = false;
     },
     // ID字典翻译
     idFormat(row, column) {
@@ -220,7 +293,7 @@ export default {
         bz: null,
         rwpcid: null,
         jgdm: null,
-        addtime: null
+        addtime: null,
       };
       this.resetForm("form");
     },
@@ -236,9 +309,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+      this.ids = selection.map((item) => item.id);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -249,8 +322,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids
-      getJcfl(id).then(response => {
+      const id = row.id || this.ids;
+      getJcfl(id).then((response) => {
         this.form = response.data;
         this.open = true;
         this.title = "修改jcfl";
@@ -258,16 +331,16 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != null) {
-            updateJcfl(this.form).then(response => {
+            updateJcfl(this.form).then((response) => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addJcfl(this.form).then(response => {
+            addJcfl(this.form).then((response) => {
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -280,31 +353,49 @@ export default {
     handleDelete(row) {
       const ids = row.id || this.ids;
       this.$confirm('是否确认删除jcfl编号为"' + ids + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(function () {
           return delJcfl(ids);
-        }).then(() => {
+        })
+        .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        })
+        });
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有jcfl数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
+      this.$confirm("是否确认导出所有jcfl数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
           this.exportLoading = true;
           return exportJcfl(queryParams);
-        }).then(response => {
+        })
+        .then((response) => {
           this.download(response.msg);
           this.exportLoading = false;
-        })
-    }
-  }
+        });
+    },
+  },
 };
 </script>
+<style lang="scss" scoped>
+.table-main {
+  position: absolute;
+  top: 155px;
+  bottom: 70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom: 30px;
+  right: 0px;
+}
+</style>

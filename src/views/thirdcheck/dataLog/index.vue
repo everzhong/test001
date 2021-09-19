@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="90px">
+    <el-form style="max-height:138px;overflow:auto" class="top-search" :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="90px">
       <el-row>
         <el-col :span="22">
           <el-form-item label="创建时间" prop="createDate">
@@ -131,122 +131,76 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row :gutter="10" class="mb8" v-if="false">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['renwu:log:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['renwu:log:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['renwu:log:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-		  :loading="exportLoading"
-          @click="handleExport"
-          v-hasPermi="['renwu:log:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table v-loading="loading" :data="logList" @selection-change="handleSelectionChange" border>
-      <el-table-column label="序号" type="index" width="55" align="center"/>
-      <el-table-column label="创建时间" align="center" prop="createDate" width="180px">
-         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="开始时间" align="center" prop="stime" width="150">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.stime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="任务层ID" align="center" prop="jobId" :width="flexColumnWidth('jobId',logList)"/>
-      <el-table-column label="日志路径" align="center" prop="logFilePath" :width="flexColumnWidth('logFilePath',logList)"/>
-      <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="抽取分类" align="center" prop="type" width="150px">
-        <template slot-scope="scope">
-          <span>{{scope.row.type==1?'住院明细抽取':scope.row.type==2?'住院主单抽取':scope.row.type==3?'门诊明细抽取':scope.row.type==4?'门诊主单抽取':scope.row.type==5?'据ID抽取明细':''}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="成功条数" align="center" prop="succ">
-        <template slot-scope="scope">
-          <span>{{scope.row.succ?(scope.row.succ.replace(/[^0-9]/ig,"")):''}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',logList)"/>
-      <el-table-column label="年月份" align="center" prop="ny" show-overflow-tooltip width="300px"/>
-      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <span>{{scope.row.status==1?'正常':scope.row.status==2?'禁用':''}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="总耗时" align="center" prop="ztime"  />
-      <el-table-column label="结束时间" align="center" prop="etime" width="150">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.etime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="失败条数" align="center" prop="fucc" />
-      <el-table-column label="抽取状态" align="center" prop="ends" width="150px">
-        <template slot-scope="scope">
-          <span>{{['未开始抽取数据','抽取中','成功抽取数据','抽取失败'][scope.row.ends*1]}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['renwu:log:edit']"
-          >修改</el-button>
-        
-        </template>
-      </el-table-column>
-    </el-table>
-    
+    <div class="table-main" v-loading="loading" >
+      <el-table :data="logList" @selection-change="handleSelectionChange" border height="100%" style="width:100%">
+        <el-table-column label="序号" type="index" width="55" align="center"/>
+        <el-table-column label="创建时间" align="center" prop="createDate" width="180px">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="开始时间" align="center" prop="stime" width="150">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.stime, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="任务层ID" align="center" prop="jobId" :width="flexColumnWidth('jobId',logList)"/>
+        <el-table-column label="日志路径" align="center" prop="logFilePath" :width="flexColumnWidth('logFilePath',logList)"/>
+        <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="抽取分类" align="center" prop="type" width="150px">
+          <template slot-scope="scope">
+            <span>{{scope.row.type==1?'住院明细抽取':scope.row.type==2?'住院主单抽取':scope.row.type==3?'门诊明细抽取':scope.row.type==4?'门诊主单抽取':scope.row.type==5?'据ID抽取明细':''}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="成功条数" align="center" prop="succ">
+          <template slot-scope="scope">
+            <span>{{scope.row.succ?(scope.row.succ.replace(/[^0-9]/ig,"")):''}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',logList)"/>
+        <el-table-column label="年月份" align="center" prop="ny" show-overflow-tooltip width="300px"/>
+        <el-table-column label="状态" align="center" prop="status">
+          <template slot-scope="scope">
+            <span>{{scope.row.status==1?'正常':scope.row.status==2?'禁用':''}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总耗时" align="center" prop="ztime"  />
+        <el-table-column label="结束时间" align="center" prop="etime" width="150">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.etime, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="失败条数" align="center" prop="fucc" />
+        <el-table-column label="抽取状态" align="center" prop="ends" width="150px">
+          <template slot-scope="scope">
+            <span>{{['未开始抽取数据','抽取中','成功抽取数据','抽取失败'][scope.row.ends*1]}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['renwu:log:edit']"
+            >修改</el-button>
+          
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <pagination
+      class="fixed-bottom"
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
     <!-- 添加或修改数据抽取日志对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -628,3 +582,17 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.table-main {
+  position: absolute;
+  top:162px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
+}
+</style>

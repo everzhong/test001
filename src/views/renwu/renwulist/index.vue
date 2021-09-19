@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form class="top-search" :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px" style="height:94px;overflow:auto;margin-bottom:5px">
       <el-row>
         <el-col :span="22">
           <el-form-item label="批次号" prop="rwpicd">
@@ -9,7 +9,7 @@
               placeholder="请输入"
               clearable
               size="small"
-              style="width: 240px"
+              style="width: 200px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
@@ -19,15 +19,21 @@
               placeholder="请输入，支持模糊搜索"
               clearable
               size="small"
-              style="width: 240px"
+              style="width: 200px"
               @keyup.enter.native="handleQuery"
             />
+          </el-form-item>
+          <el-form-item label="委托机构" prop="wtjg">
+            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 200px"></el-input>
+          </el-form-item>
+          <el-form-item label="承办机构" prop="cbjg">
+            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 200px"></el-input>
           </el-form-item>
           <el-form-item label="任务推送日期" label-width="98px">
             <el-date-picker
               v-model="dateRange"
               size="small"
-              style="width: 240px"
+              style="width: 220px"
               value-format="yyyy-MM-dd"
               type="daterange"
               range-separator="-"
@@ -35,23 +41,16 @@
               end-placeholder="结束日期"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item label="委托机构" prop="wtjg">
-            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 240px"></el-input>
-          </el-form-item>
-          <el-form-item label="承办机构" prop="cbjg">
-            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 240px"></el-input>
-          </el-form-item>
         </el-col>
         <el-col :span="2">
           <el-form-item style="margin-right:0;text-align:right">
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            <el-button style="margin-right:10px;" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+            <el-button style="margin-right:10px;" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-
-     <el-row :gutter="10" class="mb8">
+     <el-row :gutter="10">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -60,8 +59,8 @@
         >接收数据</el-button>
       </el-col>
     </el-row>
-    <div>
-      <el-table class="qztable" v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border>
+    <div class="table-main">
+      <el-table class="qztable" v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
           <template slot-scope="scope">
@@ -112,6 +111,7 @@
       </el-table>
     </div>
     <pagination
+      class="fixed-bottom"
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
@@ -459,5 +459,17 @@ export default {
     &::v-deep .el-radio__label {
       display: none !important;
     }
+}
+.table-main {
+  position: absolute;
+  top:160px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
 }
 </style>

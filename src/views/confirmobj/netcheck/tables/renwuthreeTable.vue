@@ -1,5 +1,6 @@
 <template>
-  <el-table :data="tableData" border @selection-change="handleSelectionChange">
+<div :style="{minHeight:'360px',height:tableHeight}">
+  <el-table :data="tableData" border @selection-change="handleSelectionChange" height="100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
     <el-table-column label="疑点类型" align="center" prop="ydlx" width="250">
@@ -32,6 +33,7 @@
     <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
   </el-table>
+</div>
 </template>
 <script>
 import {updateRenwuthree} from '@/api/renwu/renwuthree'
@@ -39,13 +41,17 @@ export default {
   name:'RenwuthreeTable',
   data(){
     return {
-      ydlxOptions:[]
+      ydlxOptions:[],
+      tableHeight:0
     }
   },
   created(){
     this.getDicts("renwu_ss_ydlx").then(response => {
       this.ydlxOptions = response.data||[]
     });
+  },
+  mounted(){
+    this.tableHeight = document.body.offsetHeight - 50-34-118-40-70-20+'px';
   },
   props:['tableData'],
   methods:{

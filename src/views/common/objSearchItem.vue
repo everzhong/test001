@@ -1,4 +1,5 @@
 <template>
+<div style="max-height:110px;overflow:auto">
   <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px" style="display:table">
       <div>
         <el-form-item label="批次号" prop="rwpcid">
@@ -107,7 +108,8 @@
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
         <el-button style="margin-left:0" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
-    </el-form>
+  </el-form>
+</div>
 </template>
 <script>
 export default {

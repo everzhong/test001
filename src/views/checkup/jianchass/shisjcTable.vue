@@ -3,7 +3,7 @@
   <el-table :data="tableData" border  style="margin-top:10px">
     <el-table-column label="机构名称" align="center" prop="jgmc"  show-overflow-tooltip/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  show-overflow-tooltip/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  show-overflow-tooltip/>
+    <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
     <el-table-column label="明细项目编号" align="center" prop="mxxmbm"  show-overflow-tooltip/>
     <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  show-overflow-tooltip/>
     <el-table-column label="通用名" align="center" prop="tym"  show-overflow-tooltip/>

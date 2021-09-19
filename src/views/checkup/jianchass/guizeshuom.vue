@@ -22,7 +22,7 @@
               <el-radio :label="scope.row.id" v-model="roleCheck"></el-radio>
             </template>
           </el-table-column>
-          <el-table-column label="规则名称" prop="jczbh" align="center"></el-table-column>
+          <el-table-column label="规则名称" prop="gzmc" align="center"></el-table-column>
           <el-table-column label="规则描述" prop="jczmc" align="center"></el-table-column>
         </el-table>
       </div>

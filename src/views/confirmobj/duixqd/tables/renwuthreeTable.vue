@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" border @selection-change="handleSelectionChange">
+  <el-table :data="tableData" border @selection-change="handleSelectionChange" style="width:100%" height="100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
@@ -7,7 +7,7 @@
     <el-table-column label="疑点说明" align="center" prop="remark" />
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
+    <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
     <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
     <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
     <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">

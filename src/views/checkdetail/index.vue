@@ -1,14 +1,10 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" v-if="!isFromLuli"/>
-    <!-- <div class="tabs-part">
-      <div class="left-btn"></div>
-      <div class="tabs"></div>
-    </div> -->
+    <SearchItem @handleQuery="handleQuery" v-if="!isFromLuli" style="margin-bottom:6px"/>
     <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
     </div>
-    <el-row :gutter="10" class="mb8">
+    <el-row :gutter="10">
       <el-col :span="1.5" v-if="tabsValue==='two'">
         <el-button
           type="primary"
@@ -33,11 +29,10 @@
       </div>
       <!-- <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar> -->
     </el-row>
-    <div v-loading="loading">
+    <div v-loading="loading" :class="[isFromLuli?'table-main1':'table-main']">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
-      <!-- <RenwutwoTable :selectable="selectableFun" v-else :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/> -->
-      <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border>
+      <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border style="width:100%" height="100%">
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column label="序号" type="index" align="center"/>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
@@ -81,7 +76,6 @@
         </template>
       </el-table-column>
       <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
-
           <!-- <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button
@@ -91,7 +85,7 @@
               >查看明细</el-button>
             </template>
           </el-table-column> -->
-        </el-table>
+      </el-table>
     </div>
     <!-- <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
       <el-form-item label="已选机构" prop="yxjg">
@@ -125,7 +119,7 @@
       </el-form-item>
     </el-form> -->
     <pagination
-      v-show="total>0"
+      class="fixed-bottom"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -139,7 +133,6 @@ import { listRenwuthreeTab } from '@/api/renwu/renwuthree'
 import { listRenwufourTab } from '@/api/renwu/renwufour'
 import { submitDxqd} from "@/api/renwu/dcqz"
 import SearchItem from '../common/searchItems'
-import RenwutwoTable from '../common/renwutwoTable'
 import RenwuthreeTable from '../common/renwuthreeTable'
 import RenwufourTable from '../common/renwufourTable'
 import {bossRand} from '@/utils/ruoyi'
@@ -147,12 +140,12 @@ export default {
   name: "Renwutwo",
   components: {
     SearchItem,
-    RenwutwoTable,
     RenwuthreeTable,
     RenwufourTable
   },
   data() {
     return {
+      tableHeight:0,
       isFromLuli:false,//从履历查询过来
       submitParams:{
         yxjg:'',
@@ -264,12 +257,16 @@ export default {
     this.isFromLuli && (this.tabsValue='three')
     this.getList();
   },
+  mounted(){
+    this.tableHeight = document.body.offsetHeight - 50-34-118-40-75+'px';
+  },
   methods: {
     /** 查询renwutwo列表 */
     async getList(options) {
       const params = options?{...this.queryParams,...options}:this.queryParams
       const { query } = this.$route
       params.rwpcid = query?.rwpcid
+      this.loading = true
       try {
         let  res = null
         switch(this.tabsValue) {
@@ -714,7 +711,22 @@ export default {
 <style lang="scss" scoped>
 .tabs-part {
   clear: both;
-  
-  
+}
+.table-main,.table-main1{
+  position: absolute;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.table-main {
+  top:160px;
+}
+.table-main1 {
+  top:60px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
 }
 </style>

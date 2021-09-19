@@ -1,15 +1,13 @@
 <template>
-  <div>
-   <el-table
+<div style="height:100%">
+  <div style="height:100%">
+    <el-table
       v-loading="loading"
       :data="tableData"
       border
+      height="100%"
+      style="width:100%"
     >
-      <!-- <el-table-column label="序号" type="index" align="center">
-        <template slot-scope="scope">
-          <span>{{(pageNum - 1) * pageSize + scope.$index + 1}}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column label="序号" type="index" align="center"  />
       <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
       <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',tableData)"/>
@@ -50,12 +48,13 @@
       </el-table-column>
       <el-table-column label="费用类别" align="center" prop="fylb" />
     </el-table>
-    <pagination 
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      :autoScroll="false"
-      @pagination="getList" />
+  </div>
+  <pagination 
+    :total="total"
+    :page.sync="queryParams.pageNum"
+    :limit.sync="queryParams.pageSize"
+    :autoScroll="false"
+    @pagination="getList" />
   </div>
 </template>
 <script>

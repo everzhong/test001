@@ -69,7 +69,7 @@
       </el-form-item>
     </el-form>
     <pagination
-      v-show="total>0&&!mxShow"
+      v-show="!mxShow"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -221,9 +221,17 @@ export default {
   methods: {
     checkMix(row,key){
       const keyw = `${key}Options`
-      this[keyw].query = {
-        rwpcid:row.rwpcid,
-        jgdm:row.jgdm
+      if(key==='xgmx'){
+        this[keyw].query = {
+          pch:row.rwpcid,
+          jgdm:row.jgdm
+        }
+      } else {
+        this[keyw].query = {
+          jgdm:row.jgdm,
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+        }
       }
       this[keyw].show = true
       this.mxShow = true
@@ -232,6 +240,7 @@ export default {
     async getList(query) {
       const params = query?{...this.queryParams,...query}:this.queryParams
       delete params.status
+      this.loading = true
       try {
         let  res = null
         switch(this.tabsValue) {
@@ -541,6 +550,7 @@ export default {
      */
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
+      this.total = 0
       if(val!=='two'){
         this.xgmxOptions.show=false
         this.mxShow = false
@@ -570,7 +580,5 @@ export default {
 }
 .tabs-part {
   clear: both;
-  
-  
 }
 </style>

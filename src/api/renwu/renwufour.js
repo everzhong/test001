@@ -20,8 +20,9 @@ export function listRenwufourTab(query) {
 export function listRenwufourRj(query) {
     return request({
         url: '/renwu/renwufour/listrj',
-        method: 'post',
-        data: query
+        method: 'get',
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+        params: query
     })
 }
 // 查询renwufour详细

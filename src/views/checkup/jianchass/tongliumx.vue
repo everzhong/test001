@@ -1,7 +1,6 @@
 /**项目流水号汇总 第5层数据*/
 <template>
-<div>
-  <el-table v-show="!showLog" class="qztable" :row-class-name="tableRowClassName"  ref="multipleTable" :data="tableData" border style="margin-top:10px">
+  <el-table v-show="!showLog" class="qztable" :row-class-name="tableRowClassName"  ref="multipleTable" :data="tableData" border height="100%" style="width:100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column  align="center" width="55">
       <template slot-scope="scope">
@@ -11,7 +10,7 @@
     <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/>
     <el-table-column label="就医类型" align="center" prop="jslb" />
     <el-table-column label="险种" align="center" prop="ybbf" />
-    <el-table-column label="规则名称" align="center" :width="flexColumnWidth('gzmc',[{gzmc}])">
+    <el-table-column label="规则名称" align="center" width="350" show-overflow-tooltip>
       <template><span>{{gzmc}}</span></template>
     </el-table-column>
     <el-table-column label="交易流水号" align="center" prop="lsh"  :width="flexColumnWidth('lsh',tableData)"/>
@@ -21,15 +20,15 @@
     <el-table-column label="科室名称" align="center" prop="ksmc"  :width="flexColumnWidth('ksmc',tableData)"/>
     <el-table-column label="医师代码" align="center" prop="ysgh"  :width="flexColumnWidth('ysgh',tableData)"/>
     <el-table-column label="医师姓名" align="center" prop="ysxm"  :width="flexColumnWidth('ysxm',tableData)"/>
-    <el-table-column label="结算日期" align="center" prop="jsrqsj"  width="110">
-       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.jsrqsj, '{y}-{m}-{d}') }}</span>
-      </template>
+    <el-table-column label="结算日期" align="center" prop="jyrq"  width="110">
+       <!-- <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.jyrq, '{y}-{m}-{d}') }}</span>
+      </template> -->
     </el-table-column>
     <el-table-column label="结算日期时间" align="center" prop="jsrqsj"  :width="flexColumnWidth('jsrqsj',tableData)">
-      <template slot-scope="scope">
+      <!-- <template slot-scope="scope">
         <span>{{ parseTime(scope.row.jsrqsj, '{y}-{m}-{d} {h}:{s}:{s}') }}</span>
-      </template>
+      </template> -->
     </el-table-column>
     <el-table-column label="明细项目使用时间" align="center" prop="mxxmsysj"  :width="flexColumnWidth('mxxmsysj',tableData)">
       <template slot-scope="scope">
@@ -43,11 +42,8 @@
       </template>
     </el-table-column>
   </el-table>
-  <!-- <operate-log v-if="showLog" @on-close="closedetail" :tableData="logList"></operate-log> -->
-</div>
 </template>
 <script>
-// import OperateLog from './operateLog.vue'
 export default {
   name:'Tongliumx',
   data(){
@@ -68,9 +64,6 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.$emit('handleSelectionChange',selection)
-      // this.ids = selection.map(item => item.rwpcid)
-      // this.single = selection.length!==1
-      // this.multiple = !selection.length
     },
     checkLog(row){
       // this.showLog = true
@@ -98,6 +91,9 @@ export default {
         className = row.xwrd.indexOf('未发现违规')>-1?'xwrd-table-row-normal':'xwrd-table-row'
       } else {
         className = ''
+      }
+      if(row.isyd && row.isyd==1){
+        className+=" isyd-row"
       }
       return  className
     }

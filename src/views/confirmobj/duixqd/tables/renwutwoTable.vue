@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" @selection-change="handleSelectionChange" border>
+  <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
     <el-table-column type="selection" width="55" align="center" />
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="网审意见" align="center" prop="wsyj"  :width="flexColumnWidth('wsyj',tableData)"/>

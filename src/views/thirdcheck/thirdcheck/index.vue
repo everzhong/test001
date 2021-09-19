@@ -63,9 +63,9 @@
       </el-col>
     </el-row>
   </el-form>
-    <div v-loading="loading">
+    <div v-loading="loading" class="table-main">
       <!-- <RenwuthreeTable :tableData="renwuthreeList"/> -->
-    <el-table :data="renwuthreeList" border>
+      <el-table :data="renwuthreeList" border height="100%" style="width:100%">
         <el-table-column type="selection" width="55" align="center" />
         <!-- <el-table-column label="序号" type="index" align="center"  /> -->
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
@@ -100,6 +100,7 @@
       </el-table>
     </div>
     <pagination
+      class="fixed-bottom"
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
@@ -435,7 +436,17 @@ export default {
 <style lang="scss" scoped>
 .tabs-part {
   clear: both;
-  
-  
+}
+.table-main {
+  position: absolute;
+  top:114px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
 }
 </style>

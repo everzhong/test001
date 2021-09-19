@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" border>
+  <el-table :data="tableData" border height="100%" style="width:100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
@@ -23,7 +23,7 @@
       </template>
     </el-table-column>
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
+    <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
     <el-table-column label="违反条数(违反规则的明细数量)" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
     <el-table-column label="涉及金额" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
       <template slot-scope="scope">

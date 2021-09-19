@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery"/>
+    <SearchItem @handleQuery="handleQuery" style="height:94px;margin-bottom:10px"/>
     <!-- <div class="tabs-part">
       <div class="left-btn"></div>
       <div class="tabs"></div>
@@ -37,13 +37,14 @@
         </el-radio-group>
       </div>
     </el-row>
-    <div v-loading="loading" v-show="!mingxOptios.show">
+    <div v-loading="loading" v-show="!mingxOptios.show" class="table-main">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
       <RenwutwoTable v-else :tableData="renwutwoList" @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <pagination
-      v-show="total>0&&!mingxOptios.show"
+     class="fixed-bottom"
+      v-show="!mingxOptios.show"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -522,6 +523,7 @@ export default {
      */
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
+      this.total = 0
       if(val!=='two'){
         if(this.ids.length) {
           const resql = []
@@ -542,7 +544,17 @@ export default {
 <style lang="scss" scoped>
 .tabs-part {
   clear: both;
-  
-  
+}
+.table-main {
+  position: absolute;
+  top:165px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
 }
 </style>

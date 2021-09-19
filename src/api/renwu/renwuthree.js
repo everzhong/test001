@@ -20,8 +20,9 @@ export function listRenwuthreeTab(query) {
 export function listRenwuthreeRj(query) {
     return request({
         url: '/renwu/renwuthree/listrj',
-        method: 'post',
-        data: query
+        method: 'get',
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+        params: query
     })
 }
 // 查询机构列表

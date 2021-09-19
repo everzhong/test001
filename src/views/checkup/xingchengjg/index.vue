@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery"/>
-    <div v-loading="loading">
-      <!-- <RenwutwoTable :tableData="renwutwoList" /> -->
-      <el-table :data="renwutwoList" border>
+    <SearchItem @handleQuery="handleQuery" style="height:94px"/>
+    <div v-loading="loading" class="table-main">
+      <el-table :data="renwutwoList" border height="100%" style="width:100%">
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="状态" align="center" prop="status" width="150"><template>待结果复核</template></el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
@@ -36,6 +35,7 @@
       </el-table>
     </div>
     <pagination
+      class="fixed-bottom"
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
@@ -472,7 +472,17 @@ export default {
 <style lang="scss" scoped>
 .tabs-part {
   clear: both;
-  
-  
+}
+.table-main {
+  position: absolute;
+  top:114px;
+  bottom:70px;
+  left: 20px;
+  right: 20px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 0px;
 }
 </style>

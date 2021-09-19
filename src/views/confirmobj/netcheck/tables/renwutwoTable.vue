@@ -44,7 +44,7 @@ export default {
   },
   props:['tableData'],
   mounted(){
-    this.tableHeight = document.body.offsetHeight - 50-34-118-32-70-50-40+'px';
+    this.tableHeight = document.body.offsetHeight - 50-34-118-40-70-50-35+'px';
   },
   methods:{
     // 多选框选中数据

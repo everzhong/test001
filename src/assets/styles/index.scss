@@ -115,6 +115,8 @@ aside {
 //main-container全局样式
 .app-container {
     padding: 20px;
+    height: calc(100vh - 84px);
+    position: relative;
 }
 
 .components-container {
