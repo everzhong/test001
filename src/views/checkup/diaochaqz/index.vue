@@ -49,12 +49,10 @@
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
 
 import SearchItem from '../../common/objSearchItem'
-import RenwutwoTable from '../../common/renwutwoTable'
 export default {
   name: "Diaochaqz",
   components: {
     SearchItem,
-    RenwutwoTable,
   },
   data() {
     return {

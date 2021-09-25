@@ -21,9 +21,6 @@
         >批量打印通知</el-button>
       </el-col>
     </el-row>
-    <!-- <div v-loading="loading">
-      <RenwutwoTable :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange"/>
-    </div> -->
      <div v-loading="loading" class="table-main">
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange" style="width:100%" height="100%"> 
         <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -90,7 +87,6 @@
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
 import SearchItem from '../../common/objSearchItem'
-import RenwutwoTable from '../../common/renwutwoTable'
 import SingleNotice from './singleNotice.vue'
 import MutilNotice from './mutilNotice.vue'
 
@@ -98,7 +94,6 @@ export default {
   name: "Dayintz",
   components: {
     SearchItem,
-    RenwutwoTable,
     SingleNotice,
     MutilNotice
   },

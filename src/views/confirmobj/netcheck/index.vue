@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery"/>
+    <SearchItem @handleQuery="handleQuery" style="margin-bottom:10px"/>
     <!-- <div class="tabs-part">
       <div class="left-btn"></div>
       <div class="tabs"></div>
@@ -75,8 +75,10 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
-    <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
+    <div class="table-main" v-if="xgmxOptions.show||qmxOptions.show">
+      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+      <quanmingxi :options="qmxOptions" v-else />
+    </div>
   </div>
 </template>
 <script>
@@ -580,5 +582,12 @@ export default {
 }
 .tabs-part {
   clear: both;
+}
+.table-main {
+  position: absolute;
+  left:20px;
+  right:20px;
+  top:178px;
+  bottom:70px;
 }
 </style>

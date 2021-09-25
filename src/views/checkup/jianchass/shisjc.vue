@@ -67,6 +67,12 @@
         <!-- <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
           <el-radio-button label="three">规则筛查</el-radio-button>
         </el-radio-group> -->
+        <div class="top-right-btn" v-if="tabsValue=='five'||tabsValue=='qmx'">
+          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+            <el-radio-button label="five">同流水号明细</el-radio-button>
+            <el-radio-button label="qmx">全明细</el-radio-button>
+          </el-radio-group>
+        </div>
       </el-row>
       <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'">
         <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable">
@@ -93,7 +99,7 @@
               </template>
             </el-table-column>
         </el-table>
-        <tongliumx ref="tongLiumx" v-if="tabsValue==='five'&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
+        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
@@ -101,7 +107,7 @@
       </div>
       <pagination
         class="fixed-bottom"
-        v-show="total>0 &&!logShow&&!qmxOptions.show"
+        v-show="!logShow&&!qmxOptions.show"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
@@ -173,7 +179,7 @@ import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenw
 import { setSancha } from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
 import { updateRenwufive} from '@/api/renwu/renwufive'
-import { getTLS } from '@/api/renwu/mingxi'
+import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
 import LiushuiTable from './liushiTable.vue'
@@ -299,7 +305,8 @@ export default {
         show:false,
         xwrd:'',
         type:''
-      }
+      },
+      lsh:''//第四层的参数，查询同流水号明细需要用到
     }
   },
   created() {
@@ -307,6 +314,18 @@ export default {
     this.getList();
   },
   methods: {
+    //同流水号明细，全明细切换
+    tabsLevelChange(val){
+      this.queryParams.pageNum=1
+      this.total = 0
+      const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
+      this.searchNextParams = val=='five'?{lsh:this.lsh||''}:{
+        jgdm:jgdm,
+        zdbm:this.parseTime(datastarttime, '{y}{m}{d}'),
+        zdbm1:this.parseTime(dataendtime, '{y}{m}{d}')
+      }
+      this.getList()
+    },
     /**
      * 第三方筛查
      */
@@ -391,13 +410,14 @@ export default {
         wgfy:''
       }
       switch(this.tabsValue) {
-        case 'five':
+        case ('five'||'qmx'):
           if(this.qmxOptions.show){
             this.qmxOptions.show = false
             this.xwrdForm.gzmc=gzmc
           } else {
             this.tabsValue = 'four'
             this.xwrdForm.gzmc=''
+            this.lsh = ''
           }
           break
         case 'four':
@@ -522,7 +542,10 @@ export default {
             res = await listRenwufour(params)
             break;
           case 'five':
-            res = await getTLS({...this.queryParams,...query})
+            res = await getTLS({...this.queryParams,...this.searchNextParams})
+            break;
+          case 'qmx':
+            res = await getQMX({...this.queryParams,...this.searchNextParams})
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
@@ -530,8 +553,11 @@ export default {
             break;
         }
         if(res.code===200){
-          this[`renwu${this.tabsValue}List`] = res.rows;
-          // this[`renwu${this.tabsValue}List`] = [{ajly:1111}];
+          if(this.tabsValue=='qmx'){
+            this[`renwufiveList`] = res.rows;
+          } else {
+            this[`renwu${this.tabsValue}List`] = res.rows;
+          }
           this.total = res.total;
           if(this.chaxunDialog){
             this.$refs['chaxunForm'].resetFields()
@@ -719,17 +745,9 @@ export default {
     tongLiushuimx(row){
       this.tabsValue = 'five'
       this.selectedId = ''
-      this.xwrdForm = {
-        gzmc:row.gzmc,
-        xwrd:'',
-        bz:'',
-        zkdj:'',
-        wgsl:'',
-        wgfy:''
-      }
-      // this.searchNextParams = {gzmc:row.gzmc,rwpcid:row.rwpcid,jgdm:row.jgdm,mxxmbm:row.mxxmbm,fid:row.id}
-      console.log(111)
-      this.getList({lsh:row.lsh||''})
+      this.lsh = row.lsh || ''
+      this.searchNextParams = {lsh:row.lsh||''}
+      this.getList()
     },
     //操作记录
     checkLog(row,type){
@@ -742,8 +760,9 @@ export default {
     //全明细
     checkMx(row){
       this.qmxOptions.query = {
-        rwpcid:row.rwpcid,
-        jgdm:row.jgdm
+        jgdm:row.jgdm,
+        zdbm:this.parseTime(this.queryInfoFrom.datastarttime, '{y}{m}{d}'),
+        zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}{d}')
       }
       this.qmxOptions.show = true
     },

@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import {getQuanmx} from '@/api/renwu/renwuone'
+import {getQMX} from '@/api/renwu/mingxi'
 export default {
   name:"Quanmingxi",
   data(){
@@ -81,7 +81,7 @@ export default {
       this.loading = true;
       const params = {...this.queryParams,...this.options.query}
       try {
-        const res = await getQuanmx(params);
+        const res = await getQMX(params);
         if(res.code==200){
           this.tableData = res.rows
           this.total = res.total

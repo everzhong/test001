@@ -18,7 +18,7 @@ export function getTLS(query) {
 // 查询全明细列表
 export function getQMX(query) {
     return request({
-        url: '/renwu/JYMXlistse',
+        url: '/renwu/JYMX/listse',
         method: 'get',
         params: query
     })
