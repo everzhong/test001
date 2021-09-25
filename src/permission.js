@@ -18,10 +18,10 @@ router.beforeEach((to, from, next) => {
     if (urlUid && uid !== urlUid) {
         removeToken()
     }
-    if (getToken()) {
+    if (getToken()) { //has token
         /* has token*/
         if (to.path === '/login') {
-            next({ path: '/' })
+            next()
             NProgress.done()
         } else {
             if (store.getters.roles.length === 0) {
@@ -38,7 +38,6 @@ router.beforeEach((to, from, next) => {
                             next(to.path ? {...to, replace: true } : { path: '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成
                         }
                     })
-
                 }).catch(err => {
                     store.dispatch('LogOut').then(() => {
                         Message.error(err)
@@ -54,6 +53,7 @@ router.beforeEach((to, from, next) => {
         if (whiteList.indexOf(to.path) !== -1) {
             // 在免登录白名单，直接进入
             next()
+                // NProgress.done()
         } else {
             next(`/authLogin?redirect=${to.fullPath}`) // 否则全部重定向到登录页
             NProgress.done()

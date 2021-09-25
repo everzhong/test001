@@ -1,6 +1,6 @@
 <template>
   <div class="login" style="opacity:0">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
+    <!-- <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">第三方监管</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
@@ -17,7 +17,7 @@
         >
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
-      </el-form-item>
+      </el-form-item> -->
       <!-- <el-form-item prop="code">
         <el-input
           v-model="loginForm.code"
@@ -32,7 +32,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item> -->
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -45,22 +45,22 @@
           <span v-else>登 录 中...</span>
         </el-button>
       </el-form-item>
-    </el-form>
+    </el-form> -->
     <!--  底部  -->
-    <div class="el-login-footer">
+    <!-- <div class="el-login-footer"> -->
       <!-- <span>Copyright © 2021 .</span> -->
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
-import { encrypt, decrypt } from '@/utils/jsencrypt'
+// import { encrypt, decrypt } from '@/utils/jsencrypt'
 import axios from 'axios'
 
 export default {
-  name: "Login",
+  name: "login",
   data() {
     return {
       codeUrl: "",
@@ -85,34 +85,18 @@ export default {
       redirect: undefined
     };
   },
-  watch: {
-    // $route: {
-    //   handler: function(route) {
-    //     this.redirect = route.query && route.query.redirect;
-    //   },
-    //   immediate: true
-    // }
-  },
   created() {
-    // this.getCode();
-    // this.getCookie();
-    let uid = ''
-    if(window.onmessage){
-      window.onmessage = function(e){
-        if(e.data['userToken']){
-          uid = e.data['userToken']
-        }
-      } 
-    } else if( this.$route.query.uid){
-      uid = this.$route.query.uid;
-    }
-    if(uid){
-      Cookies.set("username", uid, { expires: 30 });
-      this.handlerLoginapi({uid:uid});
-    } else {
-      this.$router.push({
-        path:'/authLogin',
-      })
+    const self = this
+    window.onmessage = function(e){
+      const UID = e.data['loginToken']
+      if(UID){
+        // Cookies.set("username", UID, { expires: 30 });
+        self.handlerLoginapi({uid:UID});
+      } else {
+        self.$router.push({
+          path:'/authLogin',
+        })
+      }
     }
   },
   methods: {
@@ -137,7 +121,7 @@ export default {
       Cookies.remove('username')
       this.$store.dispatch('ClearInfo')
       this.$store.dispatch("LoginApi", info).then(() => {
-          this.$router.push({ path: this.redirect}).catch(()=>{});
+          this.$router.push({ path: this.redirect||"/renwu/renwulist"}).catch(()=>{});
         }).catch(() => {
           window.parent.postMessage({
             'loginFailed': {
