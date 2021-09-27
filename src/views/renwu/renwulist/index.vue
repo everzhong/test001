@@ -449,6 +449,10 @@ export default {
       setYd({
         id:this.radioCheck,
         rwpcid:this.radioSelection.rwpcid
+      }).then(res=>{
+        if(res.code===200){
+          this.msgSuccess('提交成功')
+        }
       })
     }
   }
