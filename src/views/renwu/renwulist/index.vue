@@ -1,56 +1,54 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px" style="height:94px;overflow:auto;margin-bottom:5px">
-      <el-row>
-        <el-col :span="22">
-          <el-form-item label="批次号" prop="rwpicd">
-            <el-input
-              v-model="queryParams.rwpicd"
-              placeholder="请输入"
-              clearable
-              size="small"
-              style="width: 200px"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="任务名称" prop="rwmc">
-            <el-input
-              v-model="queryParams.rwmc"
-              placeholder="请输入，支持模糊搜索"
-              clearable
-              size="small"
-              style="width: 200px"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="委托机构" prop="wtjg">
-            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 200px"></el-input>
-          </el-form-item>
-          <el-form-item label="承办机构" prop="cbjg">
-            <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 200px"></el-input>
-          </el-form-item>
-          <el-form-item label="任务推送日期" label-width="98px">
-            <el-date-picker
-              v-model="dateRange"
-              size="small"
-              style="width: 220px"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="2">
-          <el-form-item style="margin-right:0;text-align:right">
-            <el-button style="margin-right:10px;" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-            <el-button style="margin-right:10px;" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
+    <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" v-show="showSearch" label-width="68px" style="max-height:94px;overflow:auto;margin-bottom:5px">
+      <div>
+        <el-form-item label="批次号" prop="rwpicd">
+          <el-input
+            v-model="queryParams.rwpicd"
+            placeholder="请输入"
+            clearable
+            size="small"
+            style="width: 200px"
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="任务名称" prop="rwmc">
+          <el-input
+            v-model="queryParams.rwmc"
+            placeholder="请输入，支持模糊搜索"
+            clearable
+            size="small"
+            style="width: 200px"
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="委托机构" prop="wtjg">
+          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 200px"></el-input>
+        </el-form-item>
+        <el-form-item label="承办机构" prop="cbjg">
+          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 200px"></el-input>
+        </el-form-item>
+        <el-form-item label="任务推送日期" label-width="98px">
+          <el-date-picker
+            v-model="dateRange"
+            size="small"
+            style="width: 220px"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
+        </el-form-item>
+      </div>
+      <div>
+        <el-form-item style="margin-right:0;text-align:right">
+          <el-button style="margin-right:10px;" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+          <el-button style="margin-right:10px;" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </div>
     </el-form>
-     <el-row :gutter="10">
+    <el-row :gutter="10">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -59,7 +57,7 @@
         >接收数据</el-button>
       </el-col>
     </el-row>
-    <div class="table-main">
+    <div class="table-main" :style="{top:tableHeight}">
       <el-table class="qztable" v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column  align="center" width="55">
@@ -76,12 +74,12 @@
         <el-table-column label="检查方式" align="center" prop="jcfs" :width="flexColumnWidth('jcfs',renwuoneList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime" :width="flexColumnWidth('datastarttime',renwuoneList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwuoneList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="机构数量" align="center" prop="jgsl" :width="flexColumnWidth('jgsl',renwuoneList)"/>
@@ -97,13 +95,14 @@
         </el-table-column>
         <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',renwuoneList)"/>
         <el-table-column label="任务描述" align="center" prop="rwms" :width="flexColumnWidth('rwms',renwuoneList)"/>
-        <el-table-column label="异地/本地" align="center" prop="ybd" :width="flexColumnWidth('ybd',renwuoneList)"/>
+        <!-- <el-table-column label="异地/本地" align="center" prop="ybd" :width="flexColumnWidth('ybd',renwuoneList)"/> -->
         <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwuoneList)"/>
         <el-table-column label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="text"
+              :disabled="scope.row.jsstatus!=2"
               @click="checkdetail(scope.row)"
             >查看任务详情</el-button>
           </template>
@@ -219,11 +218,15 @@ export default {
         ],
       },
       radioCheck:'',
-      radioSelection:{}
+      radioSelection:{},
+      tableHeight:0
     };
   },
   created() {
     this.getList();
+  },
+  mounted(){
+    this.tableHeight = this.calcTableHeight(32+5+10)
   },
   methods: {
     /** 查询renwuone列表 */
@@ -353,7 +356,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      this.resetForm("searchForm");
       this.handleQuery();
     },
     // 多选框选中数据

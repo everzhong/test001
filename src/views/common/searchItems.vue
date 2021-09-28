@@ -1,8 +1,7 @@
 <template>
 <div style="max-height:102px;overflow:auto">
   <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
-    <el-row>
-      <el-col :span="22">
+      <div>
           <el-form-item label="机构名称" prop="jgmc">
             <el-input
               v-model="query.jgmc"
@@ -73,14 +72,13 @@
               />
             </el-select>
           </el-form-item> -->
-      </el-col>
-      <el-col :span="2">
+      </div>
+      <div>
         <el-form-item style="margin-right:0;text-align:right">
           <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
           <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         </el-form-item>
-      </el-col>
-    </el-row>
+      </div>
   </el-form>
 </div>
 </template>

@@ -1,8 +1,8 @@
 <template>
   <el-dialog width="780px" class="msg-dialog" title="选择行为认定" :visible.sync="options.show">
     <el-select v-model="typeSelect" style="margin-bottom:5px" clearable @change="filterXwrdList">
-      <el-option label="都督管理办法（第31号令）" value="1"></el-option>
-      <el-option label="都督管理办法（第60号令）" value="2"></el-option>
+      <el-option label="监督管理办法（第31号令）" value="1"></el-option>
+      <el-option label="监督管理办法（第60号令）" value="2"></el-option>
     </el-select>
     <el-table size="small" v-loading="loading" :data="filterList" @selection-change="handleSelectionChange" border height="350px">
       <el-table-column width="40px" align="center">

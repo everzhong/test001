@@ -31,20 +31,20 @@
           </template>
         </el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwutwoList)"/>
-        <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
+        <el-table-column label="险种" align="center" prop="ybbf" show-overflow-tooltip/>
+        <el-table-column label="就医类型" align="center" prop="jslb" show-overflow-tooltip/>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="检查机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
         <el-table-column label="检查组" align="center" prop="jczname"  :width="flexColumnWidth('jczname',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">

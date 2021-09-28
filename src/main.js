@@ -16,7 +16,7 @@ import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree, flexColumnWidth, formatMoney } from "@/utils/ruoyi";
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree, flexColumnWidth, formatMoney,calcTableHeight} from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
@@ -45,6 +45,7 @@ Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.formatMoney = formatMoney
 Vue.prototype.checkRole = checkRole
+Vue.prototype.calcTableHeight = calcTableHeight
 Vue.prototype.addJcfl = function(query) {
     const params = {
         ...query,

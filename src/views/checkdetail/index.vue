@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" v-if="!isFromLuli" style="margin-bottom:6px"/>
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" style="margin-bottom:6px"/>
     <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
     </div>
@@ -19,7 +19,14 @@
           @click="handleThirdCheck"
         >第三方筛查</el-button>
       </el-col>
-      
+      <el-col :span="1.5" v-if="mxShow">
+        <el-button
+          type="warning"
+          size="small"
+          plain
+          @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
+        >返回上一层</el-button>
+      </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
           <el-radio-button label="two" v-if="!isFromLuli">任务列表</el-radio-button>
@@ -27,104 +34,73 @@
           <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
         </el-radio-group>
       </div>
-      <!-- <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar> -->
     </el-row>
-    <div v-loading="loading" :class="[isFromLuli?'table-main1':'table-main']">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
+    <div v-loading="loading" v-show="!mxShow" :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topHeight}">
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkdetail($event,'xgmx')"/>
+      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
       <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border style="width:100%" height="100%">
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column label="序号" type="index" align="center"/>
-        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <!-- <el-table-column label="状态" align="center" prop="status"  width="96">
+        <el-table-column label="第三方筛查状态" align="center" width="150">
+        <template slot-scope="scope">
+          <span>{{scope.row.sccqstatus?(scope.row.sccqstatus==0?'未生成筛查任务':scope.row.sccqstatus==1?'未开始筛查':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':''):''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
+      <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
+      <el-table-column label="检查方式" align="center" prop="jcfs" />
+      <el-table-column label="险种" align="center" prop="ybbf" />
+      <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
+      <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{statusText(scope.row.status)}}</span>
-          </template>
-        </el-table-column> -->
-        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/>
-        <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',renwutwoList)"/>
-        <el-table-column label="险种" align="center" prop="ybbf" />
-        <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
-        <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',renwutwoList)"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结算金额" align="center" prop="jsje"  :width="flexColumnWidth('jsje',renwutwoList)">
-          <template slot-scope="scope">
-          <span>{{formatMoney(scope.row.jsje,2)}}</span>
-        </template>
-      </el-table-column>
-        <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
-        <el-table-column label="第三方筛查状态" align="center" width="150">
-          <template slot-scope="scope">
-            <span>{{scope.row.sccqstatus?(scope.row.sccqstatus==0?'未生成筛查任务':scope.row.sccqstatus==1?'未开始筛查':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':''):''}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="涉及金额" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)">
+        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
+        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
+        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
+        <!-- <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/> -->
+      <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
+      <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
+      <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
+      <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)">
           <template slot-scope="scope">
           <span>{{formatMoney(scope.row.ydje,2)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
-          <!-- <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                @click="checkdetail(scope.row)"
-              >查看明细</el-button>
-            </template>
-          </el-table-column> -->
+      <el-table-column label="操作" align="center" width="180">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            @click="checkdetail(scope.row,'xgmx')"
+          >查看相关明细</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            @click="checkdetail(scope.row,'qmx')"
+          >全明细</el-button>
+        </template>
+      </el-table-column>
       </el-table>
     </div>
-    <!-- <el-form v-if="tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:30px;">
-      <el-form-item label="已选机构" prop="yxjg">
-        <el-input
-          style="width:280px;margin-right:30px"
-          disabled
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          v-model="submitParams.yxjg">
-        </el-input>
-      </el-form-item>
-      <el-form-item label="网审意见" prop="wsyj">
-        <el-select v-model="submitParams.wsyj" placeholder="全部" clearable  style="width: 180px">
-          <el-option
-            key="1"
-            label="建议检查"
-            value="建议检查"
-          />
-          <el-option
-            key="2"
-            label="暂不检查"
-            value="暂不检查"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="检查人员" prop="wsry" style="margin-left:10px">
-       <el-input readonly :value="submitParams.wsry"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
-      </el-form-item>
-    </el-form> -->
     <pagination
+      v-show="!mxShow"
       class="fixed-bottom"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <div class="table-main" v-if="xgmxOptions.show||qmxOptions.show">
+      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+      <quanmingxi :options="qmxOptions" v-else />
+    </div>
   </div>
 </template>
 <script>
@@ -136,16 +112,29 @@ import SearchItem from '../common/searchItems'
 import RenwuthreeTable from '../common/renwuthreeTable'
 import RenwufourTable from '../common/renwufourTable'
 import {bossRand} from '@/utils/ruoyi'
+import Checkmx from '../common/xgmingxi.vue'
+import Quanmingxi from '../common/quanmingxi.vue'
 export default {
   name: "Renwutwo",
   components: {
     SearchItem,
     RenwuthreeTable,
-    RenwufourTable
+    RenwufourTable,
+    Checkmx,
+    Quanmingxi
   },
   data() {
     return {
-      tableHeight:0,
+      xgmxOptions:{
+        show:false,
+        query:{}
+      },
+      qmxOptions:{
+        show:false,
+        query:{}
+      },
+      mxShow:false,
+      topHeight:0,
       isFromLuli:false,//从履历查询过来
       submitParams:{
         yxjg:'',
@@ -250,17 +239,38 @@ export default {
       //
       tabsValue:'two',
       noThirdCheckList:[],
+      resql:''
     };
   },
   created() {
     this.isFromLuli = this.$route.query.fromLuli
     this.isFromLuli && (this.tabsValue='three')
     this.getList();
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
   },
   mounted(){
-    this.tableHeight = document.body.offsetHeight - 50-34-118-40-75+'px';
+    this.topHeight = this.calcTableHeight(32+5+10,this.isFromLuli)
   },
   methods: {
+    checkdetail(row,key){
+      const keyw = `${key}Options`
+      if(key==='xgmx'){
+        this[keyw].query = {
+          pch:row.rwpcid,
+          jgdm:row.jgdm
+        }
+      } else {
+        this[keyw].query = {
+          jgdm:row.jgdm,
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+        }
+      }
+      this[keyw].show = true
+      this.mxShow = true
+    },
     /** 查询renwutwo列表 */
     async getList(options) {
       const params = options?{...this.queryParams,...options}:this.queryParams
@@ -277,13 +287,15 @@ export default {
             res = await listRenwufourTab(params)
             break;
           default:
-            // params.status = 0 //默认查0的数据
             res = await listRenwutwo(params)
             break;
         }
         if(res.code===200){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
+          if(this.tabsValue==='two'){
+            this.resql = res.resql
+          }
         }
       } catch (error) {
         console.log(error)
@@ -689,13 +701,16 @@ export default {
      * tabs切换
      */
     tabsLevelChange(val){
+      this.mxShow = false
       this.queryParams.pageNum = 1
       if(this.ids.length && val!=='two'){
         const jgdmList = this.selectionList.map(item=>item.jgdm)
         this.getList({jgdm:jgdmList.join(',')})
       } else {
         this.ids = []
-        this.getList()
+        if(this.resql){
+          this.getList({resql:this.resql})
+        }
       }
     },
     statusText(status){

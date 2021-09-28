@@ -32,7 +32,7 @@
           </template>
         </el-table-column>
         <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
-        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
+        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',tableData)"/>
         <el-table-column label="异本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
         <el-table-column label="数据开始时间" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)"/>
@@ -67,44 +67,6 @@
       <el-form ref="chaxunForm" :model="queryForm"  label-width="100px" size="small">
         <el-form-item label="规则分类" prop="gzfl">
           <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
-          <!-- <el-popover
-              ref="tablePopover"
-              placement="bottom"
-              width="750"
-              popper-class="sys-popup"
-              trigger="click">
-              <div style="min-height:150px;max-height:210px;overflow:auto">
-                <el-form size="small" inline>
-                  <el-form-item label="规则分类">
-                    <el-input style="width:230px" v-model="guizefl.search" clearable></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary" plain>重置 </el-button>
-                  </el-form-item>
-                </el-form>
-                <el-table :data="guizefl.data" border="" class="sys-small-table" @selection-change="handleGuizeChange">
-                  <el-table-column type="selection" width="50" align="center" />
-                  <el-table-column property="gzmc" label="分类名称" align="center" :width="flexColumnWidth('jczname',tableData)"></el-table-column>
-                </el-table>
-              </div>
-              <pagination
-                  style="margin-top:0;margin-bottom:30px"
-                  v-show="guizefl.total>0"
-                  :total="guizefl.total"
-                  size="small"
-                  :page.sync="guizefl.pageNum"
-                  :limit.sync="guizefl.pageSize"
-                  @pagination="getGuizList"
-                />
-              <div style="text-align:right;margin-top:10px">
-                <el-button size="mini" type="primary" @click="$refs.tablePopover.doClose()" plain>返回</el-button>
-                <el-button size="mini" type="primary" @click="selectedGuize">确定</el-button>
-              </div>
-              <el-select class="select-no-drawdown"  multiple :popper-append-to-body="false" slot="reference" v-model="guizefl.gzfl" style="width:360px">
-                <el-option v-for="item in guizefl.selection" :key="item.gzmc" :value="item.gzmc" :label="item.gzmc"></el-option>
-              </el-select>
-          </el-popover> -->
         </el-form-item>
         <el-form-item label="规则名称" prop="gzmc">
           <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
@@ -163,10 +125,20 @@ export default {
         {dictValue:'0',dictLabel:'未核实'},
         {dictValue:'1',dictLabel:'核实中'},
         {dictValue:'2',dictLabel:'已核实'}
-      ]
+      ],
+      xzqOptions:[]
     }
   },
+  created(){
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
+  },
   methods:{
+    // 行政区字典翻译
+    xzqFormat(row, column) {
+      return this.selectDictLabel(this.xzqOptions, row.xzq);
+    },
     filterData(selection){
       selection.forEach(item => {
         this.tableData = this.tableData.filter(subItem=>{

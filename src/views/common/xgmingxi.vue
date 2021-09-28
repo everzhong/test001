@@ -40,8 +40,9 @@
         </template>
         </el-table-column>
         <el-table-column label="费用类别" align="center" prop="fylb" />
-    </el-table>
+      </el-table>
     <pagination
+      style="float:right"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"

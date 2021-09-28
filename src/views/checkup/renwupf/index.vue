@@ -169,7 +169,8 @@ export default {
       sendNotice:{
         show:false,
         ids:[]
-      }
+      },
+      resql:''
     };
   },
   created() {
@@ -231,6 +232,9 @@ export default {
         if(res.code===200){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
+          if(this.tabsValue === 'two'){
+            this.resql = res.resql
+          }
         }
       } catch (error) {
         console.log(error)
@@ -514,7 +518,9 @@ export default {
           })
           this.getList({resql:resql.join(' or ')})
         } else {
-          this.getList()
+          if(this.resql){
+            this.getList({resql:this.resql})
+          }
         }
       } else {
         this.ids = []

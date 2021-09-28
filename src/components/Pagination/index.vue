@@ -78,7 +78,7 @@ export default {
   },
   data(){
     return {
-      totalPage: Math.ceil(this.total / this.limit),
+      totalPage: 0,
       firstDisabled: true
     }
   },
@@ -127,6 +127,13 @@ export default {
     toLastPage () {
       this.currentPage = this.totalPage;
       this.handleCurrentChange(this.totalPage);
+    }
+  },
+  watch:{
+    total(n,o){
+      if(n>0) {
+        this.totalPage = Math.ceil(this.total / this.limit);
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
 <div style="max-height:110px;overflow:auto">
-  <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px" style="display:table">
+  <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
       <div>
         <el-form-item label="批次号" prop="rwpcid">
           <el-input
@@ -104,10 +104,12 @@
           </el-select>
         </el-form-item>
       </div>
-      <el-form-item style="width:80px;display:table-cell">
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-        <el-button style="margin-left:0" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
+      <div style="margin-right:10px">
+        <el-form-item style="width:80px;display:table-cell">
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+          <el-button style="margin-left:0" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </div>
   </el-form>
 </div>
 </template>
@@ -159,19 +161,18 @@ export default {
       this.getDicts("renwu_ss_jslb").then(response => {
         this.jslbOptions = response.data;
       });
-      this.getDicts("renwu_ss_xzq").then(response => {
+      this.getDicts("sys_job_jgxx").then(response => {
         this.xzqOptions = response.data;
       });
       this.getDicts("renwu_ss_jgdj").then(response => {
         this.jsdjOptions = response.data;
       });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jglbOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jgxzOptions = response.data;
-      });
-      
+      // this.getDicts("${column.dictType}").then(response => {
+      //   this.jglbOptions = response.data;
+      // });
+      // this.getDicts("${column.dictType}").then(response => {
+      //   this.jgxzOptions = response.data;
+      // });
     },
     // // 异本地字典翻译
     // ybdFormat(row, column) {

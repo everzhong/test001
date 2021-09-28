@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="max-height:138px;overflow:auto"/>
-    <div v-loading="loading" class="table-main">
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="max-height:138px;overflow:auto"/>
+    <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <el-table :data="renwutwoList" border height="100%" style="width:100%">
         <el-table-column label="序号" type="index" align="center"  />
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="机构等级" align="center" prop="jgdj"  :width="flexColumnWidth('jgdj',renwutwoList)"/>
-        <el-table-column label="行政区" align="center" prop="xzq"  show-overflow-tooltip/>
+        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="监管阶段" align="center" prop="jgzt"  show-overflow-tooltip/>
@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:0,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -151,6 +152,12 @@ export default {
   },
   created() {
     this.getList();
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
+  },
+  mounted(){
+    this.tableHeight = this.calcTableHeight(5)
   },
   methods: {
     /** 查询renwutwo列表 */

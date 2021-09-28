@@ -8,7 +8,7 @@
           <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">
             <el-table-column label="机构代码" prop="jgdm" align="center" :width="flexColumnWidth('jgdm',zhzList)"></el-table-column>
             <el-table-column label="机构名称" prop="jgmc" align="center" :width="flexColumnWidth('jgmc',zhzList)"></el-table-column>
-            <el-table-column label="行政区" prop="xzq" align="center" :width="flexColumnWidth('xzq',zhzList)"></el-table-column>
+            <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
             <el-table-column fixed="right" label="检查开始时间" prop="dayinstarttime" align="center" :width="flexColumnWidth('dayinstarttime',zhzList)">
               <template slot-scope="scope">
                 <span>{{parseTime(scope.row.dayinstarttime,'{y}年{m}月{d}日')}}</span>
@@ -148,6 +148,7 @@ export default {
       // 文件名称字典
       wenjianOptions: [],
       // 查询参数
+      xzqOptions:[],
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -171,8 +172,9 @@ export default {
       this.ids = printData.map(item => item.id)
     }
     this.isView = this.$route.query.isView
-    // this.getList();
-    // this.gitDic();
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
   },
   methods: {
     dayinBack(){
@@ -211,6 +213,10 @@ export default {
     // 类型字典翻译
     typeFormat(row, column) {
       return this.selectDictLabel(this.typeOptions, row.type);
+    },
+    // 行政区字典翻译
+    xzqFormat(row, column) {
+      return this.selectDictLabel(this.xzqOptions, row.xzq);
     },
     // 资料说明字典翻译
     zlsmFormat(row, column) {
@@ -400,74 +406,6 @@ export default {
           this.getList();
           this.msgSuccess("删除成功");
         })
-    },
-    gitDic(){
-      this.getDicts("${column.dictType}").then(response => {
-        this.qzidOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.rwpcidOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jgdmOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.typeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.zlsmOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.upmanOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.addtimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcddOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcstarttimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcendtimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.dwqcOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.addrOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.farenOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.telOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.zfryOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.xwnameOptions = response.data;
-      });
-      this.getDicts("sys_user_sex").then(response => {
-        this.sexOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.sfzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.lxdzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.bzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.wenjianurlOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.wenjianOptions = response.data;
-      });
     },
     satrtTimeCgange(val){
       this.zhzList = this.zhzList.map(item=>{

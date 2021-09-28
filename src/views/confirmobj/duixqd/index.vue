@@ -113,8 +113,6 @@ export default {
       dataendtimeOptions: [],
       // 就医类型字典
       jslbOptions: [],
-      // 行政区字典
-      xzqOptions: [],
       // 网审意见字典
       wsyjOptions: [],
       // 更新时间字典
@@ -172,7 +170,8 @@ export default {
       rules: {
       },
       //
-      tabsValue:'two'
+      tabsValue:'two',
+      resql:''
     };
   },
   created() {
@@ -207,6 +206,9 @@ export default {
         if(res.code===200){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
+          if(this.tabsValue==='two'){
+            this.resql = res.resql
+          }
         }
       } catch (error) {
         console.log(error)
@@ -236,10 +238,6 @@ export default {
     // 就医类型字典翻译
     jslbFormat(row, column) {
       return this.selectDictLabel(this.jslbOptions, row.jslb);
-    },
-    // 行政区字典翻译
-    xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
     },
     // 网审意见字典翻译
     wsyjFormat(row, column) {
@@ -532,7 +530,9 @@ export default {
           })
           this.getList({resql:resql.join(' or ')})
         } else {
-          this.getList()
+          if(this.resql){
+            this.getList({resql:this.resql})
+          }
         }
       } else {
         this.ids = []

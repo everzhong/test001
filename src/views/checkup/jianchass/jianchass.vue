@@ -12,12 +12,12 @@
         <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
@@ -89,8 +89,6 @@ export default {
       dataendtimeOptions: [],
       // 就医类型字典
       jslbOptions: [],
-      // 行政区字典
-      xzqOptions: [],
       // 网审意见字典
       wsyjOptions: [],
       // 更新时间字典
@@ -194,10 +192,6 @@ export default {
     // 就医类型字典翻译
     jslbFormat(row, column) {
       return this.selectDictLabel(this.jslbOptions, row.jslb);
-    },
-    // 行政区字典翻译
-    xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
     },
     // 网审意见字典翻译
     wsyjFormat(row, column) {

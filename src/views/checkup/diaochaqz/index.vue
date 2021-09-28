@@ -12,17 +12,17 @@
         <el-table-column label="就医类型" align="center" prop="jslb"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/>
+        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
         <el-table-column label="检查机构" align="center" prop="dcjg"/>
         <el-table-column label="检查组" align="center" prop="jczname" :width="flexColumnWidth('jczname',renwutwoList)"/>
       <el-table-column label="操作" align="center" width="100">
@@ -152,96 +152,9 @@ export default {
   },
   created() {
     this.getList();
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.datastarttimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.rwpcidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ybbfOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dataendtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jslbOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xzqOptions = response.data;
-    // });
-    // this.getDicts("sys_common_check").then(response => {
-    //   this.wsyjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.uptimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsryOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.sjwgsOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.ydjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsjeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsrcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.addtimeOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.xydmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgdmOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jgmcOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jsdjOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.wsry2Options = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dxqdOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.statusOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.jczidOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.isdayinOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinnameOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayintelOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinriqiOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinphoneOptions = response.data;
-    // });
-    // this.getDicts("${column.dictType}").then(response => {
-    //   this.dayinstarttimeOptions = response.data;
-    // });
-    // this.getDicts("sys_common_yesno").then(response => {
-    //   this.dcjgOptions = response.data;
-    // });
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
   },
   methods: {
     /** 查询renwutwo列表 */

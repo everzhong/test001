@@ -32,7 +32,7 @@
           </template>
         </el-table-column>
         <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
-        <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
+        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',tableData)"/>
         <el-table-column label="异本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
         <el-table-column label="数据开始时间" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)"/>
@@ -174,13 +174,21 @@ export default {
         {dictValue:'0',dictLabel:'未核实'},
         {dictValue:'1',dictLabel:'核实中'},
         {dictValue:'2',dictLabel:'已核实'}
-      ]
+      ],
+      xzqOptions:[]
     }
   },
   created(){
     this.getList()
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
   },
   methods:{
+    // 行政区字典翻译
+    xzqFormat(row, column) {
+      return this.selectDictLabel(this.xzqOptions, row.xzq);
+    },
     filterData(selection){
       selection.forEach(item => {
         this.tableData = this.tableData.filter(subItem=>{

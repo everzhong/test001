@@ -4,6 +4,7 @@
       size="small"
       label-width="100px"
       class="top-search"
+      style="display:block;overflow:auto;max-height:129px"
       ref="queryForm"
       :inline="true"
     >
@@ -170,6 +171,7 @@ export default {
       jgdmOptions: [],
       // 添加记录时间字典
       addtimeOptions: [],
+      xzqOptions:[],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -185,6 +187,9 @@ export default {
   created() {
     this.queryInfoFrom = this.$route.query;
     this.getList();
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
   },
   methods: {
     doCheck(row) {

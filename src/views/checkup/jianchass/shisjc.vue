@@ -610,10 +610,6 @@ export default {
     ybbfFormat(row, column) {
       return this.selectDictLabel(this.ybbfOptions, row.ybbf);
     },
-    // 行政区字典翻译
-    xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
-    },
     // 就医类型字典翻译
     jslbFormat(row, column) {
       return this.selectDictLabel(this.jslbOptions, row.jslb);

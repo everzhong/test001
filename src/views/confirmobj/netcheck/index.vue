@@ -6,7 +6,7 @@
       <div class="tabs"></div>
     </div> -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'&&mxShow">
+      <el-col :span="1.5" v-if="mxShow">
         <el-button
           type="warning"
           size="small"
@@ -30,8 +30,8 @@
       </div>
     </el-row>
     <div v-loading="loading"  v-show="!mxShow">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
+      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
       <RenwutwoTable v-else :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
@@ -69,6 +69,7 @@
       </el-form-item>
     </el-form>
     <pagination
+      class="fixed-bottom"
       v-show="!mxShow"
       :total="total"
       :page.sync="queryParams.pageNum"
@@ -147,8 +148,6 @@ export default {
       dataendtimeOptions: [],
       // 就医类型字典
       jslbOptions: [],
-      // 行政区字典
-      xzqOptions: [],
       // 网审意见字典
       wsyjOptions: [],
       // 更新时间字典
@@ -215,6 +214,7 @@ export default {
         wsry:'',
         wsyj:''
       },
+      resql:''
     };
   },
   created() {
@@ -260,6 +260,9 @@ export default {
         if(res.code===200){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
+          if(this.tabsValue==='two'){
+            this.resql = res.resql
+          }
         }
       } catch (error) {
         console.log(error)
@@ -289,10 +292,6 @@ export default {
     // 就医类型字典翻译
     jslbFormat(row, column) {
       return this.selectDictLabel(this.jslbOptions, row.jslb);
-    },
-    // 行政区字典翻译
-    xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
     },
     // 网审意见字典翻译
     wsyjFormat(row, column) {
@@ -553,9 +552,9 @@ export default {
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
       this.total = 0
+      this.mxShow = false
       if(val!=='two'){
         this.xgmxOptions.show=false
-        this.mxShow = false
         this.qmxOptions.show=false
         if(this.ids.length) {
           const resql = []
@@ -564,7 +563,7 @@ export default {
           })
           this.getList({resql:resql.join(' or ')})
         } else {
-          this.getList()
+          this.resql && (this.getList({resql:this.resql}))
         }
       } else {
         this.ids = []
@@ -589,5 +588,10 @@ export default {
   right:20px;
   top:178px;
   bottom:70px;
+}
+.fixed-bottom {
+  position: absolute;
+  bottom:30px;
+  right: 5px;
 }
 </style>

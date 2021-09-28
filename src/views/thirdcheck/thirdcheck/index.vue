@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
     <!-- <SearchItem @handleQuery="handleQuery"/> -->
-    <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
-    <el-row>
-      <el-col :span="22">
+    <el-form class="top-search" :model="query" ref="searchForm" :inline="true"  label-width="68px" style="max-height:94px;overflow:auto">
+      <div>
         <el-form-item label="批次号" prop="rwpcid">
             <el-input
               v-model="query.rwpcid"
@@ -54,16 +53,15 @@
               />
             </el-select>
           </el-form-item>
-      </el-col>
-      <el-col :span="2">
+      </div>
+      <div>
         <el-form-item style="margin-right:0;text-align:right">
           <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
           <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         </el-form-item>
-      </el-col>
-    </el-row>
-  </el-form>
-    <div v-loading="loading" class="table-main">
+      </div>
+    </el-form>
+    <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <!-- <RenwuthreeTable :tableData="renwuthreeList"/> -->
       <el-table :data="renwuthreeList" border height="100%" style="width:100%">
         <el-table-column type="selection" width="55" align="center" />
@@ -72,12 +70,12 @@
         <el-table-column label="筛查任务ID" align="center" prop="scrwid"  :width="flexColumnWidth('scrwid',renwuthreeList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime" width="150">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数据结束日期" align="center" prop="dataendtime" width="150">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwuthreeList)"/>
@@ -121,6 +119,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:0,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -238,6 +237,9 @@ export default {
   },
   created() {
     this.getList();
+  },
+  mounted(){
+    this.tableHeight = this.calcTableHeight(10)
   },
   methods: {
     openUrl(row){
@@ -416,7 +418,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      this.resetForm("searchForm");
       this.handleQuery();
     },
     // 多选框选中数据

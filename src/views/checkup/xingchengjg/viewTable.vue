@@ -3,7 +3,7 @@
     <el-table-column label="序号" type="index" width="55" align="center" />
     <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwufourList)"/>
     <el-table-column label="就医类别" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwufourList)"/>
-    <el-table-column label="检查方式" align="center" prop="jcfx">
+    <el-table-column label="检查方式" align="center">
       <template>
         <span>规则筛查</span>
       </template>

@@ -61,7 +61,7 @@
     />
     </div>
     <div class="bottom-dec">
-      <p>规则明称：{{selection.gzmc}}</p>
+      <p>规则名称：{{selection.gzmc}}</p>
       <div><span>情况说明：{{selection.qksm}}</span><span>相关资料：{{selection.xgzl}}</span></div>
     </div>
     <!-- 查询条件 -->

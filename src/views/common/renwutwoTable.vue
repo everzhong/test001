@@ -6,19 +6,19 @@
     <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
      <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
-    <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',tableData)"/>
+    <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
     <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',tableData)"/>
     <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
     <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
     <el-table-column label="异地/本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
     <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)">
       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}-{d}') }}</span>
+        <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
       </template>
     </el-table-column>
     <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',tableData)">
       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}-{d}') }}</span>
+        <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
       </template>
     </el-table-column>
     <el-table-column label="结算金额" align="center" prop="jsje"  :width="flexColumnWidth('jsje',tableData)">
@@ -53,9 +53,16 @@
 export default {
   name:'RenwutwoTable',
   data(){
-    return {}
+    return {
+      xzqOptions:[]
+    }
   },
   props:['tableData','showEdit'],
+  created(){
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
+  },
   methods:{
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -66,7 +73,10 @@ export default {
     },
     checkdetail(row){
       this.$emit('check-mx',row)
-    }
+    },
+    xzqFormat(row, column) {
+      return this.selectDictLabel(this.xzqOptions, row.xzq);
+    },
   }
 }
 </script>
