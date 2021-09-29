@@ -150,6 +150,7 @@
         </el-table-column>
       </el-table>
       <pagination
+        style="float:right"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
@@ -175,6 +176,7 @@
         </el-table-column> -->
       </el-table>
       <pagination
+        style="float:right"
         :total="total"
         :page.sync="uploadQuery.pageNum"
         :limit.sync="uploadQuery.pageSize"

@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+    <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="dayinBack">返回</el-button>
     </div>
     <div class="zhizuo-port">
-        <div class="zhizuo" v-if="!isView">
+        <div class="zhizuo">
           <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">
             <el-table-column label="机构代码" prop="jgdm" align="center" :width="flexColumnWidth('jgdm',zhzList)"></el-table-column>
             <el-table-column label="机构名称" prop="jgmc" align="center" :width="flexColumnWidth('jgmc',zhzList)"></el-table-column>
@@ -58,7 +58,7 @@
             <el-button :disabled="(!!zhizuo.isdayin && !this.checkRole(['admin']))" size="mini" type="primary" @click="submitForm">保存</el-button>
           </div>
         </div>
-        <div :class="['pre-view',isView?'margin-style':'']">
+        <div :class="['pre-view']">
           <p class="top-tip">预览通知书</p>
           <single-notice v-if="zhzList.length<2" :pageData="zhizuo"></single-notice>
           <mutile-notice v-else :zhizuo="zhizuo" :noticeList="zhzList"></mutile-notice>
@@ -82,7 +82,6 @@ export default {
   },
   data() {
     return {
-      isView:false,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -171,7 +170,6 @@ export default {
       this.zhizuo = printData[0]
       this.ids = printData.map(item => item.id)
     }
-    this.isView = this.$route.query.isView
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
@@ -431,6 +429,7 @@ export default {
     flex-shrink: 0;
     width: 600px;
     color:#606266;
+    padding-top: 10px;
     .zhizuo-item {
       display: flex;
       font-size: 14px;

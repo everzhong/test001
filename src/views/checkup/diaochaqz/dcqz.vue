@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
+    <el-form size="small" label-width="100px" ref="queryForm" :inline="true" v-show="showSearch">
           <el-form-item label="险种" prop="ybbf">
             <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
           </el-form-item>
@@ -25,7 +25,7 @@
             <el-form-item label="检查组" prop="jcz">
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+          <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>

@@ -23,8 +23,8 @@
     </div>
     <div class="content">
       <p class="qz-title">资料文件列表</p>
-      <div style="max-height:450px;overflow:auto">
-        <el-table :data="tableData" border>
+      <div style="height:450px;overflow:auto">
+        <el-table :data="tableData" border height="100%">
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <el-table-column label="序号" type="index" align="center"  />
           <el-table-column label="资料说明" align="center" prop="zlsm"  :width="flexColumnWidth('zlsm',tableData)"/>
@@ -44,6 +44,7 @@
         </el-table>
       </div>
       <pagination
+        style="float:right"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"

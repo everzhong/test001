@@ -2,11 +2,9 @@
   <el-table :data="tableData" border @selection-change="handleSelectionChange" style="width:100%" height="100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <el-table-column label="序号" type="index" align="center" width="60"/>
-    <!-- <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/> -->
-    <el-table-column label="疑点类型" align="center" prop="ydlx" show-overflow-tooltip/>
-    <el-table-column label="疑点说明" align="center" prop="remark" show-overflow-tooltip/>
     <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
+    <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
     <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>

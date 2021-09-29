@@ -10,32 +10,35 @@
             @click="handleNetCheck"
           >派发检查组</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="tabsValue==='two'&&qmxOptions.show">
+        <el-col :span="1.5" v-if="mxShow">
           <el-button
             type="warning"
             size="small"
             plain
-            @click="qmxOptions.show=false"
+            @click="qmxOptions.show=false,xgmxOptions.show=false,mxShow=false"
           >返回上一层</el-button>
         </el-col>
         <div class="top-right-btn">
           <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="two" value="two">任务列表</el-radio-button>
             <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>
-            <el-radio-button label="four" value="four">规则筛查-项目汇总</el-radio-button>
+            <el-radio-button label="four" value="four">任务列表-项目列表</el-radio-button>
           </el-radio-group>
         </div>
       </el-row>
     </div>
-    <div v-loading="loading" class="table-main">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
-      <RenwufourTable v-if="tabsValue==='four'" :tableData="renwufourList"/>
-      <RenwutwoTable v-if="tabsValue==='two' && !qmxOptions.show" :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange" @check-mx="checkMingx" :showEdit="true"/>
+    <div v-loading="loading" class="table-main" v-show="!mxShow">
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMingx($event,'xgmx')"/>
+      <RenwufourTable v-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMingx($event,'xgmx')"/>
+      <RenwutwoTable v-if="tabsValue==='two'" :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange" @check-xgmx="checkMingx($event,'xgmx')" @check-qmx="checkMingx($event,'qmx')" :showEdit="true"/>
+    </div>
+    <div class="table-main" v-show="mxShow">
       <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
+      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
     </div>
     <pagination
       class="fixed-bottom"
-      v-show="!qmxOptions.show"
+      v-show="!mxShow"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -49,10 +52,11 @@ import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, ex
 import { listRenwuthreeRj } from '@/api/renwu/renwuthree'
 import { listRenwufourRj } from '@/api/renwu/renwufour'
 import SearchItem from '../../common/objSearchItem'
-import RenwutwoTable from '../../common/renwutwoTable'
-import RenwuthreeTable from '../../common/renwuthreeTable'
-import RenwufourTable from '../../common/renwufourTable'
+import RenwutwoTable from './tables/renwutwoTable'
+import RenwuthreeTable from './tables/renwuthreeTable'
+import RenwufourTable from './tables/renwufourTable'
 import sendMessage from './sendMessage.vue'
+import Checkmx from '../../common/xgmingxi.vue'
 import Quanmingxi from '../../common/quanmingxi.vue'
 export default {
   name: "Renwupf",
@@ -62,7 +66,8 @@ export default {
     RenwuthreeTable,
     RenwufourTable,
     sendMessage,
-    Quanmingxi
+    Quanmingxi,
+    Checkmx
   },
   data() {
     return {
@@ -70,6 +75,11 @@ export default {
         show:false,
         query:{}
       },
+      xgmxOptions:{
+        show:false,
+        query:{}
+      },
+      mxShow:false,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -509,6 +519,7 @@ export default {
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
       this.total = 0
+      this.mxShow = false
       if(val!=='two'){
         this.qmxOptions.show=false
         if(this.ids.length) {
@@ -526,13 +537,22 @@ export default {
         this.ids = []
       }
     },
-    checkMingx(row){
-      this.qmxOptions.query = {
-        jgdm:row.jgdm,
-        zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
-        zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}')
+    checkMingx(row,key){
+      const keyw = `${key}Options`
+      if(key==='xgmx'){
+        this[keyw].query = {
+          pch:row.rwpcid,
+          jgdm:row.jgdm
+        }
+      } else {
+        this[keyw].query = {
+          jgdm:row.jgdm,
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+        }
       }
-      this.qmxOptions.show = true
+      this[keyw].show = true
+      this.mxShow = true
     }
   }
 };

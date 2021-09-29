@@ -31,7 +31,7 @@
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="费用类别" align="center" prop="fylb" />
+    <el-table-column label="费用类别" align="center" prop="fylb" :formatter="fylbFormat"  show-overflow-tooltip/>
     <el-table-column label="操作" align="center" width="180">
         <template slot-scope="scope">
           <el-button
@@ -51,6 +51,9 @@ export default {
   },
   props:['tableData'],
   methods:{
+    fylbFormat(row, column) {
+      return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       // this.$emit('handleSelectionChange',selection)

@@ -18,6 +18,7 @@
             <span>{{parseTime(scope.row.bjsj, '{y}-{m}-{d} {h}:{s}')}}</span>
           </template>
         </el-table-column>
+        <el-table-column label="行为认定" align="center" prop="xwrd" :width="flexColumnWidth('xwrd',tableData)"/>
         <el-table-column label="追款单价(元)" align="center" prop="zkdj">
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.zkdj,3)}}</span>
@@ -29,7 +30,6 @@
             <span>{{formatMoney(scope.row.wgfy,2)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="行为认定" align="center" prop="xwrd" :width="flexColumnWidth('xwrd',tableData)"/>
         <el-table-column label="备注" align="center" prop="bz"   show-overflow-tooltip/>
       </el-table>
     </div>

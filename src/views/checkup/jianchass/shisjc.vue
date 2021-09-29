@@ -29,12 +29,12 @@
               <el-form-item label="检查组" prop="jcz">
               <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
             </el-form-item>
-            <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
+            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
               <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
               <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
               <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
             </div>
-            <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-else>
+            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-else>
               <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
             </div>
       </el-form>
@@ -79,7 +79,6 @@
             <!-- <el-table-column type="selection" width="55" align="center" /> -->
             <el-table-column label="序号" width="55" type="index" align="center"/>
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
-            <el-table-column label="案件来源"  prop="ajly"  align="center" :width="flexColumnWidth('ajly',renwuthreeList)"/>
             <el-table-column label="违规数量" align="center" prop="wgsl"/>
             <el-table-column label="违规费用(元)" align="center" prop="wgfy" :width="flexColumnWidth('wgfy',renwuthreeList)">
               <template slot-scope="scope">
@@ -89,8 +88,13 @@
             <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
             <el-table-column label="规则名称" align="center" prop="gzmc" width="350" show-overflow-tooltip/>
             <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
+            <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrcs" :width="flexColumnWidth('xjjzrcs',renwuthreeList)"/>
             <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
-            <el-table-column label="医院核实结果" align="center" prop="yyhsjg" :width="flexColumnWidth('yyhsjg',renwuthreeList)"/>
+            <el-table-column label="结算费用(元)" align="center" prop="jsfy" :width="flexColumnWidth('jsfy',renwuthreeList)">
+              <template slot-scope="scope">
+                <span>{{formatMoney(scope.row.jsfy,2)}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="160">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="fluProject(scope.row)">

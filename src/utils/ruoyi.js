@@ -20,7 +20,7 @@ export function parseTime(time, pattern) {
                 const timeArr = tStr.split('/')
                 const dateStr = timeArr[0]
                 const timeStr = timeArr[1]
-                return `${[dateStr.slice(0, 4),dateStr.slice(4,6),dateStr.slice(6,8)].join('/')} ${[dateStr.slice(0, 2),dateStr.slice(2,4),dateStr.slice(4,6)].join(':')}`
+                return `${[dateStr.slice(0, 4),dateStr.slice(4,6),dateStr.slice(6,8)].join('/')} ${[timeStr.slice(0, 2),timeStr.slice(2,4),timeStr.slice(4,6)].join(':')}`
             }
             switch (true) {
                 case (/^[0-9]+$/.test(time) && time.length===13):
@@ -30,10 +30,10 @@ export function parseTime(time, pattern) {
                     time = time.replace(new RegExp(/-/gm), '/');
                     break;
                 case (time.length>13 && time.indexOf('/')>-1):
-                    time = formatDateStr(itme);
+                    time = formatDateStr(time);
                     break;
                 case time.length===8:
-                    tiem = [tiem.slice(0, 4),tiem.slice(4,6),tiem.slice(6,8)].join('/');
+                    time = [time.slice(0, 4),time.slice(4,6),time.slice(6,8)].join('/');
                     break;
                 default:
                     break;

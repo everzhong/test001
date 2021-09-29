@@ -20,7 +20,6 @@ if (process.env.NODE_ENV !== 'production') {
 axios.defaults.baseURL = baseUrl;
 const service = axios.create({
         // axios中请求配置有baseURL选项，表示请求URL公共部分
-        // baseURL: process.env.VUE_APP_BASE_API,
         baseURL: baseUrl,
         // 超时
         timeout: 90000
@@ -70,7 +69,7 @@ service.interceptors.response.use(res => {
         // 获取错误信息
         const msg = errorCode[code] || res.data.msg || errorCode['default']
         if (code === 401) {
-            var redirectUrl = baseUrl + '/#/'
+            let redirectUrl = window.location.origin + '/#/'
             if (window.location.href.split('/#/')[1]) {
                 redirectUrl += window.location.href.split('/#/')[1]
             } else {

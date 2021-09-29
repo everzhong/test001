@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search" ref="queryInfoFrom" :inline="true">
+    <el-form size="small" label-width="100px" class="top-search1" ref="queryInfoFrom" :inline="true">
           <el-form-item label="案件来源" prop="ajly">
             <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
           </el-form-item>
@@ -28,12 +28,12 @@
             <el-form-item label="检查组" prop="jcz">
             <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
           </el-form-item>
-          <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
+          <!-- <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
             <el-button type="primary" size="mini" @click="handleAgree(5)">提交</el-button>
             <el-button type="primary" size="mini" @click="handleAgree(3)">回退</el-button>
             <el-button type="primary" plain icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
-          </div>
-          <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-else>
+          </div> -->
+          <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
             <el-button type="primary" icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
     </el-form>
@@ -59,6 +59,18 @@
     <wg-table :tableData="listjg" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
     <ViewTable v-if="viewTableObj.show" :options="viewTableObj.options"/>
+    <el-form inline style="margin-top:30px">
+      <el-form-item label="复核意见：" style="margin-right:50px">
+        <el-radio v-model="status" label="5">同意</el-radio>
+        <el-radio v-model="status" label="3">驳回</el-radio>
+      </el-form-item>
+      <el-form-item label="具体说明：" style="margin-right:30px">
+        <el-input v-model="qdbh" type="textarea" style="width:300px"/>
+      </el-form-item>
+      <el-form-item >
+        <el-button type="primary" size="small" @click="saveDxqd">保存</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
@@ -86,7 +98,9 @@ export default {
         options:{}
       },
       listjc:[],
-      listjg:[]
+      listjg:[],
+      status:'',//复核意见
+      qdbh:''//具体说明
     }
   },
   components:{
@@ -114,6 +128,19 @@ export default {
       }
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
       this.viewTableObj.show = true
+    },
+    saveDxqd(){
+      if(!this.status){
+        this.msgError('请选择复核意见')
+        return false
+      }
+      const params = {
+        ids:[this.queryInfoFrom.id],
+        status:this.status,//提交5，退回3
+        dxqd:this.status==5?'提交':'退回',
+        qdbh:this.qdbh//驳回意见字段
+      }
+      this.doSubmit(params)
     },
      /**
      *  

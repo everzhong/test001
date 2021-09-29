@@ -45,7 +45,7 @@
         style="
           position: absolute;
           right: 20px;
-          top: -31px;
+          top: -72px;
           background-color: #fff;
         "
       >

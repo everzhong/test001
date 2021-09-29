@@ -1,5 +1,5 @@
 <template>
-<div :style="{minHeight:'360px',height:tableHeight}">
+<!-- <div :style="{minHeight:'360px',height:tableHeight}"> -->
   <el-table :data="tableData" border @selection-change="handleSelectionChange" height="100%">
     <!-- <el-table-column type="selection" width="55" align="center" /> -->
     <!-- <el-table-column label="案件来源" align="center" prop="ajly" :width="flexColumnWidth('ajly',tableData)"/> -->
@@ -47,7 +47,7 @@
         </template>
       </el-table-column>
   </el-table>
-</div>
+<!-- </div> -->
 </template>
 <script>
 import {updateRenwuthree} from '@/api/renwu/renwuthree'
@@ -56,16 +56,12 @@ export default {
   data(){
     return {
       ydlxOptions:[],
-      tableHeight:0
     }
   },
   created(){
     this.getDicts("renwu_ss_ydlx").then(response => {
       this.ydlxOptions = response.data||[]
     });
-  },
-  mounted(){
-    this.tableHeight = document.body.offsetHeight - 50-34-118-40-70-20+'px';
   },
   props:['tableData'],
   methods:{

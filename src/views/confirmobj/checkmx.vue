@@ -10,12 +10,14 @@
         <el-table-column label="医师姓名" align="center" prop="ysxm" :width="flexColumnWidth('ysxm',tableData)" />
         <el-table-column label="参保人卡号" align="center" prop="kh" :width="flexColumnWidth('kh',tableData)" />
         <el-table-column label="参保人姓名" align="center" prop="xm" :width="flexColumnWidth('xm',tableData)" />
-        <el-table-column label="结算日期" align="center" prop="jsrqsj" width="180">
+        <el-table-column label="险种" align="center" prop="ybbf" :width="flexColumnWidth('ybbf',tableData)" />
+        <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',tableData)" />
+        <el-table-column label="结算日期" align="center" prop="jyrq" width="180">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.jsrqsj,'{y}-{m}-{d}') }}</span>
+            <span>{{ parseTime(scope.row.jyrq,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="明细项目编号" align="center" prop="mxxmbh" :width="flexColumnWidth('mxxmbh',tableData)" />
+        <el-table-column label="明细项目编号" align="center" prop="mxxmbm" :width="flexColumnWidth('mxxmbm',tableData)" />
         <el-table-column label="明细项目名称" align="center" prop="mxxmmc" :width="flexColumnWidth('mxxmmc',tableData)" />
         <el-table-column label="通用名" align="center" prop="tym" :width="flexColumnWidth('tym',tableData)" />
         <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj" :width="flexColumnWidth('mxxmdj',tableData)">
@@ -34,14 +36,15 @@
             <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy" :width="flexColumnWidth('mxxmbjsfy',tableData)">
+        <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmybjsfy" :width="flexColumnWidth('mxxmybjsfy',tableData)">
           <template slot-scope="scope">
-          <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
+          <span>{{formatMoney(scope.row.mxxmybjsfy,2)}}</span>
         </template>
         </el-table-column>
-        <el-table-column label="费用类别" align="center" prop="fylb" />
+        <el-table-column label="费用类别" align="center" prop="fylb" :formatter="fylbFormat"  show-overflow-tooltip/>
     </el-table>
     <pagination
+        style="float:right"
         :total="total"
         :page.sync="queryParams.pageNum"
         :limit.sync="queryParams.pageSize"
@@ -72,6 +75,9 @@ export default {
     this.getList()
   },
   methods:{
+    fylbFormat(row, column) {
+      return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+    },
     /** 查询renwuthree列表 */
     async getList(query) {
       this.loading = true

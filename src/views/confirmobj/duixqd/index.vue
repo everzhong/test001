@@ -21,12 +21,12 @@
           @click="handleAgree(0)"
         >驳回</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'&&mingxOptios.show">
+      <el-col :span="1.5" v-if="mxShow">
         <el-button
           type="warning"
           size="small"
           plain
-          @click="mingxOptios.show=false"
+          @click="mxShow=false,xgmxOptions.show=false,qmxOptions.show=false"
         >返回上一层</el-button>
       </el-col>
       <div class="top-right-btn">
@@ -37,20 +37,23 @@
         </el-radio-group>
       </div>
     </el-row>
-    <div v-loading="loading" v-show="!mingxOptios.show" class="table-main">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList"/>
-      <RenwutwoTable v-else :tableData="renwutwoList" @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
+    <div v-loading="loading" v-show="!mxShow" class="table-main">
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"  @check-xgmx="checkMix($event,'xgmx')"/>
+      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
+      <RenwutwoTable v-else :tableData="renwutwoList" @check-xgmx="checkMix($event,'xgmx')"  @check-qmx="checkMix($event,'qmx')" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <pagination
      class="fixed-bottom"
-      v-show="!mingxOptios.show"
+      v-show="!mxShow"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <checkmx :options="mingxOptios" v-if="mingxOptios.show"/>
+    <div class="table-main" v-show="mxShow">
+      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+      <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
+    </div>
   </div>
 </template>
 <script>
@@ -63,6 +66,8 @@ import RenwutwoTable from './tables/renwutwoTable'
 import RenwuthreeTable from './tables/renwuthreeTable'
 import RenwufourTable from './tables/renwufourTable'
 import Checkmx from '../checkmx.vue'
+import Quanmingxi from '../../common/quanmingxi.vue'
+
 export default {
   name: "Duixqd",
   components: {
@@ -70,14 +75,20 @@ export default {
     RenwutwoTable,
     RenwuthreeTable,
     RenwufourTable,
-    Checkmx
+    Checkmx,
+    Quanmingxi
   },
   data() {
     return {
-      mingxOptios:{
+      xgmxOptions:{
         show:false,
         query:{}
       },
+      qmxOptions:{
+        show:false,
+        query:{}
+      },
+      mxShow:false,
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -178,12 +189,23 @@ export default {
     this.getList();
   },
   methods: {
-    checkMix(row){
-      this.mingxOptios.query = {
-        rwpcid:row.rwpcid,
-        jgdm:row.jgdm
+    checkMix(row,key){
+      const keyw = `${key}Options`
+      if(key==='xgmx'){
+        this[keyw].query = {
+          pch:row.rwpcid,
+          jgdm:row.jgdm
+        }
+      } else {
+        this[keyw].query = {
+          jgdm:row.jgdm,
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+        }
       }
-      this.mingxOptios.show = true
+      this[keyw].show = true
+      this.mxShow = true
+
     },
     /** 查询renwutwo列表 */
     async getList(query) {
@@ -522,6 +544,7 @@ export default {
     tabsLevelChange(val){
       this.queryParams.pageNum = 1
       this.total = 0
+      this.mxShow = false
       if(val!=='two'){
         if(this.ids.length) {
           const resql = []

@@ -24,18 +24,20 @@
      <div v-loading="loading" class="table-main">
       <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange" style="width:100%" height="100%"> 
         <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column label="序号" type="index" align="center"/>
         <el-table-column label="是否制作" align="center" prop="isdayin" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.isdayin?'是':'否'}}</span>
           </template>
         </el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
+        <el-table-column label="案件来源" align="center" prop="ajly" show-overflow-tooltip/>
+        <el-table-column label="检查方式" align="center" prop="ajly" show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf" show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb" show-overflow-tooltip/>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
+        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="检查机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
+        <el-table-column label="承办机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
         <el-table-column label="检查组" align="center" prop="jczname"  :width="flexColumnWidth('jczname',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
           <template slot-scope="scope">
@@ -47,7 +49,7 @@
             <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="150">
+        <el-table-column label="操作" align="center" width="280">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.isdayin!=1"
@@ -56,17 +58,23 @@
               @click="navigateToAdd([scope.row])"
             >制作通知</el-button>
             <el-button
-              v-else
-              size="mini"
-              type="text"
-              @click="printFile([scope.row])"
-            >打印通知</el-button>
-            <el-button
               v-if="scope.row.isdayin==1"
               size="mini"
               type="text"
               @click="navigateToAdd([scope.row],true)"
             >查看通知</el-button>
+            <el-button
+              v-if="scope.row.isdayin==1"
+              size="mini"
+              type="text"
+              @click="printFile([scope.row],'jianca')"
+            >打印检查通知书</el-button>
+            <el-button
+              v-if="scope.row.isdayin==1"
+              size="mini"
+              type="text"
+              @click="printFile([scope.row],'jilv')"
+            >打印纪律告知书</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -79,8 +87,14 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div v-for="(item,i) in pildyList" :key="i" :id="'dayin_'+i" style="display:none">
+    <div v-for="(item,i) in piliangList" :key="item.id" :id="'piliang_'+i" style="display:none">
       <SingleNotice :pageData="item"/>
+    </div>
+    <div v-for="(item,i) in jiancaList" :key="item.id+'jc'" :id="'jianca_'+i" style="display:none">
+      <JcNotice :pageData="item"/>
+    </div>
+    <div v-for="(item,i) in jilvList" :key="item.id+'jl'" :id="'jilv_'+i" style="display:none">
+      <JlNotice :pageData="item"/>
     </div>
   </div>
 </template>
@@ -88,18 +102,25 @@
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo } from "@/api/renwu/renwutwo"
 import SearchItem from '../../common/objSearchItem'
 import SingleNotice from './singleNotice.vue'
-import MutilNotice from './mutilNotice.vue'
+import JcNotice from './jcNotice.vue'
+import JlNotice from './jlNotice.vue'
+
+// import MutilNotice from './mutilNotice.vue'
 
 export default {
   name: "Dayintz",
   components: {
     SearchItem,
     SingleNotice,
-    MutilNotice
+    JcNotice,
+    JlNotice
+    // MutilNotice
   },
   data() {
     return {
-      pildyList:[],
+      piliangList:[],//批量打印
+      jiancaList:[],//检查通知书
+      jilvList:[],//纪律通知书
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -228,10 +249,10 @@ export default {
         path:path,
       })
     },
-    printFile(row){
-      this.pildyList = row
+    printFile(row,key){
+      this[`${key}List`] = [...row]
       setTimeout(() => {
-        this.doPrint(row)
+        this.doPrint(key)
       }, 50);
     },
     // 异本地字典翻译
@@ -409,7 +430,7 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.selectionData = selection
-      this.pildyList = selection
+      this.piliangList = [...selection]
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -518,18 +539,19 @@ export default {
             confirmButtonText: '确定'
           }).catch(_=>{});
         } else {
-          this.doPrint()
+          this.doPrint('piliang')
         }
       }
     },
     /**
      * 执行打印
      */
-    doPrint(){
+    doPrint(type){
       const dayinList = []
-      var newWin = window.open() // 新打开一个空窗口
-      for (var i = 0; i < this.pildyList.length; i++) {
-        var imageToPrint = document.getElementById(`dayin_${i}`) // 获取需要打印的内容
+      const newWin = window.open() // 新打开一个空窗口
+      const dyList = this[`${type}List`]
+      for (let i = 0; i < dyList.length; i++) {
+        const imageToPrint = document.getElementById(`${type}_${i}`) // 获取需要打印的内容
         imageToPrint.style.display = 'block'
         dayinList.push(imageToPrint)
         newWin.document.write(imageToPrint.outerHTML) // 将需要打印的内容添加进新的窗口

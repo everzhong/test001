@@ -1,30 +1,105 @@
 <template>
   <div class="app-container">
-    <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+    <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="dayinBack">返回</el-button>
     </div>
     <div class="zhizuo-port">
-        <div class="pre-view margin-style">
-          <p class="top-tip">预览通知书</p>
-          <single-notice v-if="zhzList.length<2" :pageData="zhizuo"></single-notice>
-          <mutile-notice v-else :zhizuo="zhizuo" :noticeList="zhzList"></mutile-notice>
+        <div class="zhizuo">
+          <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">
+            <el-table-column label="机构代码" prop="jgdm" align="center" :width="flexColumnWidth('jgdm',zhzList)"></el-table-column>
+            <el-table-column label="机构名称" prop="jgmc" align="center" :width="flexColumnWidth('jgmc',zhzList)"></el-table-column>
+            <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
+            <el-table-column fixed="right" label="检查开始时间" prop="dayinstarttime" align="center" :width="flexColumnWidth('dayinstarttime',zhzList)">
+              <template slot-scope="scope">
+                <span>{{parseTime(scope.row.dayinstarttime,'{y}年{m}月{d}日')}}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="zhizuo-item">
+            <span>检查开始日期</span>
+            <el-date-picker
+              v-model="zhizuo.dayinstarttime"
+              type="date"
+              size="small"
+              placeholder="选择检查开始日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd hh:mm:ss"
+              disabled
+              >
+            </el-date-picker>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系人</span>
+            <el-input size="small" v-model="zhizuo.dayinname" disabled></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系电话</span>
+            <el-input size="small" v-model="zhizuo.dayintel" maxlength="12" disabled></el-input>
+            <span>(检查通知书)</span>
+          </div>
+          <div class="zhizuo-item">
+            <span>制作日期</span>
+            <el-date-picker
+              v-model="zhizuo.dayinriqi"
+              type="date"
+              size="small"
+              placeholder="选择制作日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd hh:mm:ss"
+              disabled
+              >
+            </el-date-picker>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系电话</span>
+            <el-input size="small" v-model="zhizuo.dayinphone" maxlength="12" disabled></el-input>
+            <span>(纪律告知书)</span>
+          </div>
         </div>
+        <div :class="['pre-view']">
+          <p class="top-tip">预览通知书</p>
+          <!-- <single-notice v-if="zhzList.length<2" :pageData="zhizuo"></single-notice> -->
+          <jc-notice :pageData="zhizuo"/>
+          <div class="dy-xz">
+            <el-button type="primary" size="mini" @click="printFile([zhizuo],'jianca')">打印</el-button>
+            <el-button type="primary" size="mini" @click="toImage('jcNotice','检查通知书')">下载</el-button>
+          </div>
+          <jl-notice :pageData="zhizuo"/>
+          <div class="dy-xz">
+            <el-button type="primary" size="mini" @click="printFile([zhizuo],'jilv')">打印</el-button>
+            <el-button type="primary" size="mini" @click="toImage('jlNotice','纪律告知书')">下载</el-button>
+          </div>
+        </div>
+    </div>
+    <div v-for="(item,i) in jiancaList" :key="item.id+'jc'" :id="'jianca_'+i" style="display:none">
+      <JcNotice :pageData="item"/>
+    </div>
+    <div v-for="(item,i) in jilvList" :key="item.id+'jl'" :id="'jilv_'+i" style="display:none">
+      <JlNotice :pageData="item"/>
     </div>
   </div>
 </template> 
 
 <script>
 import { listDcqz, getDcqz, delDcqz, addDcqz, } from "@/api/renwu/dcqz";
-import { setDytz } from "@/api/renwu/renwutwo"
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,setDytz } from "@/api/renwu/renwutwo"
 
 import SingleNotice from './singleNotice.vue'
-import mutileNotice from './mutilNotice.vue'
+import JcNotice from './jcNotice.vue'
+import JlNotice from './jlNotice.vue'
+
+import html2canvas from 'html2canvas'
+import JsPDf from 'jspdf'
+import redirectVue from '../../redirect.vue';
+
 
 export default {
-  name: "ViewNotice",
+  name: "AddNotice",
   components: {
     SingleNotice,
-    mutileNotice
+    JcNotice,
+    JlNotice
+    // mutileNotice
   },
   data() {
     return {
@@ -93,6 +168,7 @@ export default {
       // 文件名称字典
       wenjianOptions: [],
       // 查询参数
+      xzqOptions:[],
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -104,6 +180,8 @@ export default {
       },
       zhizuo:{},
       zhzList:[],
+      jiancaList:[],
+      jilvList:[]
     };
   },
   created() {
@@ -115,10 +193,60 @@ export default {
       this.zhizuo = printData[0]
       this.ids = printData.map(item => item.id)
     }
-    // this.getList();
-    // this.gitDic();
+    this.getDicts("sys_job_jgxx").then(response => {
+      this.xzqOptions = response.data;
+    });
   },
   methods: {
+    toImage(id,name){
+      let canvasImg = document.getElementById(id)
+      html2canvas(canvasImg,{
+        width:1000,
+        allowTaint:true,
+        useCORS:true
+      }).then(canvas=>{
+        let url = canvas.toDataURL('image/jpeg');
+        let contentWidth = canvas.width
+        let contentHeight = canvas.height
+        let imgWidth = 595.28
+        let imgHeight = 595.28/(contentWidth/contentHeight)
+        let PDF = new JsPDf('p','px','a4')
+        PDF.addImage(url,"JPEG",36,25,imgWidth,imgHeight)
+        PDF.save(`${name}.pdf`)
+      })
+    },
+    printFile(data,key){
+      console.log(data,key)
+      this[`${key}List`] = [...data]
+      setTimeout(() => {
+        this.doPrint(key)
+      }, 50);
+    },
+    /**
+     * 执行打印
+     */
+    doPrint(type){
+      const dayinList = []
+      const newWin = window.open() // 新打开一个空窗口
+      const dyList = this[`${type}List`]
+      for (let i = 0; i < dyList.length; i++) {
+        const imageToPrint = document.getElementById(`${type}_${i}`) // 获取需要打印的内容
+        imageToPrint.style.display = 'block'
+        dayinList.push(imageToPrint)
+        newWin.document.write(imageToPrint.outerHTML) // 将需要打印的内容添加进新的窗口
+      }
+      const styleSheet = `<style>.print-area{width:669px;height:1020px;margin:auto}</style>`
+      newWin.document.head.innerHTML = styleSheet // 给打印的内容加上样式
+      newWin.document.close() // 在IE浏览器中使用必须添加这一句
+      newWin.focus() // 在IE浏览器中使用必须添加这一句
+      setTimeout(function() {
+          newWin.print() // 打印
+          newWin.close() // 关闭窗口
+      }, 10)
+      dayinList.forEach(item=>{
+        item.style.display = 'none'
+      })
+    },
     dayinBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
@@ -155,6 +283,10 @@ export default {
     // 类型字典翻译
     typeFormat(row, column) {
       return this.selectDictLabel(this.typeOptions, row.type);
+    },
+    // 行政区字典翻译
+    xzqFormat(row, column) {
+      return this.selectDictLabel(this.xzqOptions, row.xzq);
     },
     // 资料说明字典翻译
     zlsmFormat(row, column) {
@@ -345,74 +477,6 @@ export default {
           this.msgSuccess("删除成功");
         })
     },
-    gitDic(){
-      this.getDicts("${column.dictType}").then(response => {
-        this.qzidOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.rwpcidOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jgdmOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.typeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.zlsmOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.upmanOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.addtimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcddOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcstarttimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcendtimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.dwqcOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.addrOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.farenOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.telOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.zfryOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.xwnameOptions = response.data;
-      });
-      this.getDicts("sys_user_sex").then(response => {
-        this.sexOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.sfzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.lxdzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.bzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.wenjianurlOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.wenjianOptions = response.data;
-      });
-    },
     satrtTimeCgange(val){
       this.zhzList = this.zhzList.map(item=>{
         item.dayinstarttime = val
@@ -435,21 +499,21 @@ export default {
   }
   .zhizuo {
     flex-shrink: 0;
-    width: 600px;
+    width: 500px;
     color:#606266;
+    padding-top: 10px;
     .zhizuo-item {
       display: flex;
       font-size: 14px;
       align-items: center;
       margin-bottom: 5px;
-      width: 450px;
       &::v-deep .el-input__inner {
         color:#303313;
-        width: 300px;
-        margin-right: 10px;
+        width: 290px;
+        margin-right: 5px;
       }
       &::v-deep .el-date-editor.el-input {
-        width: 300px;
+        width: 290px;
       }
       >span {
         display: block;
@@ -460,8 +524,9 @@ export default {
     }
   }
   .pre-view {
-    padding-left:50px;
+    padding-left:40px;
     padding-right:20px;
+    padding-bottom: 20px;
     p {
       padding: 0;
       margin: 0;
@@ -541,6 +606,10 @@ export default {
     }
     &.margin-style {
       margin: auto;
+    }
+    .dy-xz {
+      text-align: right;
+      padding:10px 0;
     }
   }
 }

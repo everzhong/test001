@@ -9,7 +9,7 @@
         <el-radio-button label="2">查看核实情况</el-radio-button>
       </el-radio-group>
       <br>
-      <section class="transfer" v-loading="loading" v-show="tabsValue==='1'">
+      <section class="transfer table-main" v-loading="loading" v-show="tabsValue==='1'">
         <div class="left-part">
           <transfer-item ref="leftList" @select="selectChange($event,'leftState')" :options="leftOptions"></transfer-item>
         </div>
@@ -22,10 +22,12 @@
           <!-- <transfer-item @select="selectChange($event,'rightState')" :options="rightOptions" :tableData="rightList"></transfer-item> -->
         </div>
       </section>
-      <div v-show="tabsValue==='1'" style="text-align:right;margin-top:10px"> 
+      <div v-show="tabsValue==='1'" style="text-align:right;margin-top:10px;position:absolute;bottom:20px;right:0"> 
         <el-button type="primary" size="mini" @click="confirmHs">确定核实数据</el-button>
       </div>
-      <check-hssz v-if="tabsValue==='2'"></check-hssz>
+      <div class="table-main1">
+        <check-hssz v-if="tabsValue==='2'"></check-hssz>
+      </div>
     </section>
 </template>
 <script>
@@ -133,12 +135,25 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.table-main,.table-main1 {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+}
+.table-main1 {
+  bottom:20px;
+  top:90px;
+}
+.table-main {
+  bottom:70px;
+  top:105px;
+}
 .transfer {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
   >div {
     box-sizing: border-box;
+    height: 100%;
     &.btn {
       flex-shrink: 0;
       width: 60px;
@@ -159,8 +174,10 @@ export default {
   }
 }
 .jgheshi{
-  margin-top:10px;
+  height: 100%;
+  position: relative;
   .head-close {
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;

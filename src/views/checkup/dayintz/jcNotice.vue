@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <div id="printJc" class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0">
+  <section id="jcNotice">
+    <div class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所/××区医疗保障局 </h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/×医保监督通（××××）×号</div>
@@ -42,7 +42,7 @@
       <!-- <el-button type="primary" v-print="printJianchs" size="mini" >打印</el-button> -->
       <!-- <el-button type="primary" size="mini" @click="printEvent('printJc')">打印</el-button> -->
     <!-- </div> -->
-    <div id="printJl" class="print-area" ref="printJl" style="width:635px;padding:0px;flex-shrink:0">
+    <!-- <div id="printJl" class="print-area" ref="printJl" style="width:635px;padding:0px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
@@ -86,7 +86,7 @@
         </div>
       </section>
       <div style="border:1px solid #303313;border-top:none;padding:3px 20px 10px;">备注：本文书一式三份，一份留存执法案卷，一份交被检机构，一份张贴检查室门上。</div>
-    </div>
+    </div> -->
     <!-- <div style="text-align:right;padding-right:19px">
       <el-button size="mini" type="primary" v-print="printJilv">打印</el-button>
       <el-button size="mini" type="primary" @click="printEvent('printJl')">打印</el-button>
@@ -95,18 +95,9 @@
 </template>
 <script>
 export default {
-  name:'SingleNotice',
+  name:'JcNotice',
   data(){
-    return {
-      //  printJianchs: {
-      //   id: "printJc",
-      //   popTitle: "监督检查通知书",
-      // },
-      // printJilv: {
-      //   id: "printJl",
-      //   popTitle: "监督检查纪律告知书",
-      // },
-    }
+    return {}
   },
   mounted(){
   },

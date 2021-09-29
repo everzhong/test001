@@ -129,6 +129,7 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
+            this.$store.dispatch('GetFyList');
             this.$router.push({ path: this.redirect || "/renwu/renwulist" }).catch(()=>{});
           }).catch(() => {
             this.loading = false;

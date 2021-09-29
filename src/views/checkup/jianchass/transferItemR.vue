@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%">
+  <div style="width:100%;height:100%">
     <el-row :gutter="10">
       <el-col :span="1.5">
         <span style="margin-right:10px;">{{options.title||'待选择'}}</span>
@@ -12,47 +12,25 @@
         <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
     </el-row>
-    <div style="height:400px">
-      <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="350px"> 
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',tableData)"/>
+    <div style="height:calc(100% - 90px)">
+      <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="100%"> 
         <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',tableData)"/>
-        <el-table-column label="规则名称" align="center" prop="gzmc"  :width="flexColumnWidth('gzmc',tableData)"/>
-        <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
+        <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
+        <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
         <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
         <el-table-column label="涉及金额" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.xjje,2)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结算费用" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',tableData)">
+        <el-table-column label="结算总费用" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',tableData)">
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.jsfy,2)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
-        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',tableData)"/>
-        <el-table-column label="异本地" align="center" prop="ybd"  :width="flexColumnWidth('ybd',tableData)"/>
-        <el-table-column label="数据开始时间" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)"/>
-        <el-table-column label="信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
-        <el-table-column label="添加时间" align="center" prop="addtime"  :width="flexColumnWidth('addtime',tableData)"/>
-        <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',tableData)"/>
-        <el-table-column label="机构核实意见" align="center" prop="hsyj"  :width="flexColumnWidth('hsyj',tableData)"/>
-        <el-table-column label="核实状态" align="center" prop="hszt"  :width="flexColumnWidth('hszt',tableData)"/>
-        <el-table-column label="核实时间" align="center" prop="hssj"  :width="flexColumnWidth('hssj',tableData)"/>
-        <el-table-column label="核实人" align="center" prop="hsr"  :width="flexColumnWidth('hsr',tableData)"/>
-        <el-table-column label="核实派发时间" align="center" prop="hspfsj"  :width="flexColumnWidth('hspfsj',tableData)"/>
-        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
-        <el-table-column label="已发送回智审" align="center" prop="issend"  :width="flexColumnWidth('issend',tableData)">
-          <template slot-scope="scope">
-            <span>{{scope.row.issend==='0'?'否':scope.row.issend==='1'?'是':''}}</span>
-          </template>
-        </el-table-column>
       </el-table>
       <pagination
-      v-show="total>0"
+      style="float:right"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"

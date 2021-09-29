@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="margin-bottom:10px"/>
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="margin-bottom:10px"/>
     <!-- <div class="tabs-part">
       <div class="left-btn"></div>
       <div class="tabs"></div>
@@ -29,10 +29,8 @@
         </el-radio-group>
       </div>
     </el-row>
-    <div v-loading="loading"  v-show="!mxShow">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
-      <RenwutwoTable v-else :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
+    <div v-loading="loading"  v-show="!mxShow && tabsValue==='two'">
+      <RenwutwoTable v-if="tabsValue==='two'" :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
     </div>
     <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
       <el-form-item label="已选机构" prop="yxjg">
@@ -76,9 +74,11 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div class="table-main" v-if="xgmxOptions.show||qmxOptions.show">
+    <div v-loading="loading" class="table-main" v-show="tabsValue!=='two'||mxShow" :style="{top:tableHeight}">
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
+      <RenwufourTable  v-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
       <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
-      <quanmingxi :options="qmxOptions" v-else />
+      <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
     </div>
   </div>
 </template>
@@ -104,6 +104,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:0,
       xgmxOptions:{
         show:false,
         query:{}
@@ -222,6 +223,7 @@ export default {
   },
   methods: {
     checkMix(row,key){
+      this.tableHeight = this.calcTableHeight(35+15)
       const keyw = `${key}Options`
       if(key==='xgmx'){
         this[keyw].query = {
@@ -554,6 +556,7 @@ export default {
       this.total = 0
       this.mxShow = false
       if(val!=='two'){
+        this.tableHeight = this.calcTableHeight(50)
         this.xgmxOptions.show=false
         this.qmxOptions.show=false
         if(this.ids.length) {

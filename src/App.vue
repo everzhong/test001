@@ -6,8 +6,9 @@
 
 <script>
 export default  {
-  name:  'App'
+  name:  'App',
 }
+
 </script>
 <style lang="scss">
 .el-table th {
@@ -17,6 +18,12 @@ export default  {
   // margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
+  .el-form-item {
+    margin-bottom: 10px;
+    margin-right: 20px;
+  }
+}
+.top-search1 {
   .el-form-item {
     margin-bottom: 10px;
     margin-right: 20px;

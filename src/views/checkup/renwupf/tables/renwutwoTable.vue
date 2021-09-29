@@ -2,9 +2,8 @@
   <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
     <el-table-column type="selection" width="55" align="center" />
     <el-table-column label="序号" type="index" align="center"  />
-    <el-table-column label="网审意见" align="center" prop="wsyj"  :width="flexColumnWidth('wsyj',tableData)"/>
-    <el-table-column label="网审人员" align="center" prop="wsry"  :width="flexColumnWidth('wsry',tableData)"/>
     <el-table-column label="监管状态" align="center" width="150"><template>待对象确定</template></el-table-column>
+    <el-table-column label="承办机构" align="center" prop="cbjg"  :width="flexColumnWidth('cbjg',tableData)"/>
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/>
     <el-table-column label="检查方式" align="center" prop="jcfs"  show-overflow-tooltip/>
@@ -21,10 +20,8 @@
       </template>
     </el-table-column>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-    <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
     <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
     <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
-    <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',tableData)"/>
     <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',tableData)"/>
     <el-table-column label="涉及就诊人员数" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
     <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">

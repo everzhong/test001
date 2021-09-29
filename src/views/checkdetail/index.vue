@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" style="margin-bottom:6px"/>
-    <div style="position:absolute;right:20px;top:-31px;background-color:#fff">
+    <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
     </div>
     <el-row :gutter="10">
@@ -64,7 +64,6 @@
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <!-- <el-table-column label="行政区" align="center" prop="xzq"  :width="flexColumnWidth('xzq',renwutwoList)"/> -->
       <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
       <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
       <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>

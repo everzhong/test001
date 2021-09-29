@@ -7,6 +7,7 @@
         <el-table-column label="状态" align="center" prop="status" width="150"><template>待结果复核</template></el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/>
+        <el-table-column label="检查方式" align="center" prop="jcfs"  show-overflow-tooltip/>
         <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
         <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
@@ -21,7 +22,8 @@
         </el-table-column>
         <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="检查机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
+        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
+        <el-table-column label="承办机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
         <el-table-column label="检查组" align="center" prop="jczname"  show-overflow-tooltip/>
         <el-table-column label="操作" align="center" width="100">
           <template slot-scope="scope">
@@ -29,14 +31,13 @@
               size="mini"
               type="text"
               @click="doCheck(scope.row)"
-            >形成初步结果</el-button>
+            >结果复核</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <pagination
       class="fixed-bottom"
-      v-show="total>0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"

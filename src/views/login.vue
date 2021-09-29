@@ -121,6 +121,7 @@ export default {
       Cookies.remove('username')
       this.$store.dispatch('ClearInfo')
       this.$store.dispatch("LoginApi", info).then(() => {
+          this.$store.dispatch('GetFyList');
           this.$router.push({ path: this.redirect||"/renwu/renwulist"}).catch(()=>{});
         }).catch(() => {
           window.parent.postMessage({
