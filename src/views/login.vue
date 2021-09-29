@@ -127,7 +127,7 @@ export default {
           window.parent.postMessage({
             'loginFailed': {
                 'systemName': '第三方监管',
-                'redirectUrl': axios.defaults.baseURL + '/#/login'
+                'redirectUrl': window.location.origin + '/#/login'
             }
           }, '*');
           this.loading = false;
