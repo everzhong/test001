@@ -3,13 +3,12 @@
     <SearchItem @handleQuery="handleQuery" style="height:94px"/>
     <div v-loading="loading" class="table-main">
       <!-- <RenwutwoTable :tableData="renwutwoList" /> -->
-      <el-table :data="renwutwoList" border height="100%" style="width:100%">
-        <el-table-column label="序号" type="index" align="center"/>
-        <el-table-column label="状态" align="center" width="150"><template>待检查实施</template></el-table-column>
+      <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
+        <el-table-column label="序号" type="index" align="center" slot="fixed"/>
+        <el-table-column label="状态" align="center" min-width="170"><template>待检查实施</template></el-table-column>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
         <el-table-column label="检查方式" align="center" prop="jcfs"  :width="flexColumnWidth('jcfs',renwutwoList)"/>
-
         <el-table-column label="险种" align="center" prop="ybbf" />
         <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
         <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
@@ -27,7 +26,7 @@
         <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="承办机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
         <el-table-column label="检查组" align="center" prop="jczname" />
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" slot="operate" min-width="150">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -36,7 +35,7 @@
             >实施检查</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -58,6 +57,59 @@ export default {
   },
   data() {
     return {
+      tableHeader:[{
+        label:"状态",
+        prop:"status",
+        width:'140px',
+        viewFun:()=>{
+          return '待检查实施'
+        }
+      },{
+        label:"批次号",
+        prop:'rwpcid'
+      },{
+        label:"案件来源",
+        prop:'ajly',
+        width:'auto'
+      },{
+        label:"检查方式",
+        prop:'jcfs',
+        width:'auto'
+      },{
+        label:"险种",
+        prop:'ybbf',
+        width:'auto'
+      },{
+        label:"就医类型",
+        prop:'jslb'
+      },{
+        label:"数据开始日期",
+        prop:'datastarttime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"数据结束日期",
+        prop:'dataendtime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"机构代码",
+        prop:'jgdm'
+      },{
+        label:"统一社会信用代码",
+        prop:'xydm'
+      },{
+        label:"机构名称",
+        prop:'jgmc'
+      },{
+        label:"承办机构",
+        prop:'jcjg'
+      },{
+        label:"检查组",
+        prop:'jczname'
+      }],
       // 遮罩层
       loading: true,
       // 导出遮罩层

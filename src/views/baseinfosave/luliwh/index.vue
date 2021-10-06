@@ -2,27 +2,9 @@
   <div class="app-container">
     <SearchItem ref="searchForm" @handleQuery="handleQuery" style="max-height:138px;overflow:auto"/>
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
-      <el-table :data="renwutwoList" border height="100%" style="width:100%">
-        <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="机构等级" align="center" prop="jgdj"  :width="flexColumnWidth('jgdj',renwutwoList)"/>
-        <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf"  show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb"  show-overflow-tooltip/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="监管阶段" align="center" prop="jgzt"  show-overflow-tooltip/>
-        <el-table-column label="操作" align="center" width="100">
+      <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
+        <el-table-column label="序号" type="index" align="center" slot="fixed"/>
+        <el-table-column label="操作" align="center" min-width="100" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -31,7 +13,7 @@
             >查看详情</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -53,6 +35,48 @@ export default {
   },
   data() {
     return {
+      tableHeader:[{
+        prop: 'rwpcid',
+        label: '批次号'
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'jgdj',
+        label: '机构等级',
+      },{
+        prop: 'xzq',
+        label: '行政区',
+        width:'auto',
+        formatter: this.xzqFormat
+      },{
+        prop: 'ybbf',
+        label: '险种',
+        width:'auto'
+      },{
+        prop: 'jslb',
+        label: '就医类型',
+        width:'auto'
+      },{
+        label:"数据开始日期",
+        prop:'datastarttime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"数据结束日期",
+        prop:'dataendtime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"监管阶段",
+        prop:'jgzt',
+        width:'auto'
+      }],
       tableHeight:0,
       // 遮罩层
       loading: true,

@@ -1,38 +1,8 @@
 <template>
-  <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
-    <el-table-column type="selection" width="55" align="center" />
-    <el-table-column label="序号" type="index" align="center"  />
-    <el-table-column label="网审意见" align="center" prop="wsyj"  :width="flexColumnWidth('wsyj',tableData)"/>
-    <el-table-column label="网审人员" align="center" prop="wsry"  :width="flexColumnWidth('wsry',tableData)"/>
-    <el-table-column label="监管状态" align="center" width="150"><template>待对象确定</template></el-table-column>
-    <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
-    <el-table-column label="案件来源" align="center" prop="ajly"  show-overflow-tooltip/>
-    <el-table-column label="检查方式" align="center" prop="jcfs"  show-overflow-tooltip/>
-    <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',tableData)"/>
-    <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',tableData)"/>
-    <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',tableData)">
-      <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',tableData)">
-      <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-    <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
-    <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
-    <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
-    <el-table-column label="结算等级" align="center" prop="jsdj"  :width="flexColumnWidth('jsdj',tableData)"/>
-    <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',tableData)"/>
-    <el-table-column label="涉及就诊人员数" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.ydje,2)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" align="center" width="150">
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
+    <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+    <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
+    <el-table-column label="操作" align="center" width="150" slot="operate">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -46,14 +16,90 @@
         >全明细</el-button>
       </template>
     </el-table-column>
-  </el-table>
+  </sTable>
 </template>
 <script>
 export default {
   name:'RenwutwoTable',
   data(){
     return {
-      xzqOptions:[]
+      xzqOptions:[],
+      tableHeader:[{
+        label:"网审意见",
+        prop:"wsyj",
+      },{
+        label:"网审人员",
+        prop:'wsry'
+      },{
+        label:"监管状态",
+        prop:'jgzt',
+        width: '150px',
+        viewFun:()=>{
+          return '待对象确定'
+        }
+      },{
+        label:"批次号",
+        prop:'rwpcid'
+      },{
+        label:"案件来源",
+        prop:'ajly',
+        width:'auto'
+      },{
+        label:"检查方式",
+        prop:'jcfs',
+        width:'auto',
+        viewFun:()=>{
+          return '规则筛查'
+        }
+      },{
+        label:"险种",
+        prop:'ybbf'
+      },{
+        label:"就医类型",
+        prop:'jslb'
+      },{
+        label:"数据开始日期",
+        prop:'datastarttime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"数据结束日期",
+        prop:'dataendtime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"机构代码",
+        prop:'jgdm'
+      },{
+        label:"统一社会信用代码",
+        prop:'xydm'
+      },{
+        label:"机构名称",
+        prop:'jgmc'
+      },{
+        label:"行政区",
+        prop:'xzq',
+        width:'auto',
+        formatter:this.xzqFormat
+      },{
+        label:"结算等级",
+        prop:'jsdj',
+        formatter:this.xzqFormat
+      },{
+        label:"涉及规则数",
+        prop:'sjwgs'
+      },{
+        label:"涉及就诊人员数",
+        prop:'jsrc'
+      },{
+        label:"涉及金额(元)",
+        prop:'ydje',
+        viewFun:(ydje)=>{
+          return this.formatMoney(ydje,2)
+        }
+      }]
     }
   },
   props:['tableData'],

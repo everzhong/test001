@@ -545,6 +545,8 @@ export default {
       this.queryParams.pageNum = 1
       this.total = 0
       this.mxShow = false
+      this.qmxOptions.show=false
+      this.xgmxOptions.show=false
       if(val!=='two'){
         if(this.ids.length) {
           const resql = []

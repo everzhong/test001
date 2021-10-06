@@ -16,7 +16,7 @@ import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree, flexColumnWidth, formatMoney,calcTableHeight} from "@/utils/ruoyi";
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree, flexColumnWidth, formatMoney, calcTableHeight } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
@@ -26,6 +26,7 @@ import Print from '@/utils/print' // 注册
 import mPrint from 'vue-print-nb' // 引入附件的js文件 v-print方式
 import { checkRole } from '@/utils/permission'
 import { addJcfl } from '@/api/renwu/jcfl.js' //新增检查履历
+import sTable from '@/components/stable.vue'
 
 Vue.use(Print)
 Vue.use(mPrint)
@@ -73,7 +74,7 @@ Vue.prototype.msgInfo = function(msg) {
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
-
+Vue.component('sTable', sTable)
 Vue.use(permission)
 
 /**

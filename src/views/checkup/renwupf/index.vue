@@ -520,8 +520,9 @@ export default {
       this.queryParams.pageNum = 1
       this.total = 0
       this.mxShow = false
+      this.qmxOptions.show=false
+      this.xgmxOptions.show=false
       if(val!=='two'){
-        this.qmxOptions.show=false
         if(this.ids.length) {
           const resql = []
           this.selection.forEach(item=>{

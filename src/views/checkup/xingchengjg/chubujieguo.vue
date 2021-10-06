@@ -40,7 +40,7 @@
     <p style="font-size:12px;margin:0px 0 10px 0;color:#606626">初步结果-预览</p>
     <el-row :gutter="10">
       <el-col :span="1.5">
-        <span>参保人：</span>
+        <span style="color:#606266;font-size:14px">参保人：</span>
         <el-select v-model="queryParams.ybd" size="small" @change="getList">
           <el-option label="本地" value="本地"></el-option>
           <el-option label="异地" value="异地"></el-option>

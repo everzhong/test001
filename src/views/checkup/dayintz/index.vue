@@ -21,35 +21,10 @@
         >批量打印通知</el-button>
       </el-col>
     </el-row>
-     <div v-loading="loading" class="table-main">
-      <el-table :data="renwutwoList" border  @selection-change="handleSelectionChange" style="width:100%" height="100%"> 
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column label="是否制作" align="center" prop="isdayin" width="100">
-          <template slot-scope="scope">
-            <span>{{scope.row.isdayin?'是':'否'}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <el-table-column label="案件来源" align="center" prop="ajly" show-overflow-tooltip/>
-        <el-table-column label="检查方式" align="center" prop="ajly" show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf" show-overflow-tooltip/>
-        <el-table-column label="就医类型" align="center" prop="jslb" show-overflow-tooltip/>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="承办机构" align="center" prop="jcjg"  :width="flexColumnWidth('jcjg',renwutwoList)"/>
-        <el-table-column label="检查组" align="center" prop="jczname"  :width="flexColumnWidth('jczname',renwutwoList)"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="280">
+      <div v-loading="loading" class="table-main">
+      <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" slot="fixed"></el-table-column>
+        <el-table-column label="操作" align="center" min-width="280" slot="operate">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.isdayin!=1"
@@ -77,7 +52,7 @@
             >打印纪律告知书</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -104,6 +79,7 @@ import SearchItem from '../../common/objSearchItem'
 import SingleNotice from './singleNotice.vue'
 import JcNotice from './jcNotice.vue'
 import JlNotice from './jlNotice.vue'
+import Stable from '../../../components/stable.vue'
 
 // import MutilNotice from './mutilNotice.vue'
 
@@ -113,11 +89,64 @@ export default {
     SearchItem,
     SingleNotice,
     JcNotice,
-    JlNotice
+    JlNotice,
+    Stable
     // MutilNotice
   },
   data() {
     return {
+      tableHeader:[{
+        label:"是否制作",
+        prop:"isdayin",
+        viewFun:(isdayin)=>{
+          return isdayin?'是':'否'
+        }
+      },{
+        label:"批次号",
+        prop:'rwpcid'
+      },{
+        label:"案件来源",
+        prop:'ajly',
+        width:'auto'
+      },{
+        label:"检查方式",
+        prop:'jcfs',
+        width:'auto'
+      },{
+        label:"险种",
+        prop:'ybbf',
+        width:'auto'
+      },{
+        label:"就医类型",
+        prop:'jslb'
+      },{
+        label:"机构代码",
+        prop:'jgdm'
+      },{
+        label:"统一社会信用代码",
+        prop:'xydm'
+      },{
+        label:"机构名称",
+        prop:'jgmc'
+      },{
+        label:"承办机构",
+        prop:'jcjg'
+      },{
+        label:"检查组",
+        prop:'jczname'
+      },{
+        label:"数据开始日期",
+        prop:'datastarttime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}-{d}')
+        }
+      },{
+        label:"数据结束日期",
+        prop:'dataendtime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}-{d}')
+        }
+      }],
       piliangList:[],//批量打印
       jiancaList:[],//检查通知书
       jilvList:[],//纪律通知书

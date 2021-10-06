@@ -75,8 +75,8 @@
       @pagination="getList"
     />
     <div v-loading="loading" class="table-main" v-show="tabsValue!=='two'||mxShow" :style="{top:tableHeight}">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
-      <RenwufourTable  v-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
+      <RenwuthreeTable v-if="tabsValue==='three'&!mxShow" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
+      <RenwufourTable  v-if="tabsValue==='four'&!mxShow" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
       <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
       <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
     </div>
@@ -555,10 +555,10 @@ export default {
       this.queryParams.pageNum = 1
       this.total = 0
       this.mxShow = false
+      this.xgmxOptions.show=false
+      this.qmxOptions.show=false
       if(val!=='two'){
         this.tableHeight = this.calcTableHeight(50)
-        this.xgmxOptions.show=false
-        this.qmxOptions.show=false
         if(this.ids.length) {
           const resql = []
           this.selectionList.forEach(item=>{

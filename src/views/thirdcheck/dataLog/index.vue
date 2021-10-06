@@ -132,8 +132,8 @@
       </el-row>
     </el-form>
     <div class="table-main" v-loading="loading" >
-      <el-table :data="logList" @selection-change="handleSelectionChange" border height="100%" style="width:100%">
-        <el-table-column label="序号" type="index" width="55" align="center"/>
+      <sTable :data="logList" :header="tableHeader" :fixedNum="1">
+        <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
         <el-table-column label="创建时间" align="center" prop="createDate" width="180px">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
@@ -180,7 +180,7 @@
             <span>{{['未开始抽取数据','抽取中','成功抽取数据','抽取失败'][scope.row.ends*1]}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -188,10 +188,9 @@
               @click="handleUpdate(scope.row)"
               v-hasPermi="['renwu:log:edit']"
             >修改</el-button>
-          
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -204,9 +203,6 @@
     <!-- 添加或修改数据抽取日志对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <!-- <el-form-item label="创建时间" prop="createDate">
-          <el-input v-model="form.createDate" placeholder="请输入创建时间" />
-        </el-form-item> -->
         <el-form-item label="开始时间" prop="stime">
           <el-date-picker clearable size="small"
             v-model="form.stime"
@@ -286,10 +282,83 @@ import { listLog, getLog, delLog, addLog, updateLog, exportLog } from "@/api/ren
 
 export default {
   name: "DataLog",
-  components: {
-  },
   data() {
     return {
+      tableHeader:[{
+        prop: 'createDate',
+        label: '创建时间',
+        width:"180px",
+        viewFun:(createDate)=>{
+          return this.parseTime(createDate)
+        }
+      },{
+        prop: 'stime',
+        label: '开始时间',
+        width:"150px",
+        viewFun:(stime)=>{
+          return this.parseTime(stime,'{y}-{m}-{d}')
+        }
+      },{
+        prop: 'jobId',
+        label: '任务层ID',
+      },{
+        label:"日志路径",
+        prop:'logFilePath',
+      },{
+        label:"更新时间",
+        prop:'updateDate',
+        width:"180px",
+        viewFun:(time)=>{
+          return this.parseTime(time)
+        }
+      },{
+        prop: 'type',
+        label: '抽取分类',
+        width: '150px',
+        viewFun: (type)=>{
+          return type==1?'住院明细抽取':type==2?'住院主单抽取':type==3?'门诊明细抽取':type==4?'门诊主单抽取':type==5?'据ID抽取明细':''
+        }
+      },{
+        prop: 'succ',
+        label: '成功条数',
+        width:'auto',
+        viewFun: (succ)=>{
+          return (succ?(succ.replace(/[^0-9]/ig,"")):'')
+        }
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'ny',
+        label: '年月份',
+      },{
+        prop: 'status',
+        label: '状态',
+        viewFun: (status)=>{
+          return status==1?'正常':status==2?'禁用':''
+        }
+      },{
+        prop: 'ztime',
+        label: '总耗时',
+      },{
+        prop: 'etime',
+        label: '结束时间',
+        width:"150px",
+        viewFun:(etime)=>{
+          return this.parseTime(etime,'{y}-{m}-{d}')
+        }
+      },{
+        prop: 'fucc',
+        label: '失败条数',
+        width:'auto'
+      },{
+        prop: 'ends',
+        label: '抽取状态',
+        width: '180px',
+        viewFun: (ends)=>{
+          return (ends==0?'未开始抽取数据':ends==1?'抽取中':ends==2?'成功抽取数据':ends==3?'抽取失败':'--')
+        }
+      }],
       // 遮罩层
       loading: true,
       // 导出遮罩层

@@ -57,47 +57,16 @@
         >接收数据</el-button>
       </el-col>
     </el-row>
-    <div class="table-main" :style="{top:tableHeight}">
-      <el-table class="qztable" v-loading="loading" :data="renwuoneList" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
-        <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column  align="center" width="55">
+    <div class="table-main" :style="{top:tableHeight}" v-loading="loading">
+      <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
+        <el-table-column  align="center" width="55" slot="fixed">
           <template slot-scope="scope">
             <el-radio :label="scope.row.id" v-model="radioCheck" @change="radioChange"></el-radio>
           </template>
         </el-table-column>
-        <el-table-column label="序号" type="index" align="center"  />
-        <el-table-column label="接收状态" align="center" prop="jsstatus">
-          <template slot-scope="scope"><span>{{['未接收','抽取中','已抽取'][scope.row.jsstatus||0]}}</span></template>
-        </el-table-column>
-        <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',renwuoneList)" />
-        <el-table-column label="任务名称" align="center" prop="rwmc" :width="flexColumnWidth('rwmc',renwuoneList)"/>
-        <el-table-column label="检查方式" align="center" prop="jcfs" :width="flexColumnWidth('jcfs',renwuoneList)"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime" :width="flexColumnWidth('datastarttime',renwuoneList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwuoneList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="机构数量" align="center" prop="jgsl" :width="flexColumnWidth('jgsl',renwuoneList)"/>
-        <el-table-column label="任务推送日期" align="center" prop="rwtssj" :width="flexColumnWidth('rwtssj',renwuoneList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.rwtssj,'{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="计划完成日期" align="center" prop="rwendtime" :width="flexColumnWidth('rwendtime',renwuoneList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.rwendtime,'{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',renwuoneList)"/>
-        <el-table-column label="任务描述" align="center" prop="rwms" :width="flexColumnWidth('rwms',renwuoneList)"/>
-        <!-- <el-table-column label="异地/本地" align="center" prop="ybd" :width="flexColumnWidth('ybd',renwuoneList)"/> -->
-        <el-table-column label="险种" align="center" prop="ybbf"  :width="flexColumnWidth('ybbf',renwuoneList)"/>
-        <el-table-column label="操作" align="center" width="100">
+        <el-table-column label="序号" type="index" align="center" slot="fixed"/>
+        <!-- <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',renwuoneList)"/> -->
+        <el-table-column label="操作" align="center" width="100" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -107,7 +76,8 @@
             >查看任务详情</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      <!-- </el-table> -->
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -119,16 +89,66 @@
     />
   </div>
 </template>
-
 <script>
 import { listRenwuone, getRenwuone, delRenwuone, addRenwuone, updateRenwuone, exportRenwuone } from "@/api/renwu/renwuone";
 import {setYd} from "@/api/renwu/renwutwo"
+
 export default {
   name: "Renwuone",
-  components: {
-  },
   data() {
     return {
+      tableHeader:[{
+        prop: 'jsstatus',
+        label: '接收状态',
+        viewFun:function(index){
+          return ['未接收','抽取中','已抽取'][index||0]
+        }
+      },{
+        prop: 'rwpcid',
+        label: '批次号'
+      },{
+        prop: 'rwmc',
+        label: '任务名称',
+      },{
+        prop: 'jcfs',
+        label: '检查方式',
+      },{
+        prop: 'datastarttime',
+        label: '数据开始日期',
+        viewFun: (time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }  
+      },{
+        prop: 'dataendtime',
+        label: '数据结束日期',
+        viewFun: (time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        } 
+      },{
+        prop: 'jgsl',
+        label: '机构数量',
+      },{
+        prop: 'rwtssj',
+        label: '任务推送日期',
+        viewFun: (time)=>{
+          return this.parseTime(time,'{y}-{m}-{d}')
+        } 
+      },{
+        prop: 'rwendtime',
+        label: '计划完成日期',
+        viewFun: (time)=>{
+          return this.parseTime(time,'{y}-{m}-{d}')
+        } 
+      },{
+        prop: 'jslb',
+        label: '就医类型',
+      },{
+        prop: 'rwms',
+        label: '任务描述',
+      },{
+        prop: 'ybbf',
+        label: '险种',
+      }],
       dateRange:[],
       // 遮罩层
       loading: true,

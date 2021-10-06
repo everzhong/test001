@@ -2,9 +2,9 @@
   <div class="app-container">
     <SearchItem @handleQuery="handleQuery" style="height:94px"/>
     <div v-loading="loading" class="table-main">
-      <el-table :data="renwutwoList" border height="100%" style="width:100%">
+      <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column label="序号" type="index" align="center"  />
+        <el-table-column label="序号" type="index" align="center" slot="fixed" width="70"/>
         <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
         <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
         <el-table-column label="检查方式" align="center" prop="jcfs"  show-overflow-tooltip/>
@@ -25,7 +25,7 @@
         <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',renwutwoList)"/>
         <el-table-column label="承办机构" align="center" prop="dcjg"/>
         <el-table-column label="检查组" align="center" prop="jczname" :width="flexColumnWidth('jczname',renwutwoList)"/>
-      <el-table-column label="操作" align="center" width="100">
+      <el-table-column label="操作" align="center" min-width="100" slot="operate">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -34,7 +34,7 @@
           >调查取证</el-button>
         </template>
       </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -56,6 +56,52 @@ export default {
   },
   data() {
     return {
+      tableHeader:[{
+        prop: 'rwpcid',
+        label: '批次号',
+      },{
+        prop: 'ajly',
+        label: '案件来源',
+      },{
+        prop: 'jcfs',
+        label: '检查方式',
+        width:'auto'
+      },{
+        prop: 'ybbf',
+        label: '险种',
+        width:'auto'
+      },{
+        prop: 'jslb',
+        label: '就医类型',
+        width:'auto'
+      },{
+        label:"数据开始日期",
+        prop:'datastarttime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"数据结束日期",
+        prop:'dataendtime',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'xydm',
+        label: '统一社会信用代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'dcjg',
+        label: '承办机构',
+      },{
+        prop: 'jczname',
+        label: '检查组',
+      }],
       // 遮罩层
       loading: true,
       // 导出遮罩层

@@ -1,7 +1,6 @@
 <template>
-  <el-table :data="tableData" border @selection-change="handleSelectionChange" style="width:100%" height="100%">
-    <!-- <el-table-column type="selection" width="55" align="center" /> -->
-    <el-table-column label="序号" type="index" align="center" width="60"/>
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
+    <el-table-column label="序号" type="index" align="center" width="60" slot="fixed"/>
     <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
     <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
@@ -20,7 +19,7 @@
         <span>{{formatMoney(scope.row.jsfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="操作" align="center" width="150">
+    <el-table-column label="操作" align="center" min-width="150" slot="operate">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -29,13 +28,52 @@
         >查看相关明细</el-button>
       </template>
     </el-table-column>
-  </el-table>
+  </sTable>
 </template>
 <script>
 export default {
   name:'RenwuthreeTable',
   data(){
-    return {}
+    return {
+      tableHeader:[{
+        label:"批次号",
+        prop:'rwpcid'
+      },{
+        label:"机构代码",
+        prop:'jgdm'
+      },{
+        label:"统一社会信用代码",
+        prop:'xydm',
+      },{
+        label:"机构名称",
+        prop:'jgmc'
+      },{
+        label:"规则分类",
+        prop:'gzfl',
+        width:'auto'
+      },{
+        label:"规则名称",
+        prop:'gzmc'
+      },{
+        label:"涉及就诊人员数",
+        prop:'xjjzrs'
+      },{
+        label:"涉及明细数",
+        prop:'xjmxs'
+      },{
+        label:"涉及金额(元)",
+        prop:'xjje',
+        viewFun:(xjje)=>{
+          return this.formatMoney(xjje,2)
+        }
+      },{
+        label:"结算费用(元)",
+        prop:'jsfy',
+        viewFun:(jsfy)=>{
+          return this.formatMoney(jsfy,2)
+        }
+      }]
+    }
   },
   props:['tableData'],
   methods:{

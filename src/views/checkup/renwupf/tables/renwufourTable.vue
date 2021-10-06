@@ -1,38 +1,7 @@
 <template>
-  <el-table :data="tableData" border @selection-change="handleSelectionChange" style="width:100%" height="100%">
-    <!-- <el-table-column type="selection" width="55" align="center" /> -->
-    <el-table-column label="序号" type="index" align="center"/>
-    <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
-    <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-    <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
-    <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
-    <el-table-column label="明细项目编号" align="center" prop="mxxmbm"  :width="flexColumnWidth('mxxmbm',tableData)"/>
-    <el-table-column label="明细项目名称" align="center" prop="mxxmmc"  :width="flexColumnWidth('mxxmmc',tableData)"/>
-    <el-table-column label="通用名" align="center" prop="tym" show-overflow-tooltip/>
-    <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj"  :width="flexColumnWidth('mxxmdj',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="明细项目数量" align="center" prop="mxxmsl"  :width="flexColumnWidth('mxxmsl',tableData)"/>
-    <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje"  :width="flexColumnWidth('mxxmje',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="明细项目交易金额(元)" align="center" prop="mxxmjyfy"  :width="flexColumnWidth('mxxmjyfy',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy"  :width="flexColumnWidth('mxxmbjsfy',tableData)">
-       <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="费用类别" align="center" prop="fylb"  show-overflow-tooltip/>
-    <el-table-column label="操作" align="center" width="150">
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
+    <el-table-column label="序号" type="index" align="center" slot="fixed"/>
+    <el-table-column label="操作" align="center" width="150" slot="operate">
       <template slot-scope="scope">
         <el-button
           size="mini"
@@ -41,13 +10,71 @@
         >查看相关明细</el-button>
       </template>
     </el-table-column>
-  </el-table>
+  </sTable>
 </template>
 <script>
 export default {
   name:'RenwufourTable',
   data(){
-    return {}
+    return {
+       tableHeader:[{
+        prop: 'rwpcid',
+        label: '批次号'
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'gzfl',
+        label: '规则分类',
+      },{
+        prop: 'gzmc',
+        label: '规则名称',
+      },{
+        prop: 'mxxmbm',
+        label: '明细项目编号',
+      },{
+        prop: 'mxxmmc',
+        label: '明细项目名称',
+      },{
+        prop: 'tym',
+        label: '通用名',
+      },{
+        prop: 'mxxmdj',
+        label: '明细项目单价(元)',
+        viewFun: (mxxmdj)=>{
+          return this.formatMoney(mxxmdj,3)
+        }
+      },{
+        prop: 'mxxmsl',
+        label: '明细项目数量',
+      },{
+        prop: 'mxxmje',
+        label: '明细项目金额(元)',
+        viewFun: (mxxmje)=>{
+          return this.formatMoney(mxxmje,2)
+        }  
+      },{
+        prop: 'mxxmjyfy',
+        label: '明细项目交易金额(元)',
+        viewFun: (mxxmjyfy)=>{
+          return this.formatMoney(mxxmjyfy,2)
+        }  
+      },{
+        prop: 'mxxmbjsfy',
+        label: '明细项目医保结算金额(元)',
+        viewFun: (mxxmbjsfy)=>{
+          return this.formatMoney(mxxmbjsfy,2)
+        }  
+      },{
+        prop: 'fylb',
+        label: '费用类别',
+        formatter: this.fylbFormat,
+        width: 'auto'
+      }]
+    }
   },
   props:['tableData'],
   methods:{

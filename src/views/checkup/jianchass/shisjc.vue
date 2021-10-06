@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <section v-show="!heshiOption.show" >
-      <el-form style="height:80px;overflow:auto;margin-bottom:20px" size="small" label-width="100px" class="top-search" ref="queryForm" :inline="true" v-show="showSearch">
+      <el-form style="height:80px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="queryForm" :inline="true" v-show="showSearch">
             <el-form-item label="案件来源" prop="ajly">
               <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
             </el-form-item>
@@ -40,20 +40,20 @@
       </el-form>
       <el-row :gutter="10">
         <el-col :span="1.5">
-          <span>参保人：</span>
-          <el-select v-model="ybd" size="small">
-            <el-option label="本地" value="1"></el-option>
-            <el-option label="异地" value="2"></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="1.5">
           <el-button type="primary" size="small" @click="chaxunDialog = true">查询条件</el-button>
         </el-col>
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli">
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli">
-          <el-button type="primary" size="small" @click="handleThirdCheck" style="margin-right:50px">第三方筛查</el-button>
+          <el-button type="primary" size="small" @click="handleThirdCheck" style="margin-right:15px">第三方筛查</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <span style="color:#606266;font-size:14px">参保人：</span>
+          <el-select v-model="ybd" size="small">
+            <el-option label="本地" value="1"></el-option>
+            <el-option label="异地" value="2"></el-option>
+          </el-select>
         </el-col>
         <!-- <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
           <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
@@ -75,9 +75,9 @@
         </div>
       </el-row>
       <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'">
-        <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable">
-            <!-- <el-table-column type="selection" width="55" align="center" /> -->
-            <el-table-column label="序号" width="55" type="index" align="center"/>
+        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
+        <!-- <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable"> -->
+            <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
             <el-table-column label="违规数量" align="center" prop="wgsl"/>
             <el-table-column label="违规费用(元)" align="center" prop="wgfy" :width="flexColumnWidth('wgfy',renwuthreeList)">
@@ -95,14 +95,14 @@
                 <span>{{formatMoney(scope.row.jsfy,2)}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="160">
+            <el-table-column label="操作" align="center" min-width="160" slot="operate">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="fluProject(scope.row)">
                   流水号项目汇总
                 </el-button>
               </template>
             </el-table-column>
-        </el-table>
+        </sTable>
         <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
@@ -206,6 +206,42 @@ export default {
   },
   data() {
     return {
+      tableHeader:[{
+        prop: 'xwrd',
+        label: '认定行为',
+      },{
+        prop: 'wgsl',
+        label: '违规数量',
+        width:'auto' 
+      },{
+        prop: 'wgfy',
+        label: '违规费用(元)',
+        width: 'auto',
+        viewFun: (wgfy)=>{
+          return this.formatMoney(wgfy,2)
+        }
+      },{
+        prop: 'gzfl',
+        label: '规则分类',
+      },{
+        prop: 'gzmc',
+        label: '规则名称',
+      },{
+        prop: 'xjjzrs',
+        label: '涉及就诊人员数',
+      },{
+        prop: 'xjjzrcs',
+        label: '涉及就诊人次数',
+      },{
+        prop: 'xjmxs',
+        label: '涉及明细数',
+      },{
+        prop: 'jsfy',
+        label: '结算费用(元)',
+        viewFun: (jsfy)=>{
+          return this.formatMoney(jsfy,2)
+        }
+      }],
       qmxOptions:{
         show:false,
         query:{}
@@ -413,8 +449,8 @@ export default {
         wgsl:'',
         wgfy:''
       }
-      switch(this.tabsValue) {
-        case ('five'||'qmx'):
+      switch(true) {
+        case (this.tabsValue=='five'||this.tabsValue=='qmx'):
           if(this.qmxOptions.show){
             this.qmxOptions.show = false
             this.xwrdForm.gzmc=gzmc
@@ -424,7 +460,7 @@ export default {
             this.lsh = ''
           }
           break
-        case 'four':
+        case (this.tabsValue=='four'):
           this.tabsValue = 'three'
           this.xwrdForm.gzmc=''
           break
@@ -883,7 +919,7 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:152px;
+  top:153px;
   bottom:70px;
   left: 20px;
   right: 20px;

@@ -15,7 +15,7 @@
           <p style="margin-bottom:60px">(监督检查具体内容和要求见附件)</p>
           <div style="margin-bottom:25px">
             <span style="width:60%;display:inline-block">联系人：{{pageData.dayinname}}</span>
-            <span style="width:40%;display:inline-block;text-align:right">联电话：<span style="display:inline-block;width:40%">{{pageData.dayintel}}</span></span>
+            <span style="width:40%;display:inline-block;text-align:right">联系电话：<span style="display:inline-block;width:40%">{{pageData.dayintel}}</span></span>
           </div>
           <div style="text-align:right;margin-bottom:70px">
             <p style="width:100%;margin-bottom:10px;;text-align:right">上海市医疗保险监督检查所/××区医疗保障局</p>

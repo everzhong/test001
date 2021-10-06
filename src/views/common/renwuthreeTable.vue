@@ -1,40 +1,58 @@
 <template>
-  <el-table :data="tableData" border height="100%" style="width:100%">
-    <!-- <el-table-column type="selection" width="55" align="center" /> -->
-    <el-table-column label="序号" type="index" align="center"  />
-    <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
-     <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-    <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
-    <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
-    <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',tableData)"/>
-    <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',tableData)"/>
-     <el-table-column label="涉及金额" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
+    <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
+    <el-table-column label="操作" align="center" width="180" slot="operate">
       <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.xjje,2)}}</span>
+        <el-button
+          size="mini"
+          type="text"
+          @click="checkdetail(scope.row,'xgmx')"
+        >查看相关明细</el-button>
       </template>
     </el-table-column>
-    <el-table-column label="结算费用(元)" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.jsfy,2)}}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" align="center" width="180">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            @click="checkdetail(scope.row,'xgmx')"
-          >查看相关明细</el-button>
-        </template>
-      </el-table-column>
-  </el-table>
+  </sTable>
 </template>
 <script>
 export default {
   name:'RenwuthreeTable',
   data(){
-    return {}
+    return {
+      tableHeader:[{
+        prop: 'rwpcid',
+        label: '批次号'
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'gzfl',
+        label: '规则分类',
+      },{
+        prop: 'gzmc',
+        label: '规则名称',
+      },{
+        prop: 'xjjzrs',
+        label: '涉及就诊人员数',
+      },{
+        prop: 'xjmxs',
+        label: '涉及明细数',
+        width: 'auto'
+      },{
+        prop: 'xjje',
+        label: '涉及金额(元)',
+        viewFun: (xjje)=>{
+          return this.formatMoney(xjje,2)
+        }
+      },{
+        prop: 'jsfy',
+        label: '结算费用(元)',
+        viewFun: (jsfy)=>{
+          return this.formatMoney(jsfy,2)
+        }  
+      }]
+    }
   },
   props:['tableData'],
   methods:{

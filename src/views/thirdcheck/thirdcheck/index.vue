@@ -63,39 +63,14 @@
     </el-form>
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <!-- <RenwuthreeTable :tableData="renwuthreeList"/> -->
-      <el-table :data="renwuthreeList" border height="100%" style="width:100%">
-        <el-table-column type="selection" width="55" align="center" />
-        <!-- <el-table-column label="序号" type="index" align="center"  /> -->
-        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwuthreeList)"/>
-        <el-table-column label="筛查任务ID" align="center" prop="scrwid"  :width="flexColumnWidth('scrwid',renwuthreeList)"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime" width="150">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" width="150">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwuthreeList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwuthreeList)"/>
-        <el-table-column label="数据抽取状态" align="center" prop="sccqstatus"  show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{scope.row.sccqstatus==1?'未开始':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':'--'}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="规则执行状态" align="center" prop="scstatus">
-           <template slot-scope="scope">
-            <span>{{scope.row.scstatus==1?'未开始':scope.row.scstatus==2?'执行中':scope.row.scstatus==3?'完成':'--'}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center">
+      <sTable :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
+        <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+        <el-table-column label="操作" align="center" slot="operate" min-width="100">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="openUrl(scope.row)">数据筛查</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -119,6 +94,47 @@ export default {
   },
   data() {
     return {
+      tableHeader:[{
+        prop: 'rwpcid',
+        label: '批次号'
+      },{
+        prop: 'scrwid',
+        label: '筛查任务ID',
+      },{
+        label:"数据开始日期",
+        prop:'datastarttime',
+        width:'150px',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        label:"数据结束日期",
+        prop:'dataendtime',
+        width:'150px',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'sccqstatus',
+        label: '数据抽取状态',
+        width:'150px',
+        viewFun: (sccqstatus)=>{
+          return sccqstatus==1?'未开始':sccqstatus==2?'执行中':sccqstatus==3?'完成':sccqstatus==4?'无需抽取':'--'
+        }
+      },{
+        prop: 'scstatus',
+        label: '规则执行状态',
+        width:'150px',
+        viewFun: (scstatus)=>{
+          return scstatus==1?'未开始':scstatus==2?'执行中':scstatus==3?'完成':'--'
+        }
+      }],
       tableHeight:0,
       // 遮罩层
       loading: true,

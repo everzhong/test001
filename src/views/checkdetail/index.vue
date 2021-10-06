@@ -5,14 +5,14 @@
       <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
     </div>
     <el-row :gutter="10">
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5" v-if="tabsValue==='two'&!mxShow">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
         >提交网审</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'">
+      <el-col :span="1.5" v-if="tabsValue==='two'&!mxShow">
         <el-button
           type="primary"
           size="small"
@@ -38,55 +38,24 @@
     <div v-loading="loading" v-show="!mxShow" :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topHeight}">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkdetail($event,'xgmx')"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
-      <el-table v-else  @selection-change="handleSelectionChange" :data="renwutwoList" border style="width:100%" height="100%">
-        <el-table-column type="selection" width="55" align="center"/>
-        <el-table-column label="序号" type="index" align="center"/>
-        <el-table-column label="第三方筛查状态" align="center" width="150">
-        <template slot-scope="scope">
-          <span>{{scope.row.sccqstatus?(scope.row.sccqstatus==0?'未生成筛查任务':scope.row.sccqstatus==1?'未开始筛查':scope.row.sccqstatus==2?'执行中':scope.row.sccqstatus==3?'完成':scope.row.sccqstatus==4?'无需抽取':''):''}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-      <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
-      <el-table-column label="检查方式" align="center" prop="jcfs" />
-      <el-table-column label="险种" align="center" prop="ybbf" />
-      <el-table-column label="就医类型" align="center" prop="jslb"  :width="flexColumnWidth('jslb',renwutwoList)"/>
-      <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
+      <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
+        <el-table-column slot="fixed" type="selection" width="55" align="center"/>
+        <el-table-column slot="fixed" label="序号" type="index" align="center"/>
+        <el-table-column label="操作" align="center" width="180" slot="operate">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
+            <el-button
+              size="mini"
+              type="text"
+              @click="checkdetail(scope.row,'xgmx')"
+            >查看相关明细</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              @click="checkdetail(scope.row,'qmx')"
+            >全明细</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',renwutwoList)"/>
-      <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
-      <el-table-column label="涉及规则数" align="center" prop="sjwgs"  :width="flexColumnWidth('sjwgs',renwutwoList)"/>
-      <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',renwutwoList)"/>
-      <el-table-column label="涉及金额(元)" align="center" prop="ydje"  :width="flexColumnWidth('ydje',renwutwoList)">
-          <template slot-scope="scope">
-          <span>{{formatMoney(scope.row.ydje,2)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="180">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            @click="checkdetail(scope.row,'xgmx')"
-          >查看相关明细</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            @click="checkdetail(scope.row,'qmx')"
-          >全明细</el-button>
-        </template>
-      </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       v-show="!mxShow"
@@ -124,6 +93,68 @@ export default {
   },
   data() {
     return {
+      tableHeader:[{
+        prop: 'sccqstatus',
+        label: '第三方筛查状态',
+        width: '150px',
+        viewFun:function(index){
+          return (index?(index==0?'未生成筛查任务':index==1?'未开始筛查':index==2?'执行中':index==3?'完成':indexs==4?'无需抽取':''):'')
+        }
+      },{
+        prop: 'rwpcid',
+        label: '批次号'
+      },{
+        prop: 'ajly',
+        label: '案件来源',
+      },{
+        prop: 'jcfs',
+        label: '检查方式',
+        width:'auto'
+      },{
+        prop: 'ybbf',
+        label: '险种',
+        width: 'auto'
+      },{
+        prop: 'jslb',
+        label: '就医类型',
+      },{
+        prop: 'datastarttime',
+        label: '数据开始日期',
+        viewFun: (time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }  
+      },{
+        prop: 'dataendtime',
+        label: '数据结束日期',
+        viewFun: (time)=>{
+          return this.parseTime(time,'{y}-{m}')
+        }  
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'xydm',
+        label: '统一社会信用代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'xzq',
+        label: '行政区',
+      },{
+        prop: 'sjwgs',
+        label: '涉及规则数',
+        formatter: this.xzqFormat
+      },{
+        prop: 'jsrc',
+        label: '涉及就诊人次',
+      },{
+        prop: 'ydje',
+        label: '涉及金额(元)',
+        viewFun: (ydje)=>{
+          return this.formatMoney(ydje,2)
+        }
+      }],
       xgmxOptions:{
         show:false,
         query:{}
@@ -529,9 +560,9 @@ export default {
       const jgmc = selection.map(item => item.jgmc)
       this.submitParams.yxjg = jgmc.join(',')
       this.submitParams.wsry = selection.length?this.$store.getters.name:''
-      //第三方筛查状态sancha 1已查 0未查
+      //第三方筛查状态sccqstatus 3已完成
       this.noThirdCheckList  = selection.filter(item => {
-        return item.sancha === 0
+        return item.sccqstatus != 3
       });
     },
     /** 新增按钮操作 */
@@ -603,10 +634,22 @@ export default {
      * 实施网申
      */
     handleNetCheck(){
-      if(!this.ids.length){
+      const self = this
+      if(!self.ids.length){
         this.msgError('请至少选择一项')
-        return
+      } else if(self.noThirdCheckList.length){
+        self.$confirm('当前医药机构任务未完成第三方筛查，请确认不完成第三方筛查直接实施网审/现场检查?', "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(()=> {
+          self.doSubmit()
+        }).catch(_=>{})
+      } else {
+        self.doSubmit()
       }
+    },
+    doSubmit(){
       submitDxqd({ids:this.ids,status:0}).then(res=>{
         this.msgSuccess("操作成功")
         this.selectionList.forEach(item=>{
@@ -621,7 +664,6 @@ export default {
         })
         this.getList()
       })
-
     },
     async netCheck(data){
       const res = await submitNetCheck(data);
@@ -701,7 +743,10 @@ export default {
      */
     tabsLevelChange(val){
       this.mxShow = false
+      this.qmxOptions.show=false
+      this.xgmxOptions.show=false
       this.queryParams.pageNum = 1
+      this.total = 0
       if(this.ids.length && val!=='two'){
         const jgdmList = this.selectionList.map(item=>item.jgdm)
         this.getList({jgdm:jgdmList.join(',')})

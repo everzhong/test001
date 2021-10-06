@@ -1,55 +1,9 @@
 <template>
 <div style="height:100%">
-  <div style="height:100%">
-    <el-table
-      v-loading="loading"
-      :data="tableData"
-      border
-      height="100%"
-      style="width:100%"
-    >
-      <el-table-column label="序号" type="index" align="center"  />
-      <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-      <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',tableData)"/>
-      <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',tableData)"/>
-      <el-table-column label="规则名称" align="center" prop="gzmc" :width="flexColumnWidth('gzmc',tableData)"/>
-      <el-table-column label="医师代码" align="center" prop="ysgh" :width="flexColumnWidth('ysgh',tableData)" />
-      <el-table-column label="医师姓名" align="center" prop="ysxm" :width="flexColumnWidth('ysxm',tableData)" />
-      <el-table-column label="参保人卡号" align="center" prop="kh" :width="flexColumnWidth('kh',tableData)" />
-      <el-table-column label="参保人姓名" align="center" prop="xm" :width="flexColumnWidth('xm',tableData)" />
-      <el-table-column label="险种" align="center" prop="ybbf" :width="flexColumnWidth('ybbf',tableData)" />
-        <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',tableData)" />
-       <el-table-column label="结算日期" align="center" prop="jsrqsj" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.jsrqsj,'{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="明细项目编号" align="center" prop="mxxmbm" :width="flexColumnWidth('mxxmbm',tableData)" />
-      <el-table-column label="明细项目名称" align="center" prop="mxxmmc" :width="flexColumnWidth('mxxmmc',tableData)" />
-      <el-table-column label="通用名" align="center" prop="tym" :width="flexColumnWidth('tym',tableData)" />
-      <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj" :width="flexColumnWidth('mxxmdj',tableData)">
-        <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
-      </template>
-      </el-table-column>
-      <el-table-column label="明细项目数量" align="center" prop="mxxmsl" :width="flexColumnWidth('mxxmsl',tableData)" />
-      <el-table-column label="明细项目金额(元)" align="center" prop="mxxmje" :width="flexColumnWidth('mxxmje',tableData)">
-        <template slot-scope="scope">
-          <span>{{formatMoney(scope.row.mxxmje,2)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="明细项目交易金额(元)" align="center" prop="mxxmjyfy" :width="flexColumnWidth('mxxmjyfy',tableData)">
-        <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
-      </template>
-      </el-table-column>
-      <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy" :width="flexColumnWidth('mxxmbjsfy',tableData)">
-        <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
-      </template>
-      </el-table-column>
-      <el-table-column label="费用类别" align="center" prop="fylb" :formatter="fylbFormat"  show-overflow-tooltip/>
-    </el-table>
+  <div style="height:100%" v-loading="loading">
+    <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
+      <el-table-column label="序号" type="index" align="center" slot="fixed"/>
+    </sTable>
   </div>
   <pagination
    style="float:right"
@@ -72,7 +26,86 @@ export default {
         pageNum:1,
         pageSize:10
       },
-      tableData:[]
+      tableData:[],
+      tableHeader:[{
+        prop: 'jgdm',
+        label: '机构代码',
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+      },{
+        prop: 'gzfl',
+        label: '规则分类',
+      },{
+        prop: 'gzmc',
+        label: '规则名称',
+      },{
+        prop: 'ysgh',
+        label: '医师代码',
+      },{
+        prop: 'ysxm',
+        label: '医师姓名',
+      },{
+        prop: 'kh',
+        label: '参保人卡号',
+      },{
+        prop: 'xm',
+        label: '参保人姓名',
+      },{
+        prop: 'ybbf',
+        label: '险种',
+      },{
+        prop: 'jslb',
+        label: '就医类型',
+      },{
+        prop: 'jyrq',
+        label: '结算日期',
+        viewFun: (jyrq)=>{
+          return this.parseTime(jyrq,'{y}-{m}-{d}')
+        }
+      },{
+        prop: 'mxxmbm',
+        label: '明细项目编号',
+      },{
+        prop: 'mxxmmc',
+        label: '明细项目名称',
+      },{
+        prop: 'tym',
+        label: '通用名',
+      },{
+        prop: 'mxxmdj',
+        label: '明细项目单价(元)',
+        viewFun: (mxxmdj)=>{
+          return this.formatMoney(mxxmdj,3)
+        }
+      },{
+        prop: 'mxxmsl',
+        label: '明细项目数量',
+        width: 'auto'
+      },{
+        prop: 'mxxmje',
+        label: '明细项目金额(元)',
+        viewFun: (mxxmje)=>{
+          return this.formatMoney(mxxmje,2)
+        }  
+      },{
+        prop: 'mxxmjyfy',
+        label: '明细项目交易金额(元)',
+        viewFun: (mxxmjyfy)=>{
+          return this.formatMoney(mxxmjyfy,2)
+        }  
+      },{
+        prop: 'mxxmbjsfy',
+        label: '明细项目医保结算金额(元)',
+        viewFun: (mxxmbjsfy)=>{
+          return this.formatMoney(mxxmbjsfy,2)
+        }  
+      },{
+        prop: 'fylb',
+        label: '费用类别',
+        formatter: this.fylbFormat,
+        width: 'auto'
+      }]
     }
   },
   props:['options'],

@@ -58,15 +58,9 @@
         >
       </div>
     </el-form>
-    <div class="table-main">
-      <el-table
-        :data="jcflList"
-        style="width: 100%"
-        height="100%"
-        border
-        v-loading="loading"
-      >
-        <el-table-column label="序号" type="index" align="center" width="100" />
+    <div class="table-main" v-loading="loading">
+      <sTable :data="jcflList" :header="tableHeader" :fixedNum="1">
+        <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
         <el-table-column
           label="监管流程"
           align="center"
@@ -92,7 +86,7 @@
           show-overflow-tooltip
           width="300"
         ></el-table-column>
-        <el-table-column label="操作" align="center" width="150">
+        <el-table-column label="操作" align="center" width="150" slot="operate">
           <template slot-scope="scope">
             <el-button
               v-if="
@@ -106,7 +100,7 @@
             >
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
     </div>
     <pagination
       class="fixed-bottom"
@@ -133,6 +127,26 @@ export default {
   components: {},
   data() {
     return {
+      tableHeader:[{
+        prop: 'jglc',
+        label: '监管流程',
+        width:'auto',
+      },{
+        prop: 'gjxx',
+        label: '关键信息',
+        width:'auto',
+      },{
+        prop: 'zhczr',
+        label: '最新操作人',
+        width:'auto',
+      },{
+        prop: 'zhczsj',
+        label: '最新操作时间',
+        viewFun:(zhczsj)=>{
+          return this.parseTime(zhczsj)
+        },
+        width:'auto'
+      }],
       // 遮罩层
       loading: false,
       // 导出遮罩层
