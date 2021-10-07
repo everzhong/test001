@@ -45,9 +45,11 @@ export default {
       },{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
       },{
         prop: 'ybbf',
         label: '险种',
+        formatter:this.ybdFormat
       },{
         prop: 'lsh',
         label: '交易流水号',
@@ -135,6 +137,10 @@ export default {
     }
   },
   props:['tableData','fromLog','noLog'],
+  created(){
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
+  },
   mounted(){
     const th = document.body.offsetHeight - 50-34-138-32-152;
     this.tableHeight = this.fromLog?`${th+90}px`:`${th}px` ;
@@ -142,6 +148,14 @@ export default {
   methods:{
     fylbFormat(row, column) {
       return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+    },
+     // 险种字典翻译
+    ybbfFormat(row, column) {
+      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+    },
+    // 就医类型字典翻译
+    jslbFormat(row, column) {
+      return this.selectDictLabel(this.jslbOptions, row.jslb);
     },
     radioChange(e){
       const selection = this.tableData.filter(item=>{

@@ -121,8 +121,10 @@ export default {
       Cookies.remove('username')
       this.$store.dispatch('ClearInfo')
       this.$store.dispatch("LoginApi", info).then(() => {
-          this.$store.dispatch('GetFyList');
           this.$router.push({ path: this.redirect||"/renwu/renwulist"}).catch(()=>{});
+          this.$store.dispatch('GetFyList');
+          this.$store.dispatch('GetJsList');
+          this.$store.dispatch('GetYbbfList');
         }).catch(() => {
           window.parent.postMessage({
             'loginFailed': {

@@ -16,10 +16,12 @@ export default {
       tableHeader:[{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
         width: 'auto'
       },{
         prop: 'ybbf',
         label: '险种',
+        formatter:this.ybdFormat,
         width: 'auto'
       },{
         prop: 'lsh',
@@ -100,9 +102,21 @@ export default {
     }
   },
   props:['tableData','gzmc'],
+  created(){
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
+  },
   methods:{
     fylbFormat(row, column) {
       return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+    },
+     // 险种字典翻译
+    ybbfFormat(row, column) {
+      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+    },
+    // 就医类型字典翻译
+    jslbFormat(row, column) {
+      return this.selectDictLabel(this.jslbOptions, row.jslb);
     },
     radioChange(e){
       const selection = this.tableData.filter(item=>{

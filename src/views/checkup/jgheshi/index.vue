@@ -56,10 +56,12 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
+        formatter:this.ybdFormat,
         width:'auto'
       },{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
         width:'auto'
       },{
         prop: 'ybd',
@@ -107,11 +109,21 @@ export default {
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
   },
   methods:{
     // 行政区字典翻译
     xzqFormat(row, column) {
       return this.selectDictLabel(this.xzqOptions, row.xzq);
+    },
+     // 险种字典翻译
+    ybbfFormat(row, column) {
+      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+    },
+    // 就医类型字典翻译
+    jslbFormat(row, column) {
+      return this.selectDictLabel(this.jslbOptions, row.jslb);
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -156,13 +168,6 @@ export default {
             if(res.code===200) { 
               this.msgSuccess('机构核实成功')
               this.getList()
-              // this.addJcfl({
-              //   jglc:'机构核实',
-              //   gjxx:`提交机构核实：批号为${row.rwpcid}机构代码为${row.jgdm}`,
-              //   rwpcid:row.rwpcid,
-              //   jgdm:row.jgdm,
-              //   zhczr:this.$store.getters.name,
-              // })
             } 
           })
         }).catch(() => {

@@ -69,10 +69,12 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
+        formatter:this.ybdFormat,
         width:'auto'
       },{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
         width:'auto'
       },{
         label:"数据开始日期",
@@ -201,6 +203,9 @@ export default {
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
+
   },
   methods: {
     /** 查询renwutwo列表 */

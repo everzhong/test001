@@ -53,12 +53,12 @@
       :visible.sync="innerDialogShow"
       @close="innerBack"
       width="500px">
-        <el-form size="small" inline :model="addGroup"  ref="innerForm">
+        <el-form size="small" inline :model="addGroup"  :rules="innerRules" ref="innerForm">
           <el-form-item label="检查组编号" prop="jczbh">
-            <el-input style="width:370px" v-model="addGroup.jczbh"></el-input>
+            <el-input style="width:365px" v-model="addGroup.jczbh"></el-input>
           </el-form-item>
           <el-form-item label="检查组名称" prop="deptName">
-            <el-input style="width:370px" v-model="addGroup.deptName" :disabled="isEditInner"></el-input>
+            <el-input style="width:365px" v-model="addGroup.deptName" :disabled="isEditInner"></el-input>
           </el-form-item>
           <el-form-item label="检查组成员" prop="jczcy">
             <el-popover
@@ -79,7 +79,7 @@
                 <el-button size="mini" type="primary" plain @click="$refs.tablePopover.doClose()">返回</el-button>
                 <el-button size="mini" type="primary" @click="selectedRole">确定</el-button>
               </div>
-              <el-select multiple :popper-append-to-body="false" slot="reference" style="width:370px" v-model="addGroup.jczcy">
+              <el-select multiple :popper-append-to-body="false" slot="reference" style="width:365px" v-model="addGroup.jczcy">
                 <el-option v-for="item in gridData" :key="item.userId" :value="item.userId" :label="item.nickName"></el-option>
               </el-select>
             </el-popover>
@@ -118,6 +118,11 @@ export default {
       roleSelection:[],
       gridData:[],
       editTarget:null,//更改组成员（哪一组）
+      innerRules:{
+        jczbh:[{ required: true, message: '请输入检查组编号', trigger: 'blur' }],
+        deptName:[{ required: true, message: '请输入检查组名称', trigger: 'blur' }],
+        jczcy:[{ required: true, message: '请选择检查组成员', trigger: 'change' }]
+      }
     }
   },
   mounted(){
@@ -218,37 +223,46 @@ export default {
       this.isEditInner = false
     },
     async innerConfirm(){
-      if(this.addGroup.jczcy.length&&this.isEditInner) {
-        const selected = []
-        this.addGroup.jczcy.forEach(item=>{
-          let has  = this.gridData.filter(sitem=>{
-            return item == sitem.userId
-          })
-          selected.push(has[0])
-        })
-        this.roleList[this.editTarget].jczcy = [...selected]
-      }
-      const {jczbh,deptName,jczcy,deptId} = this.addGroup
-      if(this.isEditInner){
-        this.options.ids.forEach(id=>{
-          updateRenwutwo({
-            // parentId: 101,
-            // jczbh,
-            // deptName,
-            id,
-            deptId,
-            jczid:jczcy.join(',')
-          })
-        })
-        this.innerDialogShow=false
-      } else {
-        const res = await addDept({jczbh,deptName,parentId: 101,jczcy:jczcy.join(',')})
-        if(res.code===200) {
-          this.msgSuccess('新增成功')
-          this.getJanChaxz()
-          this.innerBack()
+      this.$refs['innerForm'].validate(async (valid) => {
+        if (valid) {
+          if(this.isEditInner) {
+            const selected = []
+            this.addGroup.jczcy.forEach(item=>{
+              let has  = this.gridData.filter(sitem=>{
+                return item == sitem.userId
+              })
+              selected.push(has[0])
+            })
+            this.roleList[this.editTarget].jczcy = [...selected]
+          }
+          const {jczbh,deptName,jczcy,deptId} = this.addGroup
+          if(this.isEditInner){
+            const res = await updateDept({deptId,jczbh,parentId: 101,deptName})
+            if(res.code===200){
+              this.msgSuccess('更改成功')
+              this.getJanChaxz()
+              this.options.ids.forEach(id=>{
+                updateRenwutwo({
+                  id,
+                  deptId,
+                  jczid:jczcy.join(',')
+                })
+              })
+              this.innerDialogShow=false
+            }
+          } else {
+            const res = await addDept({jczbh,deptName,parentId: 101,jczcy:jczcy.join(',')})
+            if(res.code===200) {
+              this.msgSuccess('新增成功')
+              this.getJanChaxz()
+              this.innerBack()
+            }
+          }
+        } else {
+          console.log('error submit!!');
+          return false;
         }
-      }
+      });
     },
     innerBack(){
       this.innerDialogShow=false

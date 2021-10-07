@@ -25,8 +25,8 @@
       <div v-show="tabsValue==='1'" style="text-align:right;margin-top:10px;position:absolute;bottom:20px;right:0"> 
         <el-button type="primary" size="mini" @click="confirmHs">确定核实数据</el-button>
       </div>
-      <div class="table-main1">
-        <check-hssz v-if="tabsValue==='2'"></check-hssz>
+      <div class="table-main1" v-if="tabsValue==='2'">
+        <check-hssz></check-hssz>
       </div>
     </section>
 </template>
@@ -81,15 +81,6 @@ export default {
           this.msgSuccess('核实完成')
           this.$refs.rightList.clear()
           this.loading= false
-          // needHs.forEach(item=>{
-          //   this.addJcfl({
-          //     jglc:'机构核实',
-          //     gjxx:`批号为${item.rwpcid}机构代码为${item.jgdm}的机构核实`,
-          //     rwpcid:item.rwpcid,
-          //     jgdm:item.jgdm,
-          //     zhczr:this.$store.getters.name,
-          //   })
-          // })
         }).catch(e=>{
           this.loading= false
         })

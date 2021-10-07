@@ -142,12 +142,14 @@ export default {
       },{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
       },{
         prop: 'rwms',
         label: '任务描述',
       },{
         prop: 'ybbf',
         label: '险种',
+        formatter:this.ybdFormat
       }],
       dateRange:[],
       // 遮罩层
@@ -244,6 +246,8 @@ export default {
   },
   created() {
     this.getList();
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
     this.tableHeight = this.calcTableHeight(32+5+10)

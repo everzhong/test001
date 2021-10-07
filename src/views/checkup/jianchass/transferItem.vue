@@ -2,7 +2,7 @@
   <div style="width:100%;height:100%">
     <el-row :gutter="10">
       <el-col :span="1.5">
-        <span style="margin-right:10px;">{{options.title||'待选择'}}</span>
+        <span style="margin-right:10px;font-size:14px;color:#606266">{{options.title||'待选择'}}</span>
         <el-select v-model="queryForm.ybd" size="small" @change="ybdChange">
           <el-option label="本地" value="本地"></el-option>
           <el-option label="异地" value="异地"></el-option>

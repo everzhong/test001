@@ -128,13 +128,13 @@
           <el-form-item label="备注" prop="bz">
             <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
           </el-form-item>
-          <el-form-item label="追款单价" prop="zkdj">
+          <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
             <el-input v-model="xwrdForm.zkdj" :disabled="isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
-          <el-form-item label="违规数量" prop="wgsl">
+          <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
             <el-input v-model="xwrdForm.wgsl" :disabled="isDisabled.sl" @change="handleDjslChange"></el-input>
           </el-form-item>
-          <el-form-item label="违规费用(元)" prop="wgfy" >
+          <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
             <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
           </el-form-item>
           <el-form-item>
@@ -484,7 +484,8 @@ export default {
     },
     xwrdSubmit(){
       const mxxmbjsfy = this.tabsValue==='foue'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-      if(this.xwrdForm.wgfy>mxxmbjsfy){
+      
+      if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
         this.msgError('违规费用不能大于明细项目医保结算金额')
         return
       }
@@ -493,17 +494,23 @@ export default {
             let res = ''
             if(this.tabsValue==='four'){
               const {type,xwbh,lx} = this.xwrdChecd
-              res = await updateRenwufour({id:this.selectedId,...this.xwrdForm,type,xwbh,lx})
+              const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,lx}
+              if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
+                delete params.zkdj
+                delete  params.wgsl
+                delete  params.wgfy
+              }
+              res = await updateRenwufour(params)
             } else if (this.tabsValue==='five') {//在第五层认定,需要同时更改第四层和第五层
-              const { rwpcid,jgdm,mxxmbm,fid } = this.selectionList[0]
-              const params = {id:this.selectedId,...this.xwrdForm,rwpcid,jgdm,mxxmbm,fid,xwrdr:this.$store.getters.name}
-              delete params.gzmc
-              res = await updateRenwufive(params)
+              // const { rwpcid,jgdm,mxxmbm,fid } = this.selectionList[0]
+              // const params = {id:this.selectedId,...this.xwrdForm,rwpcid,jgdm,mxxmbm,fid,xwrdr:this.$store.getters.name}
+              // delete params.gzmc
+              // res = await updateRenwufive(params)
             }
             if(res.code===200) {
               this.msgSuccess('操作成功')
-              this.getList({...this.searchNextParams})
-              this.searchNextParams = {}
+              this.getList()
+              // this.searchNextParams = {}
               this.selectionList.forEach(item=>{
                 rendingAdd({
                   bjr: this.$store.getters.name,

@@ -113,10 +113,12 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
-        width: 'auto'
+        formatter:this.ybdFormat,
+        width: 'auto',
       },{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
       },{
         prop: 'datastarttime',
         label: '数据开始日期',
@@ -279,6 +281,9 @@ export default {
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
+
   },
   mounted(){
     this.topHeight = this.calcTableHeight(32+5+10,this.isFromLuli)
@@ -664,22 +669,6 @@ export default {
         })
         this.getList()
       })
-    },
-    async netCheck(data){
-      const res = await submitNetCheck(data);
-      if(res.code===200) {
-        this.msgSuccess('提交成功')
-        this.getList()
-        this.selectionList.forEach(item=>{
-          this.addJcfl({
-            jglc:'提交网审',
-            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
-            rwpcid:item.rwpcid,
-            jgdm:item.jgdm,
-            zhczr:this.$store.getters.name,
-          })
-        })
-      }
     },
     /**
      * 第三方筛查

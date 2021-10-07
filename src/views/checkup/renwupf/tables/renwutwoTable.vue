@@ -29,7 +29,7 @@ export default {
         prop:'jgzt',
         width: '150px',
         viewFun:()=>{
-          return '待对象确定'
+          return '待任务派发'
         }
       },{
         label:"承办机构",

@@ -55,11 +55,13 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
-        width:'auto'
+        formatter:this.ybdFormat,
+        width:'auto',
       },{
         prop: 'jslb',
         label: '就医类型',
-        width:'auto'
+        formatter: this.jslbFormat,
+        width:'auto',
       },{
         label:"数据开始日期",
         prop:'datastarttime',
@@ -179,6 +181,8 @@ export default {
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
     this.tableHeight = this.calcTableHeight(5)

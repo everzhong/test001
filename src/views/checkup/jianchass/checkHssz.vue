@@ -7,7 +7,7 @@
           <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
         <el-col :span="1.5">
-          <span style="margin-right:10px;font-szie:14px;color:#606266">参保人</span>
+          <span style="margin-right:10px;font-size:14px;color:#606266">参保人</span>
           <el-select v-model="queryForm.ybd" size="small" @change="ybdChange" style="width:100px">
             <el-option label="本地" value="本地"></el-option>
             <el-option label="异地" value="异地"></el-option>

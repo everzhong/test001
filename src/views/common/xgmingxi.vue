@@ -37,10 +37,10 @@ export default {
         prop: 'jgmc',
         label: '机构名称',
       },{
-        prop: 'gzfl',
+        prop: 'GZMC',
         label: '规则分类',
       },{
-        prop: 'gzmc',
+        prop: 'GZMC2',
         label: '规则名称',
       },{
         prop: 'ysgh',
@@ -57,9 +57,11 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
+        formatter:this.ybdFormat
       },{
         prop: 'jslb',
         label: '就医类型',
+        formatter: this.jslbFormat,
       },{
         prop: 'jyrq',
         label: '结算日期',
@@ -114,10 +116,20 @@ export default {
   props:['options'],
   created(){
     this.getList()
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
   },
   methods:{
     fylbFormat(row, column) {
       return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+    },
+     // 险种字典翻译
+    ybbfFormat(row, column) {
+      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+    },
+    // 就医类型字典翻译
+    jslbFormat(row, column) {
+      return this.selectDictLabel(this.jslbOptions, row.jslb);
     },
     /** 查询renwuthree列表 */
     async getList(query) {
