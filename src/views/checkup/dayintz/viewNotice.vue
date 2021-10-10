@@ -270,95 +270,95 @@ export default {
     },
     // ID字典翻译
     qzidFormat(row, column) {
-      return this.selectDictLabel(this.qzidOptions, row.qzid);
+      return this.selectDictLabels(this.qzidOptions, row.qzid);
     },
     // 批次号字典翻译
     rwpcidFormat(row, column) {
-      return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
+      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabel(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
     },
     // 类型字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.type);
+      return this.selectDictLabels(this.typeOptions, row.type);
     },
     // 行政区字典翻译
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
     // 资料说明字典翻译
     zlsmFormat(row, column) {
-      return this.selectDictLabel(this.zlsmOptions, row.zlsm);
+      return this.selectDictLabels(this.zlsmOptions, row.zlsm);
     },
     // 上传者字典翻译
     upmanFormat(row, column) {
-      return this.selectDictLabel(this.upmanOptions, row.upman);
+      return this.selectDictLabels(this.upmanOptions, row.upman);
     },
     // 添加时间字典翻译
     addtimeFormat(row, column) {
-      return this.selectDictLabel(this.addtimeOptions, row.addtime);
+      return this.selectDictLabels(this.addtimeOptions, row.addtime);
     },
     // 检查地点字典翻译
     jcddFormat(row, column) {
-      return this.selectDictLabel(this.jcddOptions, row.jcdd);
+      return this.selectDictLabels(this.jcddOptions, row.jcdd);
     },
     // 检查开始时间字典翻译
     jcstarttimeFormat(row, column) {
-      return this.selectDictLabel(this.jcstarttimeOptions, row.jcstarttime);
+      return this.selectDictLabels(this.jcstarttimeOptions, row.jcstarttime);
     },
     // 检查结束时间字典翻译
     jcendtimeFormat(row, column) {
-      return this.selectDictLabel(this.jcendtimeOptions, row.jcendtime);
+      return this.selectDictLabels(this.jcendtimeOptions, row.jcendtime);
     },
     // 单位全称字典翻译
     dwqcFormat(row, column) {
-      return this.selectDictLabel(this.dwqcOptions, row.dwqc);
+      return this.selectDictLabels(this.dwqcOptions, row.dwqc);
     },
     // 单位地址字典翻译
     addrFormat(row, column) {
-      return this.selectDictLabel(this.addrOptions, row.addr);
+      return this.selectDictLabels(this.addrOptions, row.addr);
     },
     // 法人字典翻译
     farenFormat(row, column) {
-      return this.selectDictLabel(this.farenOptions, row.faren);
+      return this.selectDictLabels(this.farenOptions, row.faren);
     },
     // 联系电话字典翻译
     telFormat(row, column) {
-      return this.selectDictLabel(this.telOptions, row.tel);
+      return this.selectDictLabels(this.telOptions, row.tel);
     },
     // 执法人员字典翻译
     zfryFormat(row, column) {
-      return this.selectDictLabel(this.zfryOptions, row.zfry);
+      return this.selectDictLabels(this.zfryOptions, row.zfry);
     },
     // 被询问人字典翻译
     xwnameFormat(row, column) {
-      return this.selectDictLabel(this.xwnameOptions, row.xwname);
+      return this.selectDictLabels(this.xwnameOptions, row.xwname);
     },
     // 性别字典翻译
     sexFormat(row, column) {
-      return this.selectDictLabel(this.sexOptions, row.sex);
+      return this.selectDictLabels(this.sexOptions, row.sex);
     },
     // 被询问人身份证号字典翻译
     sfzFormat(row, column) {
-      return this.selectDictLabel(this.sfzOptions, row.sfz);
+      return this.selectDictLabels(this.sfzOptions, row.sfz);
     },
     // 被询问人联系地址字典翻译
     lxdzFormat(row, column) {
-      return this.selectDictLabel(this.lxdzOptions, row.lxdz);
+      return this.selectDictLabels(this.lxdzOptions, row.lxdz);
     },
     // 备注字典翻译
     bzFormat(row, column) {
-      return this.selectDictLabel(this.bzOptions, row.bz);
+      return this.selectDictLabels(this.bzOptions, row.bz);
     },
     // 文件地址字典翻译
     wenjianurlFormat(row, column) {
-      return this.selectDictLabel(this.wenjianurlOptions, row.wenjianurl);
+      return this.selectDictLabels(this.wenjianurlOptions, row.wenjianurl);
     },
     // 文件名称字典翻译
     wenjianFormat(row, column) {
-      return this.selectDictLabel(this.wenjianOptions, row.wenjian);
+      return this.selectDictLabels(this.wenjianOptions, row.wenjian);
     },
     // 取消按钮
     cancel() {

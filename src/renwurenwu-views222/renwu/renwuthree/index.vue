@@ -527,99 +527,99 @@ export default {
     },
     // 序号字典翻译
     idFormat(row, column) {
-      return this.selectDictLabel(this.idOptions, row.id);
+      return this.selectDictLabels(this.idOptions, row.id);
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabel(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
     },
     // 机构名称字典翻译
     jgmcFormat(row, column) {
-      return this.selectDictLabel(this.jgmcOptions, row.jgmc);
+      return this.selectDictLabels(this.jgmcOptions, row.jgmc);
     },
     // 规则分类字典翻译
     gzflFormat(row, column) {
-      return this.selectDictLabel(this.gzflOptions, row.gzfl);
+      return this.selectDictLabels(this.gzflOptions, row.gzfl);
     },
     // 规则名称字典翻译
     gzmcFormat(row, column) {
-      return this.selectDictLabel(this.gzmcOptions, row.gzmc);
+      return this.selectDictLabels(this.gzmcOptions, row.gzmc);
     },
     // 涉及就诊人数字典翻译
     xjjzrsFormat(row, column) {
-      return this.selectDictLabel(this.xjjzrsOptions, row.xjjzrs);
+      return this.selectDictLabels(this.xjjzrsOptions, row.xjjzrs);
     },
     // 涉及明细数字典翻译
     xjmxsFormat(row, column) {
-      return this.selectDictLabel(this.xjmxsOptions, row.xjmxs);
+      return this.selectDictLabels(this.xjmxsOptions, row.xjmxs);
     },
     // 涉及金额字典翻译
     xjjeFormat(row, column) {
-      return this.selectDictLabel(this.xjjeOptions, row.xjje);
+      return this.selectDictLabels(this.xjjeOptions, row.xjje);
     },
     // 结算费用字典翻译
     jsfyFormat(row, column) {
-      return this.selectDictLabel(this.jsfyOptions, row.jsfy);
+      return this.selectDictLabels(this.jsfyOptions, row.jsfy);
     },
     // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 行政区字典翻译
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     // 异本地字典翻译
     ybdFormat(row, column) {
-      return this.selectDictLabel(this.ybdOptions, row.ybd);
+      return this.selectDictLabels(this.ybdOptions, row.ybd);
     },
     // 数据开始时间字典翻译
     datastarttimeFormat(row, column) {
-      return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
+      return this.selectDictLabels(this.datastarttimeOptions, row.datastarttime);
     },
     // 信用代码字典翻译
     xydmFormat(row, column) {
-      return this.selectDictLabel(this.xydmOptions, row.xydm);
+      return this.selectDictLabels(this.xydmOptions, row.xydm);
     },
     // 添加时间字典翻译
     addtimeFormat(row, column) {
-      return this.selectDictLabel(this.addtimeOptions, row.addtime);
+      return this.selectDictLabels(this.addtimeOptions, row.addtime);
     },
     // 结算等级字典翻译
     jsdjFormat(row, column) {
-      return this.selectDictLabel(this.jsdjOptions, row.jsdj);
+      return this.selectDictLabels(this.jsdjOptions, row.jsdj);
     },
     // 机构核实意见字典翻译
     hsyjFormat(row, column) {
-      return this.selectDictLabel(this.hsyjOptions, row.hsyj);
+      return this.selectDictLabels(this.hsyjOptions, row.hsyj);
     },
     // 核实状态字典翻译
     hsztFormat(row, column) {
-      return this.selectDictLabel(this.hsztOptions, row.hszt);
+      return this.selectDictLabels(this.hsztOptions, row.hszt);
     },
     // 核实时间字典翻译
     hssjFormat(row, column) {
-      return this.selectDictLabel(this.hssjOptions, row.hssj);
+      return this.selectDictLabels(this.hssjOptions, row.hssj);
     },
     // 核实人字典翻译
     hsrFormat(row, column) {
-      return this.selectDictLabel(this.hsrOptions, row.hsr);
+      return this.selectDictLabels(this.hsrOptions, row.hsr);
     },
     // 核实派发时间字典翻译
     hspfsjFormat(row, column) {
-      return this.selectDictLabel(this.hspfsjOptions, row.hspfsj);
+      return this.selectDictLabels(this.hspfsjOptions, row.hspfsj);
     },
     // 批次号字典翻译
     rwpcidFormat(row, column) {
-      return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
+      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
     },
     // 已发送回智审字典翻译
     issendFormat(row, column) {
-      return this.selectDictLabel(this.issendOptions, row.issend);
+      return this.selectDictLabels(this.issendOptions, row.issend);
     },
     // 取消按钮
     cancel() {

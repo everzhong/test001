@@ -49,19 +49,25 @@ export default {
         prop: 'xzq',
         label: '行政区',
         width: 'auto',
-        formatter:this.xzqFormat
+        viewFun: (xzq)=>{
+          return this.selectDictLabels(this.xzqOptions, xzq)
+        }
       },{
         prop: 'jsdj',
         label: '结算等级',
       },{
         prop: 'ybbf',
         label: '险种',
-        formatter:this.ybdFormat,
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.ybbfOptions, ybbf)
+        },
         width:'auto'
       },{
         prop: 'jslb',
         label: '就医类型',
-        formatter: this.jslbFormat,
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.jslbOptions,jslb)
+        },
         width:'auto'
       },{
         prop: 'ybd',
@@ -115,15 +121,15 @@ export default {
   methods:{
     // 行政区字典翻译
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
      // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

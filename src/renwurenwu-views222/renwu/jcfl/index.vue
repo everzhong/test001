@@ -235,39 +235,39 @@ export default {
     },
     // ID字典翻译
     idFormat(row, column) {
-      return this.selectDictLabel(this.idOptions, row.id);
+      return this.selectDictLabels(this.idOptions, row.id);
     },
     // 监管流程字典翻译
     jglcFormat(row, column) {
-      return this.selectDictLabel(this.jglcOptions, row.jglc);
+      return this.selectDictLabels(this.jglcOptions, row.jglc);
     },
     // 关键信息字典翻译
     gjxxFormat(row, column) {
-      return this.selectDictLabel(this.gjxxOptions, row.gjxx);
+      return this.selectDictLabels(this.gjxxOptions, row.gjxx);
     },
     // 最后操作人字典翻译
     zhczrFormat(row, column) {
-      return this.selectDictLabel(this.zhczrOptions, row.zhczr);
+      return this.selectDictLabels(this.zhczrOptions, row.zhczr);
     },
     // 最后操作时间字典翻译
     zhczsjFormat(row, column) {
-      return this.selectDictLabel(this.zhczsjOptions, row.zhczsj);
+      return this.selectDictLabels(this.zhczsjOptions, row.zhczsj);
     },
     // 备注字典翻译
     bzFormat(row, column) {
-      return this.selectDictLabel(this.bzOptions, row.bz);
+      return this.selectDictLabels(this.bzOptions, row.bz);
     },
     // 批次号字典翻译
     rwpcidFormat(row, column) {
-      return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
+      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabel(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
     },
     // 添加记录时间字典翻译
     addtimeFormat(row, column) {
-      return this.selectDictLabel(this.addtimeOptions, row.addtime);
+      return this.selectDictLabels(this.addtimeOptions, row.addtime);
     },
     // 取消按钮
     cancel() {

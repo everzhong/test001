@@ -71,7 +71,9 @@ export default {
       },{
         prop: 'fylb',
         label: '费用类别',
-        formatter: this.fylbFormat,
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
         width: 'auto'
       }]
     }

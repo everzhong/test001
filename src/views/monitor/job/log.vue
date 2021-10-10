@@ -232,11 +232,11 @@ export default {
     },
     // 执行状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 任务组名字典翻译
     jobGroupFormat(row, column) {
-      return this.selectDictLabel(this.jobGroupOptions, row.jobGroup);
+      return this.selectDictLabels(this.jobGroupOptions, row.jobGroup);
     },
     /** 搜索按钮操作 */
     handleQuery() {

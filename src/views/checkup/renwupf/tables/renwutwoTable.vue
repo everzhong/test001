@@ -47,10 +47,16 @@ export default {
         width:'auto'
       },{
         label:"险种",
-        prop:'ybbf'
+        prop:'ybbf',
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.ybbfOptions, ybbf)
+        }
       },{
         label:"就医类型",
-        prop:'jslb'
+        prop:'jslb',
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.jslbOptions,jslb)
+        }
       },{
         label:"数据开始日期",
         prop:'datastarttime',
@@ -70,10 +76,12 @@ export default {
         label:"机构名称",
         prop:'jgmc'
       },{
-        label:"行政区",
+        label: "行政区",
         prop:'xzq',
         width:'auto',
-        formatter:this.xzqFormat
+        viewFun: (xzq)=>{
+          return this.selectDictLabels(this.xzqOptions, xzq)
+        }
       },{
         label:"涉及规则数",
         prop:'sjwgs'
@@ -86,7 +94,9 @@ export default {
         viewFun:(ydje)=>{
           return this.formatMoney(ydje,2)
         }
-      }]
+      }],
+      jslbOptions:[],
+      ybbfOptions:[]
     }
   },
   props:['tableData'],
@@ -94,6 +104,8 @@ export default {
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
+    this.ybbfOptions = this.$store.getters.ybbfDic
+    this.jslbOptions = this.$store.getters.jslbDic
   },
   methods:{
     // 多选框选中数据
@@ -108,7 +120,7 @@ export default {
     },
     // 行政区字典翻译
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
   },
 }

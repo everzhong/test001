@@ -254,7 +254,7 @@ export default {
     },
     // 参数系统内置字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.configType);
+      return this.selectDictLabels(this.typeOptions, row.configType);
     },
     // 取消按钮
     cancel() {

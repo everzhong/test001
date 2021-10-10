@@ -251,11 +251,11 @@ export default {
     },
     // 操作日志状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 操作日志类型字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.businessType);
+      return this.selectDictLabels(this.typeOptions, row.businessType);
     },
     /** 搜索按钮操作 */
     handleQuery() {

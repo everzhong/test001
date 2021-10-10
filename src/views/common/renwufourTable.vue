@@ -71,7 +71,9 @@ export default {
       },{
         prop: 'fylb',
         label: '费用类别',
-        formatter: this.fylbFormat,
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
         width: 'auto'
       }]
     }
@@ -79,7 +81,7 @@ export default {
   props:['tableData'],
   methods:{
     fylbFormat(row, column) {
-      return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+      return this.selectDictLabels(this.$store.getters.fyDic, row.fylb);
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

@@ -380,7 +380,7 @@ export default {
     },
     // 性别字典翻译
     sexFormat(row, column) {
-      return this.selectDictLabel(this.sexOptions, row.sex);
+      return this.selectDictLabels(this.sexOptions, row.sex);
     },
     radioChange(){
       this.getList()

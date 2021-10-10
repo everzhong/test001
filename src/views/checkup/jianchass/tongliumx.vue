@@ -16,12 +16,16 @@ export default {
       tableHeader:[{
         prop: 'jslb',
         label: '就医类型',
-        formatter: this.jslbFormat,
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.jslbOptions,jslb)
+        },
         width: 'auto'
       },{
         prop: 'ybbf',
         label: '险种',
-        formatter:this.ybdFormat,
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.ybbfOptions, ybbf)
+        },
         width: 'auto'
       },{
         prop: 'lsh',
@@ -96,7 +100,9 @@ export default {
       },{
         prop: 'fylb',
         label: '费用类别',
-        formatter: this.fylbFormat,
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
         width: 'auto'
       }]
     }
@@ -108,15 +114,15 @@ export default {
   },
   methods:{
     fylbFormat(row, column) {
-      return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+      return this.selectDictLabels(this.$store.getters.fyDic, row.fylb);
     },
      // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     radioChange(e){
       const selection = this.tableData.filter(item=>{

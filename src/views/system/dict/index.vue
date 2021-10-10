@@ -259,7 +259,7 @@ export default {
     },
     // 字典状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {

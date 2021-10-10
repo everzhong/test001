@@ -34,12 +34,6 @@ export default {
         prop: 'jgmc',
         label: '机构名称',
       },{
-        prop: 'gzfl',
-        label: '规则分类',
-      },{
-        prop: 'gzmc',
-        label: '规则名称',
-      },{
         prop: 'ysgh',
         label: '医师代码',
       },{
@@ -54,11 +48,15 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
-        formatter:this.ybdFormat,
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.ybbfOptions, ybbf)
+        },
       },{
         prop: 'jslb',
         label: '就医类型',
-        formatter: this.jslbFormat,
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.jslbOptions,jslb)
+        },
       },{
         prop: 'jyrq',
         label: '结算日期',
@@ -97,15 +95,17 @@ export default {
           return this.formatMoney(mxxmjyfy,2)
         }  
       },{
-        prop: 'mxxmbjsfy',
+        prop: 'mxxmybjsfy',
         label: '明细项目医保结算金额(元)',
-        viewFun: (mxxmbjsfy)=>{
-          return this.formatMoney(mxxmbjsfy,2)
+        viewFun: (mxxmybjsfy)=>{
+          return this.formatMoney(mxxmybjsfy,2)
         }  
       },{
         prop: 'fylb',
         label: '费用类别',
-        formatter: this.fylbFormat,
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
         width: 'auto'
       }]
     }
@@ -118,15 +118,15 @@ export default {
   },
   methods:{
     fylbFormat(row, column) {
-      return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+      return this.selectDictLabels(this.$store.getters.fyDic, row.fylb);
     },
      // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     async getList(){
       this.loading = true;

@@ -28,7 +28,7 @@ export default {
         pageSize:50
       },
       tableHeader:[{
-        prop: 'rwpcid',
+        prop: 'pch',
         label: '批次号'
       },{
         prop: 'jgdm',
@@ -37,10 +37,10 @@ export default {
         prop: 'jgmc',
         label: '机构名称',
       },{
-        prop: 'GZMC',
+        prop: 'gzmc',
         label: '规则分类',
       },{
-        prop: 'GZMC2',
+        prop: 'gzmc2',
         label: '规则名称',
       },{
         prop: 'ysgh',
@@ -57,11 +57,15 @@ export default {
       },{
         prop: 'ybbf',
         label: '险种',
-        formatter:this.ybdFormat
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.ybbfOptions, ybbf)
+        }
       },{
         prop: 'jslb',
         label: '就医类型',
-        formatter: this.jslbFormat,
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.jslbOptions,jslb)
+        },
       },{
         prop: 'jyrq',
         label: '结算日期',
@@ -100,7 +104,7 @@ export default {
           return this.formatMoney(mxxmjyfy,2)
         }  
       },{
-        prop: 'mxxmbjsfy',
+        prop: 'mxxmybjsfy',
         label: '明细项目医保结算金额(元)',
         viewFun: (mxxmbjsfy)=>{
           return this.formatMoney(mxxmbjsfy,2)
@@ -108,7 +112,9 @@ export default {
       },{
         prop: 'fylb',
         label: '费用类别',
-        formatter: this.fylbFormat,
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
         width: 'auto'
       }]
     }
@@ -121,15 +127,15 @@ export default {
   },
   methods:{
     fylbFormat(row, column) {
-      return this.selectDictLabel(this.$store.getters.fyDic, row.fylb);
+      return this.selectDictLabels(this.$store.getters.fyDic, row.fylb);
     },
      // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     /** 查询renwuthree列表 */
     async getList(query) {

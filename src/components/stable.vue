@@ -23,7 +23,7 @@
         align="center"
         show-overflow-tooltip
       >
-        <template slot-scope="scope" v-if="!col.formatter">
+        <template slot-scope="scope">
           <span v-if="!col.viewTemp">{{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}}</span>
           <el-input v-if="col.viewTemp==='input'" v-model="scope.row[col.prop]" size="mini" @blur="ydChange(scope.row)"></el-input>
           <el-select v-if="col.viewTemp==='selector'" v-model="scope.row[col.prop]" size="mini" @change="ydChange(scope.row)">

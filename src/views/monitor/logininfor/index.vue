@@ -172,7 +172,7 @@ export default {
     },
     // 登录状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     /** 搜索按钮操作 */
     handleQuery() {

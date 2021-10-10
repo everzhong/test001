@@ -239,119 +239,119 @@ export default {
     },
     // 异本地字典翻译
     ybdFormat(row, column) {
-      return this.selectDictLabel(this.ybdOptions, row.ybd);
+      return this.selectDictLabels(this.ybdOptions, row.ybd);
     },
     // 数据开始时间字典翻译
     datastarttimeFormat(row, column) {
-      return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
+      return this.selectDictLabels(this.datastarttimeOptions, row.datastarttime);
     },
     // 批次号字典翻译
     rwpcidFormat(row, column) {
-      return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
+      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
     },
     // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 数据结束时间字典翻译
     dataendtimeFormat(row, column) {
-      return this.selectDictLabel(this.dataendtimeOptions, row.dataendtime);
+      return this.selectDictLabels(this.dataendtimeOptions, row.dataendtime);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     // 网审意见字典翻译
     wsyjFormat(row, column) {
-      return this.selectDictLabel(this.wsyjOptions, row.wsyj);
+      return this.selectDictLabels(this.wsyjOptions, row.wsyj);
     },
     // 更新时间字典翻译
     uptimeFormat(row, column) {
-      return this.selectDictLabel(this.uptimeOptions, row.uptime);
+      return this.selectDictLabels(this.uptimeOptions, row.uptime);
     },
     // 网审人员字典翻译
     wsryFormat(row, column) {
-      return this.selectDictLabel(this.wsryOptions, row.wsry);
+      return this.selectDictLabels(this.wsryOptions, row.wsry);
     },
     // 涉及规则数字典翻译
     sjwgsFormat(row, column) {
-      return this.selectDictLabel(this.sjwgsOptions, row.sjwgs);
+      return this.selectDictLabels(this.sjwgsOptions, row.sjwgs);
     },
     // 疑点金额字典翻译
     ydjeFormat(row, column) {
-      return this.selectDictLabel(this.ydjeOptions, row.ydje);
+      return this.selectDictLabels(this.ydjeOptions, row.ydje);
     },
     // 结算金额字典翻译
     jsjeFormat(row, column) {
-      return this.selectDictLabel(this.jsjeOptions, row.jsje);
+      return this.selectDictLabels(this.jsjeOptions, row.jsje);
     },
     // 涉及就诊人次字典翻译
     jsrcFormat(row, column) {
-      return this.selectDictLabel(this.jsrcOptions, row.jsrc);
+      return this.selectDictLabels(this.jsrcOptions, row.jsrc);
     },
     // 添加时间字典翻译
     addtimeFormat(row, column) {
-      return this.selectDictLabel(this.addtimeOptions, row.addtime);
+      return this.selectDictLabels(this.addtimeOptions, row.addtime);
     },
     // 信用代码字典翻译
     xydmFormat(row, column) {
-      return this.selectDictLabel(this.xydmOptions, row.xydm);
+      return this.selectDictLabels(this.xydmOptions, row.xydm);
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabel(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
     },
     // 机构名称字典翻译
     jgmcFormat(row, column) {
-      return this.selectDictLabel(this.jgmcOptions, row.jgmc);
+      return this.selectDictLabels(this.jgmcOptions, row.jgmc);
     },
     // 结算等级字典翻译
     jsdjFormat(row, column) {
-      return this.selectDictLabel(this.jsdjOptions, row.jsdj);
+      return this.selectDictLabels(this.jsdjOptions, row.jsdj);
     },
     // 网审人员2字典翻译
     wsry2Format(row, column) {
-      return this.selectDictLabel(this.wsry2Options, row.wsry2);
+      return this.selectDictLabels(this.wsry2Options, row.wsry2);
     },
     // 对象同意或驳回字典翻译
     dxqdFormat(row, column) {
-      return this.selectDictLabel(this.dxqdOptions, row.dxqd);
+      return this.selectDictLabels(this.dxqdOptions, row.dxqd);
     },
     // 流程识别ID字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 检查组ID字典翻译
     jczidFormat(row, column) {
-      return this.selectDictLabel(this.jczidOptions, row.jczid);
+      return this.selectDictLabels(this.jczidOptions, row.jczid);
     },
     // 是否打印了通知字典翻译
     isdayinFormat(row, column) {
-      return this.selectDictLabel(this.isdayinOptions, row.isdayin);
+      return this.selectDictLabels(this.isdayinOptions, row.isdayin);
     },
     // 打印通知书联系人字典翻译
     dayinnameFormat(row, column) {
-      return this.selectDictLabel(this.dayinnameOptions, row.dayinname);
+      return this.selectDictLabels(this.dayinnameOptions, row.dayinname);
     },
     // 打印通知书联系电话(检查通知书)字典翻译
     dayintelFormat(row, column) {
-      return this.selectDictLabel(this.dayintelOptions, row.dayintel);
+      return this.selectDictLabels(this.dayintelOptions, row.dayintel);
     },
     // 打印日期字典翻译
     dayinriqiFormat(row, column) {
-      return this.selectDictLabel(this.dayinriqiOptions, row.dayinriqi);
+      return this.selectDictLabels(this.dayinriqiOptions, row.dayinriqi);
     },
     // 打印通知书联系电话(纪律告知书)字典翻译
     dayinphoneFormat(row, column) {
-      return this.selectDictLabel(this.dayinphoneOptions, row.dayinphone);
+      return this.selectDictLabels(this.dayinphoneOptions, row.dayinphone);
     },
     // 打印中的检查开始日期字典翻译
     dayinstarttimeFormat(row, column) {
-      return this.selectDictLabel(this.dayinstarttimeOptions, row.dayinstarttime);
+      return this.selectDictLabels(this.dayinstarttimeOptions, row.dayinstarttime);
     },
     // 形成结果同意或驳回字典翻译
     dcjgFormat(row, column) {
-      return this.selectDictLabel(this.dcjgOptions, row.dcjg);
+      return this.selectDictLabels(this.dcjgOptions, row.dcjg);
     },
     // 取消按钮
     cancel() {

@@ -468,71 +468,71 @@ export default {
     },
     // ID字典翻译
     idFormat(row, column) {
-      return this.selectDictLabel(this.idOptions, row.id);
+      return this.selectDictLabels(this.idOptions, row.id);
     },
     // 创建时间字典翻译
     createDateFormat(row, column) {
-      return this.selectDictLabel(this.createDateOptions, row.createDate);
+      return this.selectDictLabels(this.createDateOptions, row.createDate);
     },
     // 更新人字典翻译
     updateByFormat(row, column) {
-      return this.selectDictLabel(this.updateByOptions, row.updateBy);
+      return this.selectDictLabels(this.updateByOptions, row.updateBy);
     },
     // 开始时间字典翻译
     stimeFormat(row, column) {
-      return this.selectDictLabel(this.stimeOptions, row.stime);
+      return this.selectDictLabels(this.stimeOptions, row.stime);
     },
     // 任务层ID字典翻译
     jobIdFormat(row, column) {
-      return this.selectDictLabel(this.jobIdOptions, row.jobId);
+      return this.selectDictLabels(this.jobIdOptions, row.jobId);
     },
     // 日志路径字典翻译
     logFilePathFormat(row, column) {
-      return this.selectDictLabel(this.logFilePathOptions, row.logFilePath);
+      return this.selectDictLabels(this.logFilePathOptions, row.logFilePath);
     },
     // 更新时间字典翻译
     updateDateFormat(row, column) {
-      return this.selectDictLabel(this.updateDateOptions, row.updateDate);
+      return this.selectDictLabels(this.updateDateOptions, row.updateDate);
     },
     // 抽取分类字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.type);
+      return this.selectDictLabels(this.typeOptions, row.type);
     },
     // 成功条数字典翻译
     succFormat(row, column) {
-      return this.selectDictLabel(this.succOptions, row.succ);
+      return this.selectDictLabels(this.succOptions, row.succ);
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabel(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
     },
     // 年月份字典翻译
     nyFormat(row, column) {
-      return this.selectDictLabel(this.nyOptions, row.ny);
+      return this.selectDictLabels(this.nyOptions, row.ny);
     },
     // 状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 创建人字典翻译
     createByFormat(row, column) {
-      return this.selectDictLabel(this.createByOptions, row.createBy);
+      return this.selectDictLabels(this.createByOptions, row.createBy);
     },
     // 总耗时字典翻译
     ztimeFormat(row, column) {
-      return this.selectDictLabel(this.ztimeOptions, row.ztime);
+      return this.selectDictLabels(this.ztimeOptions, row.ztime);
     },
     // 结束时间字典翻译
     etimeFormat(row, column) {
-      return this.selectDictLabel(this.etimeOptions, row.etime);
+      return this.selectDictLabels(this.etimeOptions, row.etime);
     },
     // 失败条数字典翻译
     fuccFormat(row, column) {
-      return this.selectDictLabel(this.fuccOptions, row.fucc);
+      return this.selectDictLabels(this.fuccOptions, row.fucc);
     },
     // 抽取状态字典翻译
     endsFormat(row, column) {
-      return this.selectDictLabel(this.endsOptions, row.ends);
+      return this.selectDictLabels(this.endsOptions, row.ends);
     },
     // 取消按钮
     cancel() {

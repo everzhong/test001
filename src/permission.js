@@ -27,12 +27,15 @@ router.beforeEach((to, from, next) => {
             if (store.getters.roles.length === 0) {
                 // 判断当前用户是否已拉取完user_info信息
                 store.dispatch('GetInfo').then((res) => {
+                    store.dispatch('GetFyList');
+                    store.dispatch('GetJsList');
+                    store.dispatch('GetYbbfList');
                     const roles = res.roles;
                     store.dispatch('GenerateRoutes').then(accessRoutes => {
                         router.addRoutes(accessRoutes) // 动态添加可访问路由表
                         if (roles.indexOf('jigou') > -1 || roles.indexOf('JDSCXBDDYLJG') > -1) {
                             next({ path: '/checkup/listjg', replace: true })
-                        } else if (roles.indexOf('xianchangjc') > -1 || roles.indexOf('jiancha') > -1 || roles.indexOf('JDSCXBXXRY') > -1) {
+                        } else if (roles.indexOf('xianchangjc') > -1 || roles.indexOf('JDSCXBXXRY') > -1) {
                             next({ path: '/checkup/dayintz', replace: true })
                         } else {
                             next(to.path ? {...to, replace: true } : { path: '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成

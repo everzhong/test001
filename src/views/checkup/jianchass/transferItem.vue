@@ -118,7 +118,7 @@ export default {
   methods:{
     // 行政区字典翻译
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
     filterData(selection){
       selection.forEach(item => {

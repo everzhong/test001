@@ -301,14 +301,14 @@ export default {
       if (row.menuType == "F") {
         return "";
       }
-      return this.selectDictLabel(this.visibleOptions, row.visible);
+      return this.selectDictLabels(this.visibleOptions, row.visible);
     },
     // 菜单状态字典翻译
     statusFormat(row, column) {
       if (row.menuType == "F") {
         return "";
       }
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {

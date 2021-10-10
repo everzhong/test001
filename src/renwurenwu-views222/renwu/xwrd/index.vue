@@ -255,23 +255,23 @@ export default {
     },
     // 从属哪一号令字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.type);
+      return this.selectDictLabels(this.typeOptions, row.type);
     },
     // 行为编号字典翻译
     xwbhFormat(row, column) {
-      return this.selectDictLabel(this.xwbhOptions, row.xwbh);
+      return this.selectDictLabels(this.xwbhOptions, row.xwbh);
     },
     // 违规行为字典翻译
     wgxwFormat(row, column) {
-      return this.selectDictLabel(this.wgxwOptions, row.wgxw);
+      return this.selectDictLabels(this.wgxwOptions, row.wgxw);
     },
     // 违规从属行为字典翻译
     lxFormat(row, column) {
-      return this.selectDictLabel(this.lxOptions, row.lx);
+      return this.selectDictLabels(this.lxOptions, row.lx);
     },
     // ID字典翻译
     idFormat(row, column) {
-      return this.selectDictLabel(this.idOptions, row.id);
+      return this.selectDictLabels(this.idOptions, row.id);
     },
     // 取消按钮
     cancel() {

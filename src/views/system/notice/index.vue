@@ -250,11 +250,11 @@ export default {
     },
     // 公告状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 公告状态字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.noticeType);
+      return this.selectDictLabels(this.typeOptions, row.noticeType);
     },
     // 取消按钮
     cancel() {

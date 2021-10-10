@@ -345,11 +345,11 @@ export default {
     },
     // 任务组名字典翻译
     jobGroupFormat(row, column) {
-      return this.selectDictLabel(this.jobGroupOptions, row.jobGroup);
+      return this.selectDictLabels(this.jobGroupOptions, row.jobGroup);
     },
     // 状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {

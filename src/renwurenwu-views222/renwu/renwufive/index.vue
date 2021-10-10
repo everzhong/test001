@@ -719,119 +719,119 @@ export default {
     },
     // 明细项目金额字典翻译
     mxxmjeFormat(row, column) {
-      return this.selectDictLabel(this.mxxmjeOptions, row.mxxmje);
+      return this.selectDictLabels(this.mxxmjeOptions, row.mxxmje);
     },
     // 明细项目交易金额字典翻译
     mxxmjyfyFormat(row, column) {
-      return this.selectDictLabel(this.mxxmjyfyOptions, row.mxxmjyfy);
+      return this.selectDictLabels(this.mxxmjyfyOptions, row.mxxmjyfy);
     },
     // 明细项目医保结算金额字典翻译
     mxxmybjsfyFormat(row, column) {
-      return this.selectDictLabel(this.mxxmybjsfyOptions, row.mxxmybjsfy);
+      return this.selectDictLabels(this.mxxmybjsfyOptions, row.mxxmybjsfy);
     },
     // 明细项目使用时间字典翻译
     mxxmsysjFormat(row, column) {
-      return this.selectDictLabel(this.mxxmsysjOptions, row.mxxmsysj);
+      return this.selectDictLabels(this.mxxmsysjOptions, row.mxxmsysj);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 记录行号字典翻译
     jlhhFormat(row, column) {
-      return this.selectDictLabel(this.jlhhOptions, row.jlhh);
+      return this.selectDictLabels(this.jlhhOptions, row.jlhh);
     },
     // 行为认定字典翻译
     xwrdFormat(row, column) {
-      return this.selectDictLabel(this.xwrdOptions, row.xwrd);
+      return this.selectDictLabels(this.xwrdOptions, row.xwrd);
     },
     // ID字典翻译
     idFormat(row, column) {
-      return this.selectDictLabel(this.idOptions, row.id);
+      return this.selectDictLabels(this.idOptions, row.id);
     },
     // 任务流水号字典翻译
     rwpcidFormat(row, column) {
-      return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
+      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
     },
     // 对应的交易明细表ID字典翻译
     mxidFormat(row, column) {
-      return this.selectDictLabel(this.mxidOptions, row.mxid);
+      return this.selectDictLabels(this.mxidOptions, row.mxid);
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabel(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
     },
     // 机构名称字典翻译
     jgmcFormat(row, column) {
-      return this.selectDictLabel(this.jgmcOptions, row.jgmc);
+      return this.selectDictLabels(this.jgmcOptions, row.jgmc);
     },
     // 规则分类字典翻译
     gzflFormat(row, column) {
-      return this.selectDictLabel(this.gzflOptions, row.gzfl);
+      return this.selectDictLabels(this.gzflOptions, row.gzfl);
     },
     // 科室代码字典翻译
     ksdmFormat(row, column) {
-      return this.selectDictLabel(this.ksdmOptions, row.ksdm);
+      return this.selectDictLabels(this.ksdmOptions, row.ksdm);
     },
     // 科室名称字典翻译
     ksmcFormat(row, column) {
-      return this.selectDictLabel(this.ksmcOptions, row.ksmc);
+      return this.selectDictLabels(this.ksmcOptions, row.ksmc);
     },
     // 医师代码字典翻译
     ysghFormat(row, column) {
-      return this.selectDictLabel(this.ysghOptions, row.ysgh);
+      return this.selectDictLabels(this.ysghOptions, row.ysgh);
     },
     // 流水号字典翻译
     lshFormat(row, column) {
-      return this.selectDictLabel(this.lshOptions, row.lsh);
+      return this.selectDictLabels(this.lshOptions, row.lsh);
     },
     // 卡号字典翻译
     khFormat(row, column) {
-      return this.selectDictLabel(this.khOptions, row.kh);
+      return this.selectDictLabels(this.khOptions, row.kh);
     },
     // 参保人姓名字典翻译
     xmFormat(row, column) {
-      return this.selectDictLabel(this.xmOptions, row.xm);
+      return this.selectDictLabels(this.xmOptions, row.xm);
     },
     // 结算日期字典翻译
     jsrqsjFormat(row, column) {
-      return this.selectDictLabel(this.jsrqsjOptions, row.jsrqsj);
+      return this.selectDictLabels(this.jsrqsjOptions, row.jsrqsj);
     },
     // 明细项目编号字典翻译
     mxxmbmFormat(row, column) {
-      return this.selectDictLabel(this.mxxmbmOptions, row.mxxmbm);
+      return this.selectDictLabels(this.mxxmbmOptions, row.mxxmbm);
     },
     // 明细项目单价字典翻译
     mxxmdjFormat(row, column) {
-      return this.selectDictLabel(this.mxxmdjOptions, row.mxxmdj);
+      return this.selectDictLabels(this.mxxmdjOptions, row.mxxmdj);
     },
     // 明细项目单位字典翻译
     mxxmdwFormat(row, column) {
-      return this.selectDictLabel(this.mxxmdwOptions, row.mxxmdw);
+      return this.selectDictLabels(this.mxxmdwOptions, row.mxxmdw);
     },
     // 明细项目数量字典翻译
     mxxmslFormat(row, column) {
-      return this.selectDictLabel(this.mxxmslOptions, row.mxxmsl);
+      return this.selectDictLabels(this.mxxmslOptions, row.mxxmsl);
     },
     // 追款单价字典翻译
     zkdjFormat(row, column) {
-      return this.selectDictLabel(this.zkdjOptions, row.zkdj);
+      return this.selectDictLabels(this.zkdjOptions, row.zkdj);
     },
     // 违规数量字典翻译
     wgslFormat(row, column) {
-      return this.selectDictLabel(this.wgslOptions, row.wgsl);
+      return this.selectDictLabels(this.wgslOptions, row.wgsl);
     },
     // 违规费用字典翻译
     wgfyFormat(row, column) {
-      return this.selectDictLabel(this.wgfyOptions, row.wgfy);
+      return this.selectDictLabels(this.wgfyOptions, row.wgfy);
     },
     // 行为认定人字典翻译
     xwrdrFormat(row, column) {
-      return this.selectDictLabel(this.xwrdrOptions, row.xwrdr);
+      return this.selectDictLabels(this.xwrdrOptions, row.xwrdr);
     },
     // 取消按钮
     cancel() {

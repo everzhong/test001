@@ -528,75 +528,75 @@ export default {
     },
     // 批次号字典翻译
     rwpcidFormat(row, column) {
-      return this.selectDictLabel(this.rwpcidOptions, row.rwpcid);
+      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
     },
     // 机构名称字典翻译
     rwmcFormat(row, column) {
-      return this.selectDictLabel(this.rwmcOptions, row.rwmc);
+      return this.selectDictLabels(this.rwmcOptions, row.rwmc);
     },
     // 检查方式字典翻译
     jcfsFormat(row, column) {
-      return this.selectDictLabel(this.jcfsOptions, row.jcfs);
+      return this.selectDictLabels(this.jcfsOptions, row.jcfs);
     },
     // 数据开始时间字典翻译
     datastarttimeFormat(row, column) {
-      return this.selectDictLabel(this.datastarttimeOptions, row.datastarttime);
+      return this.selectDictLabels(this.datastarttimeOptions, row.datastarttime);
     },
     // 机构数量字典翻译
     jgslFormat(row, column) {
-      return this.selectDictLabel(this.jgslOptions, row.jgsl);
+      return this.selectDictLabels(this.jgslOptions, row.jgsl);
     },
     // 任务截止时间字典翻译
     rwendtimeFormat(row, column) {
-      return this.selectDictLabel(this.rwendtimeOptions, row.rwendtime);
+      return this.selectDictLabels(this.rwendtimeOptions, row.rwendtime);
     },
     // 就医类型字典翻译
     jslbFormat(row, column) {
-      return this.selectDictLabel(this.jslbOptions, row.jslb);
+      return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
     // 任务描述字典翻译
     rwmsFormat(row, column) {
-      return this.selectDictLabel(this.rwmsOptions, row.rwms);
+      return this.selectDictLabels(this.rwmsOptions, row.rwms);
     },
     // 异地/本地字典翻译
     ybdFormat(row, column) {
-      return this.selectDictLabel(this.ybdOptions, row.ybd);
+      return this.selectDictLabels(this.ybdOptions, row.ybd);
     },
     // 险种字典翻译
     ybbfFormat(row, column) {
-      return this.selectDictLabel(this.ybbfOptions, row.ybbf);
+      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
     },
     // 第三方筛查状态字典翻译
     disanchaFormat(row, column) {
-      return this.selectDictLabel(this.disanchaOptions, row.disancha);
+      return this.selectDictLabels(this.disanchaOptions, row.disancha);
     },
     // 承办机构字典翻译
     cbjgFormat(row, column) {
-      return this.selectDictLabel(this.cbjgOptions, row.cbjg);
+      return this.selectDictLabels(this.cbjgOptions, row.cbjg);
     },
     // 任务推送时间字典翻译
     rwtssjFormat(row, column) {
-      return this.selectDictLabel(this.rwtssjOptions, row.rwtssj);
+      return this.selectDictLabels(this.rwtssjOptions, row.rwtssj);
     },
     // 添加时间字典翻译
     addtimeFormat(row, column) {
-      return this.selectDictLabel(this.addtimeOptions, row.addtime);
+      return this.selectDictLabels(this.addtimeOptions, row.addtime);
     },
     // 任务状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabels(this.statusOptions, row.status);
     },
     // 数据结束时间字典翻译
     dataendtimeFormat(row, column) {
-      return this.selectDictLabel(this.dataendtimeOptions, row.dataendtime);
+      return this.selectDictLabels(this.dataendtimeOptions, row.dataendtime);
     },
     // 案件来源字典翻译
     ajlyFormat(row, column) {
-      return this.selectDictLabel(this.ajlyOptions, row.ajly);
+      return this.selectDictLabels(this.ajlyOptions, row.ajly);
     },
     // 更新时间字典翻译
     uptimeFormat(row, column) {
-      return this.selectDictLabel(this.uptimeOptions, row.uptime);
+      return this.selectDictLabels(this.uptimeOptions, row.uptime);
     },
     // 取消按钮
     cancel() {

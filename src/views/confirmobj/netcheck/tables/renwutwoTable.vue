@@ -52,10 +52,16 @@ export default {
         prop:'jgmc'
       },{
         label:"险种",
-        prop:'ybbf'
+        prop:'ybbf',
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.ybbfOptions, ybbf)
+        }
       },{
         label:"就医类型",
-        prop:'jslb'
+        prop:'jslb',
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.jslbOptions,jslb)
+        }
       },{
         label:"数据开始日期",
         prop:'datastarttime',
@@ -69,10 +75,12 @@ export default {
           return this.parseTime(time,'{y}-{m}')
         }
       },{
-        label:"行政区",
+        label: "行政区",
         prop:'xzq',
         width:'auto',
-        formatter:this.xzqFormat
+        viewFun: (xzq)=>{
+          return this.selectDictLabels(this.xzqOptions, xzq)
+        }
       },{
         label:"涉及规则数",
         prop:'sjwgs'
@@ -91,7 +99,9 @@ export default {
       },{
         label:"机构代码",
         prop:'jgdm'
-      }]
+      }],
+      jslbOptions:[],
+      ybbfOptions:[]
     }
   },
   props:['tableData'],
@@ -99,6 +109,8 @@ export default {
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
+    this.jslbOptions = this.$store.getters.jslbDic
+    this.ybbfOptions = this.$store.getters.ybbfDic
   },
   mounted(){
     this.tableHeight = document.body.offsetHeight - 50-34-118-40-70-50-35+'px';
@@ -116,7 +128,7 @@ export default {
     },
     // 行政区字典翻译
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
   }
 }

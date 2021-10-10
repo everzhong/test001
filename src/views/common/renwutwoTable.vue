@@ -75,7 +75,7 @@ export default {
       this.$emit('check-mx',row)
     },
     xzqFormat(row, column) {
-      return this.selectDictLabel(this.xzqOptions, row.xzq);
+      return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
   }
 }
