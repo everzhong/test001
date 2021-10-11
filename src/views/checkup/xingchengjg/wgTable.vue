@@ -9,7 +9,7 @@
     <el-table-column
       align="center"
       prop="wglx"
-      label="类型"
+      label="适用办法"
       >
     </el-table-column>
     <el-table-column
@@ -146,7 +146,7 @@ export default {
       const list = []
       if(data.length){
         const wglx = []
-        data.forEach(item=>{
+        data.forEach((item,i)=>{
           wglx.indexOf(item.wglx)<0&&(wglx.push(item.wglx))
         })
         wglx.forEach((lx,i)=>{
@@ -175,6 +175,7 @@ export default {
           })
         })
       }
+      console.log(result)
       return result
     },
     /** 查询renwu列表 */

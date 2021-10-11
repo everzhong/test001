@@ -297,6 +297,18 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="承办机构ID" prop="jgdm">
+              <el-input v-model="form.jgdm" placeholder="请输入机构ID" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="承办机构名称" prop="jgmc">
+              <el-input v-model="form.jgmc" placeholder="请输入机构名称"  />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="所属机构代码">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入"></el-input>

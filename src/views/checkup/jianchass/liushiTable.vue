@@ -33,9 +33,11 @@ export default {
       },{
         prop: 'gzfl',
         label: '规则分类',
+        align: 'left'
       },{
         prop: 'gzmc',
         label: '规则名称',
+        align: 'left'
       },{
         prop: 'xwrd',
         label: '认定行为',

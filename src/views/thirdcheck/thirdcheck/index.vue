@@ -67,7 +67,7 @@
         <el-table-column type="selection" width="55" align="center" slot="fixed"/>
         <el-table-column label="操作" align="center" slot="operate" min-width="100">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="openUrl(scope.row)">数据筛查</el-button>
+            <el-button type="text" size="mini" @click="openUrl(scope.row)" :disabled="scope.row.sccqstatus<3">数据筛查</el-button>
           </template>
         </el-table-column>
       </sTable>
@@ -100,6 +100,12 @@ export default {
       },{
         prop: 'scrwid',
         label: '筛查任务ID',
+      },{
+        prop: 'addtime',
+        label: '生成任务时间',
+        viewFun:(time)=>{
+          return this.parseTime(time)
+        }
       },{
         label:"数据开始日期",
         prop:'datastarttime',

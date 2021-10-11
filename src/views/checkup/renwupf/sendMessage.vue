@@ -23,9 +23,9 @@
             <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
           </template>
         </el-table-column>
-        <el-table-column label="检查组编号" prop="jczbh" align="center"></el-table-column>
-        <el-table-column label="检查组名称" prop="deptName" align="center"></el-table-column>
-        <el-table-column label="检查组成员" prop="jczcy" align="center">
+        <el-table-column label="检查组编号" prop="jczbh" align="center" show-overflow-tooltip></el-table-column>
+        <el-table-column label="检查组名称" prop="deptName" align="center" show-overflow-tooltip></el-table-column>
+        <el-table-column label="检查组成员" prop="jczcy" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{formateNickName(scope.row.jczcy)}}</span>
           </template>
@@ -70,9 +70,14 @@
               <div style="min-height:150px;max-height:210px;overflow:auto">
                 <el-table :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
                   <el-table-column type="selection" width="50" align="center" />
-                  <el-table-column property="jgdm" label="承办机构ID" align="center" show-overflow-tooltip></el-table-column>
-                  <el-table-column property="jgmc" label="承办机构名称" align="center" show-overflow-tooltip></el-table-column>
-                  <el-table-column property="nickName" label="人员姓名" align="center" show-overflow-tooltip></el-table-column>
+                  <el-table-column property="jgdm" label="机构ID" align="center" show-overflow-tooltip></el-table-column>
+                  <el-table-column property="jgmc" label="机构名称" align="center" show-overflow-tooltip></el-table-column>
+                  <el-table-column property="dept" label="人员类型" align="center" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <span>{{scope.row.dept.leader}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column property="nickName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
                 </el-table>
               </div>
               <div style="text-align:right;margin-top:10px">

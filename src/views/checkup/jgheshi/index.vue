@@ -88,10 +88,12 @@ export default {
       },{
         prop: 'gzfl',
         label: '规则分类',
+        align: 'left',
         width:'auto'
       },{
         prop: 'gzmc',
         label: '规则名称',
+        align: 'left'
       },{
         prop: 'xjmxs',
         label: '违反条数(违反规则的明细数量)',

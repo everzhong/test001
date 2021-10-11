@@ -1,7 +1,7 @@
 <template>
   <section id="jlNotice">
     <!-- <div id="printJc" class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0">
-      <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所/××区医疗保障局 </h1>
+      <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所 </h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/×医保监督通（××××）×号</div>
         <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
@@ -18,7 +18,7 @@
             <span style="width:40%;display:inline-block;text-align:right">联系电话：<span style="display:inline-block;width:40%">{{pageData.dayintel}}</span></span>
           </div>
           <div style="text-align:right;margin-bottom:70px">
-            <p style="width:100%;margin-bottom:10px;;text-align:right">上海市医疗保险监督检查所/××区医疗保障局</p>
+            <p style="width:100%;margin-bottom:10px;;text-align:right">上海市医疗保险监督检查所</p>
             <p style="width:40%;text-align:left;margin-left:60%;text-align:right">
               <span style="margin-right:5px">{{parseTime(pageData.dayinriqi,'{y}')}}</span>年
               <span style="margin:0 5px">{{parseTime(pageData.dayinriqi,'{m}')}}</span>月

@@ -48,7 +48,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <el-row :gutter="10">
+    <!-- <el-row :gutter="10">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -56,18 +56,23 @@
           @click="handleRecive"
         >接收数据</el-button>
       </el-col>
-    </el-row>
+    </el-row> -->
     <div class="table-main" :style="{top:tableHeight}" v-loading="loading">
-      <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
-        <el-table-column  align="center" width="55" slot="fixed">
+      <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
+        <!-- <el-table-column  align="center" width="55" slot="fixed">
           <template slot-scope="scope">
             <el-radio :label="scope.row.id" v-model="radioCheck" @change="radioChange"></el-radio>
           </template>
-        </el-table-column>
-        <el-table-column label="序号" type="index" align="center" slot="fixed"/>
-        <!-- <el-table-column label="就医类型" align="center" prop="jslb" :width="flexColumnWidth('jslb',renwuoneList)"/> -->
-        <el-table-column label="操作" align="center" width="100" slot="operate">
+        </el-table-column> -->
+        <el-table-column label="序号" type="index" align="center"  slot="fixed" width="55px"/>
+        <el-table-column label="操作" align="center" min-width="200" slot="operate">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              :disabled="scope.row.jsstatus!=0"
+              @click="handleRecive(scope.row)"
+            >接收疑点数据</el-button>
             <el-button
               size="mini"
               type="text"
@@ -76,7 +81,6 @@
             >查看任务详情</el-button>
           </template>
         </el-table-column>
-      <!-- </el-table> -->
       </sTable>
     </div>
     <pagination
@@ -101,7 +105,7 @@ export default {
         prop: 'jsstatus',
         label: '接收状态',
         viewFun:function(index){
-          return ['未接收','抽取中','已抽取'][index||0]
+          return ['未接收','接收中','已接收'][index||0]
         }
       },{
         prop: 'rwpcid',
@@ -110,8 +114,8 @@ export default {
         prop: 'rwmc',
         label: '任务名称',
       },{
-        prop: 'jcfs',
-        label: '检查方式',
+        prop: 'ajly',
+        label: '任务来源',
       },{
         prop: 'datastarttime',
         label: '数据开始日期',
@@ -128,7 +132,7 @@ export default {
         prop: 'jgsl',
         label: '机构数量',
       },{
-        prop: 'rwtssj',
+        prop: 'uptime',
         label: '任务推送日期',
         viewFun: (time)=>{
           return this.parseTime(time,'{y}-{m}-{d}')
@@ -148,6 +152,9 @@ export default {
       },{
         prop: 'rwms',
         label: '任务描述',
+        viewFun:(rwms)=>{
+          return (rwms||'无')
+        }
       },{
         prop: 'ybbf',
         label: '险种',
@@ -254,7 +261,7 @@ export default {
     this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
-    this.tableHeight = this.calcTableHeight(32+5+10)
+    this.tableHeight = this.calcTableHeight(7)
   },
   methods: {
     /** 查询renwuone列表 */
@@ -472,14 +479,14 @@ export default {
       })[0]
     },
     //数据提交
-    handleRecive(){
-      if(this.radioCheck==''){
-        this.msgError("请选择一项");
-        return
-      }
+    handleRecive(row){
+      // if(this.radioCheck==''){
+      //   this.msgError("请选择一项");
+      //   return
+      // }
       setYd({
-        id:this.radioCheck,
-        rwpcid:this.radioSelection.rwpcid
+        id:row.id,
+        rwpcid:row.rwpcid
       }).then(res=>{
         if(res.code===200){
           this.msgSuccess('提交成功')

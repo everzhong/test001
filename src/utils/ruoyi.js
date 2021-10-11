@@ -15,30 +15,30 @@ export function parseTime(time, pattern) {
     if (typeof time === 'object') {
         date = time
     } else {
-        if(typeof time === 'string'){
-            const formatDateStr = (tStr)=>{
+        if (typeof time === 'string') {
+            const formatDateStr = (tStr) => {
                 const timeArr = tStr.split('/')
                 const dateStr = timeArr[0]
                 const timeStr = timeArr[1]
                 return `${[dateStr.slice(0, 4),dateStr.slice(4,6),dateStr.slice(6,8)].join('/')} ${[timeStr.slice(0, 2),timeStr.slice(2,4),timeStr.slice(4,6)].join(':')}`
             }
             switch (true) {
-                case (/^[0-9]+$/.test(time) && time.length===13):
+                case (/^[0-9]+$/.test(time) && time.length === 13):
                     time = parseInt(time);
                     break;
-                case (time.indexOf('-')>-1 && time.indexOf('T')<0):
+                case (time.indexOf('-') > -1 && time.indexOf('T') < 0):
                     time = time.replace(new RegExp(/-/gm), '/');
                     break;
-                case (time.length>13 && time.indexOf('/')>-1):
+                case (time.length > 13 && time.indexOf('/') > -1):
                     time = formatDateStr(time);
                     break;
-                case time.length===8:
-                    time = [time.slice(0, 4),time.slice(4,6),time.slice(6,8)].join('/');
+                case time.length === 8:
+                    time = [time.slice(0, 4), time.slice(4, 6), time.slice(6, 8)].join('/');
                     break;
                 default:
                     break;
             }
-        } else if((typeof time === 'number') && (time.toString().length === 10)) {
+        } else if ((typeof time === 'number') && (time.toString().length === 10)) {
             time = time * 1000
         }
         date = new Date(time)
@@ -101,7 +101,7 @@ export function selectDictLabel(datas, value) {
 
 // 回显数据字典（字符串数组）
 export function selectDictLabels(datas, value, separator) {
-    if(value===null||value===undefined||value===''){
+    if (value === null || value === undefined || value === '') {
         return ''
     } else {
         var actions = [];
@@ -297,9 +297,9 @@ export function bossRand(len = 6) {
  * 动态计算表单高度
  * @param {*} hasSearch 有查询部分，默认true
  * @param {*} otherPart 其余需要减掉的部分
-*/
-export function calcTableHeight(otherPartH=0,hasSearch=true){
+ */
+export function calcTableHeight(otherPartH = 0, hasSearch = true) {
     const paddingTop = 20;
-    const searchPartH = (hasSearch && this.$refs.searchForm) ?(this.$refs.searchForm.$el.offsetHeight):0;//查询区域的高度
+    const searchPartH = (hasSearch && this.$refs.searchForm) ? (this.$refs.searchForm.$el.offsetHeight) : 0; //查询区域的高度
     return `${searchPartH+paddingTop+otherPartH}px`
 }

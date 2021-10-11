@@ -15,12 +15,12 @@
       <el-table-column v-for="(col, index) in tableHeader" :key="index"
         :prop="col.prop"
         :label="col.label"
-        :width="col.width?col.width:flexColumnWidth(col.prop,data)"
+        :min-width="columntWidth(col.label)"
         :type="col.type"
         :column-key="index.toString()"
         :render-header="renderHeader"
         :formatter="col.formatter"
-        align="center"
+        :align="col.align?col.align:'center'"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
@@ -39,7 +39,7 @@
       <slot name="operate" @contextmenu="mouseRightClick" v-if="tableHeader.length"></slot>
     </el-table>
     <div v-if="isPop" class="pop" :style="{left:mouse.left+'px',top:mouse.top+'px'}">
-      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+      <el-checkbox :indeterminate="isIndeterminate" v-model="isCheckAll" @change="handleCheckAllChange">全选</el-checkbox>
       <el-checkbox-group v-model="checkedList" @change="handleCheckedCitiesChange">
         <el-checkbox v-for="item in checkeOptions" :label="item.prop" :key="item.prop">{{item.label}}</el-checkbox>
       </el-checkbox-group>
@@ -70,11 +70,17 @@ export default {
     },
     isrowClassName:{
       type:Boolean,
+    },
+    checkAll:{
+      type:Boolean,
+      default:function(){
+        return true
+      }
     }
   },
   data () {
     return {
-      tableHeader: this.header,
+      tableHeader: [],
       dragState: {
         start: -9, // 起始元素的 index
         end: -9, // 移动鼠标时所覆盖的元素 index
@@ -87,20 +93,31 @@ export default {
         top:10
       },
       checkeOptions:[...this.header],
-      checkAll:true,
+      isCheckAll:this.checkAll,
       allProps:[],
       checkedList:[],
-      isIndeterminate:false
+      isIndeterminate:!this.checkAll
     }
   },
+  created(){
+    const needShowList = this.header.filter(item=>{
+      return item.hide!==true
+    })
+    this.tableHeader = needShowList
+  },
   mounted(){
-    this.allProps = this.tableHeader.map(item => item.prop)
-    this.checkedList = [...this.allProps]
+    this.allProps = this.header.map(item => item.prop)
+    this.checkedList = this.tableHeader.map(item => item.prop)
     const tableDom = this.$refs.scTable.$el
     const theader = tableDom.getElementsByClassName('el-table__header-wrapper')[0]
     theader.addEventListener('contextmenu',this.mouseRightClick)
   },
   methods: {
+    columntWidth(label){
+      const realLabel = label.replace('(','').replace(')','')
+      let len = realLabel.length<4?4:realLabel.length
+      return len*22
+    },
     // 自定义表头
     renderHeader (createElement, {column}) {
       return createElement(
@@ -206,7 +223,7 @@ export default {
     },
     handleCheckedCitiesChange(val){
       let checkedCount = val.length;
-      this.checkAll = checkedCount === this.allProps.length;
+      this.isCheckAll = checkedCount === this.allProps.length;
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allProps.length;
       this.resetOptions([...val])
     },
@@ -271,19 +288,20 @@ export default {
     background-color: rgba(27,101,185,.15);
   }
   .el-table td {
-    padding: 5px 0;
+    padding:2px 0;
     .cell {
       width: 100% !important;
     }
   }
   .el-table th {
     padding:6px 0 1px;
-    height: 46px;
+    height: 40px;
     .cell {
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 0 !important;
       // .thead-cell {
       //   width: 100%;
       // }

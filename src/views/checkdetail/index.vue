@@ -10,7 +10,7 @@
           type="primary"
           size="small"
           @click="handleNetCheck"
-        >提交网审</el-button>
+        >派发网审</el-button>
       </el-col>
       <el-col :span="1.5" v-if="tabsValue==='two'&!mxShow">
         <el-button
@@ -106,10 +106,7 @@ export default {
       },{
         prop: 'ajly',
         label: '案件来源',
-      },{
-        prop: 'jcfs',
-        label: '检查方式',
-        width:'auto'
+        width: 'auto'
       },{
         prop: 'ybbf',
         label: '险种',
@@ -155,7 +152,7 @@ export default {
         label: '涉及规则数',
       },{
         prop: 'jsrc',
-        label: '涉及就诊人次',
+        label: '涉及就诊人员数',
       },{
         prop: 'ydje',
         label: '涉及金额(元)',
@@ -698,14 +695,17 @@ export default {
             return item.id===id;
           })
           if(selected.length){
-            const {rwpcid,jgdm,jgmc,sccqstatus} = selected[0];
+            const {rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime} = selected[0];
             const time = bossRand();
             const scParams = {
               ids:id,
               scrwid:[rwpcid,jgdm,time].join('-'),
               scstatus:1,
               scname:[rwpcid,time,jgmc].join('-'),
-              scsqr:userNmae
+              scsqr:userNmae,
+              jgdm,
+              datastarttime,
+              dataendtime
             }
             if(sccqstatus==0) {
               scParams.sccqstatus = 1

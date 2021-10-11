@@ -280,8 +280,9 @@ export default {
       // } else {
       //   window.localStorage.setItem('PRDATA',JSON.stringify(this.selectionData))
       // }
+      const data = row[0]
       window.localStorage.setItem('PRDATA',JSON.stringify(row))
-      const path =`/checkup/${isView?'viewNotice':'addNotice'}`
+      const path =`/checkup/${isView?`viewNotice?rwpcid=${data.rwpcid}&jgmc=${data.jgmc}`:'addNotice'}`
       this.$router.push({
         path:path,
       })

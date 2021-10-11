@@ -90,8 +90,6 @@ import JlNotice from './jlNotice.vue'
 
 import html2canvas from 'html2canvas'
 import JsPDf from 'jspdf'
-import redirectVue from '../../redirect.vue';
-
 
 export default {
   name: "AddNotice",
@@ -199,6 +197,8 @@ export default {
   },
   methods: {
     toImage(id,name){
+      const {rwpcid,jgmc} = this.$route.query
+      console.log(this.$route.query)
       let canvasImg = document.getElementById(id)
       html2canvas(canvasImg,{
         width:1000,
@@ -212,7 +212,7 @@ export default {
         let imgHeight = 595.28/(contentWidth/contentHeight)
         let PDF = new JsPDf('p','px','a4')
         PDF.addImage(url,"JPEG",36,25,imgWidth,imgHeight)
-        PDF.save(`${name}.pdf`)
+        PDF.save(`${[rwpcid,jgmc,name].join('-')}.pdf`)
       })
     },
     printFile(data,key){

@@ -223,9 +223,11 @@ export default {
       },{
         prop: 'gzfl',
         label: '规则分类',
+        align: 'left'
       },{
         prop: 'gzmc',
         label: '规则名称',
+        align: 'left'
       },{
         prop: 'xjjzrs',
         label: '涉及就诊人员数',
@@ -380,14 +382,17 @@ export default {
         type: "warning"
       }).then(()=> {
           const userNmae = this.$store.getters.name
-          const {id,rwpcid,jgdm,jgmc,sccqstatus} = this.queryInfoFrom
+          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime} = this.queryInfoFrom
           const time = bossRand();
           const requireParams = {
             ids:id,
             scrwid:[rwpcid,jgdm,time].join('-'),
             scstatus:1,
             scname:[rwpcid,time,jgmc].join('-'),
-            scsqr:userNmae
+            scsqr:userNmae,
+            jgdm,
+            datastarttime,
+            dataendtime
           }
           if(sccqstatus==0){
             requireParams.sccqstatus = 1
@@ -494,7 +499,7 @@ export default {
             let res = ''
             if(this.tabsValue==='four'){
               const {type,xwbh,lx} = this.xwrdChecd
-              const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,lx}
+              const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,wglx:lx}
               if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
                 delete params.zkdj
                 delete  params.wgsl
@@ -509,7 +514,7 @@ export default {
             }
             if(res.code===200) {
               this.msgSuccess('操作成功')
-              this.getList()
+              this.getList(this.searchNextParams)
               // this.searchNextParams = {}
               this.selectionList.forEach(item=>{
                 rendingAdd({
@@ -767,6 +772,7 @@ export default {
         this.xwrdForm.zkdj = mxxmdj
         this.xwrdForm.wgsl = mxxmsl
         this.xwrdForm.wgfy = mxxmje
+        this.xwrdForm.xwrd = ''
         // const shuliangList = selection.map(item=>item.mxxmsl)
         // const feiyong = selection.map(item=>item.mxxmje)
         // this.xwrdForm.mxxmsl = this.sum(shuliangList)

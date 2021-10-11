@@ -29,9 +29,11 @@ export default {
       },{
         prop: 'gzfl',
         label: '规则分类',
+        align: 'left'
       },{
         prop: 'gzmc',
         label: '规则名称',
+        align: 'left'
       },{
         prop: 'xjjzrs',
         label: '涉及就诊人员数',

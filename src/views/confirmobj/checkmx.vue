@@ -29,6 +29,14 @@ export default {
         pageSize:50
       },
       tableHeader:[{
+        prop: 'lsh',
+        label: '流水号',
+        hide:true
+      },{
+        prop: 'id',
+        label: 'ID',
+        hide:true
+      },{
         prop: 'pch',
         label: '批次号'
       },{
@@ -40,9 +48,11 @@ export default {
       },{
         prop: 'gzmc',
         label: '规则分类',
+        align: 'left'
       },{
         prop: 'gzmc2',
         label: '规则名称',
+        align: 'left'
       },{
         prop: 'ysgh',
         label: '医师代码',
