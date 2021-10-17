@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search1" ref="queryInfoFrom" :inline="true">
+    <el-form size="small" label-width="100px" class="top-search1" ref="searchForm" :inline="true">
           <el-form-item label="案件来源" prop="ajly">
             <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
           </el-form-item>
@@ -58,8 +58,10 @@
     <jc-table :tableData="listjc" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <wg-table :tableData="listjg" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
-    <ViewTable v-if="viewTableObj.show" :options="viewTableObj.options"/>
-    <el-form inline style="margin-top:30px">
+    <div v-if="viewTableObj.show" class="table-main" :style="{top:topHeight}">
+      <ViewTable :options="viewTableObj.options"/>
+    </div>
+    <el-form inline style="margin-top:30px" v-if="!viewTableObj.show">
       <el-form-item label="复核意见：" style="margin-right:50px">
         <el-radio v-model="status" label="5">同意</el-radio>
         <el-radio v-model="status" label="3">驳回</el-radio>
@@ -86,12 +88,13 @@ export default {
   name:"Chubujieguo",
   data(){
     return {
+      topHeight:0,
       tabsValue:'listjc',
       //上页带过来的info
       queryInfoFrom:{},
       //组合查询条件
       queryParams:{
-        ybd:"01",
+        ybd:"",
       },
       viewTableObj:{
         show:false,
@@ -111,20 +114,22 @@ export default {
   },
   created(){
     this.queryInfoFrom = this.$route.query
-    console.log(this.$store.getters)
     // this.getList();
+  },
+   mounted(){
+    this.topHeight = this.calcTableHeight(68)
   },
   methods:{
     viewHanddle(row,type){
       if(this.tabsValue==="listjc"){
         this.viewTableObj.options = {
-          ybbf:type,
+          ybbf:row.ybbf,
           jslb:row.label
         }
       } else {
         this.viewTableObj.options = {
           wglx:row.wglx,
-          jslb:type
+          jslb:row.ybbf
         }
       }
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
@@ -198,7 +203,7 @@ export default {
     /** 查询renwu列表 */
     async getList() {
       const {rwpcid,jgdm} = this.queryInfoFrom
-      const params = {rwpcid,jgdm}
+      const params = {rwpcid,jgdm,ybd:this.queryParams.ybd}
       this.loading = true
       try {
         let res = null
@@ -222,3 +227,12 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.table-main {
+  position: absolute;
+  top:155px;
+  bottom:0;
+  left: 20px;
+  right: 20px;
+}
+</style>

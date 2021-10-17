@@ -1,137 +1,179 @@
 <template>
-  <div class="jc-table"> 
+  <div class="jc-table">
+    <!-- <el-table
+      show-summary
+      :summary-method="getSummaries"
+      :data="tableData"
+      :span-method="objectSpanMethod"
+      style="margin-top: 10px"
+    >
+      <el-table-column align="center" prop="label" label="就医类型">
+      </el-table-column>
+      <el-table-column align="center" prop="guize" label="检查方式" />
+      <el-table-column label="职保" align="center">
+        <el-table-column align="center" prop="zhibaofy" label="费用（元）">
+          <template slot-scope="scope">
+            <span
+              @click="viewDetail(scope.row, '职保')"
+              style="color: #1b65b9; cursor: pointer"
+              >{{ scope.row.zhibaofy }}</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="city" label="占比（%）">
+          <template slot-scope="scope">
+            <span>{{ clacPercent(scope.row.zhibaofy, scope.row.total) }}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="居保" align="center">
+        <el-table-column align="center" prop="jubaofy" label="费用（元）">
+          <template slot-scope="scope">
+            <span
+              @click="viewDetail(scope.row, '居保')"
+              style="color: #1b65b9; cursor: pointer"
+              >{{ scope.row.jubaofy }}</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="zip" label="占比（%）">
+          <template slot-scope="scope">
+            <span>{{ clacPercent(scope.row.jubaofy, scope.row.total) }}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="合计" align="center">
+        <el-table-column align="center" prop="xiaoji" label="费用（元）">
+          <template slot-scope="scope">
+            <span
+              @click="viewDetail(scope.row, '')"
+              style="color: #1b65b9; cursor: pointer"
+              >{{ (scope.row.xiaoji * 1).toFixed(2) }}</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="namePercent" label="占比（%）">
+          <template slot-scope="scope">
+            <span>{{
+              clacPercent(
+                scope.row.zhibaofy * 1 + scope.row.jubaofy * 1,
+                scope.row.total
+              )
+            }}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+    </el-table> -->
     <el-table
-    show-summary
-    :summary-method="getSummaries"
-    :data="tableData"
-    :span-method="objectSpanMethod"
-    style="margin-top:10px">
-    <el-table-column
-      align="center"
-      prop="label"
-      label="就医类型"
-      >
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="guize"
-      label="检查方式"
-    />
-    <el-table-column label="职保" align="center">
-      <el-table-column
-        align="center"
-        prop="zhibaofy"
-        label="费用（元）"
-        >
-        <template slot-scope="scope">
-          <span @click="viewDetail(scope.row,'职保')" style="color:#1B65B9;cursor:pointer;">{{scope.row.zhibaofy}}</span>
-        </template>
+      :span-method="objectSpanMethod"
+      :data="tableData"
+      :cell-style="handelCellStyle"
+      style="margin-top: 10px"
+    >
+      <el-table-column label="就医类型" prop="jslb" align="center" min-width="150px" show-overflow-tooltip></el-table-column>
+      <el-table-column label="检查方式" prop="jcfs" align="center" min-width="150px" show-overflow-tooltip> </el-table-column>
+      <el-table-column label="职保" align="center">
+        <el-table-column label="费用" prop="zbfy" align="center">
+          <template slot-scope="scope">
+            <span
+              @click="viewDetail(scope.row, '职保')"
+              style="color: #1b65b9; cursor: pointer"
+              >{{ (scope.row.zbfy*1).toFixed(2) }}</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="占比%" prop="zblv" align="center">
+          <template slot-scope="scope">
+            <span>{{clacPercent(scope.row.zbfy*1,scope.row.total)}}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="city"
-        label="占比（%）"
-        >
-        <template slot-scope="scope">
-          <span>{{clacPercent(scope.row.zhibaofy,scope.row.total)}}</span>
-        </template>
+      <el-table-column label="居保" align="center">
+        <el-table-column label="费用" prop="jbfy" align="center">
+          <template slot-scope="scope">
+            <span
+              @click="viewDetail(scope.row, '居保')"
+              style="color: #1b65b9; cursor: pointer"
+              >{{ (scope.row.jbfy*1).toFixed(2) }}</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="占比%" prop="jblv" align="center">
+          <template slot-scope="scope">
+            <span>{{clacPercent(scope.row.jbfy*1,scope.row.total)}}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
-    </el-table-column>
-    <el-table-column label="居保" align="center">
-      <el-table-column
-        align="center"
-        prop="jubaofy"
-        label="费用（元）"
-        >
-        <template slot-scope="scope">
-          <span @click="viewDetail(scope.row,'居保')" style="color:#1B65B9;cursor:pointer;">{{scope.row.jubaofy}}</span>
-        </template>
+      <el-table-column label="合计" align="center">
+        <el-table-column label="费用" prop="hj" align="center">
+          <template slot-scope="scope"><span @click="viewDetail(scope.row, '')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.zbfy*1+scope.row.jbfy*1).toFixed(2)}}</span></template>
+        </el-table-column>
+        <el-table-column label="占比%" prop="hjlv" align="center">
+            <template slot-scope="scope">
+              <span>{{clacPercent((scope.row.zbfy*1+scope.row.jbfy*1),scope.row.total)}}</span>
+            </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="zip"
-        label="占比（%）"
-        >
-        <template slot-scope="scope">
-          <span>{{clacPercent(scope.row.jubaofy,scope.row.total)}}</span>
-        </template>
-      </el-table-column>
-    </el-table-column>
-    <el-table-column label="合计" align="center">
-      <el-table-column
-        align="center"
-        prop="xiaoji"
-        label="费用（元）"
-        >
-        <template slot-scope="scope">
-          <span @click="viewDetail(scope.row,'')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.xiaoji*1).toFixed(2)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="namePercent"
-        label="占比（%）"
-        >
-        <template slot-scope="scope">
-          <span>{{clacPercent(scope.row.zhibaofy*1+scope.row.jubaofy*1,scope.row.total)}}</span>
-        </template>
-      </el-table-column>
-    </el-table-column>
-  </el-table>
+    </el-table>
   </div>
 </template>
 <script>
-import { getListjc } from '@/api/renwu/renwufour'
+import { getListjc } from "@/api/renwu/renwufour";
 
 export default {
-  name:'JcTable',
-  data(){
+  name: "JcTable",
+  data() {
     return {
-      tableData: []
-    }
+      tableData: [],
+      splitList: {}
+    };
   },
-  created(){
-    this.getList()
+  created() {
+    this.getList();
   },
-  methods:{
-    getSummaries(param) {
-      const { columns, data } = param
-      const total = data[0]?data[0].total:0
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = '合计';
-          return;
+  methods: {
+    handelCellStyle ({row, column, rowIndex, columnIndex}) {
+      if (rowIndex === this.tableData.length - 1 && columnIndex === 0) {
+        return {borderRight: 'none', textAlign: 'right', backgroundColor: 'rgb(253, 246, 236)'}
+      }
+      if (row.jcfs === '小计') {
+        return {backgroundColor: 'rgb(254, 240, 240)', padding: '7px 0'}
+      }
+      if (rowIndex === this.tableData.length - 1) {
+        return {backgroundColor: 'rgb(253, 246, 236)', padding: '7px 0'}
+      }
+    },
+    initialJcRow () {
+      const firstName = this.tableData.map(item => item.jslb)
+      const rowInfo = {}
+      firstName.forEach(item => {
+        if (!rowInfo.hasOwnProperty(item)) {
+          rowInfo[item] = 1
+        } else {
+          rowInfo[item] += 1
         }
-        if (index ===1) {
-          sums[index] = '';
-          return;
-        }
-        const values = data.map((item,n) => (n%2===0 && Number(item[column.property])));
-        if (!values.every(value => isNaN(value)) && index%2===0) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0);
-          sums[index]  = sums[index].toFixed(2);
-        } else if(index%2===1 && total!==0) {
-          sums[index] = (sums[index-1]*100/total).toFixed(2)
-        }
-      });
+      })
 
-      return sums;
+      const rowArr = []
+      for (let key in rowInfo) {
+        rowArr.push(rowInfo[key])
+      }
+
+      let statKey = 0
+      const resetRow = {}
+      rowArr.forEach(item => {
+        resetRow[statKey] = item
+        statKey += item
+      })
+      return resetRow
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
-        if (rowIndex % 2 === 0) {
+        if (this.splitList.hasOwnProperty(rowIndex)) {
           return {
-            rowspan: 2,
+            rowspan: this.splitList[rowIndex],
             colspan: 1
-          };
+          }
         } else {
           return {
             rowspan: 0,
@@ -140,103 +182,90 @@ export default {
         }
       }
     },
-    viewDetail(row,ybbf){
-      this.$emit('view-detail',row,ybbf)
+    viewDetail(row, ybbf) {
+      this.$emit("view-detail", row, ybbf);
     },
-    initList(data){
-      const list = []
-      if(data.length){
-        const {zkdj} = data[0]
-        const menzhen = {
-          label:"门诊",
-          guize:"规则筛查",
-          total:zkdj,
-          xiaoji:0
+    initList(list) {
+      const menzhen = [{jslb: '门诊', jcfs: '规则筛查', zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: '0.00'}]
+      const zhuyuan = [{jslb: '住院', jcfs: '规则筛查', zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: '0.00'}]
+      list.forEach(item => {
+        const ybbfType = isNaN(item.ybbf * 1) ? 'zbfy' : 'jbfy'
+        const gz = item.jcfs ? item.jcfs : '规则筛查'
+        const mzgzIdx = menzhen.findIndex(value => {
+          return value.jcfs === gz
+        })
+        const zygzIdx = zhuyuan.findIndex(value => {
+          return value.jcfs === gz
+        })
+        if (mzgzIdx > -1) {
+          menzhen[mzgzIdx][ybbfType] = item.tym// 门诊的职保费用或者居保费用
+          menzhen[mzgzIdx]['total'] = item.zkdj// 总数
+        } else {
+          const obj = {jslb: '门诊', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: item.zkdj}
+          obj[ybbfType] = item.tym
+          menzhen.push(obj)
         }
-        const menzhenhj = {guize:"小计",total:zkdj,xiaoji:0,label:"门诊"}
-        const zhuyuan = {
-          label:"住院",
-          guize:"规则筛查",
-          total:zkdj*1,
-          xiaoji:0
+        if (zygzIdx > -1) {
+          zhuyuan[zygzIdx][ybbfType] = item.bz// 住院的职保费用或者居保费用
+          zhuyuan[zygzIdx]['total'] = item.zkdj// 总数
+        } else {
+          const obj = {jslb: '住院', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: item.zkdj}
+          obj[ybbfType] = item.bz
+          zhuyuan.push(obj)
         }
-        const zhuyuanhj = {guize:"小计",total:zkdj,xiaoji:0,label:"住院"}
-        data.forEach(element => {
-          const {tym,bz} = element
-          menzhen.xiaoji += tym*1
-          zhuyuan.xiaoji += bz*1
-          menzhenhj.xiaoji += tym*1
-          zhuyuanhj.xiaoji += bz*1
-          if(element.ybbf==='职保'){
-            menzhen.zhibaofy = (tym*1).toFixed(2)
-            zhuyuan.zhibaofy = (bz*1).toFixed(2)
-            menzhenhj.zhibaofy = (tym*1).toFixed(2)
-            zhuyuanhj.zhibaofy = (bz*1).toFixed(2)
-          } else {
-            menzhen.jubaofy = (tym*1).toFixed(2)
-            zhuyuan.jubaofy = (bz*1).toFixed(2)
-            menzhenhj.jubaofy = (tym*1).toFixed(2)
-            zhuyuanhj.jubaofy = (bz*1).toFixed(2)
-          }
-        });
-        !menzhen.zhibaofy && (menzhen.zhibaofy='0.00')
-        !menzhen.jubaofy && (menzhen.jubaofy='0.00')
-        !zhuyuan.zhibaofy && (zhuyuan.zhibaofy='0.00')
-        !zhuyuan.jubaofy && (zhuyuan.jubaofy='0.00')
-        
-        !menzhenhj.zhibaofy && (menzhenhj.zhibaofy='0.00')
-        !menzhenhj.jubaofy && (menzhenhj.jubaofy='0.00')
-        !zhuyuanhj.zhibaofy && (zhuyuanhj.zhibaofy='0.00')
-        !zhuyuanhj.jubaofy && (zhuyuanhj.jubaofy='0.00')
-       
-        // if(menzhen.zhibaofy*1!==0 || menzhen.jubaofy*1!==0){
-        //   list.push(menzhen);
-        //   list.push(menzhenhj);
-        // }
-        // if(zhuyuan.zhibaofy*1!==0 || zhuyuanhj.jubaofy*1!==0) {
-        //   list.push(zhuyuan);
-        //   list.push(zhuyuanhj);
-        // }
-        list.push(menzhen)
-        list.push(menzhenhj)
-        list.push(zhuyuan)
-        list.push(zhuyuanhj)
-      }
-      return list
+      })
+      // 插入小计
+      const mzzbxj = menzhen.reduce((a, b) => { return a + b.zbfy * 1 }, 0)
+      const mzjbxj = menzhen.reduce((a, b) => { return a + b.jbfy * 1 }, 0)
+      const zyzbxj = zhuyuan.reduce((a, b) => { return a + b.zbfy * 1 }, 0)
+      const zyjbxj = zhuyuan.reduce((a, b) => { return a + b.jbfy * 1 }, 0)
+      const total = menzhen[0].total || '0.00'
+      menzhen.push({jslb: '门诊', jcfs: '小计', zbfy: mzzbxj, zblv: '0.00', jbfy: mzjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
+      zhuyuan.push({jslb: '住院', jcfs: '小计', zbfy: zyzbxj, zblv: '0.00', jbfy: zyjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
+      // 合并门诊和住院 & 插入总计
+      const newList = menzhen.concat(zhuyuan)
+      newList.push({jslb: '合计', jcfs: '', zbfy: mzzbxj + zyzbxj, zblv: '0.00', jbfy: mzjbxj + zyjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
+      return newList
     },
     /** 查询renwu列表 */
     async getList() {
-      const {rwpcid,jgdm} = this.$route.query
-      const params = {rwpcid,jgdm}
-      this.loading = true
+      const { rwpcid, jgdm } = this.$route.query;
+      const params = { rwpcid, jgdm };
+      this.loading = true;
       try {
-        let  res = await getListjc(params)
-        if(res.code===200){
+        let res = await getListjc(params);
+        if (res.code === 200) {
           // this.tableData = res.rows
-          this.tableData = this.initList(res.rows)
+          this.tableData = this.initList(res.rows);
+          this.splitList = this.initialJcRow()
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      this.loading = false
+      this.loading = false;
     },
     /**
      * 百分比
      */
-    clacPercent(molecular,denominator){
-      let percent = null
-      if(molecular===undefined||molecular===null||denominator===undefined||denominator===null||denominator*1===0){
-        percent = '0.000'
+    clacPercent(molecular, denominator) {
+      let percent = null;
+      if (
+        molecular === undefined ||
+        molecular === null ||
+        denominator === undefined ||
+        denominator === null ||
+        denominator * 1 === 0
+      ) {
+        percent = "0.00";
       } else {
-        percent = ((molecular/denominator)*100).toFixed(3)
+        percent = ((molecular / denominator) * 100).toFixed(3);
       }
-      return percent
-    }
-  }
-
-}
+      return percent;
+    },
+  },
+};
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .jc-table {
   &::v-deep .el-table__footer-wrapper {
     td:first-child {
@@ -245,6 +274,11 @@ export default {
       .cell {
         padding-right: 0 !important;
       }
+    }
+  }
+  &::v-deep .el-table {
+    .el-table__cell {
+      padding: 6px 0;
     }
   }
 }

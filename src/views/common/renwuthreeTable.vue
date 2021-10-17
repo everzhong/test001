@@ -57,6 +57,9 @@ export default {
         viewFun: (jsfy)=>{
           return this.formatMoney(jsfy,2)
         }  
+      },{
+        prop: 'ajly',
+        label: '案件来源'
       }]
     }
   },

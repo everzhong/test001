@@ -80,6 +80,9 @@ export default {
           return this.selectDictLabels(this.$store.getters.fyDic, fylb)
         },
         width: 'auto'
+      },{
+        prop: 'ajly',
+        label: '案件来源'
       }]
     }
   },
