@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" v-show="showSearch" label-width="68px" style="max-height:94px;overflow:auto;margin-bottom:5px">
+    <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" v-show="showSearch" label-width="60px" style="max-height:94px;overflow:auto;margin-bottom:5px">
       <div>
         <el-form-item label="批次号" prop="rwpicd">
           <el-input
@@ -8,7 +8,7 @@
             placeholder="请输入"
             clearable
             size="small"
-            style="width: 200px"
+            style="width: 180px"
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
@@ -18,17 +18,17 @@
             placeholder="请输入，支持模糊搜索"
             clearable
             size="small"
-            style="width: 200px"
+            style="width: 180px"
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
         <el-form-item label="委托机构" prop="wtjg">
-          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 200px"></el-input>
+          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 180px"></el-input>
         </el-form-item>
         <el-form-item label="承办机构" prop="cbjg">
-          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 200px"></el-input>
+          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 180px"></el-input>
         </el-form-item>
-        <el-form-item label="任务推送日期" label-width="98px">
+        <el-form-item label="任务推送日期" label-width="80px">
           <el-date-picker
             v-model="dateRange"
             size="small"
@@ -58,7 +58,7 @@
       </el-col>
     </el-row> -->
     <div class="table-main" :style="{top:tableHeight}" v-loading="loading">
-      <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
+      <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="1" :checkAll="false" @selection-change="handleSelectionChange">
         <!-- <el-table-column  align="center" width="55" slot="fixed">
           <template slot-scope="scope">
             <el-radio :label="scope.row.id" v-model="radioCheck" @change="radioChange"></el-radio>
@@ -109,10 +109,12 @@ export default {
         }
       },{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
       },{
         prop: 'rwmc',
         label: '任务名称',
+        hide: true
       },{
         prop: 'ajly',
         label: '任务来源',

@@ -15,7 +15,7 @@
       <el-table-column v-for="(col, index) in tableHeader" :key="index"
         :prop="col.prop"
         :label="col.label"
-        :min-width="columntWidth(col.label)"
+        :min-width="(col.viewTemp==='input'||col.viewTemp==='selector')?'180':columntWidth(col.label,col.fixedWidth)"
         :type="col.type"
         :column-key="index.toString()"
         :render-header="renderHeader"
@@ -113,10 +113,12 @@ export default {
     theader.addEventListener('contextmenu',this.mouseRightClick)
   },
   methods: {
-    columntWidth(label){
-      const realLabel = label.replace('(','').replace(')','')
-      let len = realLabel.length<4?4:realLabel.length
-      return len*22
+    columntWidth(label,w){
+      const realLabel = label.replace(' ','')
+      let len = realLabel.length<5?5:realLabel.length
+      let width = len*22
+      w&&(width+=w)
+      return width
     },
     // 自定义表头
     renderHeader (createElement, {column}) {

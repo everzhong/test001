@@ -31,7 +31,8 @@ export default {
         width: '250px',
         viewTemp:'input',
       },{
-        label:"机构名称",
+        label: '机构名称',
+        fixedWidth:60,
         prop:'jgmc'
       },{
         label:"规则分类",
@@ -60,10 +61,12 @@ export default {
           return this.formatMoney(jsfy,2)
         }
       },{
-        label:"批次号",
+        label: '批次号',
+        fixedWidth:30,
         prop:'rwpcid'
       },{
-        label:"机构代码",
+        label: '机构代码',
+        fixedWidth:55,
         prop:'jgdm'
       }]
     }
@@ -71,6 +74,7 @@ export default {
   created(){
     this.getDicts("renwu_ss_ydlx").then(response => {
       this.ydlxOptions = response.data||[]
+      this.tableHeader[0].selectOption = response.data || []
     });
   },
   props:['tableData'],

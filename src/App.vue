@@ -19,14 +19,22 @@ export default  {
   display: flex;
   justify-content: space-between;
   .el-form-item {
-    margin-bottom: 10px;
-    margin-right: 20px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+  }
+  .el-form-item__label {
+    font-size: 12px;
+    padding-right: 6px;
   }
 }
 .top-search1 {
   .el-form-item {
-    margin-bottom: 10px;
-    margin-right: 20px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+  }
+  .el-form-item__label {
+    font-size: 12px;
+    padding-right: 6px;
   }
 }
 .sys-table {

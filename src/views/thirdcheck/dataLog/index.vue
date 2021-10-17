@@ -328,6 +328,7 @@ export default {
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'ny',
         label: '年月份',
@@ -654,7 +655,7 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:162px;
+  top:149px;
   bottom:70px;
   left: 20px;
   right: 20px;

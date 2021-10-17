@@ -31,14 +31,15 @@ export default {
         label:"监管状态",
         prop:"status",
         width:'auto',
-        viewFun:()=>{
-          return '待网审'
+        viewFun: (status)=>{
+          return this.selectDictLabels(this.statusOptions, status+'')
         }
       },{
         label:"驳回意见",
         prop:'dxqdbh'
       },{
-        label:"案件来源",
+         label: '案件来源',
+        fixedWidth:50,
         prop:'ajly'
       },{
         label:"检查方式",
@@ -48,7 +49,8 @@ export default {
           return '规则筛查'
         }
       },{
-        label:"机构名称",
+        label: '机构名称',
+        fixedWidth:60,
         prop:'jgmc'
       },{
         label:"险种",
@@ -94,20 +96,26 @@ export default {
           return this.formatMoney(ydje,2)
         }
       },{
-        label:"批次号",
+        label: '批次号',
+        fixedWidth:30,
         prop:'rwpcid'
       },{
-        label:"机构代码",
+       label: '机构代码',
+        fixedWidth:55,
         prop:'jgdm'
       }],
       jslbOptions:[],
-      ybbfOptions:[]
+      ybbfOptions:[],
+      statusOptions:[]
     }
   },
   props:['tableData'],
   created(){
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
+    });
+    this.getDicts("sys_renwu_status").then(response => {
+      this.statusOptions = response.data;
     });
     this.jslbOptions = this.$store.getters.jslbDic
     this.ybbfOptions = this.$store.getters.ybbfDic

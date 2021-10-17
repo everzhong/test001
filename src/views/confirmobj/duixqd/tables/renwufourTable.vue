@@ -19,13 +19,16 @@ export default {
     return {
       tableHeader:[{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'gzfl',
         label: '规则分类',

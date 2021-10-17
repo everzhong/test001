@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form
       size="small"
-      label-width="100px"
+      label-width="80px"
       class="top-search"
       style="display:block;overflow:auto;max-height:129px"
       ref="queryForm"
@@ -15,10 +15,10 @@
         <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
       </el-form-item>
       <el-form-item label="险种" prop="ybbf">
-        <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
+        <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
       </el-form-item>
       <el-form-item label="就医类型" prop="jslb">
-        <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
+        <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
       </el-form-item>
       <el-form-item label="数据开始日期" prop="datastarttime">
         <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
@@ -33,14 +33,14 @@
         <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
       </el-form-item>
       <el-form-item label="机构等级" prop="jgdj">
-        <el-input readonly v-model="queryInfoFrom.cxjg"></el-input>
+        <el-input readonly :value="selectDictLabels(jgdjOptions, queryInfoFrom.jgdj)"></el-input>
       </el-form-item>
       <el-form-item label="行政区" prop="xzq">
-        <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+        <el-input readonly :value="selectDictLabels(xzqOptions, queryInfoFrom.xzq)"></el-input>
       </el-form-item>
-      <el-form-item label="监管阶段" prop="jgjd">
+      <!-- <el-form-item label="监管状态" prop="jgjd">
         <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <div
         style="
           position: absolute;
@@ -182,7 +182,7 @@ export default {
       // 批次号字典
       rwpcidOptions: [],
       // 机构代码字典
-      jgdmOptions: [],
+      jgdjOptions: [],
       // 添加记录时间字典
       addtimeOptions: [],
       xzqOptions:[],
@@ -203,6 +203,9 @@ export default {
     this.getList();
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
+    });
+    this.getDicts("renwu_ss_jgdj").then(response => {
+      this.jgdjOptions = response.data;
     });
   },
   methods: {
@@ -290,7 +293,7 @@ export default {
     },
     // 机构代码字典翻译
     jgdmFormat(row, column) {
-      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
+      return this.selectDictLabels(this.jgdjOptions, row.jgdm);
     },
     // 添加记录时间字典翻译
     addtimeFormat(row, column) {
@@ -407,7 +410,7 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top: 155px;
+  top: 145px;
   bottom: 70px;
   left: 20px;
   right: 20px;

@@ -28,17 +28,19 @@ export default {
         label:"监管状态",
         prop:'jgzt',
         width: '150px',
-        viewFun:()=>{
-          return '待任务派发'
+        viewFun: (status)=>{
+          return this.selectDictLabels(this.statusOptions, status+'')
         }
       },{
         label:"承办机构",
         prop:'cbjg'
       },{
-        label:"批次号",
+        label: '批次号',
+        fixedWidth:30,
         prop:'rwpcid'
       },{
-        label:"案件来源",
+         label: '案件来源',
+        fixedWidth:50,
         prop:'ajly',
         width:'auto'
       },{
@@ -70,10 +72,12 @@ export default {
           return this.parseTime(time,'{y}-{m}')
         }
       },{
-        label:"机构代码",
+       label: '机构代码',
+        fixedWidth:55,
         prop:'jgdm'
       },{
-        label:"机构名称",
+        label: '机构名称',
+        fixedWidth:60,
         prop:'jgmc'
       },{
         label: "行政区",
@@ -96,13 +100,17 @@ export default {
         }
       }],
       jslbOptions:[],
-      ybbfOptions:[]
+      ybbfOptions:[],
+      statusOptions:[]
     }
   },
   props:['tableData'],
   created(){
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
+    });
+    this.getDicts("sys_renwu_status").then(response => {
+      this.statusOptions = response.data;
     });
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic

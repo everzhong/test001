@@ -89,6 +89,7 @@
               </el-select>
             </el-popover>
           </el-form-item>
+          <p style="padding:0;color:#999;padding-left:10px;margin:0">备注：需提前与医保基金监督执法部门确认后，方可进行相应执法人员的选择</p>
         </el-form>
         <div slot="footer" class="msg-footer-inner">
           <el-button size="mini" type="primary" plain @click="innerBack">返回</el-button>

@@ -1,5 +1,6 @@
 <template>
-  <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="1"  @selection-change="handleSelectionChange">
+    <!-- <el-table-column type="selection" width="55" align="center" slot="fixed"/> -->
     <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
     <el-table-column label="操作" align="center" width="180" slot="operate">
       <template slot-scope="scope">
@@ -19,13 +20,16 @@ export default {
     return {
       tableHeader:[{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'gzfl',
         label: '规则分类',
@@ -64,6 +68,7 @@ export default {
       // this.ids = selection.map(item => item.rwpcid)
       // this.single = selection.length!==1
       // this.multiple = !selection.length
+      this.$emit('selection-change',selection)
     },
     checkdetail(row){
       this.$emit('check-xgmx',row)

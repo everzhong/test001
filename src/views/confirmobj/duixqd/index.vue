@@ -199,8 +199,8 @@ export default {
       } else {
         this[keyw].query = {
           jgdm:row.jgdm,
-          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
-          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}'),
         }
       }
       this[keyw].show = true

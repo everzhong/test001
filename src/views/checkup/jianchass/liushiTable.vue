@@ -27,9 +27,11 @@ export default {
       tableHeader:[{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'gzfl',
         label: '规则分类',

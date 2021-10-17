@@ -4,26 +4,27 @@
       <el-col :span="1.5">
         <span style="margin-right:10px;font-size:14px;color:#606266">{{options.title||'待选择'}}</span>
         <el-select v-model="queryForm.ybd" size="small">
-          <el-option label="本地" value="1"></el-option>
-          <el-option label="异地" value="2"></el-option>
+          <el-option label="本地" value="01"></el-option>
+          <el-option label="异地" value="02"></el-option>
         </el-select>
       </el-col>
       <el-col :span="1.5">
         <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
     </el-row>
-    <div style="height:calc(100% - 90px)">
-      <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="100%"> 
-        <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',tableData)"/>
-        <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
-        <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
-        <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
-        <el-table-column label="涉及金额" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+    <div style="height:calc(100% - 90px)" v-loading="loading">
+      <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="100%">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="规则分类" align="center" prop="gzfl" min-width="280" show-overflow-tooltip/>
+        <el-table-column label="规则名称" align="center" prop="gzmc"  min-width="350" show-overflow-tooltip/>
+        <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrs"  min-width="130"  show-overflow-tooltip/>
+        <el-table-column label="涉及明细数" align="center" prop="xjmxs"  min-width="110"  show-overflow-tooltip/>
+        <el-table-column label="涉及金额" align="center" prop="xjje"  min-width="110"  show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.xjje,2)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结算总费用" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',tableData)">
+        <el-table-column label="结算总费用" align="center" prop="jsfy"  min-width="110"  show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.jsfy,2)}}</span>
           </template>
@@ -49,7 +50,7 @@
         <el-form-item label="规则名称" prop="gzmc">
           <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
-        <el-form-item label="机构核实状态" prop="hszt">
+        <!-- <el-form-item label="机构核实状态" prop="hszt">
           <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in hsztOptions"
@@ -58,7 +59,7 @@
               :value="dict.dictValue"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getList()" size="small">确 定</el-button>
@@ -68,11 +69,13 @@
   </div>
 </template>
 <script>
+import { listRenwuthree,updateRenwuthree } from "@/api/renwu/renwuthree"
 export default {
   name:"TransferItemR",
   props:['options'],
   data(){
     return{
+      loading:false,
       allSelection:[],
       tableData:[],
       chaxunDialog:false,
@@ -82,8 +85,6 @@ export default {
         ybd:'',
         gzmc:'',
         gzfl:'',
-        xwrd:'',
-        hszt:''
       },
       guizefl:{
         search:'',
@@ -108,28 +109,43 @@ export default {
     }
   },
   created(){
-    this.getDicts("sys_job_jgxx").then(response => {
-      this.xzqOptions = response.data;
-    });
+    // this.getDicts("sys_job_jgxx").then(response => {
+    //   this.xzqOptions = response.data;
+    // });
+    this.getList()
   },
   methods:{
+    async getList(query){
+      let params ={...this.queryParams,...this.queryForm,hs:2}
+      query&&(params = {...params,...query})
+      this.loading = true
+      const res = await listRenwuthree(params)
+      if(res.code===200){
+        this.tableData = res.rows;
+        this.total = res.total;
+      }
+      this.loading = false
+    },
     // 行政区字典翻译
     xzqFormat(row, column) {
       return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
     filterData(selection){
-      selection.forEach(item => {
-        this.tableData = this.tableData.filter(subItem=>{
-          return item.id!==subItem.id
-        })
-        this.allSelection = this.allSelection.filter(subItem=>{
-          return item.id!==subItem.id
-        })
-        this.total = this.allSelection.length
-        if(this.tableData.length===0) {
-          this.queryParams.pageNum=1
-          this.getList()
-        } 
+      const request = []
+      let count = 0
+      selection.forEach((item,i)=>{
+        request.push(updateRenwuthree({id:item.id,hs:1}))
+        count++
+        if(count===selection.length){
+          this.loading= true
+          Promise.all(request).then(()=>{
+            this.getList()
+            cb && cb()
+            this.loading= false
+          }).catch(e=>{
+            this.loading= false
+          })
+        }
       })
     },
     addData(selection){
@@ -146,12 +162,12 @@ export default {
       this.tableData = []
       this.total = 0
     },
-    getList(){
-      const pageData = this.allSelection.filter((item,i)=>{
-        return  i>=this.queryParams.pageNum*this.queryParams.pageSize-this.queryParams.pageSize && i< this.queryParams.pageNum*this.queryParams.pageSize
-      })
-      this.tableData = [...pageData]
-    },
+    // getList(){
+    //   const pageData = this.allSelection.filter((item,i)=>{
+    //     return  i>=this.queryParams.pageNum*this.queryParams.pageSize-this.queryParams.pageSize && i< this.queryParams.pageNum*this.queryParams.pageSize
+    //   })
+    //   this.tableData = [...pageData]
+    // },
     getGuizList(){
       console.log(this.guizefl)
     },
@@ -170,6 +186,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.allSelection = selection
       this.$emit('select',selection)
       // this.single = selection.length!==1
       // this.multiple = !selection.length

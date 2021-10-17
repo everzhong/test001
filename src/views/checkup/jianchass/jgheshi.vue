@@ -65,42 +65,43 @@ export default {
     confirmHs(){
       const allSelect = this.$refs.rightList.getAllSelection()
       if(!allSelect.length){
-        this.msgError('请从待选列表选择需要核实的数据')
+        this.msgError('请从已选列表选择需要核实的数据')
         return
       }
-      const needHs = allSelect.filter(item=>{
-        return !(item.hszt && item.hszt*1>=1)
-      })
-      if(needHs && needHs.length){//遍历核实
+      // const needHs = allSelect.filter(item=>{
+      //   return !(item.hszt && item.hszt*1>=1)
+      // })
+      if(allSelect && allSelect.length){//遍历核实
         const request = []
-        needHs.forEach(need=>{
-          request.push(updateRenwuthree({id:need.id,hszt:1}))
+        allSelect.forEach(need=>{
+          request.push(updateRenwuthree({id:need.id,hs:3}))
         })
         this.loading= true
         Promise.all(request).then(()=>{
           this.msgSuccess('核实完成')
-          this.$refs.rightList.clear()
+          this.$refs.rightList.getList()
           this.loading= false
         }).catch(e=>{
           this.loading= false
         })
-      } else {
-        this.msgSuccess('核实完成')
-        this.$refs.rightList.clear()
       }
     },
     selectChange(data,type){
       this.$set(this,type,data)
     },
     moveToRight(){
-      this.$refs.leftList.filterData(this.leftState)
-      this.$refs.rightList.addData(this.leftState)
-      this.leftState = []
+      this.$refs.leftList.filterData(this.leftState,()=>{
+        this.$refs.rightList.getList()
+        this.leftState = []
+      })
+      
     },
     moveToLeft(){
       this.$refs.leftList.addData(this.rightState)
-      this.$refs.rightList.filterData(this.rightState)
-      this.rightState = []
+      this.$refs.rightList.filterData(this.rightState,()=>{
+        this.$refs.leftList.getList()
+        this.rightState = []
+      })
     },
     moveData(from,to){
       const toList = this[to].concat(this[from])

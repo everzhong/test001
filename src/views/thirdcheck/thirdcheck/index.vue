@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- <SearchItem @handleQuery="handleQuery"/> -->
-    <el-form class="top-search" :model="query" ref="searchForm" :inline="true"  label-width="68px" style="max-height:94px;overflow:auto">
+    <el-form class="top-search" :model="query" ref="searchForm" :inline="true"  label-width="60px" style="max-height:94px;overflow:auto">
       <div>
         <el-form-item label="批次号" prop="rwpcid">
             <el-input
@@ -96,7 +96,8 @@ export default {
     return {
       tableHeader:[{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
       },{
         prop: 'scrwid',
         label: '筛查任务ID',
@@ -123,9 +124,11 @@ export default {
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'sccqstatus',
         label: '数据抽取状态',
@@ -261,7 +264,7 @@ export default {
     this.getList();
   },
   mounted(){
-    this.tableHeight = this.calcTableHeight(10)
+    this.tableHeight = this.calcTableHeight(6)
   },
   methods: {
     openUrl(row){
@@ -463,7 +466,7 @@ export default {
 }
 .table-main {
   position: absolute;
-  top:114px;
+  top:110px;
   bottom:70px;
   left: 20px;
   right: 20px;

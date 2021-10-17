@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" ref="queryForm" :inline="true" v-show="showSearch">
+    <el-form class="top-search1" size="small" label-width="100px" ref="queryForm" :inline="true" v-show="showSearch">
           <el-form-item label="险种" prop="ybbf">
-            <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
+            <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
           </el-form-item>
           <el-form-item label="就医类型" prop="jslb">
-            <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
+            <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
           </el-form-item>
           <el-form-item label="批次号" prop="rwpcid">
             <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
@@ -19,11 +19,11 @@
           <el-form-item label="机构名称" prop="jgmc">
             <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
           </el-form-item>
-            <el-form-item label="检查机构" prop="jcjg">
+            <el-form-item label="承办机构" prop="jcjg">
             <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
           </el-form-item>
-            <el-form-item label="检查组" prop="jcz">
-            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+            <el-form-item label="检查组" prop="jczname">
+            <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
           </el-form-item>
           <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
             <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>

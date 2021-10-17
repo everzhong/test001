@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="margin-bottom:10px"/>
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="margin-bottom:6px"/>
     <!-- <div class="tabs-part">
       <div class="left-btn"></div>
       <div class="tabs"></div>
@@ -223,18 +223,25 @@ export default {
   },
   methods: {
     checkMix(row,key){
-      this.tableHeight = this.calcTableHeight(35+15)
+      this.tableHeight = this.calcTableHeight(46)
       const keyw = `${key}Options`
       if(key==='xgmx'){
-        this[keyw].query = {
+        const query = {
           pch:row.rwpcid,
           jgdm:row.jgdm
         }
+        if(this.tabsValue==="three"){
+          query.gzmc2 = row.gzmc
+        } else if(this.tabsValue==="four"){
+          query.mxxmbm = row.mxxmbm
+          query.mxxmdj = row.mxxmdj
+        }
+        this[keyw].query = query
       } else {
         this[keyw].query = {
           jgdm:row.jgdm,
-          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
-          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}'),
         }
       }
       this[keyw].show = true
@@ -558,7 +565,7 @@ export default {
       this.xgmxOptions.show=false
       this.qmxOptions.show=false
       if(val!=='two'){
-        this.tableHeight = this.calcTableHeight(50)
+        this.tableHeight = this.calcTableHeight(46)
         if(this.ids.length) {
           const resql = []
           this.selectionList.forEach(item=>{

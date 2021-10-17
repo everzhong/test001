@@ -19,6 +19,7 @@ export default {
       tableHeader:[{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'gzfl',
         label: '规则分类',
@@ -73,10 +74,12 @@ export default {
         width: 'auto'
       },{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'xydm',
         label: '统一社会信用代码',

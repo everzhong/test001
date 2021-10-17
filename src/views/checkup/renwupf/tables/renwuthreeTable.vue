@@ -36,16 +36,19 @@ export default {
   data(){
     return {
       tableHeader:[{
-        label:"批次号",
+        label: '批次号',
+        fixedWidth:30,
         prop:'rwpcid'
       },{
-        label:"机构代码",
+       label: '机构代码',
+        fixedWidth:55,
         prop:'jgdm'
       },{
         label:"统一社会信用代码",
         prop:'xydm',
       },{
-        label:"机构名称",
+        label: '机构名称',
+        fixedWidth:60,
         prop:'jgmc'
       },{
         label:"规则分类",

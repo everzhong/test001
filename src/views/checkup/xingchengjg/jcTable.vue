@@ -226,9 +226,9 @@ export default {
     clacPercent(molecular,denominator){
       let percent = null
       if(molecular===undefined||molecular===null||denominator===undefined||denominator===null||denominator*1===0){
-        percent = '0.00'
+        percent = '0.000'
       } else {
-        percent = ((molecular/denominator)*100).toFixed(2)
+        percent = ((molecular/denominator)*100).toFixed(3)
       }
       return percent
     }

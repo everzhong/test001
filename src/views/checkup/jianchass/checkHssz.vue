@@ -9,8 +9,8 @@
         <el-col :span="1.5">
           <span style="margin-right:10px;font-size:14px;color:#606266">参保人</span>
           <el-select v-model="queryForm.ybd" size="small" @change="ybdChange" style="width:100px">
-            <el-option label="本地" value="本地"></el-option>
-            <el-option label="异地" value="异地"></el-option>
+            <el-option label="本地" value="01"></el-option>
+            <el-option label="异地" value="02"></el-option>
           </el-select>
         </el-col>
         <el-col :span="1.5">
@@ -128,6 +128,7 @@ export default {
         pageNum:1
       },
       queryForm:{
+        ybd:'01',
         gzmc:'',
         gzfl:'',
         xwrd:'',
@@ -172,8 +173,8 @@ export default {
       const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
       this.searchNextParams = {
         jgdm:jgdm,
-        zdbm:this.parseTime(datastarttime, '{y}{m}{d}'),
-        zdbm1:this.parseTime(dataendtime, '{y}{m}{d}')
+        zdbm:this.parseTime(datastarttime, '{y}{m}'),
+        zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
       this.getList()
     },

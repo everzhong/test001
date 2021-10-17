@@ -5,10 +5,10 @@
             <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
           </el-form-item>
           <el-form-item label="险种" prop="ybbf">
-            <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
+            <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
           </el-form-item>
           <el-form-item label="就医类型" prop="jslb">
-            <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
+            <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
           </el-form-item>
           <el-form-item label="批次号" prop="rwpcid">
             <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
@@ -22,11 +22,11 @@
           <el-form-item label="机构名称" prop="jgmc">
             <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
           </el-form-item>
-            <el-form-item label="检查机构" prop="jcjg">
+            <el-form-item label="承办机构" prop="jcjg">
             <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
           </el-form-item>
-            <el-form-item label="检查组" prop="jcz">
-            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+            <el-form-item label="检查组" prop="jczname">
+            <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
           </el-form-item>
           <!-- <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
             <el-button type="primary" size="mini" @click="handleAgree(5)">提交</el-button>
@@ -42,8 +42,8 @@
       <el-col :span="1.5">
         <span style="color:#606266;font-size:14px">参保人：</span>
         <el-select v-model="queryParams.ybd" size="small" @change="getList">
-          <el-option label="本地" value="本地"></el-option>
-          <el-option label="异地" value="异地"></el-option>
+          <el-option label="本地" value="01"></el-option>
+          <el-option label="异地" value="02"></el-option>
         </el-select>
       </el-col>
       <el-col :span="1.5" v-if="viewTableObj.show">
@@ -91,7 +91,7 @@ export default {
       queryInfoFrom:{},
       //组合查询条件
       queryParams:{
-        ybd:"本地",
+        ybd:"01",
       },
       viewTableObj:{
         show:false,
@@ -111,6 +111,7 @@ export default {
   },
   created(){
     this.queryInfoFrom = this.$route.query
+    console.log(this.$store.getters)
     // this.getList();
   },
   methods:{

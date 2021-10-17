@@ -42,10 +42,12 @@ export default {
         }
       },{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30,
       },{
         prop: 'ajly',
         label: '案件来源',
+        fixedWidth:50,
         width:'auto'
       },{
         prop: 'jcfs',
@@ -81,9 +83,11 @@ export default {
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'xydm',
         label: '统一社会信用代码',

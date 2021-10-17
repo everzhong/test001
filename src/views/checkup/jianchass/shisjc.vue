@@ -6,10 +6,10 @@
               <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
             </el-form-item>
             <el-form-item label="险种" prop="ybbf">
-              <el-input readonly v-model="queryInfoFrom.ybbf"></el-input>
+              <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
             </el-form-item>
             <el-form-item label="就医类型" prop="jslb">
-              <el-input readonly v-model="queryInfoFrom.jslb"></el-input>
+              <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
             </el-form-item>
             <el-form-item label="批次号" prop="rwpcid">
               <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
@@ -51,8 +51,8 @@
         <el-col :span="1.5">
           <span style="color:#606266;font-size:14px">参保人：</span>
           <el-select v-model="ybd" size="small">
-            <el-option label="本地" value="1"></el-option>
-            <el-option label="异地" value="2"></el-option>
+            <el-option label="本地" value="01"></el-option>
+            <el-option label="异地" value="02"></el-option>
           </el-select>
         </el-col>
         <!-- <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
@@ -75,7 +75,7 @@
         </div>
       </el-row>
       <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'">
-        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
+        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
         <!-- <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable"> -->
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
             <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
@@ -207,6 +207,14 @@ export default {
   data() {
     return {
       tableHeader:[{
+        prop: 'ydlx',
+        label: '疑点类型',
+        hide: true
+      },{
+        prop: 'ydsm',
+        label: '疑点说明',
+        hide: true
+      },{
         prop: 'xwrd',
         label: '认定行为',
       },{
@@ -339,7 +347,7 @@ export default {
       //默认只有一个规则筛查tab(第三层)
       tabsValue:'three',
       //本地或异地
-      ybd:'1',
+      ybd:'01',
       //上页带过来的数据
       queryInfoFrom:{},
       searchNextParams:{},
@@ -363,8 +371,8 @@ export default {
       const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
       this.searchNextParams = val=='five'?{lsh:this.lsh||''}:{
         jgdm:jgdm,
-        zdbm:this.parseTime(datastarttime, '{y}{m}{d}'),
-        zdbm1:this.parseTime(dataendtime, '{y}{m}{d}')
+        zdbm:this.parseTime(datastarttime, '{y}{m}'),
+        zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
       this.getList()
     },
@@ -390,6 +398,7 @@ export default {
             scstatus:1,
             scname:[rwpcid,time,jgmc].join('-'),
             scsqr:userNmae,
+            rwpcid,
             jgdm,
             datastarttime,
             dataendtime
@@ -810,8 +819,8 @@ export default {
     checkMx(row){
       this.qmxOptions.query = {
         jgdm:row.jgdm,
-        zdbm:this.parseTime(this.queryInfoFrom.datastarttime, '{y}{m}{d}'),
-        zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}{d}')
+        zdbm:this.parseTime(this.queryInfoFrom.datastarttime, '{y}{m}'),
+        zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}')
       }
       this.qmxOptions.show = true
     },

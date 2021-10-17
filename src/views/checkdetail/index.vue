@@ -65,7 +65,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div class="table-main" v-if="xgmxOptions.show||qmxOptions.show">
+    <div :class="[isFromLuli?'table-main1':'table-main']" v-if="xgmxOptions.show||qmxOptions.show">
       <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
       <quanmingxi :options="qmxOptions" v-else />
     </div>
@@ -102,10 +102,13 @@ export default {
         }
       },{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
+
       },{
         prop: 'ajly',
         label: '案件来源',
+        fixedWidth:50,
         width: 'auto'
       },{
         prop: 'ybbf',
@@ -135,12 +138,14 @@ export default {
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'xydm',
         label: '统一社会信用代码',
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'xzq',
         label: '行政区',
@@ -295,15 +300,22 @@ export default {
     checkdetail(row,key){
       const keyw = `${key}Options`
       if(key==='xgmx'){
-        this[keyw].query = {
+        const query = {
           pch:row.rwpcid,
           jgdm:row.jgdm
         }
+        if(this.tabsValue==="three"){
+          query.gzmc2 = row.gzmc
+        } else if(this.tabsValue==="four"){
+          query.mxxmbm = row.mxxmbm
+          query.mxxmdj = row.mxxmdj
+        }
+        this[keyw].query = query
       } else {
         this[keyw].query = {
           jgdm:row.jgdm,
-          zdbm:this.parseTime(row.datastarttime, '{y}{m}{d}'),
-          zdbm1:this.parseTime(row.dataendtime, '{y}{m}{d}'),
+          zdbm:this.parseTime(row.datastarttime, '{y}{m}'),
+          zdbm1:this.parseTime(row.dataendtime, '{y}{m}'),
         }
       }
       this[keyw].show = true
@@ -703,6 +715,7 @@ export default {
               scstatus:1,
               scname:[rwpcid,time,jgmc].join('-'),
               scsqr:userNmae,
+              rwpcid,
               jgdm,
               datastarttime,
               dataendtime

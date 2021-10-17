@@ -5,35 +5,15 @@
       <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column label="序号" type="index" align="center" slot="fixed" width="70"/>
-        <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',renwutwoList)"/>
-        <el-table-column label="案件来源" align="center" prop="ajly"  :width="flexColumnWidth('ajly',renwutwoList)"/>
-        <el-table-column label="检查方式" align="center" prop="jcfs"  show-overflow-tooltip/>
-        <el-table-column label="险种" align="center" prop="ybbf" />
-        <el-table-column label="就医类型" align="center" prop="jslb"/>
-        <el-table-column label="数据开始日期" align="center" prop="datastarttime"  :width="flexColumnWidth('datastarttime',renwutwoList)">
+        <el-table-column label="操作" align="center" min-width="100" slot="operate">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.datastarttime,'{y}-{m}') }}</span>
+            <el-button
+              size="mini"
+              type="text"
+              @click="naviGateToQz(scope.row)"
+            >调查取证</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="数据结束日期" align="center" prop="dataendtime" :width="flexColumnWidth('dataendtime',renwutwoList)">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.dataendtime,'{y}-{m}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',renwutwoList)"/>
-        <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',renwutwoList)"/>
-        <el-table-column label="机构名称" align="center" prop="jgmc" :width="flexColumnWidth('jgmc',renwutwoList)"/>
-        <el-table-column label="承办机构" align="center" prop="dcjg"/>
-        <el-table-column label="检查组" align="center" prop="jczname" :width="flexColumnWidth('jczname',renwutwoList)"/>
-      <el-table-column label="操作" align="center" min-width="100" slot="operate">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            @click="naviGateToQz(scope.row)"
-          >调查取证</el-button>
-        </template>
-      </el-table-column>
       </sTable>
     </div>
     <pagination
@@ -59,9 +39,11 @@ export default {
       tableHeader:[{
         prop: 'rwpcid',
         label: '批次号',
+        fixedWidth:30
       },{
         prop: 'ajly',
         label: '案件来源',
+        fixedWidth:50
       },{
         prop: 'jcfs',
         label: '检查方式',
@@ -95,12 +77,14 @@ export default {
       },{
         prop: 'jgdm',
         label: '机构代码',
+        fixedWidth:55,
       },{
         prop: 'xydm',
         label: '统一社会信用代码',
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'dcjg',
         label: '承办机构',
@@ -407,10 +391,10 @@ export default {
       this.getList()
     },
     naviGateToQz(row){
-      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczmc} = row
+      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jcjg,jczname} = row
       this.$router.push({
         path:'/checkup/jcss/dcqz',
-        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczmc:jczmc||''}
+        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczname:jczname||'',jcjg:jcjg||''}
       })
     }
   }

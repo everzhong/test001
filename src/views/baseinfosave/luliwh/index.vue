@@ -37,13 +37,15 @@ export default {
     return {
       tableHeader:[{
         prop: 'rwpcid',
-        label: '批次号'
+        label: '批次号',
+        fixedWidth:30
       },{
         prop: 'jgdm',
-        label: '机构代码',
+        label: "机构代码",
       },{
         prop: 'jgmc',
         label: '机构名称',
+        fixedWidth:60,
       },{
         prop: 'jgdj',
         label: '机构等级',
@@ -82,8 +84,11 @@ export default {
         }
       },{
         label:"监管阶段",
-        prop:'jgzt',
-        width:'auto'
+        prop:'status',
+        width:'auto',
+        viewFun: (status)=>{
+          return this.selectDictLabels(this.statusOptions, status+'')
+        }
       }],
       tableHeight:0,
       // 遮罩层
@@ -186,6 +191,9 @@ export default {
     this.getList();
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
+    });
+    this.getDicts("sys_renwu_status").then(response => {
+      this.statusOptions = response.data;
     });
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
