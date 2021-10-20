@@ -9,7 +9,7 @@
     <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
     <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
     <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
-    <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
+    <el-table-column label="疑点金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
       <template slot-scope="scope">
         <span>{{formatMoney(scope.row.xjje,2)}}</span>
       </template>
@@ -59,12 +59,16 @@ export default {
         prop:'gzmc'
       },{
         label:"涉及就诊人员数",
-        prop:'xjjzrs'
+        prop:'xjjzrs',
+        hide:true
+      },{
+        prop: 'sjrcs',
+        label: '涉及就诊人次数',
       },{
         label:"涉及明细数",
         prop:'xjmxs'
       },{
-        label:"涉及金额(元)",
+        label:"疑点金额(元)",
         prop:'xjje',
         viewFun:(xjje)=>{
           return this.formatMoney(xjje,2)
@@ -75,6 +79,10 @@ export default {
         viewFun:(jsfy)=>{
           return this.formatMoney(jsfy,2)
         }
+      },{
+        label: '任务来源',
+        fixedWidth:55,
+        prop:'ajly'
       }]
     }
   },

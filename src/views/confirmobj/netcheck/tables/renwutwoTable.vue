@@ -59,6 +59,9 @@ export default {
           return this.selectDictLabels(this.ybbfOptions, ybbf)
         }
       },{
+        prop: 'jsdj',
+        label: '结算等级',
+      },{
         label:"就医类型",
         prop:'jslb',
         viewFun:(jslb)=>{
@@ -88,9 +91,13 @@ export default {
         prop:'sjwgs'
       },{
         label:"涉及就诊人员数",
-        prop:'jsrc'
+        prop:'jsrc',
+        hide:true
       },{
-        label:"涉及金额(元)",
+        prop: 'sjrcs',
+        label: '涉及就诊人次数',
+      },{
+        label:"疑点金额(元)",
         prop:'ydje',
         viewFun:(ydje)=>{
           return this.formatMoney(ydje,2)

@@ -102,7 +102,7 @@ export default {
         label: '违反条数(违反规则的明细数量)',
       },{
         prop: 'xjje',
-        label: '涉及金额',
+        label: '疑点金额',
         viewFun: (xjje)=>{
           return this.formatMoney(xjje,2)
         }

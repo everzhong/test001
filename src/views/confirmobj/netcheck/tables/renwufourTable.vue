@@ -83,6 +83,10 @@ export default {
       },{
         prop: 'xydm',
         label: '统一社会信用代码',
+      },{
+        label: '任务来源',
+        fixedWidth:55,
+        prop:'ajly'
       }]
     }
   },

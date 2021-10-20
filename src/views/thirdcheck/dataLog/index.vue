@@ -287,14 +287,14 @@ export default {
       tableHeader:[{
         prop: 'createDate',
         label: '创建时间',
-        width:"180px",
+        fixedWidth:66,
         viewFun:(createDate)=>{
           return this.parseTime(createDate)
         }
       },{
         prop: 'stime',
         label: '开始时间',
-        width:"150px",
+        fixedWidth:30,
         viewFun:(stime)=>{
           return this.parseTime(stime,'{y}-{m}-{d}')
         }
@@ -304,10 +304,11 @@ export default {
       },{
         label:"日志路径",
         prop:'logFilePath',
+        fixedWidth:100,
       },{
         label:"更新时间",
         prop:'updateDate',
-        width:"180px",
+        fixedWidth:66,
         viewFun:(time)=>{
           return this.parseTime(time)
         }

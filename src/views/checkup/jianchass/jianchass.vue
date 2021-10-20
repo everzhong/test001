@@ -70,6 +70,9 @@ export default {
           return this.selectDictLabels(this.jslbOptions,jslb)
         }
       },{
+        prop: 'jsdj',
+        label: '结算等级',
+      },{
         label:"数据开始日期",
         prop:'datastarttime',
         viewFun:(time)=>{

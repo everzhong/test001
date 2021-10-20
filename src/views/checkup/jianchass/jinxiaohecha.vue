@@ -1,4 +1,4 @@
-/**项目流水号汇总 第四层数据 type=1*/
+/**进销核查 第四层数据 type=2*/
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
   <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->
@@ -11,7 +11,7 @@
     <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
       <template slot-scope="scope">
         <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
-        <el-button type="text" @click="checkdetail(scope.row)" size="mini">同流水号明细</el-button>
+        <!-- <el-button type="text" @click="checkdetail(scope.row)" size="mini">同流水号明细</el-button> -->
       </template>
     </el-table-column>
   </sTable>
@@ -19,63 +19,19 @@
 </template>
 <script>
 export default {
-  name:'LiushuiTable',
+  name:'Jinxiaohecha',
   data(){
     return {
       wsCheck:'',
       tableHeight:0,
       tableHeader:[{
-        prop: 'jgdm',
-        label: '机构代码',
-        fixedWidth:55,
-      },{
-        prop: 'jgmc',
-        label: '机构名称',
-        fixedWidth:60,
-      },{
-        prop: 'gzfl',
-        label: '规则分类',
-        align: 'left'
-      },{
-        prop: 'gzmc',
-        label: '规则名称',
-        align: 'left'
-      },{
         prop: 'xwrd',
         label: '认定行为',
+        fixedWidth:55,
       },{
         prop: 'bz',
         label: '备注',
-      },{
-        prop: 'jslb',
-        label: '就医类型',
-        viewFun:(jslb)=>{
-          return this.selectDictLabels(this.jslbOptions,jslb)
-        },
-      },{
-        prop: 'ybbf',
-        label: '险种',
-        viewFun: (ybbf)=>{
-          return this.selectDictLabels(this.ybbfOptions, ybbf)
-        },
-      },{
-        prop: 'lsh',
-        label: '交易流水号',
-      },{
-        prop: 'kh',
-        label: '参保人卡号',
-      },{
-        prop: 'xm',
-        label: '参保人姓名',
-      },{
-        prop: 'sfzh',
-        label: '身份证号',
-      },{
-        prop: 'ksdm',
-        label: '科室代码',
-      },{
-        prop: 'ksmc',
-        label: '科室名称',
+        fixedWidth:45,
       },{
         prop: 'mxxmbm',
         label: '明细项目编号',
@@ -92,33 +48,53 @@ export default {
           return this.formatMoney(mxxmdj,3)
         }
       },{
+        prop: 'mxxmdw',
+        label: '明细项目单位',
+      },{
         prop: 'mxxmsl',
         label: '明细项目数量',
         width: 'auto'
       },{
-        prop: 'mxxmje',
-        label: '明细项目金额(元)',
-        viewFun: (mxxmje)=>{
-          return this.formatMoney(mxxmje,2)
-        }  
-      },{
-        prop: 'mxxmjyfy',
-        label: '明细项目交易费用(元)',
-        viewFun: (mxxmjyfy)=>{
-          return this.formatMoney(mxxmjyfy,2)
-        }  
-      },{
         prop: 'mxxmbjsfy',
-        label: '明细项目医保结算费用(元)',
+        label: '明细项目医保结算范围费用(元)',
+        fixedWidth:-130,
         viewFun: (mxxmbjsfy)=>{
           return this.formatMoney(mxxmbjsfy,2)
         }  
       },{
-        prop: 'jyrq',
-        label: '结算日期',
-        viewFun: (jyrq)=>{
-          return this.parseTime(jyrq,'{y}-{m}-{d}')
-        }
+        prop: 'fylb',
+        label: '费用类别',
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
+      },{
+        prop: 'xgzlxm',
+        label: '相关诊疗项目',
+        fixedWidth:30
+      },{
+        prop: 'kcsl',
+        label: '期初库存数量',
+      },{
+        prop: 'grsl',
+        label: '本期购入数量',
+      },{
+        prop: 'qmkcsl',
+        label: '期末库存数量'
+      },{
+        prop: 'ybjssl',
+        label: '医保结算数量',
+      },{
+        prop: 'kh',
+        label: '参保人卡号',
+      },{
+        prop: 'cesl',
+        label: '差额数量',
+      },{
+        prop: 'dzcefy',
+        label: '对账差额费用(元)',
+        viewFun: (dzcefy)=>{
+          return this.formatMoney(dzcefy,2)
+        }  
       },{
         prop: 'zkdj',
         label: '追款单价',
@@ -136,13 +112,6 @@ export default {
         viewFun: (wgfy)=>{
           return this.formatMoney(wgfy,2)
         }
-      },{
-        prop: 'fylb',
-        label: '费用类别',
-        viewFun: (fylb)=>{
-          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
-        },
-        width: 'auto'
       }]
     }
   },

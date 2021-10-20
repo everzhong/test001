@@ -49,6 +49,12 @@ export default {
       },{
         prop: 'jgdj',
         label: '机构等级',
+        viewFun: (jgdj)=>{
+          return this.selectDictLabels(this.jgdjOptions, jgdj)
+        }
+      },{
+        prop: 'jsdj',
+        label: '结算等级',
       },{
         prop: 'xzq',
         label: '行政区',
@@ -125,6 +131,7 @@ export default {
       dataendtimeOptions: [],
       // 就医类型字典
       jslbOptions: [],
+      jgdjOptions:[],
       // 行政区字典
       xzqOptions: [],
       // 网审意见字典
@@ -191,6 +198,9 @@ export default {
     this.getList();
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
+    });
+    this.getDicts("renwu_ss_jgdj").then(response => {
+      this.jgdjOptions = response.data;
     });
     this.getDicts("sys_renwu_status").then(response => {
       this.statusOptions = response.data;

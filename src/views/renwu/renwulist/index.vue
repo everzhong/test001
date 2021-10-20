@@ -114,10 +114,11 @@ export default {
       },{
         prop: 'rwmc',
         label: '任务名称',
-        hide: true
+        // hide: true
       },{
         prop: 'ajly',
-        label: '任务来源',
+        label: '案件来源',
+        fixedWidth:55
       },{
         prop: 'datastarttime',
         label: '数据开始日期',

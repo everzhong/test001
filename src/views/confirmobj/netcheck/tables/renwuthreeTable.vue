@@ -43,13 +43,16 @@ export default {
       },{
         label:"涉及就诊人员数",
         prop:'jsrc',
-        width:'auto'
+        hide:true
+      },{
+        prop: 'sjrcs',
+        label: '涉及就诊人次数',
       },{
         label:"涉及明细数",
         prop:'xjmxs',
         width:'auto'
       },{
-        label:"涉及金额(元)",
+        label:"疑点金额(元)",
         prop:'xjje',
         viewFun:(xjje)=>{
           return this.formatMoney(xjje,2)
@@ -68,6 +71,10 @@ export default {
         label: '机构代码',
         fixedWidth:55,
         prop:'jgdm'
+      },{
+        label: '任务来源',
+        fixedWidth:55,
+        prop:'ajly'
       }]
     }
   },

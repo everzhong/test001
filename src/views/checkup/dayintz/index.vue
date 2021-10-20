@@ -138,6 +138,9 @@ export default {
         fixedWidth:60,
         prop:'jgmc'
       },{
+        prop: 'jsdj',
+        label: '结算等级',
+      },{
         label:"承办机构",
         prop:'jcjg'
       },{

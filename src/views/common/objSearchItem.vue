@@ -53,7 +53,7 @@
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
-        <el-form-item label="机构等级" prop="jsdj">
+        <el-form-item label="结算等级" prop="jsdj">
           <el-select v-model="query.jsdj" placeholder="全部" clearable size="small" style="width: 180px">
             <el-option
               v-for="dict in jsdjOptions"

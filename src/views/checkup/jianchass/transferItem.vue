@@ -19,7 +19,7 @@
         <el-table-column label="规则名称" align="left" prop="gzmc"  min-width="350" show-overflow-tooltip/>
         <el-table-column label="涉及就诊人次数" align="center"  prop="xjjzrs" min-width="130" show-overflow-tooltip/>
         <el-table-column label="涉及明细数" align="center" prop="xjmxs" min-width="110"  show-overflow-tooltip/>
-        <el-table-column label="涉及金额" align="center" prop="xjje" min-width="110" show-overflow-tooltip>
+        <el-table-column label="疑点金额" align="center" prop="xjje" min-width="110" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.xjje,2)}}</span>
           </template>

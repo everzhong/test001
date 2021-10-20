@@ -64,10 +64,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="涉及金额" prop="xjje">
+      <el-form-item label="疑点金额" prop="xjje">
         <el-input
           v-model="queryParams.xjje"
-          placeholder="请输入涉及金额"
+          placeholder="请输入疑点金额"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -216,7 +216,7 @@
       <el-table-column label="批次号" align="center" prop="rwpcid" :formatter="rwpcidFormat" />
       <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs" :formatter="xjjzrsFormat" />
       <el-table-column label="涉及明细数" align="center" prop="xjmxs" :formatter="xjmxsFormat" />
-      <el-table-column label="涉及金额" align="center" prop="xjje" :formatter="xjjeFormat">
+      <el-table-column label="疑点金额" align="center" prop="xjje" :formatter="xjjeFormat">
         <template slot-scope="scope">
           <span>{{formatMoney(scope.row.xjje,2)}}</span>
         </template>
@@ -282,8 +282,8 @@
         <el-form-item label="涉及明细数" prop="xjmxs">
           <el-input v-model="form.xjmxs" placeholder="请输入涉及明细数" />
         </el-form-item>
-        <el-form-item label="涉及金额" prop="xjje">
-          <el-input v-model="form.xjje" placeholder="请输入涉及金额" />
+        <el-form-item label="疑点金额" prop="xjje">
+          <el-input v-model="form.xjje" placeholder="请输入疑点金额" />
         </el-form-item>
         <el-form-item label="结算费用" prop="jsfy">
           <el-input v-model="form.jsfy" placeholder="请输入结算费用" />
@@ -364,7 +364,7 @@ export default {
       xjjzrsOptions: [],
       // 涉及明细数字典
       xjmxsOptions: [],
-      // 涉及金额字典
+      // 疑点金额字典
       xjjeOptions: [],
       // 结算费用字典
       jsfyOptions: [],
@@ -505,7 +505,7 @@ export default {
     xjmxsFormat(row, column) {
       return this.selectDictLabels(this.xjmxsOptions, row.xjmxs);
     },
-    // 涉及金额字典翻译
+    // 疑点金额字典翻译
     xjjeFormat(row, column) {
       return this.selectDictLabels(this.xjjeOptions, row.xjje);
     },

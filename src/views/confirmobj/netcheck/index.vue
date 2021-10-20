@@ -232,7 +232,10 @@ export default {
         }
         if(this.tabsValue==="three"){
           query.gzmc2 = row.gzmc
+          query.gzmc = row.gzmc
         } else if(this.tabsValue==="four"){
+          query.gzmc = row.gzmc
+          query.mxxmmc = row.mxxmmc
           query.mxxmbm = row.mxxmbm
           query.mxxmdj = row.mxxmdj
         }

@@ -40,20 +40,49 @@
       </el-form>
       <el-row :gutter="10">
         <el-col :span="1.5">
-          <el-button type="primary" size="small" @click="chaxunDialog = true">查询条件</el-button>
+          <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli">
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli">
-          <el-button type="primary" size="small" @click="handleThirdCheck" style="margin-right:15px">第三方筛查</el-button>
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
+          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">第三方筛查</el-button>
         </el-col>
-        <el-col :span="1.5">
+        <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保人：</span>
           <el-select v-model="ybd" size="small">
             <el-option label="本地" value="01"></el-option>
             <el-option label="异地" value="02"></el-option>
           </el-select>
+        </el-col>
+
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+          <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+          <el-button type="primary" plain size="small">取消核查</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+          <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库期初时间</label>
+          <el-date-picker
+          v-model="pkqcsj"
+          align="right"
+          type="date"
+          size="small"
+          placeholder="盘库期初时间"
+         >
+        </el-date-picker>
+        </el-col>
+        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+          <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库期末时间</label>
+          <el-date-picker
+          v-model="pkqmsj"
+          align="right"
+          type="date"
+          size="small"
+          placeholder="盘库期末时间"
+         >
+        </el-date-picker>
         </el-col>
         <!-- <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
           <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
@@ -61,12 +90,13 @@
         <el-col :span="1.5" v-if="tabsValue==='four'&&isAll">
           <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
         </el-col> -->
-        <el-col :span="1.5" v-if="tabsValue!=='three'">
+        <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
           <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
-        <!-- <el-radio-group v-model="tabsValue" size="small" class="top-right-btn" v-if="tabsValue==='three'">
+        <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
           <el-radio-button label="three">规则筛查</el-radio-button>
-        </el-radio-group> -->
+          <el-radio-button label="six">进销存核查</el-radio-button>
+        </el-radio-group>
         <div class="top-right-btn" v-if="tabsValue=='five'||tabsValue=='qmx'">
           <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="five">同流水号明细</el-radio-button>
@@ -74,27 +104,10 @@
           </el-radio-group>
         </div>
       </el-row>
-      <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'">
+      <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
         <!-- <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable"> -->
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-            <el-table-column label="行为认定" align="center" prop="xwrd"  :width="flexColumnWidth('xwrd',renwuthreeList)"/>
-            <el-table-column label="违规数量" align="center" prop="wgsl"/>
-            <el-table-column label="违规费用(元)" align="center" prop="wgfy" :width="flexColumnWidth('wgfy',renwuthreeList)">
-              <template slot-scope="scope">
-                <span>{{formatMoney(scope.row.wgfy,2)}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
-            <el-table-column label="规则名称" align="center" prop="gzmc" width="350" show-overflow-tooltip/>
-            <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs" :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
-            <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrcs" :width="flexColumnWidth('xjjzrcs',renwuthreeList)"/>
-            <el-table-column label="涉及明细数" align="center" prop="xjmxs" :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
-            <el-table-column label="结算费用(元)" align="center" prop="jsfy" :width="flexColumnWidth('jsfy',renwuthreeList)">
-              <template slot-scope="scope">
-                <span>{{formatMoney(scope.row.jsfy,2)}}</span>
-              </template>
-            </el-table-column>
             <el-table-column label="操作" align="center" min-width="160" slot="operate">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="fluProject(scope.row)">
@@ -107,7 +120,9 @@
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
-        <liushui-table ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+        <jinxiaohecha v-if="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" />
+        <liushui-table v-else ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+        <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false"/>
       </div>
       <pagination
         class="fixed-bottom"
@@ -117,16 +132,13 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      <div v-show="tabsValue=='four'&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:15px;">
-        <el-form inline :model="xwrdForm" :rules="xwRules" size="small" ref="xwrdForm" label-width="100px">
+      <div v-show="(tabsValue=='four'||tabsValue=='six')&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:10px;">
+        <el-form inline :model="xwrdForm" :rules="xwRules" size="mini" ref="xwrdForm" label-width="100px">
           <el-form-item label="名称" prop="gzmc">
             <el-input v-model="xwrdForm.gzmc" disabled></el-input>
           </el-form-item>
           <el-form-item label="行为认定" prop="xwrd">
-            <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:32px;height:32px;border:1px solid #DCDFE6;border-radius:4px;width:188px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
-          </el-form-item>
-          <el-form-item label="备注" prop="bz">
-            <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
+            <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
           </el-form-item>
           <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
             <el-input v-model="xwrdForm.zkdj" :disabled="isDisabled.dj" @change="handleDjslChange"></el-input>
@@ -137,8 +149,23 @@
           <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
             <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
           </el-form-item>
+          <el-form-item label="期初库存数量" prop="wgfy" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          </el-form-item><el-form-item label="本期购入数量" prop="wgfy" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          </el-form-item><el-form-item label="现金销售数量" prop="wgfy" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          </el-form-item><el-form-item label="期末库存数量" prop="wgfy" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          </el-form-item>
+          <el-form-item label="医保结算数量" prop="wgfy" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="bz">
+            <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
+          </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="small" @click="xwrdSubmit">确定</el-button>
+            <el-button type="primary" size="mini" @click="xwrdSubmit">确定</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -193,6 +220,8 @@ import XwrdDialog from './xwrdDialog.vue'
 import Jgheshi from './jgheshi.vue'
 import operateLog from './operateLog.vue'
 import Quanmingxi from '../../common/quanmingxi.vue'
+import Jinxiaohecha from './jinxiaohecha.vue'
+import Hechashuju from './hechashuju.vue'
 export default {
   name: "Shisjc",
   components: {
@@ -202,10 +231,13 @@ export default {
     Tongliumx,
     Jgheshi,
     operateLog,
-    Quanmingxi
+    Quanmingxi,
+    Jinxiaohecha,
+    Hechashuju
   },
   data() {
     return {
+      showHecha:false,//显示选择核查数据
       tableHeader:[{
         prop: 'ydlx',
         label: '疑点类型',
@@ -219,7 +251,7 @@ export default {
         label: '认定行为',
       },{
         prop: 'wgsl',
-        label: '违规数量',
+        label: '违规人次数',
         width:'auto' 
       },{
         prop: 'wgfy',
@@ -231,23 +263,26 @@ export default {
       },{
         prop: 'gzfl',
         label: '规则分类',
-        align: 'left'
+        align: 'left',
+        fixedWidth:80
       },{
         prop: 'gzmc',
         label: '规则名称',
-        align: 'left'
+        align: 'left',
+        fixedWidth:80
       },{
         prop: 'xjjzrs',
         label: '涉及就诊人员数',
+        hide:true
       },{
-        prop: 'xjjzrcs',
-        label: '涉及就诊人次数',
+        prop: 'sjrcs',
+        label: '结算人次数',
       },{
         prop: 'xjmxs',
         label: '涉及明细数',
       },{
         prop: 'jsfy',
-        label: '结算费用(元)',
+        label: '疑点费用(元)',
         viewFun: (jsfy)=>{
           return this.formatMoney(jsfy,2)
         }
@@ -307,6 +342,7 @@ export default {
       renwuthreeList: [],
       renwufourList:[],
       renwufiveList:[],
+      renwusixList:[],
       // 弹出层标题
       title: "",
       // 核实状态字典
@@ -356,7 +392,10 @@ export default {
         xwrd:'',
         type:''
       },
-      lsh:''//第四层的参数，查询同流水号明细需要用到
+      lsh:'',//第四层的参数，查询同流水号明细需要用到
+      pkqcsj:'',//盘库期初
+      pkqmsj:'',//盘库期末
+
     }
   },
   created() {
@@ -364,8 +403,13 @@ export default {
     this.getList();
   },
   methods: {
+    //规则筛查，进销核查切换
+    tabsLevelChange1(val){
+      this.getList()
+    },
     //同流水号明细，全明细切换
     tabsLevelChange(val){
+      console.log(val)
       this.queryParams.pageNum=1
       this.total = 0
       const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
@@ -497,8 +541,7 @@ export default {
       }
     },
     xwrdSubmit(){
-      const mxxmbjsfy = this.tabsValue==='foue'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-      
+      const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
       if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
         this.msgError('违规费用不能大于明细项目医保结算金额')
         return
@@ -579,7 +622,7 @@ export default {
     */
     fluProject(row){
       this.$set(this,'tabsValue','four')
-      this.searchNextParams = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc}
+      this.searchNextParams = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,type:1}
       this.getList(this.searchNextParams)
     },
     /** 查询renwu列表 */
@@ -600,10 +643,15 @@ export default {
             res = await listRenwuthree(params)
             break;
           case 'four':
+            params.type=1
             res = await listRenwufour(params)
             break;
           case 'five':
             res = await getTLS({...this.queryParams,...this.searchNextParams})
+            break;
+          case 'six':
+            params.type=2
+            res = await listRenwufour(params)
             break;
           case 'qmx':
             res = await getQMX({...this.queryParams,...this.searchNextParams})
@@ -659,7 +707,7 @@ export default {
     xjmxsFormat(row, column) {
       return this.selectDictLabels(this.xjmxsOptions, row.xjmxs);
     },
-    // 涉及金额字典翻译
+    // 疑点金额字典翻译
     xjjeFormat(row, column) {
       return this.selectDictLabels(this.ydjeOptions, row.ydje);
     },
@@ -950,5 +998,13 @@ export default {
   position: absolute;
   bottom:30px;
   right: 0px;
+}
+.xingweirz {
+  .el-form-item {
+    margin-bottom: 2px !important;
+  }
+  &::v-deep .el-form-item__label {
+    font-size: 12px !important;
+  }
 }
 </style>

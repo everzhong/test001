@@ -1,7 +1,7 @@
 <template>
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1"  @selection-change="handleSelectionChange">
-    <!-- <el-table-column type="selection" width="55" align="center" slot="fixed"/> -->
-    <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
+    <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+    <!-- <el-table-column label="序号" type="index" align="center"  slot="fixed"/> -->
     <el-table-column label="操作" align="center" width="180" slot="operate">
       <template slot-scope="scope">
         <el-button
@@ -41,13 +41,17 @@ export default {
       },{
         prop: 'xjjzrs',
         label: '涉及就诊人员数',
+        hide:true
+      },{
+        prop: 'sjrcs',
+        label: '涉及就诊人次数',
       },{
         prop: 'xjmxs',
         label: '涉及明细数',
         width: 'auto'
       },{
         prop: 'xjje',
-        label: '涉及金额(元)',
+        label: '疑点金额(元)',
         viewFun: (xjje)=>{
           return this.formatMoney(xjje,2)
         }

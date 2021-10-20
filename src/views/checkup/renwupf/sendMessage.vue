@@ -64,11 +64,12 @@
             <el-popover
               ref="tablePopover"
               placement="bottom"
-              width="500"
+              width="600"
               popper-class="sys-popup"
               trigger="click">
-              <div style="min-height:150px;max-height:210px;overflow:auto">
-                <el-table :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
+              <el-button type="primary" size="mini" style="margin:8px 0 5px" @click="autoSelect">随机选择</el-button>
+              <div style="min-height:150px;max-height:270px;overflow:auto">
+                <el-table ref="multipleTable" :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
                   <el-table-column type="selection" width="50" align="center" />
                   <el-table-column property="jgdm" label="机构ID" align="center" show-overflow-tooltip></el-table-column>
                   <el-table-column property="jgmc" label="机构名称" align="center" show-overflow-tooltip></el-table-column>
@@ -136,13 +137,51 @@ export default {
     this.getJanChacy() //检查组成员
   },
   methods:{
+    handleSelectionChange (selection) {
+      this.roleSelection = selection
+    },
+    randomIndex (max, min) {
+      return Math.round(Math.random() * (max - min) + min)
+    },
+    findTwoIndex (list) {
+      const idxArr = []
+      const selectObj = []
+      const len = list.length - 1
+      while (idxArr.length < 2) {
+        const idx = this.randomIndex(len, 0)
+        if (idxArr.indexOf(idx) < 0) {
+          idxArr.push(idx)
+          selectObj.push(list[idx])
+        }
+      }
+      return selectObj
+    },
+    autoSelect () {
+      const roleId = this.randomIndex(1, 0) === 0 ? 4 : 9
+      const selectRoleList = this.gridData.filter(item => {
+        return item.roleId === roleId
+      })
+      let selected = []
+      if (selectRoleList.length < 3) {
+        selected = selectRoleList
+      } else {
+        selected = this.findTwoIndex(selectRoleList)
+      }
+      this.$refs.multipleTable.clearSelection()
+      selected.forEach(element => {
+        const tIdx = this.gridData.findIndex(data => {
+          return data.roleId === element.roleId && data.userId === element.userId
+        })
+        this.$refs.multipleTable.toggleRowSelection(this.gridData[tIdx])
+      })
+    },
     async getJanChaxz(){
       this.loading = true
       try {
         const res = await listDept()
-      if(res.code === 200) {
-        this.roleList = res.data
-      }
+        if(res.code === 200) {
+          this.roleList = res.data
+        }
       } catch (error) { 
         console.log(error)
       }
@@ -246,7 +285,18 @@ export default {
             const res = await updateDept({deptId,jczbh,parentId: 101,deptName})
             if(res.code===200){
               this.msgSuccess('更改成功')
-              this.getJanChaxz()
+              await this.getJanChaxz()
+              const editIdx = this.roleList.findIndex(item=>{
+                return item.deptId===this.addGroup.deptId
+              })
+              const jczList = []
+              this.addGroup.jczcy.forEach(item=>{
+                let targetZ = this.gridData.filter(subItem=>{
+                  return item===subItem.userId
+                })
+                targetZ.length && (jczList.push(targetZ[0]))
+              })
+              this.roleList[editIdx].jczcy = jczList
               this.options.ids.forEach(id=>{
                 updateRenwutwo({
                   id,
@@ -289,9 +339,6 @@ export default {
       })
       this.addGroup.jczcy = Array.from(new Set([...this.addGroup.jczcy,...roleList]))
       this.$refs.tablePopover.doClose()
-    },
-    handleSelectionChange(val){
-      this.roleSelection = val
     },
     formateNickName(jczcy){
       if(!jczcy){

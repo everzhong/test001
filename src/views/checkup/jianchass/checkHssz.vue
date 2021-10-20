@@ -30,7 +30,7 @@
         <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
         <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
         <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
-        <el-table-column label="涉及金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',renwuthreeList)">
+        <el-table-column label="疑点金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',renwuthreeList)">
           <template slot-scope="scope">
             <span>{{formatMoney(scope.row.xjje,2)}}</span>
           </template>

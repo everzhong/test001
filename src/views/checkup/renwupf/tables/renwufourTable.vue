@@ -80,6 +80,10 @@ export default {
           return this.selectDictLabels(this.$store.getters.fyDic, fylb)
         },
         width: 'auto'
+      },{
+        label: '任务来源',
+        fixedWidth:55,
+        prop:'ajly'
       }]
     }
   },

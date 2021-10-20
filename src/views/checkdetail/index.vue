@@ -36,7 +36,7 @@
       </div>
     </el-row>
     <div v-loading="loading" v-show="!mxShow" :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topHeight}">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkdetail($event,'xgmx')"/>
+      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
       <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
         <el-table-column slot="fixed" type="selection" width="55" align="center"/>
@@ -124,6 +124,9 @@ export default {
           return this.selectDictLabels(this.jslbOptions,jslb)
         },
       },{
+        prop: 'jsdj',
+        label: '结算等级',
+      },{
         prop: 'datastarttime',
         label: '数据开始日期',
         viewFun: (time)=>{
@@ -158,9 +161,13 @@ export default {
       },{
         prop: 'jsrc',
         label: '涉及就诊人员数',
+        hide:true
+      },{
+        prop: 'sjrcs',
+        label: '涉及就诊人次数',
       },{
         prop: 'ydje',
-        label: '涉及金额(元)',
+        label: '疑点金额(元)',
         viewFun: (ydje)=>{
           return this.formatMoney(ydje,2)
         }
@@ -189,6 +196,9 @@ export default {
       ids: [],
       //选中的数据列表
       selectionList:[],
+      //第三层勾选
+      threeIds:[],
+      selectionThreeList:[],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -302,11 +312,15 @@ export default {
       if(key==='xgmx'){
         const query = {
           pch:row.rwpcid,
-          jgdm:row.jgdm
+          jgdm:row.jgdm,
+          jgmc:row.jgmc
         }
         if(this.tabsValue==="three"){
           query.gzmc2 = row.gzmc
+          query.gzmc = row.gzmc
         } else if(this.tabsValue==="four"){
+          query.gzmc = row.gzmc
+          query.mxxmmc = row.mxxmmc
           query.mxxmbm = row.mxxmbm
           query.mxxmdj = row.mxxmdj
         }
@@ -585,6 +599,11 @@ export default {
         return item.sccqstatus != 3
       });
     },
+    //第三层（中间tab）勾选
+    handleThreeTableChange(selection){
+      this.threeIds = selection.map(item => item.id)
+      this.selectionThreeList = selection
+    },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -755,9 +774,21 @@ export default {
       this.xgmxOptions.show=false
       this.queryParams.pageNum = 1
       this.total = 0
-      if(this.ids.length && val!=='two'){
+      val!=='three' && (this.threeIds=[])
+      if(this.ids.length && (val==='three'||(val==='four'&& this.threeIds.length===0))){
         const jgdmList = this.selectionList.map(item=>item.jgdm)
         this.getList({jgdm:jgdmList.join(',')})
+      } else if(val==='four' && this.threeIds.length){//勾选了第三层，则用勾选的参数去查第四层
+        const pchList = this.selectionThreeList.map(item=>item.rwpcid)
+        const jgdmList = this.selectionThreeList.map(item=>item.jgdm)
+        const xmbmList = this.selectionThreeList.map(item=>item.mxxmbm)
+        console.log(pchList,jgdmList,xmbmList)
+        this.getList({
+          pch:pchList.join('')?pchList.join(','):'',
+          rwpcid:pchList.join('')?pchList.join(','):'',
+          jgdm:jgdmList.join('')?jgdmList.join(','):'',
+          mxxmbm:xmbmList.join('')?xmbmList.join(','):'',
+        })
       } else {
         this.ids = []
         if(this.resql){

@@ -130,6 +130,9 @@ export default {
         label: '机构名称',
         fixedWidth:60,
       },{
+        prop: 'jsdj',
+        label: '结算等级',
+      },{
         prop: 'sccqstatus',
         label: '数据抽取状态',
         width:'150px',
