@@ -116,7 +116,7 @@ export default {
       const newList = []
       this[targetDel].forEach(item=>{
         const hasIn = this[from].filter(sub=>{
-          return item.rwpicd===sub.rwpicd
+          return item.rwpcid===sub.rwpcid
         })
         !(hasIn && hasIn.length) && (newList.push(item))
       })

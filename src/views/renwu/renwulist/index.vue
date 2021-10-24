@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" v-show="showSearch" label-width="60px" style="max-height:80px;overflow:auto;margin-bottom:5px">
       <div>
-        <el-form-item label="批次号" prop="rwpicd">
+        <el-form-item label="批次号" prop="rwpcid">
           <el-input
-            v-model="queryParams.rwpicd"
+            v-model="queryParams.rwpcid"
             placeholder="请输入"
             clearable
             size="small"
