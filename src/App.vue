@@ -11,6 +11,29 @@ export default  {
 
 </script>
 <style lang="scss">
+.el-dialog__header {
+  height: 37px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ecedf1;
+  background-color: #f6f7f9;
+  padding: 10px 20px 0;
+  .el-dialog__title {
+    font-size: 12px !important;
+    line-height: 1;
+    color: #606266;
+  }
+  .el-dialog__headerbtn {
+    top: 12px;
+    right: 16px;
+    .el-dialog__close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 16px;
+    }
+  }
+}
 .el-table th {
   display: table-cell !important;
 }

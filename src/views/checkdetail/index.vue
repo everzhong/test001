@@ -159,11 +159,11 @@ export default {
         prop: 'sjwgs',
         label: '涉及规则数',
       },{
-        prop: 'jsrc',
+        prop: 'jsry',//第二层与第三层这个key不同
         label: '涉及就诊人员数',
         hide:true
       },{
-        prop: 'sjrcs',
+        prop: 'jsrc',
         label: '涉及就诊人次数',
       },{
         prop: 'ydje',
@@ -577,7 +577,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery(query) {
-      this.tabsValue = 'two'
+      // this.tabsValue = 'two'
       this.queryParams.pageNum = 1;
       delete query.status
       this.getList(query);

@@ -60,3 +60,11 @@ export function getQuanmx(query) {
         params: query
     })
 }
+///renwu/xgzlxm/list
+export function getXgzlxm(query) {
+    return request({
+        url: 'renwu/xgzlxm/list',
+        method: 'get',
+        params: query
+    })
+}

@@ -74,7 +74,7 @@ export default {
       if(allSelect && allSelect.length){//遍历核实
         const request = []
         allSelect.forEach(need=>{
-          request.push(updateRenwuthree({id:need.id,hs:3}))
+          request.push(updateRenwuthree({id:need.id,hs:'3'}))
         })
         this.loading= true
         Promise.all(request).then(()=>{

@@ -3,7 +3,7 @@
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
   <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
-    <el-table-column  align="center" width="55" slot="fixed">
+    <el-table-column  align="center" width="40" slot="fixed">
       <template slot-scope="scope">
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
@@ -11,13 +11,14 @@
     <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
       <template slot-scope="scope">
         <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
-        <!-- <el-button type="text" @click="checkdetail(scope.row)" size="mini">同流水号明细</el-button> -->
+        <el-button :disabled="scope.row.xwrd" type="text" @click="cancelHc(scope.row)" size="mini">取消核查</el-button>
       </template>
     </el-table-column>
   </sTable>
 </div>
 </template>
 <script>
+import { updateRenwufour } from '@/api/renwu/renwufour'
 export default {
   name:'Jinxiaohecha',
   data(){
@@ -68,20 +69,20 @@ export default {
           return this.selectDictLabels(this.$store.getters.fyDic, fylb)
         },
       },{
-        prop: 'xgzlxm',
+        prop: 'xgzlxmmc',
         label: '相关诊疗项目',
         fixedWidth:30
       },{
-        prop: 'kcsl',
+        prop: 'qckc',
         label: '期初库存数量',
       },{
-        prop: 'grsl',
+        prop: 'bqgr',
         label: '本期购入数量',
       },{
-        prop: 'qmkcsl',
+        prop: 'qmkc',
         label: '期末库存数量'
       },{
-        prop: 'ybjssl',
+        prop: 'ybjs',
         label: '医保结算数量',
       },{
         prop: 'kh',
@@ -90,7 +91,7 @@ export default {
         prop: 'cesl',
         label: '差额数量',
       },{
-        prop: 'dzcefy',
+        prop: 'dzce',
         label: '对账差额费用(元)',
         viewFun: (dzcefy)=>{
           return this.formatMoney(dzcefy,2)
@@ -121,10 +122,25 @@ export default {
     this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
-    const th = document.body.offsetHeight - 50-34-138-32-152;
+    const th = document.body.offsetHeight - 50-34-138-32-165;
     this.tableHeight = this.fromLog?`${th+90}px`:`${th}px` ;
   },
   methods:{
+    cancelHc(row){//取消核查
+      this.$confirm('是否确定取消该项核查?', "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+         return updateRenwufour({
+            id:row.id,
+            ischeck:0
+         })
+        }).then(() => {
+          this.msgSuccess("取消成功");
+          this.$emit('update')
+        })
+    },
     fylbFormat(row, column) {
       return this.selectDictLabels(this.$store.getters.fyDic, row.fylb);
     },

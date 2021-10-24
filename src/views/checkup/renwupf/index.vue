@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="height:94px"/>
+    <SearchItem @handleQuery="handleQuery" style="height:82px"/>
     <div class="middle-btn">
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5" v-if="tabsValue==='two'">
@@ -414,7 +414,6 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery(query) {
-      this.tabsValue = 'two'
       this.queryParams.pageNum = 1;
       this.getList(query);
     },
@@ -578,7 +577,7 @@ export default {
 }
 .table-main {
   position: absolute;
-  top:160px;
+  top:146px;
   bottom:70px;
   left: 20px;
   right: 20px;

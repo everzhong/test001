@@ -122,7 +122,7 @@ export default {
       const request = []
       let count = 0
       selection.forEach((item,i)=>{
-        request.push(updateRenwuthree({id:item.id,hs:2}))
+        request.push(updateRenwuthree({id:item.id,hs:'2'}))
         count++
         if(count===selection.length){
           this.loading= true
@@ -145,7 +145,7 @@ export default {
       this.tableData = this.tableData.concat(selection)
     },
     async getList(query){
-      let params ={...this.queryParams,...this.queryForm,hs:1}
+      let params ={...this.queryParams,...this.queryForm,hs:'1'}
       query&&(params = {...params,...query})
       this.loading = true
       const res = await listRenwuthree(params)

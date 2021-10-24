@@ -42,7 +42,7 @@ export default {
         prop:'gzmc'
       },{
         label:"涉及就诊人员数",
-        prop:'jsrc',
+        prop:'xjjzrs',
         hide:true
       },{
         prop: 'sjrcs',

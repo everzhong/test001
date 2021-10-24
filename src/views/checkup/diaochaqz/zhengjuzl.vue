@@ -28,7 +28,7 @@
           <!-- <el-table-column type="selection" width="55" align="center" /> -->
           <el-table-column label="序号" type="index" align="center"  />
           <el-table-column label="资料说明" align="center" prop="zlsm"  :width="flexColumnWidth('zlsm',tableData)"/>
-          <el-table-column label="资料文件" align="center" prop="wenjianurl" />
+          <el-table-column label="资料文件" align="center" prop="wenjian" />
           <el-table-column label="上传人" align="center" prop="upman" :width="flexColumnWidth('upman',tableData)"/>
           <el-table-column label="上传时间" align="center" prop="addtime"  :width="150">
             <template slot-scope="scope">
@@ -116,7 +116,7 @@ export default {
         rwpcid:this.$route.query.rwpcid,
         jgdm:this.$route.query.jgdm,
         upman:this.$store.getters.name,
-        addtime: new Date().getTime(),
+        addtime: this.parseTime(new Date().getTime()),
         wenjian,
         wenjianurl,
         zlsm

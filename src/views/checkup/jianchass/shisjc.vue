@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <section v-show="!heshiOption.show" >
-      <el-form style="height:80px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="queryForm" :inline="true" v-show="showSearch">
+      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="queryForm" :inline="true" v-show="showSearch">
             <el-form-item label="案件来源" prop="ajly">
               <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
             </el-form-item>
@@ -59,9 +59,9 @@
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
           <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <el-button type="primary" plain size="small">取消核查</el-button>
-        </el-col>
+        <!-- <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+          <el-button type="primary" plain size="small" @click="canclHc">取消核查</el-button>
+        </el-col> -->
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库期初时间</label>
           <el-date-picker
@@ -104,7 +104,7 @@
           </el-radio-group>
         </div>
       </el-row>
-      <div class="table-main"  v-loading="loading" :style="{marginTop:'10px'}" v-if="tabsValue!=='four'&&tabsValue!=='six'">
+      <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
         <!-- <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable"> -->
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
@@ -120,9 +120,8 @@
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
-        <jinxiaohecha v-if="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" />
-        <liushui-table v-else ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
-        <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false"/>
+        <jinxiaohecha v-show="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
+        <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
       </div>
       <pagination
         class="fixed-bottom"
@@ -149,17 +148,17 @@
           <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
             <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
           </el-form-item>
-          <el-form-item label="期初库存数量" prop="wgfy" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
-          </el-form-item><el-form-item label="本期购入数量" prop="wgfy" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
-          </el-form-item><el-form-item label="现金销售数量" prop="wgfy" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
-          </el-form-item><el-form-item label="期末库存数量" prop="wgfy" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.qckc"></el-input>
+          </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.bqgr"></el-input>
+          </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.xjxs"></el-input>
+          </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.qmkc"></el-input>
           </el-form-item>
-          <el-form-item label="医保结算数量" prop="wgfy" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+          <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
+            <el-input v-model="xwrdForm.ybjs"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="bz">
             <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
@@ -169,6 +168,7 @@
           </el-form-item>
         </el-form>
       </div>
+      <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
      <!-- 查询条件 -->
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px">
@@ -309,7 +309,12 @@ export default {
         bz:'',
         zkdj:'',
         wgsl:'',
-        wgfy:''
+        wgfy:'',
+        qckc:'',
+        bqgr:'',
+        xjxs:'',
+        qmkc:'',
+        ybjs:''
       },
       //选中的违规行为对象
       xwrdChecd:{},
@@ -326,8 +331,6 @@ export default {
       selectionList:[],
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -337,7 +340,7 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 总条数
-      total: 110,
+      total: 0,
       // renwuthree表格数据
       renwuthreeList: [],
       renwufourList:[],
@@ -347,9 +350,9 @@ export default {
       title: "",
       // 核实状态字典
       hsztOptions:[
-        {dictValue:0,dictLabel:'未核实'},
-        {dictValue:1,dictLabel:'核实中'},
-        {dictValue:2,dictLabel:'已核实'}
+        {dictValue:'1',dictLabel:'未核实'},
+        {dictValue:'2',dictLabel:'核实中'},
+        {dictValue:'3',dictLabel:'已核实'}
       ],
       // 查询参数
       queryParams: {
@@ -405,6 +408,8 @@ export default {
   methods: {
     //规则筛查，进销核查切换
     tabsLevelChange1(val){
+      this.selectedId = ''
+      this.selectionList = []
       this.getList()
     },
     //同流水号明细，全明细切换
@@ -541,6 +546,10 @@ export default {
       }
     },
     xwrdSubmit(){
+      if(this.selectionList.length===0){
+        this.msgError('请选择一项在进行行为认定')
+        return
+      }
       const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
       if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
         this.msgError('违规费用不能大于明细项目医保结算金额')
@@ -549,21 +558,14 @@ export default {
       this.$refs['xwrdForm'].validate(async valid => {
           if (valid) {
             let res = ''
-            if(this.tabsValue==='four'){
-              const {type,xwbh,lx} = this.xwrdChecd
-              const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,wglx:lx}
-              if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
-                delete params.zkdj
-                delete  params.wgsl
-                delete  params.wgfy
-              }
-              res = await updateRenwufour(params)
-            } else if (this.tabsValue==='five') {//在第五层认定,需要同时更改第四层和第五层
-              // const { rwpcid,jgdm,mxxmbm,fid } = this.selectionList[0]
-              // const params = {id:this.selectedId,...this.xwrdForm,rwpcid,jgdm,mxxmbm,fid,xwrdr:this.$store.getters.name}
-              // delete params.gzmc
-              // res = await updateRenwufive(params)
+            const {type,xwbh,lx} = this.xwrdChecd
+            const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,wglx:lx}
+            if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
+              delete params.zkdj
+              delete  params.wgsl
+              delete  params.wgfy
             }
+            res = await updateRenwufour(params)
             if(res.code===200) {
               this.msgSuccess('操作成功')
               this.getList(this.searchNextParams)
@@ -580,8 +582,8 @@ export default {
                   bz:this.xwrdForm.bz,
                   rid:item.rwpcid,
                   jgdm:item.jgdm,
-                  fid:this.tabsValue=='four'?item.id:item.fid,
-                  type:this.tabsValue=='four'?4:5,
+                  fid:(this.tabsValue=='four'||this.tabsValue=='six')?item.id:item.fid,
+                  type:(this.tabsValue=='four'||this.tabsValue=='six')?4:5,
                 })
               })
 
@@ -651,6 +653,7 @@ export default {
             break;
           case 'six':
             params.type=2
+            params.ischeck=1
             res = await listRenwufour(params)
             break;
           case 'qmx':
@@ -825,11 +828,19 @@ export default {
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
-        this.tabsValue==='four' && (this.xwrdForm.gzmc = gzmc)//第五层使用上一层带过来的规则名称
         this.xwrdForm.zkdj = mxxmdj
         this.xwrdForm.wgsl = mxxmsl
         this.xwrdForm.wgfy = mxxmje
+        this.tabsValue==='four' && (this.xwrdForm.gzmc = gzmc)//第五层使用上一层带过来的规则名称
         this.xwrdForm.xwrd = ''
+        if(this.tabsValue==='six'){//进销核查
+          const {qckc,bqgr,xjxs,qmkc,ybjs} = selection[0]
+          this.xwrdForm.qckc = qckc
+          this.xwrdForm.bqgr = bqgr
+          this.xwrdForm.xjxs = xjxs
+          this.xwrdForm.qmkc = qmkc
+          this.xwrdForm.ybjs = ybjs
+        }
         // const shuliangList = selection.map(item=>item.mxxmsl)
         // const feiyong = selection.map(item=>item.mxxmje)
         // this.xwrdForm.mxxmsl = this.sum(shuliangList)
@@ -842,7 +853,12 @@ export default {
           bz:'',
           zkdj:'',
           wgsl:'',
-          wgfy:''
+          wgfy:'',
+          qckc:'',
+          bqgr:'',
+          xjxs:'',
+          qmkc:'',
+          ybjs:''
         }
       }
 
@@ -852,7 +868,7 @@ export default {
       this.tabsValue = 'five'
       this.selectedId = ''
       this.lsh = row.lsh || ''
-      this.searchNextParams = {lsh:row.lsh||''}
+      this.searchNextParams = {lsh:row.lsh||'',mxxmbm:row.mxxmbm}
       this.getList()
     },
     //操作记录
@@ -1001,7 +1017,7 @@ export default {
 }
 .xingweirz {
   .el-form-item {
-    margin-bottom: 2px !important;
+    margin-bottom: 12px !important;
   }
   &::v-deep .el-form-item__label {
     font-size: 12px !important;

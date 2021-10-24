@@ -101,9 +101,9 @@ export default {
         pageNum:1
       },
       hsztOptions:[
-        {dictValue:'0',dictLabel:'未核实'},
-        {dictValue:'1',dictLabel:'核实中'},
-        {dictValue:'2',dictLabel:'已核实'}
+        {dictValue:'1',dictLabel:'未核实'},
+        {dictValue:'2',dictLabel:'核实中'},
+        {dictValue:'3',dictLabel:'已核实'}
       ],
       xzqOptions:[]
     }
@@ -116,7 +116,7 @@ export default {
   },
   methods:{
     async getList(query){
-      let params ={...this.queryParams,...this.queryForm,hs:2}
+      let params ={...this.queryParams,...this.queryForm,hs:'2'}
       query&&(params = {...params,...query})
       this.loading = true
       const res = await listRenwuthree(params)
@@ -134,7 +134,7 @@ export default {
       const request = []
       let count = 0
       selection.forEach((item,i)=>{
-        request.push(updateRenwuthree({id:item.id,hs:1}))
+        request.push(updateRenwuthree({id:item.id,hs:'1'}))
         count++
         if(count===selection.length){
           this.loading= true

@@ -45,7 +45,7 @@ export default {
         prop:'gzmc'
       },{
         label:"涉及就诊人员数",
-        prop:'jsrc',
+        prop:'xjjzrs',
         hide:true
       },{
         prop: 'sjrcs',
@@ -66,9 +66,13 @@ export default {
           return this.formatMoney(jsfy,2)
         }
       },{
-        label: '任务来源',
+        label: '案件来源',
         fixedWidth:55,
         prop:'ajly'
+      },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
       }]
     }
   },

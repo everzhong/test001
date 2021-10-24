@@ -1,6 +1,7 @@
 <template>
   <div :class="{'hidden':hidden}" class="pagination-container">
     <el-pagination
+      class="pagination_1"
       :background="background"
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
@@ -139,10 +140,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .pagination-container {
   background: #fff;
   padding: 32px 16px;
+  &::v-deep .el-pagination {
+    &.pagination_1 {
+      width: 100%;
+      text-align: right;
+    }
+  }
 }
 .pagination-container.hidden {
   display: none;

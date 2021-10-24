@@ -92,7 +92,7 @@ export default {
         jsdj:'',//机构等级
         jslb:'',//就医类别
         dsfsc:'',//第三方筛查
-        yybf:'',//险种
+        ybbf:'',//险种
         xzq:'',//行政区
         status:'',//任务状态
         ajly:'',//案件来源

@@ -19,8 +19,18 @@
           <el-form-item label="机构名称" prop="jgmc">
             <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
           </el-form-item>
-            <el-form-item label="承办机构" prop="jcjg">
+          <el-form-item label="承办机构" prop="jcjg">
             <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
+          </el-form-item>
+          <el-form-item label="结算等级" prop="jsdj">
+            <el-select disabled v-model="queryInfoFrom.jsdj" placeholder=""  clearable style="width: 180px">
+            <el-option
+              v-for="dict in jsdjOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            />
+          </el-select>
           </el-form-item>
             <el-form-item label="检查组" prop="jczname">
             <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
@@ -186,12 +196,13 @@ export default {
       },
       tabsValue:'1',
       //上页带过来的参数
-      queryInfoFrom:{}
+      queryInfoFrom:{},
+      jsdjOptions:[]
     };
   },
   created() {
     this.queryInfoFrom = this.$route.query
-    // this.gitDic();
+    this.gitDic();
   },
   methods: {
     /** 查询调查取证列表 */
@@ -413,71 +424,8 @@ export default {
         })
     },
     gitDic(){
-      this.getDicts("${column.dictType}").then(response => {
-        this.qzidOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.rwpcidOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jgdmOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.typeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.zlsmOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.upmanOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.addtimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcddOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcstarttimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.jcendtimeOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.dwqcOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.addrOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.farenOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.telOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.zfryOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.xwnameOptions = response.data;
-      });
-      this.getDicts("sys_user_sex").then(response => {
-        this.sexOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.sfzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.lxdzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.bzOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.wenjianurlOptions = response.data;
-      });
-      this.getDicts("${column.dictType}").then(response => {
-        this.wenjianOptions = response.data;
+      this.getDicts("renwu_ss_jgdj").then(response => {
+        this.jsdjOptions = response.data;
       });
     }
   }

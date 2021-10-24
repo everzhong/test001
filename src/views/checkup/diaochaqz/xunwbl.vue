@@ -110,7 +110,7 @@
     <p class="qz-title has-bg">询问笔录列表</p>
     <el-radio-group v-model="tabsValue" size="small" @change="radioChange">
       <el-radio-button label="3">在线制作列表</el-radio-button>
-      <el-radio-button label="4">签字上传列表</el-radio-button>
+      <el-radio-button label="5">签字上传列表</el-radio-button>
     </el-radio-group>
     <el-radio-group size="small" class="top-right-btn">
       <fileUpload
@@ -158,22 +158,22 @@
         @pagination="getList"
       />
     </div>
-    <div v-show="tabsValue==='4'">
+    <div v-show="tabsValue==='5'">
       <el-table  class="qztable" :data="uploadList" border style="margin-top:10px">
-        <el-table-column label="序号" type="index" align="center"  />
-          <el-table-column label="资料文件" align="center" prop="wenjianurl" />
-          <el-table-column label="上传人" align="center" prop="upman" :width="flexColumnWidth('upman',uploadList)"/>
-          <el-table-column label="上传时间" align="center" prop="addtime"  :width="150">
+        <el-table-column label="序号" type="index" align="center"  width="66"/>
+          <el-table-column label="资料文件" align="left" prop="wenjian" />
+          <el-table-column label="上传人" align="left" prop="upman" :width="flexColumnWidth('upman',uploadList)"/>
+          <el-table-column label="上传时间" align="left" prop="addtime"  :width="150">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column label="操作" align="center" :width="100">
+          <el-table-column label="操作" align="center" :width="100">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">下载</el-button>
+              <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">查看</el-button>
               <el-button type="text" size="mini" @click="deleteDoc(scope.row)">删除</el-button>
             </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
       <pagination
         style="float:right"
@@ -242,6 +242,23 @@ export default {
     });
   },
   methods:{
+     downFile(url){
+      window.open(url)
+    },
+    deleteDoc(row){
+      this.$confirm('是否确认删除此文件?', "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          delDcqz(row.qzid)
+        }).then((res)=> {
+          this.msgSuccess('删除成功')
+          setTimeout(()=>{
+            this.getList()
+          },1000)
+        })
+    },
      /** 查询调查取证列表 type=3*/
     async getList(options) {
       const {rwpcid,jgdm} = this.urlQuery
@@ -388,17 +405,17 @@ export default {
     upSuccess(fileUrl,file){
       if(fileUrl) {
         addDcqz({
-          type:4,//扫描文件资料type:4
+          type:5,//扫描文件资料type:5 询问笔录的扫描件
           rwpcid:this.$route.query.rwpcid,
           jgdm:this.$route.query.jgdm,
           upman:this.$store.getters.name,
-          addtime: new Date().getTime(),
+          addtime: this.parseTime(new Date().getTime()),
           wenjian:file.name,
           wenjianurl:fileUrl
         }).then(res=>{
           if(res.code===200) {
             this.msgSuccess('上传成功')
-            this.tabsValue==='4'&&(this.getList())
+            this.tabsValue==='5'&&(this.getList())
           }
         })
       }

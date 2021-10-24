@@ -16,7 +16,7 @@
     >
       <!-- 上传按钮 -->
       <slot name="select-btn">
-        <el-button size="mini" type="primary" v-if="!needHide||!(needHide&&list.length)">选取文件</el-button>
+        <el-button :size="buttonOPtions.size" :type="buttonOPtions.type" v-if="!needHide||!(needHide&&list.length)">{{buttonOPtions.text}}</el-button>
       </slot>
       <!-- 上传提示 -->
       <div class="el-upload__tip" slot="tip" v-if="showTip">
@@ -47,6 +47,16 @@ import axios from 'axios'
 import { Loading } from 'element-ui';
 export default {
   props: {
+    buttonOPtions:{
+      type:Object,
+      default:()=>{
+        return {
+          type:'primary',
+          text:'选取文件',
+          size:'small'
+        }
+      }
+    },
     // 值
     value: [String, Object, Array],
     // 大小限制(MB)

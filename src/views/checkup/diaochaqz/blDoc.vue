@@ -14,15 +14,15 @@
       <div style="line-height:36px;margin-left:16px;">住址（单位地址）：<span>{{pageData.addr}}</span></div>
       <div style="line-height:36px;margin-left:16px;">工作单位（法定代表人）：<span>{{pageData.faren}}</span></div>
       <div style="line-height:36px;margin-left:16px;">执法人员：<span>{{pageData.zfry}}</span></div>
-      <div style="line-height:36px;margin-left:16px;">记录人：<span>{{pageData.jlry}}</span></div>
+      <div style="line-height:36px;margin-left:16px;">记录人：<span>{{pageData.upman}}</span></div>
       <br/>
       <br/>
       <div style="text-indent:2em;letter-spacing:2px;margin-top:10px;margin-bottom:40px;text-align:justify;line-height: 28px;">
-        我们（至少2人）是上海市医疗保险监督检查所的行政执法人员{{pageData.dcjg?`/${pageData.dcjg}`:''}}的行政执法人员，负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;"> {{pageData.jcnr}} </span>进行检查。
-      <br/>检查情况：{{pageData.jcqk}}</div>
+        我们（至少2人）是上海市医疗保险监督检查所的行政执法人员，负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;"> {{pageData.z1}} </span>进行检查。
+      <br/>检查情况：{{pageData.z2}}</div>
       <br/>
       <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>
-      <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>执法人员（签名）：</span><span>记录人（签名）：</span></div>
+      <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>执法人员（签名）：{{pageData.zfry}}</span><span>记录人（签名）：{{pageData.upman}}</span></div>
     </div>
   </div>
 </template>

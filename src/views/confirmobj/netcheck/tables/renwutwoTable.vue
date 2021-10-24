@@ -91,10 +91,10 @@ export default {
         prop:'sjwgs'
       },{
         label:"涉及就诊人员数",
-        prop:'jsrc',
+        prop:'jsry',
         hide:true
       },{
-        prop: 'sjrcs',
+        prop: 'jsrc',
         label: '涉及就诊人次数',
       },{
         label:"疑点金额(元)",

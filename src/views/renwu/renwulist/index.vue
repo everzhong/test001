@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" v-show="showSearch" label-width="60px" style="max-height:94px;overflow:auto;margin-bottom:5px">
+    <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" v-show="showSearch" label-width="60px" style="max-height:80px;overflow:auto;margin-bottom:5px">
       <div>
         <el-form-item label="批次号" prop="rwpicd">
           <el-input
@@ -8,7 +8,7 @@
             placeholder="请输入"
             clearable
             size="small"
-            style="width: 180px"
+            style="width: 170px"
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
@@ -18,21 +18,21 @@
             placeholder="请输入，支持模糊搜索"
             clearable
             size="small"
-            style="width: 180px"
+            style="width: 170px"
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
-        <el-form-item label="委托机构" prop="wtjg">
-          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 180px"></el-input>
-        </el-form-item>
+        <!-- <el-form-item label="委托机构" prop="wtjg">
+          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.wtjg" clearable size="small" style="width: 170px"></el-input>
+        </el-form-item> -->
         <el-form-item label="承办机构" prop="cbjg">
-          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 180px"></el-input>
+          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 170px"></el-input>
         </el-form-item>
         <el-form-item label="任务推送日期" label-width="80px">
           <el-date-picker
             v-model="dateRange"
             size="small"
-            style="width: 220px"
+            style="width: 210px"
             value-format="yyyy-MM-dd"
             type="daterange"
             range-separator="-"
@@ -114,7 +114,7 @@ export default {
       },{
         prop: 'rwmc',
         label: '任务名称',
-        // hide: true
+        hide: true
       },{
         prop: 'ajly',
         label: '案件来源',
@@ -164,6 +164,9 @@ export default {
         viewFun:(ybbf)=>{
           return this.selectDictLabels(this.ybbfOptions,ybbf)
         }
+      },{
+        prop: 'cbjg',
+        label: '承办机构',
       }],
       dateRange:[],
       // 遮罩层
@@ -264,7 +267,7 @@ export default {
     this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
-    this.tableHeight = this.calcTableHeight(7)
+    this.tableHeight = this.calcTableHeight(5)
   },
   methods: {
     /** 查询renwuone列表 */

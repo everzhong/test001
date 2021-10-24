@@ -1,24 +1,6 @@
 <template>
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
     <el-table-column label="序号" type="index" align="center" width="60" slot="fixed"/>
-    <el-table-column label="批次号" align="center" prop="rwpcid" :width="flexColumnWidth('rwpcid',tableData)"/>
-    <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',tableData)"/>
-    <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>
-    <el-table-column label="机构名称" align="center" prop="jgmc"  :width="flexColumnWidth('jgmc',tableData)"/>
-    <el-table-column label="规则分类" align="center" prop="gzfl"  :width="flexColumnWidth('gzfl',tableData)"/>
-    <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
-    <el-table-column label="涉及就诊人员数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',tableData)"/>
-    <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',tableData)"/>
-    <el-table-column label="疑点金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.xjje,2)}}</span>
-      </template>
-    </el-table-column>
-     <el-table-column label="结算费用(元)" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',tableData)">
-      <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.jsfy,2)}}</span>
-      </template>
-    </el-table-column>
     <el-table-column label="操作" align="center" min-width="150" slot="operate">
       <template slot-scope="scope">
         <el-button
@@ -80,9 +62,13 @@ export default {
           return this.formatMoney(jsfy,2)
         }
       },{
-        label: '任务来源',
+        label: '案件来源',
         fixedWidth:55,
         prop:'ajly'
+      },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
       }]
     }
   },

@@ -18,47 +18,19 @@
         </el-col>
       </el-row>
     </div>
-    <div :class="[tabsValue==='four'?'four-type':'nor-type']"  v-loading="loading">
-      <el-table v-show="tabsValue==='three'" class="qztable" style="margin-top:10px" :data="renwuthreeList" border height="100%"> 
-        <el-table-column  align="center" width="55">
+    <div :class="[tabsValue==='four'?'four-type':'nor-type']"  v-loading="loading"  style="margin-top:10px">
+      <sTable v-show="tabsValue==='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
+         <el-table-column  align="center" width="55" slot="fixed">
           <template slot-scope="scope">
             <el-radio :label="scope.row.id" v-model="rwCheck" @change="radioChange"></el-radio>
           </template>
         </el-table-column>
-        <el-table-column label="序号" type="index" align="center"/>
-        <el-table-column label="规则分类" align="center" prop="gzfl" :width="flexColumnWidth('gzfl',renwuthreeList)"/>
-        <el-table-column label="规则名称" align="center" prop="gzmc"  width="350" show-overflow-tooltip/>
-        <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrs"  :width="flexColumnWidth('xjjzrs',renwuthreeList)"/>
-        <el-table-column label="涉及明细数" align="center" prop="xjmxs"  :width="flexColumnWidth('xjmxs',renwuthreeList)"/>
-        <el-table-column label="疑点金额(元)" align="center" prop="xjje"  :width="flexColumnWidth('xjje',renwuthreeList)">
-          <template slot-scope="scope">
-            <span>{{formatMoney(scope.row.xjje,2)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="结算总费用" align="center" prop="jsfy"  :width="flexColumnWidth('jsfy',renwuthreeList)">
-          <template slot-scope="scope">
-            <span>{{formatMoney(scope.row.jsfy,2)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="确定核实时间" align="center" prop="hssj" :width="flexColumnWidth('hssj',renwuthreeList)">
-          <template slot-scope="scope">
-            <span>{{parseTime(scope.row.hssj,'{y}-{m}-{d} {h}:{m}:{s}')}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="核实状态" align="center" prop="hszt"  :width="flexColumnWidth('hszt',renwuthreeList)"/>
-        <el-table-column label="核实意见" align="center" prop="hsr" show-overflow-tooltip/>
-        <el-table-column label="核实人" align="center" prop="hsr"  :width="flexColumnWidth('hsr',renwuthreeList)"/>
-        <el-table-column label="核实时间" align="center" prop="hspfsj" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{parseTime(scope.row.hspfsj,'{y}-{m}-{d} {h}:{m}:{s}')}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" prop="hspfsj" width="150">
+        <el-table-column label="操作" align="center" width="150" slot="operate">
           <template>
             <el-button type="text" size="mini" @click="checkLiushui">流水号项目汇总</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </sTable>
       <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" :noLog="true"  @checkdetail="tongLiushuimx"></liushui-table>
       <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList"></tongliumx>
       <pagination
@@ -117,6 +89,57 @@ export default {
   },
   data(){
     return {
+      tableHeader:[{
+        prop:'gzfl',
+        label:'规则分类',
+        fixedWidth:80,
+      },{
+        prop:'gzmc',
+        label:'规则名称',
+        fixedWidth:66
+      },{
+        prop:'xjjzrs',
+        label:'涉及就诊人次数'
+      },{
+        prop:'xjmxs',
+        label:'涉及明细数'
+      },{
+        prop:'xjje',
+        label:'疑点金额(元)',
+        viewFun:(xjje)=>{
+          return this.formatMoney(xjje,2)
+        }
+      },{
+        prop:'jsfy',
+        label:'结算总费用',
+        viewFun:(jsfy)=>{
+          return this.formatMoney(jsfy,2)
+        }
+      },{
+        prop:'hssj',
+        label:'确定核实时间',
+        viewFun:(hssj)=>{
+          return this.parseTime(hssj)
+        }
+      },{
+        prop:'hs',
+        label:'核实状态',
+        viewFun:(hs)=>{
+          return (hs==1?'未核实': hs==2?'核实中': hs==3?'已核实':'')
+        }
+      },{
+        prop:'hsyj',
+        label:'核实意见'
+      },{
+        prop:'hsr',
+        label:'核实人'
+      },{
+        prop:'hspfsj',
+        label:'核实时间',
+        viewFun:(hspfsj)=>{
+          return this.parseTime(hspfsj)
+        }
+      }],
       loading:false,
       chaxunDialog:false,
       rwCheck:'',
@@ -128,11 +151,10 @@ export default {
         pageNum:1
       },
       queryForm:{
-        ybd:'01',
+        ybd:'',
         gzmc:'',
         gzfl:'',
-        xwrd:'',
-        hszt:null
+        xwrd:''
       },
       total:0,
       hsztOptions:[
@@ -197,7 +219,7 @@ export default {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
-            res = await listRenwuthree(params)
+            res = await listRenwuthree({hs:3,...params})
             break;
           case 'four':
             res = await listRenwufour(params)
