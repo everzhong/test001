@@ -72,9 +72,13 @@ export default {
         fixedWidth:55,
         prop:'jgdm'
       },{
-        label: '任务来源',
+        label: '案件来源',
         fixedWidth:55,
         prop:'ajly'
+      },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
       }]
     }
   },

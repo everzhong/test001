@@ -1,5 +1,5 @@
 <template>
-  <div style="width:655px;padding:0;margin-left:32px;margin:auto">
+  <div id="xwbl" style="width:655px;padding:0;margin-left:32px;margin:auto">
     <h1 style="margin:0 0 12px 0;font-size:18px;font-weight:normal;text-align:center">上海市静安区医疗保障局</h1>
     <p style="font-size:14px;text-align:center;letter-spacing:5px">行政执法文书</p>
     <div style="text-align:right;font-size: 12px;margin-bottom: 10px;margin-right: 10px;margin-top: 10px;">

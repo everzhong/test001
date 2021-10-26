@@ -26,7 +26,7 @@ export default {
       xzqOptions:[],
       tableHeader:[{
         label:"监管状态",
-        prop:'jgzt',
+        prop:'status',
         width: '150px',
         viewFun: (status)=>{
           return this.selectDictLabels(this.statusOptions, status+'')

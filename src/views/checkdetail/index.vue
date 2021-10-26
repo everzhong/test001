@@ -5,14 +5,14 @@
       <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
     </div>
     <el-row :gutter="10">
-      <el-col :span="1.5" v-if="tabsValue==='two'&!mxShow">
+      <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
         <el-button
           type="primary"
           size="small"
           @click="handleNetCheck"
         >派发网审</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'&!mxShow">
+      <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
         <el-button
           type="primary"
           size="small"
@@ -38,8 +38,8 @@
     <div v-loading="loading" v-show="!mxShow" :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topHeight}">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
-      <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
-        <el-table-column slot="fixed" type="selection" width="55" align="center"/>
+      <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange">
+        <el-table-column v-if="!isRwcx" slot="fixed" type="selection" width="55" align="center"/>
         <el-table-column slot="fixed" label="序号" type="index" align="center"/>
         <el-table-column label="操作" align="center" width="180" slot="operate">
           <template slot-scope="scope">
@@ -65,7 +65,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div :class="[isFromLuli?'table-main1':'table-main']" v-if="xgmxOptions.show||qmxOptions.show">
+    <div :class="[isFromLuli?'table-main1':'table-main']" v-if="xgmxOptions.show||qmxOptions.show" :style="{top:topHeight}">
       <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
       <quanmingxi :options="qmxOptions" v-else />
     </div>
@@ -73,8 +73,8 @@
 </template>
 <script>
 import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck,setSancha} from "@/api/renwu/renwutwo"
-import { listRenwuthreeTab } from '@/api/renwu/renwuthree'
-import { listRenwufourTab } from '@/api/renwu/renwufour'
+import { listRenwuthreeTab,listRenwuthreeRj } from '@/api/renwu/renwuthree'
+import { listRenwufourTab,listRenwufourRj } from '@/api/renwu/renwufour'
 import { submitDxqd} from "@/api/renwu/dcqz"
 import SearchItem from '../common/searchItems'
 import RenwuthreeTable from '../common/renwuthreeTable'
@@ -289,10 +289,12 @@ export default {
       //
       tabsValue:'two',
       noThirdCheckList:[],
-      resql:''
+      resql:'',
+      isRwcx:false
     };
   },
   created() {
+    this.isRwcx = this.$route.query.isrwcx == 1
     this.isFromLuli = this.$route.query.fromLuli
     this.isFromLuli && (this.tabsValue='three')
     this.getList();
@@ -301,7 +303,6 @@ export default {
     });
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
-
   },
   mounted(){
     this.topHeight = this.calcTableHeight(32+5+10,this.isFromLuli)
@@ -340,15 +341,16 @@ export default {
       const params = options?{...this.queryParams,...options}:this.queryParams
       const { query } = this.$route
       params.rwpcid = query?.rwpcid
+      this.isRwcx && (delete params.status)//任务查询，查询所有状态的
       this.loading = true
       try {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
-            res = await listRenwuthreeTab(params)
+            res = await listRenwuthreeRj(params)
             break;
           case 'four':
-            res = await listRenwufourTab(params)
+            res = await listRenwufourRj(params)
             break;
           default:
             res = await listRenwutwo(params)
@@ -774,21 +776,31 @@ export default {
       this.xgmxOptions.show=false
       this.queryParams.pageNum = 1
       this.total = 0
-      val!=='three' && (this.threeIds=[])
+      val!=='four' && (this.threeIds=[])
       if(this.ids.length && (val==='three'||(val==='four'&& this.threeIds.length===0))){
-        const jgdmList = this.selectionList.map(item=>item.jgdm)
-        this.getList({jgdm:jgdmList.join(',')})
-      } else if(val==='four' && this.threeIds.length){//勾选了第三层，则用勾选的参数去查第四层
-        const pchList = this.selectionThreeList.map(item=>item.rwpcid)
-        const jgdmList = this.selectionThreeList.map(item=>item.jgdm)
-        const xmbmList = this.selectionThreeList.map(item=>item.mxxmbm)
-        console.log(pchList,jgdmList,xmbmList)
-        this.getList({
-          pch:pchList.join('')?pchList.join(','):'',
-          rwpcid:pchList.join('')?pchList.join(','):'',
-          jgdm:jgdmList.join('')?jgdmList.join(','):'',
-          mxxmbm:xmbmList.join('')?xmbmList.join(','):'',
+        const resql = []
+        this.selectionList.forEach(item=>{
+          resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}')`)
         })
+        this.getList({resql:resql.join(' or ')})
+        // const jgdmList = this.selectionList.map(item=>item.jgdm)
+        // this.getList({jgdm:jgdmList.join(',')})
+      } else if(val==='four' && this.threeIds.length){//勾选了第三层，则用勾选的参数去查第四层
+        const resql = []
+        this.selectionThreeList.forEach(item=>{
+          resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}' and gzmc='${item.gzmc}')`)
+        })
+        this.getList({resql:resql.join(' or ')})
+        // const pchList = this.selectionThreeList.map(item=>item.rwpcid)
+        // const jgdmList = this.selectionThreeList.map(item=>item.jgdm)
+        // const xmbmList = this.selectionThreeList.map(item=>item.mxxmbm)
+        // console.log(pchList,jgdmList,xmbmList)
+        // this.getList({
+        //   pch:pchList.join('')?pchList.join(','):'',
+        //   rwpcid:pchList.join('')?pchList.join(','):'',
+        //   jgdm:jgdmList.join('')?jgdmList.join(','):'',
+        //   mxxmbm:xmbmList.join('')?xmbmList.join(','):'',
+        // })
       } else {
         this.ids = []
         if(this.resql){

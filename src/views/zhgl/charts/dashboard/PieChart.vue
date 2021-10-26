@@ -21,6 +21,21 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    seriesData: {
+      type:Array,
+      default(){
+        return [{
+          label:'',
+          data:[]
+        },{
+          label:'',
+          data:[]
+        },{
+          label:'',
+          data:[]
+        }]
+      }
     }
   },
   data() {
@@ -52,62 +67,51 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['门诊', '住院', 'Forex', 'Gold', 'Forecasts']
+          data: ['疑点费用', '认定费用', '人次']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: this.seriesData[0]?.label||'',
             type: 'pie',
             //roseType: 'radius',
             radius: [25, 85],
             center: ['18%', '38%'],
-            data: [
-              { value: 320, name: '门诊' },
-              { value: 240, name: '住院' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.seriesData[0]?.data||[],
            
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           },
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: this.seriesData[1]?.label||'',
             type: 'pie',
             //roseType: 'radius',
             radius: [25, 85],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: '门诊' },
-              { value: 240, name: '住院' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.seriesData[1]?.data||[],
            
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           },
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: this.seriesData[2]?.label||'',
             type: 'pie',
             //roseType: 'radius',
             radius: [25, 85],
             center: ['80%', '38%'],
-            data: [
-              { value: 320, name: '门诊' },
-              { value: 240, name: '住院' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.seriesData[2]?.data||[],
            
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }
         ]
       })
+    }
+  },
+  watch: {
+    seriesData(){
+      this.chart.dispose()
+      this.chart = null
+      this.initChart()
     }
   }
 }

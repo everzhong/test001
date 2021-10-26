@@ -288,7 +288,7 @@ export default {
       // }
       const data = row[0]
       window.localStorage.setItem('PRDATA',JSON.stringify(row))
-      const path =`/checkup/${isView?`viewNotice?rwpcid=${data.rwpcid}&jgmc=${data.jgmc}`:'addNotice'}`
+      const path =`/checkup/${isView?`viewNotice?rwpcid=${data.rwpcid}&jgmc=${data.jgmc}&wjh=${data.wjh?data.wjh:''}`:'addNotice'}`
       this.$router.push({
         path:path,
       })

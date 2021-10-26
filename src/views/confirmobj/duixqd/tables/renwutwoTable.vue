@@ -32,8 +32,7 @@ export default {
         prop:'wsry'
       },{
         label:"监管状态",
-        prop:'jgzt',
-        width: '150px',
+        prop:'status',
         viewFun: (status)=>{
           return this.selectDictLabels(this.statusOptions, status+'')
         }

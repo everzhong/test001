@@ -83,3 +83,39 @@ export function getListjc(query) {
         params: query
     })
 }
+//获取图形数据tjjzlx
+export function getTjjzlx1(query) {
+    return request({
+        url: '/renwu/renwufour/tjjzlx',
+        method: 'get',
+        params: query
+    })
+}
+export function getTjjzlx2(query) {
+    return request({
+        url: '/renwu/renwufour/tjjzlx2',
+        method: 'get',
+        params: query
+    })
+}
+export function getTjjzlx3(query) {
+    return request({
+        url: '/renwu/renwufour/tjjzlx3',
+        method: 'get',
+        params: query
+    })
+}
+export function getTjjzlx4(query) {
+    return request({
+        url: '/renwu/renwufour/tjjzlx4',
+        method: 'get',
+        params: query
+    })
+}
+export function getTjjzlx5(query) {
+    return request({
+        url: '/renwu/renwufour/tjjzlx5',
+        method: 'get',
+        params: query
+    })
+}

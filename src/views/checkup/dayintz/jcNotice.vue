@@ -3,7 +3,7 @@
     <div class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所 </h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
-      <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/×医保监督通（××××）×号</div>
+      <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/×医保监督通{{$route.query.wjh}}号</div>
         <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">监督检查通知书</div>
           <div style="text-align: left;display:inline-block;border-bottom: 1px solid #330313;margin-bottom: 30px;min-width:80px">{{pageData.jgmc?(pageData.jgmc+'：'):''}}</div>

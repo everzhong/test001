@@ -198,7 +198,6 @@ export default {
   methods: {
     toImage(id,name){
       const {rwpcid,jgmc} = this.$route.query
-      console.log(this.$route.query)
       let canvasImg = document.getElementById(id)
       html2canvas(canvasImg,{
         width:1000,

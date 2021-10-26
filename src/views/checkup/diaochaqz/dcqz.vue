@@ -201,8 +201,11 @@ export default {
     };
   },
   created() {
+    this.getDicts("renwu_ss_jgdj").then(response => {
+      this.jsdjOptions = response.data;
+    });
     this.queryInfoFrom = this.$route.query
-    this.gitDic();
+    console.log(this.queryInfoFrom)
   },
   methods: {
     /** 查询调查取证列表 */
@@ -423,11 +426,6 @@ export default {
           this.exportLoading = false;
         })
     },
-    gitDic(){
-      this.getDicts("renwu_ss_jgdj").then(response => {
-        this.jsdjOptions = response.data;
-      });
-    }
   }
 };
 </script>

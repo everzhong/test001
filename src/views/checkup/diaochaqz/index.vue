@@ -89,7 +89,7 @@ export default {
         label: '机构名称',
         fixedWidth:60,
       },{
-        prop: 'dcjg',
+        prop: 'jcjg',
         label: '承办机构',
       },{
         prop: 'jczname',
@@ -394,10 +394,10 @@ export default {
       this.getList()
     },
     naviGateToQz(row){
-      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jcjg,jczname} = row
+      const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jcjg,jczname,jsdj} = row
       this.$router.push({
         path:'/checkup/jcss/dcqz',
-        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczname:jczname||'',jcjg:jcjg||''}
+        query:{jgdm:jgdm||'',rwpcid:rwpcid||'',ybbf:ybbf||'',jslb:jslb||'',datastarttime:datastarttime||'',dataendtime:dataendtime||'',jgmc:jgmc||'',jczname:jczname||'',jcjg:jcjg||'',jsdj:jsdj||''}
       })
     }
   }

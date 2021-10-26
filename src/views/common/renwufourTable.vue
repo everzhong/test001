@@ -83,6 +83,9 @@ export default {
       },{
         prop: 'ajly',
         label: '案件来源'
+      },{
+        prop: 'zyts',
+        label: '住院天数'
       }]
     }
   },

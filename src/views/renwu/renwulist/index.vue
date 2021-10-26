@@ -258,10 +258,12 @@ export default {
       },
       radioCheck:'',
       radioSelection:{},
-      tableHeight:0
+      tableHeight:0,
+      isRwcx:false,//任务列表，任务查询菜单都指向此页面，通过路由区分是任务列表还是任务查询
     };
   },
   created() {
+    this.isRwcx = this.$route.name==='Rwcx'
     this.getList();
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
@@ -281,6 +283,7 @@ export default {
         this.queryParams.rwendtime = ''
       }
       const params =  query?{...this.queryParams,status:0,...query}:{...this.queryParams,status:0}
+      this.isRwcx && (delete params.status)//任务查询菜单进来，查询所有状态数据
       listRenwuone(params).then(response => {
         this.renwuoneList = response.rows;
         this.total = response.total;
@@ -427,7 +430,7 @@ export default {
      */
     checkdetail(row){
       this.$router.push({
-        path:`/renwu/checkdetail?rwpcid=${row.rwpcid}`,
+        path:`/renwu/checkdetail?rwpcid=${row.rwpcid}&isrwcx=${this.isRwcx?1:0}`,
       })
     },
     /** 提交按钮 */

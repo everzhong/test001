@@ -145,7 +145,7 @@ export default {
       this.tableData = this.tableData.concat(selection)
     },
     async getList(query){
-      let params ={...this.queryParams,...this.queryForm,hs:'1'}
+      let params ={...this.queryParams,...this.queryForm,hs:'1',jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       query&&(params = {...params,...query})
       this.loading = true
       const res = await listRenwuthree(params)

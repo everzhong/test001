@@ -75,34 +75,6 @@
         </div>
         <div class="pre-view">
           <p class="top-tip">预览询问笔录</p>
-          <!-- <div id="docPart" style="width:655px;padding:0;margin-left:32px" ref="docPart">
-            <h1 style="margin:0 0 12px 0;font-size:18px;font-weight:normal;text-align:center">上海市静安区医疗保障局</h1>
-            <p style="font-size:14px;text-align:center;letter-spacing:5px">行政执法文书</p>
-            <div style="text-align:right;font-size: 12px;margin-bottom: 10px;margin-right: 10px;margin-top: 10px;">
-              第<span style="padding:0 8px"></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span style="padding:0 8px"></span>页</div>
-            <div style="padding:30px 35px;font-size:16px;border:1px solid #303313;letter-spacing:1px">
-              <p style="font-weight:600;text-align: center;">询问笔录</p>
-              <div style="line-height:36px">调查时间：{{parseTime(zhizuo.jcsj[0],'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(zhizuo.jcsj[1],'{y}年{m}月{d}日{h}时{m}分')}}</div>
-              <div style="line-height:36px">调查地点：{{zhizuo.jcdd}}</div>
-              <p style="line-height:36px">被询问人信息：</p>
-              <div style="line-height:36px;margin-left:16px;">姓名：{{zhizuo.xwname}}</div>
-              <div style="line-height:36px;margin-left:16px;">性别：{{zhizuo.sex=='0'?'男':zhizuo.sex=='1'?'女':'未知'}}</div>
-              <div style="line-height:36px;margin-left:16px;">联系地址：{{zhizuo.lxdz}}</div>
-              <div style="line-height:36px;margin-left:16px;">工作单位：{{zhizuo.dwqc}}</div>
-              <div style="line-height:36px;margin-left:16px;">联系电话：{{zhizuo.tel}}</div>
-              <div style="line-height:36px;margin-left:16px;">身份证号：{{zhizuo.sfz}}</div>
-              <div style="line-height:36px;margin-left:16px;">记录人：{{zhizuo.upman}}</div>
-              <br/>
-              <p style="text-indent:2em;letter-spacing:2px;margin-top:10px;margin-bottom:40px;text-align:justify;line-height: 28px;">
-                告知（宣读）：我们是上海市医疗保险监督检查所的行政执法人员{{urlQuery.dcjg?`/${urlQuery.dcjg}`:''}}，这是我们的执法证件，现在对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;">{{zhizuo.z1}}</span>之事进行调查。你享有以下权利：执法人员少于两人或执法证件与身份不符的，有权拒绝调查询问；同时你应承担以下义务：如实提供有关材料、回答询问，不得拒绝、阻挠调查。请你配合我们。
-              <br>询问内容：{{zhizuo.z2}}
-              </p>
-              <br/>
-              <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;">
-                <span>被调查人（签名）：</span><span>承办人（签名）：</span>
-              </div>
-            </div>
-          </div> -->
           <xw-doc :pageData="{dcjg:urlQuery.dcjg,...zhizuo,jcstarttime:zhizuo.jcsj[0]||'',jcendtime:zhizuo.jcsj[1]||''}"/>
         </div>
       </div>
@@ -140,12 +112,9 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="opertation(scope.row,'editQz')">修改</el-button>
-            <!-- <el-button type="text" size="mini" @click="opertation(scope.row,'downloadQz')">下载</el-button> -->
-            <el-button type="text" size="mini" @click="printDoc(scope.row)">下载</el-button>
+            <el-button type="text" size="mini" @click="downloadQz(scope.row)">下载</el-button>
             <el-button type="text" size="mini" @click="opertation(scope.row,'deleteQz')">删除</el-button>
-            <!-- <el-button type="text" size="mini" v-print="{id:'docPart',popTitle:'询问笔录'}">打印</el-button> -->
             <el-button type="text" size="mini" @click="printDoc(scope.row)">打印</el-button>
-
           </template>
         </el-table-column>
       </el-table>
@@ -170,7 +139,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" :width="100">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">查看</el-button>
+              <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">下载</el-button>
               <el-button type="text" size="mini" @click="deleteDoc(scope.row)">删除</el-button>
             </template>
         </el-table-column>
@@ -193,7 +162,8 @@
 import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
 import FileUpload from '@/components/FileUpload';
 import XwDoc from './xwDoc.vue'
-
+import html2canvas from 'html2canvas'
+import JsPDf from 'jspdf'
 export default {
   name:'Xunwbl',
   data(){
@@ -242,7 +212,7 @@ export default {
     });
   },
   methods:{
-     downFile(url){
+    downFile(url){
       window.open(url)
     },
     deleteDoc(row){
@@ -283,8 +253,8 @@ export default {
         jgdm:this.urlQuery.jgdm,
         ...this.zhizuo
       }
-      params.jcstarttime = this.zhizuo.jcsj[0]
-      params.jcendtime = this.zhizuo.jcsj[1]
+      params.jcstarttime = this.zhizuo.jcsj[0]?this.parseTime(this.zhizuo.jcsj[0].getTime()):""
+      params.jcendtime = this.zhizuo.jcsj[1]?this.parseTime(this.zhizuo.jcsj[1].getTime()):""
       delete params.jcsj
       if(this.opertationType==='edit'){//修改
         this.editQuzheng(params)
@@ -350,24 +320,37 @@ export default {
         })
     },
     downloadQz(row){
-      row.jcsj = []
-      if(row.jcendtime && row.jcstarttime) {
-        row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
-      }
-      this.zhizuo = {...row}
+      this.editQz(row,true)
+      const {xwname} = row
+      let canvasImg = document.getElementById('xwbl')
       setTimeout(()=>{
-        this.exportPdf(row?.xwname||'')
-      },200)
+        html2canvas(canvasImg,{
+          width:1000,
+          allowTaint:true,
+          useCORS:true
+        }).then(canvas=>{
+          let url = canvas.toDataURL('image/jpeg');
+          let contentWidth = canvas.width
+          let contentHeight = canvas.height
+          let imgWidth = 595.28
+          let imgHeight = 595.28/(contentWidth/contentHeight)
+          let PDF = new JsPDf('p','px','a4')
+          PDF.addImage(url,"JPEG",30,25,imgWidth,imgHeight)
+          PDF.save(`${xwname}-询问笔录.pdf`)
+        },300)
+      })
     },
-    editQz(row){
+    editQz(row,noScoll){
       this.opertationType = 'edit'
       row.jcsj = []
       if(row.jcendtime && row.jcstarttime) {
         row.jcsj = [new Date(row.jcstarttime),new Date(row.jcendtime)]
       }
       this.zhizuo = {...row}
-      window.scrollTo(0,100);
-      document.getElementsByClassName('zhizuo-outer')[0].scrollTop = 0
+      if(!noScoll){
+        window.scrollTo(0,100);
+        document.getElementsByClassName('zhizuo-outer')[0].scrollTop = 0
+      }
     },
     printQz(){
 

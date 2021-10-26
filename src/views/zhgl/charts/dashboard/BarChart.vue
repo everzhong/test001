@@ -23,6 +23,15 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    seriesData: {
+      type:Object,
+      default(){
+        return {
+          label:[],
+          data:[[],[],[]]
+        }
+      }
     }
   },
   data() {
@@ -45,7 +54,6 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -62,7 +70,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['宝山医院', '第六医院', '杨浦区市东医院', '嘉定区南翔医院', '上海市虹口区江湾医院', '上海市虹口区江湾医院', '上海市宝山区吴淞中心医院'],
+          data: this.seriesData?.label||[],
           axisTick: {
             alignWithLabel: true
           }
@@ -78,24 +86,31 @@ export default {
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: this.seriesData?.data[0]||[],
           animationDuration
         }, {
           name: '认定费用',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
+          data: this.seriesData?.data[1]||[],
           animationDuration
         }, {
           name: '人次',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: this.seriesData?.data[2]||[],
           animationDuration
         }]
       })
+    }
+  },
+  watch: {
+    seriesData(){
+      this.chart.dispose()
+      this.chart = null
+      this.initChart()
     }
   }
 }
