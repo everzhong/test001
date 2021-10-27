@@ -4,7 +4,8 @@ const user = {
     state: {
         fylbOptions: [], //费用类别
         jslbOptions: [], //就医类型
-        ybbfOptions: [] //险种
+        ybbfOptions: [], //险种
+        jsdjOptions: [], //结算等级
     },
 
     mutations: {
@@ -16,6 +17,9 @@ const user = {
         },
         SET_YBBFOPTIONS: (state, list) => {
             state.ybbfOptions = list
+        },
+        SET_JSDJOPTIONS: (state, list) => {
+            state.jsdjOptions = list
         }
     },
 
@@ -44,6 +48,16 @@ const user = {
             return new Promise((resolve, reject) => {
                 getDicts("renwu_ss_ybbf").then(res => {
                     commit('SET_YBBFOPTIONS', res.data)
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                });
+            })
+        },
+        GetJsdjList({ commit }, userInfo) {
+            return new Promise((resolve, reject) => {
+                getDicts("renwu_ss_jgdj").then(res => {
+                    commit('SET_JSDJOPTIONS', res.data)
                     resolve()
                 }).catch(error => {
                     reject(error)

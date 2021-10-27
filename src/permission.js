@@ -30,6 +30,7 @@ router.beforeEach((to, from, next) => {
                     store.dispatch('GetFyList');
                     store.dispatch('GetJsList');
                     store.dispatch('GetYbbfList');
+                    store.dispatch('GetJsdjList');
                     const roles = res.roles;
                     store.dispatch('GenerateRoutes').then(accessRoutes => {
                         router.addRoutes(accessRoutes) // 动态添加可访问路由表

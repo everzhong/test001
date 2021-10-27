@@ -55,6 +55,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
+        viewFun: (jsdj)=>{
+          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        }
       },{
         prop: 'xzq',
         label: '行政区',

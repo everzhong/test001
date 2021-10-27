@@ -48,6 +48,14 @@ export default {
         fixedWidth:30,
         prop:'rwpcid'
       },{
+       label: '机构代码',
+        fixedWidth:55,
+        prop:'jgdm'
+      },{
+        label: '机构名称',
+        fixedWidth:60,
+        prop:'jgmc'
+      },{
          label: '案件来源',
         fixedWidth:50,
         prop:'ajly',
@@ -72,6 +80,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
+        viewFun: (jsdj)=>{
+          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        }
       },{
         label:"数据开始日期",
         prop:'datastarttime',
@@ -85,16 +96,8 @@ export default {
           return this.parseTime(time,'{y}-{m}')
         }
       },{
-       label: '机构代码',
-        fixedWidth:55,
-        prop:'jgdm'
-      },{
         label:"统一社会信用代码",
         prop:'xydm'
-      },{
-        label: '机构名称',
-        fixedWidth:60,
-        prop:'jgmc'
       },{
         label:"承办机构",
         prop:'jcjg'

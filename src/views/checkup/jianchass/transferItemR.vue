@@ -2,34 +2,29 @@
   <div style="width:100%;height:100%">
     <el-row :gutter="10">
       <el-col :span="1.5">
-        <span style="margin-right:10px;font-size:14px;color:#606266">{{options.title||'待选择'}}</span>
-        <el-select v-model="queryForm.ybd" size="small">
+        <span style="margin-right:10px;font-size:12px;color:#606266">{{options.title||'待选择'}}</span>
+        <el-select v-model="queryGzForm.ybd" size="mini"  @change="ybdChange" style="width:90px" v-if="tabsValue==1">
           <el-option label="本地" value="01"></el-option>
           <el-option label="异地" value="02"></el-option>
         </el-select>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
+        <el-button type="primary" plain size="mini" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
+      <div class="top-right-btn">
+        <el-radio-group v-model="tabsValue" size="mini" @change="tabsLevelChange">
+          <el-radio-button label="1">规则筛查</el-radio-button>
+          <el-radio-button label="2">进销核查</el-radio-button>
+        </el-radio-group>
+      </div>
     </el-row>
-    <div style="height:calc(100% - 90px)" v-loading="loading">
-      <el-table style="margin-top:10px" :data="tableData" border @selection-change="handleSelectionChange" height="100%">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="规则分类" align="center" prop="gzfl" min-width="280" show-overflow-tooltip/>
-        <el-table-column label="规则名称" align="center" prop="gzmc"  min-width="350" show-overflow-tooltip/>
-        <el-table-column label="涉及就诊人次数" align="center" prop="xjjzrs"  min-width="130"  show-overflow-tooltip/>
-        <el-table-column label="涉及明细数" align="center" prop="xjmxs"  min-width="110"  show-overflow-tooltip/>
-        <el-table-column label="疑点金额" align="center" prop="xjje"  min-width="110"  show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{formatMoney(scope.row.xjje,2)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="结算总费用" align="center" prop="jsfy"  min-width="110"  show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{formatMoney(scope.row.jsfy,2)}}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+    <div style="height:calc(100% - 80px)" v-loading="loading">
+      <sTable v-show="tabsValue==1" style="margin-top:8px;height:100%" :fixedNum="1" :data="tableData" @selection-change="handleSelectionChange" :header="gzHeader">
+        <el-table-column type="selection" width="40" align="center" slot="fixed"/>
+      </sTable>
+      <sTable  v-show="tabsValue==2" style="margin-top:8px;height:100%" :fixedNum="1" :data="tableData" @selection-change="handleSelectionChange" :header="hcHeader">
+        <el-table-column type="selection" width="40" align="center" slot="fixed"/>
+      </sTable>
       <pagination
       style="float:right"
       :total="total"
@@ -43,23 +38,19 @@
     </div>
     <!-- 查询条件 -->
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px" :modal="false">
-      <el-form ref="chaxunForm" :model="queryForm"  label-width="100px" size="small">
-        <el-form-item label="规则分类" prop="gzfl">
-          <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
+      <el-form ref="chaxunForm" :model="queryGzForm"  label-width="100px" size="small">
+         <el-form-item label="规则分类" prop="gzfl" v-if="tabsValue==1">
+          <el-input clearable v-model="queryGzForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
-        <el-form-item label="规则名称" prop="gzmc">
-          <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
+        <el-form-item label="规则名称" prop="gzmc" v-if="tabsValue==1">
+          <el-input clearable v-model="queryGzForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="机构核实状态" prop="hszt">
-          <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
-            <el-option
-              v-for="dict in hsztOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item> -->
+        <el-form-item label="明细项目编号" prop="mxxmbm" v-if="tabsValue==2">
+          <el-input clearable v-model="queryHcForm.mxxmbm" placeholder="请输入" style="width:360px"></el-input>
+        </el-form-item>
+        <el-form-item label="明细项目名称" prop="mxxmmc" v-if="tabsValue==2">
+          <el-input clearable v-model="queryHcForm.mxxmmc" placeholder="请输入" style="width:360px"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getList()" size="small">确 定</el-button>
@@ -70,21 +61,129 @@
 </template>
 <script>
 import { listRenwuthree,updateRenwuthree } from "@/api/renwu/renwuthree"
+import { listRenwufour,updateRenwufour } from "@/api/renwu/renwufour"
+
 export default {
   name:"TransferItemR",
   props:['options'],
   data(){
     return{
+      tabsValue:'1',
       loading:false,
       allSelection:[],
       tableData:[],
       chaxunDialog:false,
       gzflOptions:[],
       total:0,
-      queryForm:{
+      gzHeader:[{
+        prop: 'gzfl',
+        label: '规则分类',
+        fixedWidth:150
+      },{
+        prop: 'gzmc',
+        label: '规则名称',
+        fixedWidth:150
+      },{
+        prop: 'xjjzrs',
+        label: '涉及就诊人次数',
+      },{
+        prop: 'xjmxs',
+        label: '涉及明细数',
+      },{
+        prop: 'xjje',
+        label: '涉及金额(元)',
+        viewFun: (xjje)=>{
+          return this.formatMoney(xjje,2)
+        }
+      },{
+        prop: 'jsfy',
+        label: '结算总费用(元)',
+        viewFun: (jsfy)=>{
+          return this.formatMoney(jsfy,2)
+        }
+      }],
+      hcHeader:[{
+        prop: 'xwrd',
+        label: '行为认定',
+        fixedWidth:50
+      },{
+        prop: 'bz',
+        label: '备注',
+        fixedWidth:90
+      },{
+        prop: 'mxxmbm',
+        label: '明细项目编号',
+      },{
+        prop: 'mxxmmc',
+        label: '明细项目名称',
+      },{
+        prop: 'xgzlxmmc',
+        label: '相关诊疗项目',
+      },{
+        prop: 'mxxmdj',
+        label: '单价(元)',
+        viewFun: (dj)=>{
+          return this.formatMoney(dj,3)
+        }
+      },{
+        prop: 'qckc',
+        label: '期初库存数量',
+      },{
+        prop: 'bqgr',
+        label: '本期购入数量',
+      },{
+        prop: 'qmkc',
+        label: '期末库存数量',
+      },{
+        prop: 'xjxs',
+        label: '现金销售数量',
+      },{
+        prop: 'sjxs',
+        label: '实际销售',
+      },{
+        prop: 'ybjs',
+        label: '医保结算数量',
+      },{
+        prop: 'cesl',
+        label: '差额数量',
+      },{
+        prop: 'dzce',
+        label: '对账差额费用(元)',
+        viewFun: (dzcefy)=>{
+          return this.formatMoney(dzcefy,2)
+        }  
+      },{
+        prop: 'zkdj',
+        label: '追款单价',
+        viewFun: (zkdj)=>{
+          return this.formatMoney(zkdj,3)
+        }  
+      },{
+        prop: 'wgsl',
+        label: '违规数量',
+        width:'auto' 
+      },{
+        prop: 'wgfy',
+        label: '违规费用(元)',
+        width: 'auto',
+        viewFun: (wgfy)=>{
+          return this.formatMoney(wgfy,2)
+        }
+      },{
+        prop: 'fylb',
+        label: '费用类别',
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        }
+      }],
+      queryGzForm:{
         ybd:'',
         gzmc:'',
         gzfl:'',
+      },
+      queryHcForm:{
+        mxxmbm:'',
+        mxxmmc:'',
       },
       guizefl:{
         search:'',
@@ -115,11 +214,26 @@ export default {
     this.getList()
   },
   methods:{
+    tabsLevelChange(val){
+      this.$emit('on-change',val)
+      this.getList()
+    },
+    ybdChange(){
+      this.queryParams.pageNum = 1
+      this.getList()
+    },
     async getList(query){
-      let params ={...this.queryParams,...this.queryForm,hs:'2',jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
+      let params ={...this.queryParams,hs:'2',jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       query&&(params = {...params,...query})
       this.loading = true
-      const res = await listRenwuthree(params)
+      let res = ""
+      if(this.tabsValue==='1'){
+        params = {...params,...this.queryGzForm}
+        res = await listRenwuthree(params)
+      } else {
+        params = {...params,...this.queryHcForm,type:2}
+        res = await listRenwufour(params)
+      }
       if(res.code===200){
         this.tableData = res.rows;
         this.total = res.total;
@@ -130,11 +244,11 @@ export default {
     xzqFormat(row, column) {
       return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
-    filterData(selection){
+    filterData(selection,cb){
       const request = []
       let count = 0
       selection.forEach((item,i)=>{
-        request.push(updateRenwuthree({id:item.id,hs:'1'}))
+        request.push(this.tabsValue==1?updateRenwuthree({id:item.id,hs:'1'}):updateRenwufour({id:item.id,hs:'1'}))
         count++
         if(count===selection.length){
           this.loading= true

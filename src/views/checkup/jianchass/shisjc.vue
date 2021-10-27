@@ -140,13 +140,13 @@
             <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
           </el-form-item>
           <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input v-model="xwrdForm.zkdj" :disabled="isDisabled.dj" @change="handleDjslChange"></el-input>
+            <el-input v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input v-model="xwrdForm.wgsl" :disabled="isDisabled.sl" @change="handleDjslChange"></el-input>
+            <el-input v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="isDisabled.fy"></el-input>
+            <el-input v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
           </el-form-item>
           <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
             <el-input v-model="xwrdForm.qckc"></el-input>
@@ -525,6 +525,7 @@ export default {
           break
         case (this.tabsValue=='four'):
           this.tabsValue = 'three'
+          this.getList()
           this.xwrdForm.gzmc=''
           break
         default :

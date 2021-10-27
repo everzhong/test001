@@ -1,34 +1,42 @@
 <template>
   <div class="hssz" style="height:100%">
     <div class="hssz-top">
-      <div class="title">规则汇总数据</div>
       <el-row :gutter="10">
+        <el-col :span="1.5">
+          <el-radio-group v-model="gzTabsValue" size="small" @change="tabsLevelChange">
+            <el-radio-button label="1">规则筛查</el-radio-button>
+            <el-radio-button label="2">进销核查</el-radio-button>
+          </el-radio-group>
+        </el-col>
         <el-col :span="1.5" v-if="tabsValue!=='three'">
           <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
-        <el-col :span="1.5">
-          <span style="margin-right:10px;font-size:14px;color:#606266">参保人</span>
-          <el-select v-model="queryForm.ybd" size="small" @change="ybdChange" style="width:100px">
-            <el-option label="本地" value="01"></el-option>
-            <el-option label="异地" value="02"></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="1.5">
-          <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
-        </el-col>
+        <div class="top-right-btn">
+          <el-col :span="1.5" v-show="gzTabsValue==1">
+            <span style="margin-right:10px;font-size:12px;color:#606266">参保人</span>
+            <el-select v-model="queryForm.ybd" size="small" @change="ybdChange" style="width:100px">
+              <el-option label="本地" value="01"></el-option>
+              <el-option label="异地" value="02"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
+          </el-col>
+        </div>
       </el-row>
     </div>
-    <div :class="[tabsValue==='four'?'four-type':'nor-type']"  v-loading="loading"  style="margin-top:10px">
-      <sTable v-show="tabsValue==='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
-         <el-table-column  align="center" width="55" slot="fixed">
-          <template slot-scope="scope">
-            <el-radio :label="scope.row.id" v-model="rwCheck" @change="radioChange"></el-radio>
-          </template>
+    <div :class="[tabsValue==='four'?'four-type':'nor-type']"  v-loading="loading"  style="margin-top:6px">
+      <sTable v-show="tabsValue==='three'&&gzTabsValue==1" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
+         <el-table-column type="index" label="序号"  align="center" width="55" slot="fixed">
         </el-table-column>
         <el-table-column label="操作" align="center" width="150" slot="operate">
           <template>
             <el-button type="text" size="mini" @click="checkLiushui">流水号项目汇总</el-button>
           </template>
+        </el-table-column>
+      </sTable>
+      <sTable v-show="gzTabsValue==2" :data="hcList" :header="hcHeader" :fixedNum="1">
+         <el-table-column type="index" label="序号"  align="center" width="55" slot="fixed">
         </el-table-column>
       </sTable>
       <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" :noLog="true"  @checkdetail="tongLiushuimx"></liushui-table>
@@ -51,13 +59,13 @@
     <!-- 查询条件 -->
     <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px" :modal="false">
       <el-form ref="chaxunForm" :model="queryForm"  label-width="100px" size="small">
-        <el-form-item label="规则分类" prop="gzfl">
+        <el-form-item label="规则分类" prop="gzfl" v-if="gzTabsValue==1">
           <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
-        <el-form-item label="规则名称" prop="gzmc">
+        <el-form-item label="规则名称" prop="gzmc" v-if="gzTabsValue==1">
           <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
-        <el-form-item label="机构核实状态" prop="hszt">
+        <el-form-item label="机构核实状态" prop="hszt" v-if="gzTabsValue==1">
           <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
             <el-option
               v-for="dict in hsztOptions"
@@ -66,6 +74,12 @@
               :value="dict.dictValue"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="明细项目编号" prop="mxxmbm" v-if="gzTabsValue==2">
+          <el-input clearable v-model="queryHcForm.mxxmbm" placeholder="请输入" style="width:360px"></el-input>
+        </el-form-item>
+        <el-form-item label="明细项目名称" prop="mxxmmc" v-if="gzTabsValue==2">
+          <el-input clearable v-model="queryHcForm.mxxmmc" placeholder="请输入" style="width:360px"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -89,6 +103,7 @@ export default {
   },
   data(){
     return {
+      gzTabsValue:'1',
       tableHeader:[{
         prop:'gzfl',
         label:'规则分类',
@@ -140,12 +155,102 @@ export default {
           return this.parseTime(hspfsj)
         }
       }],
+      hcHeader:[{
+        prop: 'xwrd',
+        label: '行为认定',
+        fixedWidth:50
+      },{
+        prop: 'bz',
+        label: '备注',
+        fixedWidth:90
+      },{
+        prop: 'mxxmbm',
+        label: '明细项目编号',
+      },{
+        prop: 'mxxmmc',
+        label: '明细项目名称',
+      },{
+        prop: 'xgzlxmmc',
+        label: '相关诊疗项目',
+      },{
+        prop: 'mxxmdj',
+        label: '单价(元)',
+        viewFun: (dj)=>{
+          return this.formatMoney(dj,3)
+        }
+      },{
+        prop: 'qckc',
+        label: '期初库存数量',
+      },{
+        prop: 'bqgr',
+        label: '本期购入数量',
+      },{
+        prop: 'qmkc',
+        label: '期末库存数量',
+      },{
+        prop: 'xjxs',
+        label: '现金销售数量',
+      },{
+        prop: 'sjxs',
+        label: '实际销售',
+      },{
+        prop: 'ybjs',
+        label: '医保结算数量',
+      },{
+        prop: 'cesl',
+        label: '差额数量',
+      },{
+        prop: 'dzce',
+        label: '对账差额费用(元)',
+        viewFun: (dzcefy)=>{
+          return this.formatMoney(dzcefy,2)
+        }  
+      },{
+        prop: 'zkdj',
+        label: '追款单价',
+        viewFun: (zkdj)=>{
+          return this.formatMoney(zkdj,3)
+        }  
+      },{
+        prop: 'wgsl',
+        label: '违规数量',
+        width:'auto' 
+      },{
+        prop: 'wgfy',
+        label: '违规费用(元)',
+        width: 'auto',
+        viewFun: (wgfy)=>{
+          return this.formatMoney(wgfy,2)
+        }
+      },{
+        prop:'hssj',
+        label:'确定核实时间',
+        viewFun:(hssj)=>{
+          return this.parseTime(hssj)
+        }
+      },{
+        prop:'hs',
+        label:'核实状态',
+        viewFun:(hs)=>{
+          return (hs==1?'未核实': hs==2?'核实中': hs==3?'已核实':'')
+        }
+      },{
+        prop:'hsr',
+        label:'核实人'
+      },{
+        prop:'hspfsj',
+        label:'核实时间',
+        viewFun:(hspfsj)=>{
+          return this.parseTime(hspfsj)
+        }
+      }],
       loading:false,
       chaxunDialog:false,
       rwCheck:'',
       renwuthreeList:[],
       renwufourList:[],
       renwufiveList:[],
+      hcList:[],
       queryParams:{
         pageSize:50,
         pageNum:1
@@ -156,11 +261,15 @@ export default {
         gzfl:'',
         xwrd:''
       },
+      queryHcForm:{
+        mxxmbm:'',
+        mxxmmc:'',
+      },
       total:0,
       hsztOptions:[
-        {dictValue:'0',dictLabel:'未核实'},
-        {dictValue:'1',dictLabel:'核实中'},
-        {dictValue:'2',dictLabel:'已核实'}
+        {dictValue:'1',dictLabel:'未核实'},
+        {dictValue:'2',dictLabel:'核实中'},
+        {dictValue:'3',dictLabel:'已核实'}
       ],
       selection:{},
       queryInfoFrom:{},
@@ -173,6 +282,9 @@ export default {
     this.getList()
   },
   methods:{
+    tabsLevelChange(){
+      this.getList()
+    },
     //返回上一层
     goBackUpLevel(){
       this.selectedId = ''
@@ -207,7 +319,7 @@ export default {
       this.getList()
     },
     async getList(query) {
-      let params = {...this.queryForm,...this.queryParams}
+      let params = this.gzTabsValue==1? {...this.queryForm,...this.queryParams}:{...this.queryHcForm,...this.queryParams}
       if(query){
         params = {...params,...query}
       } else {
@@ -217,14 +329,17 @@ export default {
       this.loading = true
       try {
         let  res = null
-        switch(this.tabsValue) {
-          case 'three':
+        switch(true) {
+          case (this.gzTabsValue==='1' && this.tabsValue==='three'):
             res = await listRenwuthree({hs:3,...params})
             break;
-          case 'four':
+          case (this.gzTabsValue==='2'):
+            res = await listRenwufour({hs:3,...params,type:2})
+            break;
+          case (this.tabsValue === 'four'):
             res = await listRenwufour(params)
             break;
-          case 'five':
+          case (this.tabsValue ==='five'):
             res = await getTLS({...this.queryParams,...this.searchNextParams})
             break;
           default:
@@ -233,7 +348,11 @@ export default {
             break;
         }
         if(res.code===200){
-          this[`renwu${this.tabsValue}List`] = res.rows;
+          if(this.gzTabsValue==2){
+            this.hcList = res.rows
+          } else {
+            this[`renwu${this.tabsValue}List`] = res.rows;
+          }
           this.total = res.total;
           if(this.chaxunDialog){
             this.$refs['chaxunForm'].resetFields()
@@ -272,9 +391,9 @@ export default {
 <style lang="scss" scoped>
 .hssz {
   .hssz-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
     margin-top: 15px;
     .title {
       font-size: 14px;

@@ -61,6 +61,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
+        viewFun: (jsdj)=>{
+          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        }
       },{
         label:"就医类型",
         prop:'jslb',

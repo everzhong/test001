@@ -134,9 +134,7 @@ export default {
       this.getDicts("sys_job_jgxx").then(response => {
         this.xzqOptions = response.data;
       });
-      this.getDicts("renwu_ss_jgdj").then(response => {
-        this.jsdjOptions = response.data;
-      });
+      this.jsdjOptions = this.$store.getters.jsdjDic
       this.getDicts("sys_job_status").then(response => {
         this.statusOptions = response.data;
       });

@@ -45,6 +45,14 @@ export default {
         label: '批次号',
         fixedWidth:30,
       },{
+        prop: 'jgdm',
+        label: '机构代码',
+        fixedWidth:55,
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+        fixedWidth:60,
+      },{
         prop: 'ajly',
         label: '案件来源',
         fixedWidth:50,
@@ -71,6 +79,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
+        viewFun: (jsdj)=>{
+          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        }
       },{
         label:"数据开始日期",
         prop:'datastarttime',
@@ -83,14 +94,6 @@ export default {
         viewFun:(time)=>{
           return this.parseTime(time,'{y}-{m}')
         }
-      },{
-        prop: 'jgdm',
-        label: '机构代码',
-        fixedWidth:55,
-      },{
-        prop: 'jgmc',
-        label: '机构名称',
-        fixedWidth:60,
       },{
         prop: 'xydm',
         label: '统一社会信用代码',

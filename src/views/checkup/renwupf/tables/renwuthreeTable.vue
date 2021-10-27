@@ -26,12 +26,12 @@ export default {
         fixedWidth:55,
         prop:'jgdm'
       },{
-        label:"统一社会信用代码",
-        prop:'xydm',
-      },{
         label: '机构名称',
         fixedWidth:60,
         prop:'jgmc'
+      },{
+        label:"统一社会信用代码",
+        prop:'xydm',
       },{
         label:"规则分类",
         prop:'gzfl',

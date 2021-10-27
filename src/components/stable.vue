@@ -15,7 +15,7 @@
       <el-table-column v-for="(col, index) in tableHeader" :key="index"
         :prop="col.prop"
         :label="col.label"
-        :min-width="(col.viewTemp==='input'||col.viewTemp==='selector')?'180':columntWidth(col.label,col.fixedWidth)"
+        :min-width="(col.viewTemp==='input'||col.viewTemp==='selector')?'180':columntWidth(col.prop,col.label,col.fixedWidth)"
         :type="col.type"
         :column-key="index.toString()"
         :render-header="renderHeader"
@@ -113,12 +113,63 @@ export default {
     theader.addEventListener('contextmenu',this.mouseRightClick)
   },
   methods: {
-    columntWidth(label,w){
+    columntWidth(prop,label){
       const realLabel = label.replace(' ','')
       let len = realLabel.length<5?5:realLabel.length
-      let width = len*22
-      w&&(width+=w)
-      return width
+      let width = len*19
+      const maxw = this.flexWidthFun(prop,this.data)
+      if(maxw<width){
+        return width
+      } else {
+        return maxw
+      }
+    },
+    flexWidthFun(str,tableData){
+      try {
+        str = str + ''
+        let columnContent = ''
+        if (!tableData || !tableData.length || tableData.length === 0 || tableData === undefined) {
+            return ""
+        }
+        if (!str || !str.length || str.length === 0 || str === undefined) {
+            return ""
+        }
+        // 获取该列中最长的数据(内容)
+        let index = 0
+        let max_temp = ''
+        for (let i = 0; i < tableData.length; i++) {
+            const now_temp =tableData[i][str] + ''
+            max_temp = tableData[index][str] + ''
+            if (now_temp.length >= max_temp.length) {
+                index = i
+            }
+        }
+        columnContent =tableData[index][str] + ''
+            // console.log('该列数据[i]:', columnContent)
+            // 以下分配的单位长度可根据实际需求进行调整
+        let flexWidth = 80
+        for (const char of columnContent) {
+            if ((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z')) {
+                // 如果是英文字符，为字符分配8个单位宽度
+                flexWidth += 11
+            } else if (char >= '\u4e00' && char <= '\u9fa5') {
+                // 如果是中文字符，为字符分配15个单位宽度
+                flexWidth += 13
+            } else {
+                // 其他种类字符，为字符分配8个单位宽度
+                flexWidth += 5
+            }
+        }
+        if (flexWidth < 80) {
+            // 设置最小宽度
+            flexWidth = 80
+        }
+        if (flexWidth > 350) {
+            // 设置最大宽度
+            flexWidth = 350
+        }
+        return flexWidth
+      } catch (e) {}
     },
     // 自定义表头
     renderHeader (createElement, {column}) {

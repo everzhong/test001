@@ -33,11 +33,19 @@ export default {
         }
       },{
         label:"承办机构",
-        prop:'cbjg'
+        prop:'jcjg'
       },{
         label: '批次号',
         fixedWidth:30,
         prop:'rwpcid'
+      },{
+       label: '机构代码',
+        fixedWidth:55,
+        prop:'jgdm'
+      },{
+        label: '机构名称',
+        fixedWidth:60,
+        prop:'jgmc'
       },{
          label: '案件来源',
         fixedWidth:50,
@@ -46,6 +54,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
+        viewFun: (jsdj)=>{
+          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        }
       },{
         label:"检查方式",
         prop:'jcfs',
@@ -74,14 +85,6 @@ export default {
         viewFun:(time)=>{
           return this.parseTime(time,'{y}-{m}')
         }
-      },{
-       label: '机构代码',
-        fixedWidth:55,
-        prop:'jgdm'
-      },{
-        label: '机构名称',
-        fixedWidth:60,
-        prop:'jgmc'
       },{
         label: "行政区",
         prop:'xzq',

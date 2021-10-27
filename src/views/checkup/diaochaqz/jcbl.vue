@@ -69,7 +69,7 @@
         </div>
         <div class="pre-view">
           <p class="top-tip">预览检查笔录</p>
-          <bl-doc :pageData="{...zhizuo,dcjg:urlQuery.dcjg,jcstarttime:zhizuo.jcsj[0]||'',jcendtime:zhizuo.jcsj[1]||''}"/>
+          <bl-doc :pageData="{...zhizuo,jsdj:urlQuery.jsdj,dcjg:urlQuery.dcjg,jcstarttime:zhizuo.jcsj[0]||'',jcendtime:zhizuo.jcsj[1]||''}"/>
         </div>
       </div>
     </section>
@@ -150,7 +150,7 @@
       />
     </div>
     <div id="printDoc" style="display:none;">
-      <bl-doc :pageData="{...printData,dcjg:urlQuery.dcjg,jgxz:urlQuery.jgxz}"/>
+      <bl-doc :pageData="{...printData,dcjg:urlQuery.dcjg,jsdj:urlQuery.jsdj}"/>
     </div>
   </div>
 </template>

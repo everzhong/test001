@@ -143,6 +143,9 @@ export default {
           return this.selectDictLabels(this.$store.getters.fyDic, fylb)
         },
         width: 'auto'
+      },{
+        prop: 'zyts',
+        label: '住院天数'
       }]
     }
   },

@@ -10,7 +10,7 @@
       <div style="line-height:36px">检查时间：{{parseTime(pageData.jcstarttime,'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(pageData.jcendtime,'{y}年{m}月{d}日{h}时{m}分')}}</div>
       <p style="line-height:36px">被检查人（被检查单位）信息：</p>
       <div style="line-height:36px;margin-left:16px;">姓名（单位全称）：<span>{{pageData.dwqc}}</span></div>
-      <div style="line-height:36px;margin-left:16px;">性别（类别/性质）：<span>{{pageData.jgxz}}</span></div>
+      <div style="line-height:36px;margin-left:16px;">性别（等级）：<span>{{pageData.jsdj==1?'一级':pageData.jsdj==2?'二级':pageData.jsdj==3?'三级':'--'}}</span></div>
       <div style="line-height:36px;margin-left:16px;">住址（单位地址）：<span>{{pageData.addr}}</span></div>
       <div style="line-height:36px;margin-left:16px;">工作单位（法定代表人）：<span>{{pageData.faren}}</span></div>
       <div style="line-height:36px;margin-left:16px;">执法人员：<span>{{pageData.zfry}}</span></div>
@@ -29,6 +29,9 @@
 <script>
 export default {
   name:'BlDoc',
-  props:['pageData']
+  props:['pageData'],
+  mounted(){
+    console.log(this.pageData)
+  }
 }
 </script>

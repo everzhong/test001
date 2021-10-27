@@ -18,6 +18,8 @@ const getters = {
     sidebarRouters: state => state.permission.sidebarRouters,
     fyDic: state => state.dic.fylbOptions,
     jslbDic: state => state.dic.jslbOptions,
-    ybbfDic: state => state.dic.ybbfOptions
+    ybbfDic: state => state.dic.ybbfOptions,
+    jsdjDic: state => state.dic.jsdjOptions
+
 }
 export default getters

@@ -27,7 +27,6 @@ export default {
       },{
         prop: 'jgmc',
         label: '机构名称',
-        fixedWidth:60,
       },{
         prop: 'gzfl',
         label: '规则分类',
@@ -83,9 +82,6 @@ export default {
       },{
         prop: 'ajly',
         label: '案件来源'
-      },{
-        prop: 'zyts',
-        label: '住院天数'
       }]
     }
   },

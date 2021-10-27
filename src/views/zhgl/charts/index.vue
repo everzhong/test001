@@ -173,9 +173,7 @@ export default {
     }
   },
   created(){
-    this.getDicts("renwu_ss_jgdj").then(response => {
-      this.jsdjOptions = response.data;
-    });
+    this.jsdjOptions = this.$store.getters.jsdjDic
     this.resetDate()
     this.getChartData()
   },

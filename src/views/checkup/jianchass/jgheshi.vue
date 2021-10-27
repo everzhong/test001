@@ -8,21 +8,20 @@
         <el-radio-button label="1">选择核实数据</el-radio-button>
         <el-radio-button label="2">查看核实情况</el-radio-button>
       </el-radio-group>
-      <br>
-      <section class="transfer table-main" v-loading="loading" v-show="tabsValue==='1'">
+      <section class="transfer table-main" style="bottom:40px" v-loading="loading" v-show="tabsValue==='1'">
         <div class="left-part">
-          <transfer-item ref="leftList" @select="selectChange($event,'leftState')" :options="leftOptions"></transfer-item>
+          <transfer-item @on-change="tabChange($event,'right')" ref="leftList" @select="selectChange($event,'leftState')" :options="leftOptions"></transfer-item>
         </div>
         <div class="btn">
           <el-button @click="moveToRight" type="primary" class="el-icon-arrow-right" size="mini" :disabled="leftState.length==0"></el-button>
           <el-button @click="moveToLeft" type="primary" class="el-icon-arrow-left" size="mini" :disabled="rightState.length==0"></el-button>
         </div>
         <div class="right-part">
-          <transfer-item-r ref="rightList" @select="selectChange($event,'rightState')" :options="rightOptions"></transfer-item-r>
+          <transfer-item-r @on-change="tabChange($event,'left')" ref="rightList" @select="selectChange($event,'rightState')" :options="rightOptions"></transfer-item-r>
           <!-- <transfer-item @select="selectChange($event,'rightState')" :options="rightOptions" :tableData="rightList"></transfer-item> -->
         </div>
       </section>
-      <div v-show="tabsValue==='1'" style="text-align:right;margin-top:10px;position:absolute;bottom:20px;right:0"> 
+      <div v-show="tabsValue==='1'" style="text-align:right;position:absolute;bottom:5px;right:0"> 
         <el-button type="primary" size="mini" @click="confirmHs">确定核实数据</el-button>
       </div>
       <div class="table-main1" v-if="tabsValue==='2'">
@@ -35,6 +34,8 @@ import TransferItem from './transferItem.vue'
 import TransferItemR from './transferItemR.vue'
 import CheckHssz from './checkHssz.vue'
 import { updateRenwuthree } from '@/api/renwu/renwuthree'
+import { updateRenwufour } from '@/api/renwu/renwufour'
+
 export default {
   name:'Jgheshi',
   data(){
@@ -52,7 +53,8 @@ export default {
         total:0,
       },
       rightState:[],
-      leftState:[]
+      leftState:[],
+      dataType:'1',//规则筛查1，进销核查2
     }
   },
   components:{
@@ -62,6 +64,11 @@ export default {
   },
   props:['options'],
   methods:{
+    tabChange(val,type){
+      this.dataType = val
+      this.$refs[`${type}List`]['tabsValue'] = val
+      this.$refs[`${type}List`].getList()
+    },
     confirmHs(){
       const allSelect = this.$refs.rightList.getAllSelection()
       if(!allSelect.length){
@@ -74,7 +81,7 @@ export default {
       if(allSelect && allSelect.length){//遍历核实
         const request = []
         allSelect.forEach(need=>{
-          request.push(updateRenwuthree({id:need.id,hs:'3'}))
+          request.push(this.dataType==1?updateRenwuthree({id:need.id,hs:'3'}):updateRenwufour({id:need.id,hs:'3'}))
         })
         this.loading= true
         Promise.all(request).then(()=>{
