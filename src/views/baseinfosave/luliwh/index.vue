@@ -494,7 +494,7 @@ export default {
     },
     doCheck(row){
       this.$router.push({
-        path:'/baseinfosave/lulidetail',
+        path:'/zhgl/lulidetail',
         query:{...row}
       },()=>{})
     }

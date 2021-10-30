@@ -67,7 +67,11 @@
               width="600"
               popper-class="sys-popup"
               trigger="click">
-              <el-button type="primary" size="mini" style="margin:8px 0 5px" @click="autoSelect">随机选择</el-button>
+              <div style="display:flex;align-items:center;margin-bottom:5px">
+                <span style="font-size:12px">人员数：</span>
+                <el-input min="2" size="mini" style="width:90px" v-model="randomCount" type="number"></el-input>
+                <el-button type="primary" size="mini" style="margin-left:8px" @click="autoSelect">随机选择</el-button>
+              </div>
               <div style="min-height:150px;max-height:270px;overflow:auto">
                 <el-table ref="multipleTable" :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
                   <el-table-column type="selection" width="50" align="center" />
@@ -108,6 +112,7 @@ export default {
   name:'SendMessage',
   data(){
     return {
+      randomCount:2,//默认随机选择2个人
       loading:false,
       roleCheck:'',
       searchName:'',
@@ -140,33 +145,50 @@ export default {
     handleSelectionChange (selection) {
       this.roleSelection = selection
     },
-    randomIndex (max, min) {
-      return Math.round(Math.random() * (max - min) + min)
-    },
-    findTwoIndex (list) {
-      const idxArr = []
-      const selectObj = []
-      const len = list.length - 1
-      while (idxArr.length < 2) {
-        const idx = this.randomIndex(len, 0)
-        if (idxArr.indexOf(idx) < 0) {
-          idxArr.push(idx)
-          selectObj.push(list[idx])
+    randomObj (list,count) {
+      if(list.length){
+        const idxArr = []
+        const selectObj = []
+        const len = list.length - 1
+        while (idxArr.length < count) {
+          const idx = Math.round(Math.random() * (len - 0) + 0)
+          if (idxArr.indexOf(idx) < 0) {
+            idxArr.push(idx)
+            selectObj.push(list[idx])
+          }
         }
+        return selectObj
+      } else {
+        return []
       }
-      return selectObj
     },
     autoSelect () {
-      const roleId = this.randomIndex(1, 0) === 0 ? 4 : 9
-      const selectRoleList = this.gridData.filter(item => {
-        return item.roleId === roleId
+      let jgRoleList = this.gridData.filter(item => {//4表示属于监管机构的人
+        return item.roleId == 4
+      })
+      let selectRoleList = this.gridData.filter(item => {//9也是除2个监管机构的人之外需要随机选择的人
+        return item.roleId == 9
       })
       let selected = []
-      if (selectRoleList.length < 3) {
-        selected = selectRoleList
+      let otherObj = []
+      if(!jgRoleList || jgRoleList.length==0){
+        otherObj = this.randomObj(selectRoleList,this.randomCount*1)
+      }else if(jgRoleList.length>2){
+        selected = this.randomObj(jgRoleList,2)
+        jgRoleList.forEach(item=>{
+          const hasInjg = selected.filter(subItem=>{
+            return item.userId !== subItem.userId
+          })
+          if(hasInjg && hasInjg.length){//把roleId=4剩下未选择的人员添加到roleId=9列表中，一起作为剩余随机选择的列表
+            selectRoleList.push(item)
+          }
+        })
+        otherObj = this.randomObj(selectRoleList,this.randomCount*1-selected.length)//剩下随机人员从roleId=9里面取
       } else {
-        selected = this.findTwoIndex(selectRoleList)
+        selected = jgRoleList
+        otherObj = this.randomObj(selectRoleList,this.randomCount*1-selected.length)//剩下随机人员从roleId=9里面取
       }
+      selected = selected.concat(otherObj)
       this.$refs.multipleTable.clearSelection()
       selected.forEach(element => {
         const tIdx = this.gridData.findIndex(data => {

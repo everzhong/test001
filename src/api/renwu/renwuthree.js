@@ -75,3 +75,11 @@ export function exportRenwuthree(query) {
         params: query
     })
 }
+// 查询renwufour列表
+export function listRenwuthreeHs(query) {
+    return request({
+        url: '/renwu/renwuthree/lisths',
+        method: 'get',
+        params: query
+    })
+}

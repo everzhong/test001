@@ -119,3 +119,12 @@ export function getTjjzlx5(query) {
         params: query
     })
 }
+
+// 查询renwufour列表
+export function listRenwufourHs(query) {
+    return request({
+        url: '/renwu/renwufour/lisths',
+        method: 'get',
+        params: query
+    })
+}

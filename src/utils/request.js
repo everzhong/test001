@@ -10,6 +10,7 @@ axios.defaults.paramsSerializer = (params) => {
     }
     // 创建axios实例
 let baseUrl = ''
+let innoreError = false
 if (process.env.NODE_ENV !== 'production') {
     baseUrl = process.env.VUE_APP_BASE_API
 } else {
@@ -27,6 +28,7 @@ const service = axios.create({
     // request拦截器
 service.interceptors.request.use(config => {
     // 是否需要设置 token
+    innoreError = config.innoreError
     const isToken = (config.headers || {}).isToken === false
     if (getToken() && !isToken && !config.noToken) {
         config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
@@ -94,13 +96,13 @@ service.interceptors.response.use(res => {
 
             //     })
             // })
-        } else if (code === 500) {
+        } else if (code === 500 && !innoreError) {
             Message({
                 message: msg,
                 type: 'error'
             })
             return Promise.reject(new Error(msg))
-        } else if (code !== 200) {
+        } else if (code !== 200 && !innoreError) {
             Notification.error({
                 title: msg
             })
@@ -110,7 +112,6 @@ service.interceptors.response.use(res => {
         }
     },
     error => {
-        console.log('err' + error)
         let { message } = error;
         if (message == "Network Error") {
             message = "后端接口连接异常";

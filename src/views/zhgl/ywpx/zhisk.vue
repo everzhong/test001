@@ -115,7 +115,7 @@
           <span class="title">索引号：</span><span class="content">{{detail.syh}}</span>
         </el-col>
         <el-col :span="8">
-          <span class="title">主题分类：</span><span class="content">医保正策</span>
+          <span class="title">主题分类：</span><span class="content">医保政策</span>
         </el-col>
         <el-col :span="14">
           <span class="title">发文机构：</span><span class="content">{{detail.sybt}}</span>
@@ -173,7 +173,7 @@ export default {
       upForm: {
         noticeTitle:'',
         syh: '',
-        ztfl: '医保正策',
+        ztfl: '医保政策',
         sybt: '',
         createTime: ''
       },
@@ -315,14 +315,14 @@ export default {
     },
     uploadFile () {//信息上传
       this.editType = 1
-      this.upForm.ztfl = "医保正策"
+      this.upForm.ztfl = "医保政策"
       this.dialogVisible = true
     },
     editFile(row){//信息修改
       this.editType = 2
       const {noticeTitle,syh,sybt,createTime,filename,url,noticeId} = row
       this.upForm = {noticeTitle,syh,sybt,createTime,noticeId}
-      this.upForm.ztfl = "医保正策"
+      this.upForm.ztfl = "医保政策"
       this.zwFileName = filename
       this.zwFileUrl = url
       for(let i=1;i<15;i++) {
@@ -357,7 +357,7 @@ export default {
       this.upForm = {
         noticeTitle:'',
         syh: '',
-        ztfl: '医保正策',
+        ztfl: '医保政策',
         sybt: '',
         createTime: ''
       },
@@ -389,7 +389,7 @@ export default {
     },
     async addPsjh(){
       const {createTime} = this.upForm
-      const params = { ...this.upForm, noticeType:1, zstype:this.zstype,filename:this.zwFileName,url:this.zwFileUrl}//zstype:1医保正策，2法律法规
+      const params = { ...this.upForm, noticeType:1, zstype:this.zstype,filename:this.zwFileName,url:this.zwFileUrl}//zstype:1医保政策，2法律法规
       if(this.fileList.length){
         this.fileList.forEach((item,i)=>{
           params[`filename${(i+1)}`] = item.fileName,

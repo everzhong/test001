@@ -22,7 +22,8 @@ export function addJcfl(data) {
     return request({
         url: '/renwu/jcfl',
         method: 'post',
-        data: data
+        data: data,
+        innoreError: true
     })
 }
 // 新增检查履历
@@ -30,7 +31,7 @@ export function addJcfl2(data) {
     return request({
         url: '/renwu/jcfl/add',
         method: 'post',
-        data: data
+        data: data,
     })
 }
 // 修改检查履历

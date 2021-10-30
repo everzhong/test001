@@ -94,11 +94,12 @@ export default {
   data() {
     return {
       tableHeader:[{
-        prop: 'sccqstatus',
+        prop: 'scstatus',
         label: '第三方筛查状态',
         width: '150px',
         viewFun:function(index){
-          return (index?(index==0?'未生成筛查任务':index==1?'未开始筛查':index==2?'执行中':index==3?'完成':indexs==4?'无需抽取':''):'')
+          // return (index?(index==0?'未生成筛查任务':index==1?'未开始筛查':index==2?'执行中':index==3?'完成':indexs==4?'无需抽取':''):'')
+          return (index?(index==1?'未开始':index==2?'执行中':index==3?'完成':''):'')
         }
       },{
         prop: 'rwpcid',
