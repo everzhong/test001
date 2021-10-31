@@ -262,7 +262,7 @@ export default {
             res = await listRenwuthreeRj(params)
             break;
           case 'four':
-            res = await listRenwufourRj(params)
+            res = await listRenwufourRj({type:1,...params})
             break;
           default:
             params.status = 0 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果

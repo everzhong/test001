@@ -354,7 +354,7 @@ export default {
             res = await listRenwuthreeRj(params)
             break;
           case 'four':
-            res = await listRenwufourRj(params)
+            res = await listRenwufourRj({type:1,...params})
             break;
           default:
             res = await listRenwutwo(params)
@@ -795,16 +795,6 @@ export default {
           resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}' and gzmc='${item.gzmc}')`)
         })
         this.getList({resql:resql.join(' or ')})
-        // const pchList = this.selectionThreeList.map(item=>item.rwpcid)
-        // const jgdmList = this.selectionThreeList.map(item=>item.jgdm)
-        // const xmbmList = this.selectionThreeList.map(item=>item.mxxmbm)
-        // console.log(pchList,jgdmList,xmbmList)
-        // this.getList({
-        //   pch:pchList.join('')?pchList.join(','):'',
-        //   rwpcid:pchList.join('')?pchList.join(','):'',
-        //   jgdm:jgdmList.join('')?jgdmList.join(','):'',
-        //   mxxmbm:xmbmList.join('')?xmbmList.join(','):'',
-        // })
       } else {
         this.ids = []
         if(this.resql){

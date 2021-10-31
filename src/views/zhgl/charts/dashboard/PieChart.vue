@@ -74,6 +74,7 @@ export default {
             name: this.seriesData[0]?.label||'',
             type: 'pie',
             //roseType: 'radius',
+            minAngle:5,
             radius: [25, 85],
             center: ['18%', '38%'],
             data: this.seriesData[0]?.data||[],
@@ -84,6 +85,7 @@ export default {
           {
             name: this.seriesData[1]?.label||'',
             type: 'pie',
+            minAngle:5,
             //roseType: 'radius',
             radius: [25, 85],
             center: ['50%', '38%'],
@@ -95,6 +97,7 @@ export default {
           {
             name: this.seriesData[2]?.label||'',
             type: 'pie',
+            minAngle:5,
             //roseType: 'radius',
             radius: [25, 85],
             center: ['80%', '38%'],

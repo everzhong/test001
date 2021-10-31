@@ -86,11 +86,13 @@ export default {
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
+          barMinHeight:7,
           data: this.seriesData?.data[0]||[],
           animationDuration
         }, {
           name: '认定费用',
           type: 'bar',
+          barMinHeight:7,
           stack: 'vistors',
           barWidth: '60%',
           data: this.seriesData?.data[1]||[],
@@ -98,6 +100,7 @@ export default {
         }, {
           name: '人次',
           type: 'bar',
+          barMinHeight:7,
           stack: 'vistors',
           barWidth: '60%',
           data: this.seriesData?.data[2]||[],
