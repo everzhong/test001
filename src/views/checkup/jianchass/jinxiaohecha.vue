@@ -82,11 +82,11 @@ export default {
         prop: 'qmkc',
         label: '期末库存数量'
       },{
+        prop: 'xjxs',
+        label: '现金销售数量',
+      },{
         prop: 'ybjs',
         label: '医保结算数量',
-      },{
-        prop: 'kh',
-        label: '参保人卡号',
       },{
         prop: 'cesl',
         label: '差额数量',
