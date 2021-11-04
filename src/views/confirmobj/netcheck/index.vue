@@ -531,7 +531,7 @@ export default {
       } else if(!this.submitParams.wsyj) {
         this.msgError('请选择网审意见')
       } else {
-        submitNetCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj}).then(res=>{
+        submitNetCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj}).then(async res=>{
           if(res.code===200){
             this.msgSuccess('提交成功')
             this.getList()

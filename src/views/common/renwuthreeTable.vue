@@ -47,8 +47,7 @@ export default {
         label: '涉及就诊人次数',
       },{
         prop: 'xjmxs',
-        label: '涉及明细数',
-        width: 'auto'
+        label: '涉及项目数',
       },{
         prop: 'xjje',
         label: '疑点金额(元)',

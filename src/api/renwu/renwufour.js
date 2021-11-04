@@ -128,3 +128,11 @@ export function listRenwufourHs(query) {
         params: query
     })
 }
+// 查询renwufour明细项目编码
+export function listXmbm(query) {
+    return request({
+        url: '/renwu/renwufour/listxmbm',
+        method: 'get',
+        params: query
+    })
+}

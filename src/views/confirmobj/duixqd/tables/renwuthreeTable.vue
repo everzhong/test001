@@ -51,7 +51,7 @@ export default {
         prop: 'sjrcs',
         label: '涉及就诊人次数',
       },{
-        label:"涉及明细数",
+        label:"涉及项目数",
         prop:'xjmxs',
       },{
         label:"疑点金额(元)",

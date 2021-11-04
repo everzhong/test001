@@ -115,7 +115,7 @@
           <span class="title">索引号：</span><span class="content">{{detail.syh}}</span>
         </el-col>
         <el-col :span="8">
-          <span class="title">主题分类：</span><span class="content">医保政策</span>
+          <span class="title">主题分类：</span><span class="content">{{this.zstype==1?"医保正策":"法律法规"}}</span>
         </el-col>
         <el-col :span="14">
           <span class="title">发文机构：</span><span class="content">{{detail.sybt}}</span>
@@ -173,7 +173,7 @@ export default {
       upForm: {
         noticeTitle:'',
         syh: '',
-        ztfl: '医保政策',
+        ztfl: '',
         sybt: '',
         createTime: ''
       },
@@ -315,14 +315,14 @@ export default {
     },
     uploadFile () {//信息上传
       this.editType = 1
-      this.upForm.ztfl = "医保政策"
+      this.upForm.ztfl = this.zstype==1?"医保政策":'法律法规'
       this.dialogVisible = true
     },
     editFile(row){//信息修改
       this.editType = 2
       const {noticeTitle,syh,sybt,createTime,filename,url,noticeId} = row
       this.upForm = {noticeTitle,syh,sybt,createTime,noticeId}
-      this.upForm.ztfl = "医保政策"
+      this.upForm.ztfl = this.zstype==1?"医保政策":'法律法规'
       this.zwFileName = filename
       this.zwFileUrl = url
       for(let i=1;i<15;i++) {

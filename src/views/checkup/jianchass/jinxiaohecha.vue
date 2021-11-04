@@ -1,4 +1,4 @@
-/**进销核查 第四层数据 type=2*/
+/**进销存核查 第四层数据 type=2*/
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
   <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->

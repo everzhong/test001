@@ -437,6 +437,11 @@ export default {
         this.title = "修改renwutwo";
       });
     },
+    async updateTwo(ids){//提交暂不检查的，把第二层status改成4
+      ids.forEach(item=>{
+        updateRenwutwo({id:item.id,status:4},'innoreError')
+      })
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -545,6 +550,14 @@ export default {
               sort:4
             })
         })
+        if(params.status===2){//同意
+          const nowsyj = this.selectionList.filter(item=>{
+            return item.wsyj === '暂不检查'
+          })
+          if(nowsyj && nowsyj.length){
+            this.updateTwo(nowsyj)
+          }
+        }
       })
     },
     /**

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <section v-show="!heshiOption.show" >
-      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="queryForm" :inline="true" v-show="showSearch">
+      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true" v-show="showSearch">
             <el-form-item label="案件来源" prop="ajly">
               <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
             </el-form-item>
@@ -40,7 +40,7 @@
       </el-form>
       <el-row :gutter="10">
         <el-col :span="1.5">
-          <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
+          <el-button type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
         </el-col>
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
@@ -50,7 +50,7 @@
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保人：</span>
-          <el-select v-model="ybd" size="small">
+          <el-select v-model="gzQueryForm.ybd" size="small">
             <el-option label="本地" value="01"></el-option>
             <el-option label="异地" value="02"></el-option>
           </el-select>
@@ -63,33 +63,17 @@
           <el-button type="primary" plain size="small" @click="canclHc">取消核查</el-button>
         </el-col> -->
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库期初时间</label>
+          <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
           <el-date-picker
-          v-model="pkqcsj"
+          v-model="pksj"
           align="right"
-          type="date"
+          type="daterange"
           size="small"
-          placeholder="盘库期初时间"
+          start-placeholder="盘库期初时间"
+          end-placeholder="盘库期末时间"
          >
         </el-date-picker>
         </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库期末时间</label>
-          <el-date-picker
-          v-model="pkqmsj"
-          align="right"
-          type="date"
-          size="small"
-          placeholder="盘库期末时间"
-         >
-        </el-date-picker>
-        </el-col>
-        <!-- <el-col :span="1.5" v-if="tabsValue==='four'&&!isAll&&renwufourList.length">
-          <el-button type="primary" plain size="small" @click="selectEvent('selectAll',true)">全选</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="tabsValue==='four'&&isAll">
-          <el-button type="primary" plain size="small" @click="selectEvent('clearAll',false)">取消全选</el-button>
-        </el-col> -->
         <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
           <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
@@ -106,7 +90,6 @@
       </el-row>
       <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
-        <!-- <el-table v-if="tabsValue=='three'"  class="qztable" :data="renwuthreeList" border style="width:100%" height="100%" ref="jctable"> -->
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
             <el-table-column label="操作" align="center" min-width="160" slot="operate">
               <template slot-scope="scope">
@@ -140,25 +123,25 @@
             <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
           </el-form-item>
           <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
           </el-form-item>
           <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.qckc"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj"></el-input>
           </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.bqgr"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj"></el-input>
           </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.xjxs"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj"></el-input>
           </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.qmkc"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj"></el-input>
           </el-form-item>
           <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
-            <el-input v-model="xwrdForm.ybjs"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="bz">
             <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
@@ -171,31 +154,92 @@
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
      <!-- 查询条件 -->
-    <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px">
-      <el-form ref="chaxunForm" :model="queryForm" :rules="rules" label-width="100px" size="small">
-        <el-form-item label="规则分类" prop="gzfl">
-          <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="规则名称" prop="gzmc">
-          <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="行为认定" prop="xwrd" >
-          <el-input clearable v-model="queryForm.xwrd" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="机构核实状态" prop="hszt">
-          <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
-            <el-option
-              v-for="dict in hsztOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+    <el-dialog title="查询条件" class="check-dialog" :visible.sync="chaxunDialog" width="800px" >
+      <el-form ref="chaxunForm" :model="gzQueryForm" :rules="rules" label-width="118px" size="small">
+        <div class="form-group" v-if="tabsValue==='three'">
+          <el-form-item label="规则分类" prop="gzfl">
+            <el-select v-model="gzQueryForm.gzfl">
+              <el-option
+                v-for="item in gzflOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="规则名称" prop="gzmc">
+              <el-input clearable v-model="gzQueryForm.gzmc"></el-input>
+          </el-form-item>
+          <el-form-item label="涉及就诊人次数" prop="xjjzrs">
+            <div class="item-group">
+              <el-input type="number" min="0"  v-model="gzQueryForm.xjjzrs"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0"  v-model="gzQueryForm.sjrcs"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="涉及明细数" prop="xjmxs" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="gzQueryForm.xjmxs"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="gzQueryForm.bz"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="涉及金额" prop="xjje" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="gzQueryForm.xjje"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="gzQueryForm.ydsm"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="结算总费用" prop="jsfy" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="gzQueryForm.jsfy"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="gzQueryForm.jsdj"></el-input>
+            </div>
+          </el-form-item>
+        </div>
+        <div class="form-group"  v-if="tabsValue==='six'">
+          <el-form-item label="明细项目编号" prop="mxxmbm">
+            <xmbm @onChecked="mxxmbmChecked" ref="mxxmbmPopo"/>
+          </el-form-item>
+          <el-form-item label="明细项目名称" prop="mxxmmc">
+              <el-input clearable v-model="bmQueryForm.mxxmmc"></el-input>
+          </el-form-item>
+          <el-form-item label="明细项目数量" prop="mxxmsl">
+            <div class="item-group">
+              <el-input clearable v-model="bmQueryForm.mxxmsl"></el-input>
+              <span>-</span>
+              <el-input clearable v-model="bmQueryForm.wgsl"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item class="long-label" label="明细项目医保结算范围费用" prop="mxxmbjsfy" >
+            <div class="item-group">
+              <el-input clearable v-model="bmQueryForm.mxxmbjsfy"></el-input>
+              <span>-</span>
+              <el-input clearable v-model="bmQueryForm.mxxmjyfy"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="明细项目单价" prop="mxxmdj" >
+            <div class="item-group">
+              <el-input clearable v-model="bmQueryForm.mxxmdj"></el-input>
+              <span>-</span>
+              <el-input clearable v-model="bmQueryForm.mxxmje"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="行为认定" prop="xwrd" >
+              <el-select clearable v-model="bmQueryForm.xwrd">
+                <el-option label="全部" value=""></el-option>
+                <el-option label="未认定" value="1"></el-option>
+                <el-option label="已认定" value="2"></el-option>
+                <el-option label="疑点标记" value="3"></el-option>
+              </el-select>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getList()" size="small">确 定</el-button>
-        <el-button @click="$refs['chaxunForm'].resetFields()" size="small">重置</el-button>
+        <el-button @click="resetCheckForm" size="small">重置</el-button>
       </div>
     </el-dialog>
     <guizeshuom :options="guizeOptions"></guizeshuom>
@@ -208,7 +252,7 @@
 <script>
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
 import { setSancha } from  '@/api/renwu/renwutwo'
-import { listRenwufour, updateRenwufour} from '@/api/renwu/renwufour'
+import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
 import { updateRenwufive} from '@/api/renwu/renwufive'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
@@ -222,6 +266,8 @@ import operateLog from './operateLog.vue'
 import Quanmingxi from '../../common/quanmingxi.vue'
 import Jinxiaohecha from './jinxiaohecha.vue'
 import Hechashuju from './hechashuju.vue'
+import xmbm from './xmbm.vue'
+
 export default {
   name: "Shisjc",
   components: {
@@ -233,7 +279,8 @@ export default {
     operateLog,
     Quanmingxi,
     Jinxiaohecha,
-    Hechashuju
+    Hechashuju,
+    xmbm
   },
   data() {
     return {
@@ -279,7 +326,7 @@ export default {
         label: '结算人次数',
       },{
         prop: 'xjmxs',
-        label: '涉及明细数',
+        label: '涉及项目数',
       },{
         prop: 'jsfy',
         label: '疑点费用(元)',
@@ -359,21 +406,29 @@ export default {
         pageNum: 1,
         pageSize: 50,
       },
-      queryForm:{
-        gzmc:'',
-        gzfl:'',
-        xwrd:'',
-        hszt:null
+      bmQueryForm:{
+        mxxmbm:'',
+        mxxmmc:'',
+        mxxmsl:'',
+        wgsl:'',
+        mxxmbjsfy:'',
+        mxxmjyfy:'',
+        mxxmdj:'',
+        mxxmje:'',
+        xwrd:''
       },
-      
-      guizefl:{
-        search:'',
+      gzQueryForm:{
         gzfl:'',
-        data:[],
-        selection:[],
-        total:0,
-        pageNum:1,
-        pageSize:50
+        gzmc:'',
+        xjjzrs:'',
+        sjrcs:'',
+        xjmxs:'',
+        bz:'',
+        xjje:'',
+        ydsm:'',
+        jsfy:'',
+        jsdj:'',
+        ybd:''
       },
       // 表单参数
       form: {},
@@ -385,8 +440,6 @@ export default {
       },
       //默认只有一个规则筛查tab(第三层)
       tabsValue:'three',
-      //本地或异地
-      ybd:'01',
       //上页带过来的数据
       queryInfoFrom:{},
       searchNextParams:{},
@@ -396,9 +449,8 @@ export default {
         type:''
       },
       lsh:'',//第四层的参数，查询同流水号明细需要用到
-      pkqcsj:'',//盘库期初
-      pkqmsj:'',//盘库期末
-
+      pksj:'', //盘库时间
+      gzflOptions:[],
     }
   },
   created() {
@@ -406,7 +458,55 @@ export default {
     this.getList();
   },
   methods: {
-    //规则筛查，进销核查切换
+    mxxmbmChecked(val){
+      this.bmQueryForm.mxxmbm = val
+    },
+    resetCheckForm(){
+      this.bmQueryForm = {
+        mxxmbm:'',
+        mxxmmc:'',
+        mxxmsl:'',
+        wgsl:'',
+        mxxmbjsfy:'',
+        mxxmjyfy:'',
+        mxxmdj:'',
+        mxxmje:'',
+        xwrd:''
+      }
+      this.gzQueryForm = {
+        gzfl:'',
+        gzmc:'',
+        xjjzrs:'',
+        sjrcs:'',
+        xjmxs:'',
+        bz:'',
+        xjje:'',
+        ydsm:'',
+        jsfy:'',
+        jsdj:'',
+        ybd:''
+      }
+      this.$refs['chaxunForm'].resetFields()
+      this.$refs.mxxmbmPopo.clear()
+    },
+    showCheckForm(){
+      this.chaxunDialog = true
+      if(this.tabsValue==='three'){
+        this.gzflOptions.length===0 && (this.remoteGzflMethod())
+      }
+    },
+    
+    async remoteGzflMethod(){
+      try {
+        const res = await this.getDicts('sys_renwu_gzfl')
+        if(res.code==200){
+          this.gzflOptions = res.data
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    //规则筛查，进销存核查切换
     tabsLevelChange1(val){
       this.selectedId = ''
       this.selectionList = []
@@ -414,7 +514,6 @@ export default {
     },
     //同流水号明细，全明细切换
     tabsLevelChange(val){
-      console.log(val)
       this.queryParams.pageNum=1
       this.total = 0
       const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
@@ -506,11 +605,17 @@ export default {
       this.selectedId = ''
       const {gzmc} = this.xwrdForm
       this.xwrdForm = {
+        gzmc:'',
         xwrd:'',
         bz:'',
         zkdj:'',
         wgsl:'',
-        wgfy:''
+        wgfy:'',
+        qckc:'',
+        bqgr:'',
+        xjxs:'',
+        qmkc:'',
+        ybjs:''
       }
       switch(true) {
         case (this.tabsValue=='five'||this.tabsValue=='qmx'):
@@ -556,11 +661,19 @@ export default {
         this.msgError('违规费用不能大于明细项目医保结算金额')
         return
       }
+      if(this.tabsValue==='six' && !this.pksj){//进销存核查
+        this.msgError('请选择盘库期初和盘库期末时间')
+        return   
+      }
       this.$refs['xwrdForm'].validate(async valid => {
           if (valid) {
             let res = ''
             const {type,xwbh,lx} = this.xwrdChecd
             const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,wglx:lx}
+            if(this.pksj){
+              params.pkqcsj = this.parseTime(this.pksj[0].getTime(),'{y}-{m}-{d}')
+              params.pkqmsj = this.parseTime(this.pksj[1].getTime(),'{y}-{m}-{d}')
+            }
             if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
               delete params.zkdj
               delete  params.wgsl
@@ -570,7 +683,6 @@ export default {
             if(res.code===200) {
               this.msgSuccess('操作成功')
               this.getList(this.searchNextParams)
-              // this.searchNextParams = {}
               this.selectionList.forEach(item=>{
                 rendingAdd({
                   bjr: this.$store.getters.name,
@@ -631,7 +743,7 @@ export default {
     /** 查询renwu列表 */
     async getList(query) {
       // const params = query?{...query,...this.queryParams}:this.queryParams
-      let params = {...this.queryForm,...this.queryParams}
+      let params = {...this.queryParams}
       if(query){
         params = {...params,...query}
       } else {
@@ -643,7 +755,7 @@ export default {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
-            res = await listRenwuthree(params)
+            res = await listRenwuthree({...params,...this.gzQueryForm})
             break;
           case 'four':
             params.type=1
@@ -655,7 +767,7 @@ export default {
           case 'six':
             params.type=2
             params.ischeck=1
-            res = await listRenwufour(params)
+            res = await listRenwufour({...params,...this.bmQueryForm})
             break;
           case 'qmx':
             res = await getQMX({...this.queryParams,...this.searchNextParams})
@@ -673,7 +785,7 @@ export default {
           }
           this.total = res.total;
           if(this.chaxunDialog){
-            this.$refs['chaxunForm'].resetFields()
+            this.resetCheckForm()
             this.chaxunDialog = false
           }
         }
@@ -817,7 +929,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      this.resetForm("bmQueryForm");
       this.handleQuery();
     },
     // 多选框选中数据
@@ -832,9 +944,10 @@ export default {
         this.xwrdForm.zkdj = mxxmdj
         this.xwrdForm.wgsl = mxxmsl
         this.xwrdForm.wgfy = mxxmje
-        this.tabsValue==='four' && (this.xwrdForm.gzmc = gzmc)//第五层使用上一层带过来的规则名称
+        this.xwrdForm.gzmc = gzmc
         this.xwrdForm.xwrd = ''
-        if(this.tabsValue==='six'){//进销核查
+        // this.tabsValue==='four' && (this.xwrdForm.gzmc = gzmc)//第五层使用上一层带过来的规则名称
+        if(this.tabsValue==='six'){//进销存核查
           const {qckc,bqgr,xjxs,qmkc,ybjs} = selection[0]
           this.xwrdForm.qckc = qckc
           this.xwrdForm.bqgr = bqgr
@@ -1022,6 +1135,36 @@ export default {
   }
   &::v-deep .el-form-item__label {
     font-size: 12px !important;
+  }
+}
+.check-dialog {
+  &::v-deep .el-dialog__body {
+    padding:30px 20px 5px;
+  }
+  &::v-deep .el-dialog__footer {
+    text-align: center;
+  }
+  .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .el-select {
+      width: 100%;
+    }
+    .el-form-item {
+      width: 48%;
+      display: block;
+    }
+    .long-label {
+      &::v-deep .el-form-item__label {
+        line-height: normal;
+        font-size: 12px;
+      }
+    }
+  }
+  .item-group {
+    width: 100%;
+    display: flex;
   }
 }
 </style>

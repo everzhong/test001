@@ -77,10 +77,10 @@
                   <el-table-column type="selection" width="50" align="center" />
                   <el-table-column property="jgdm" label="机构ID" align="center" show-overflow-tooltip></el-table-column>
                   <el-table-column property="jgmc" label="机构名称" align="center" show-overflow-tooltip></el-table-column>
-                  <el-table-column property="dept" label="人员类型" align="center" show-overflow-tooltip>
-                    <template slot-scope="scope">
+                  <el-table-column property="roleName" label="人员类型" align="center" show-overflow-tooltip>
+                    <!-- <template slot-scope="scope">
                       <span>{{scope.row.dept.leader}}</span>
-                    </template>
+                    </template> -->
                   </el-table-column>
                   <el-table-column property="nickName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
                 </el-table>

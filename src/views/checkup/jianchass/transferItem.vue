@@ -14,7 +14,7 @@
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="mini" @change="tabsLevelChange">
           <el-radio-button label="1">规则筛查</el-radio-button>
-          <el-radio-button label="2">进销核查</el-radio-button>
+          <el-radio-button label="2">进销存核查</el-radio-button>
         </el-radio-group>
       </div>
     </el-row>
@@ -38,24 +38,64 @@
     />
     </div>
     <!-- 查询条件 -->
-    <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px" :modal="false">
-      <el-form ref="chaxunForm" :model="queryGzForm"  label-width="100px" size="small">
-        <el-form-item label="规则分类" prop="gzfl" v-if="tabsValue==1">
-          <el-input clearable v-model="queryGzForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="规则名称" prop="gzmc" v-if="tabsValue==1">
-          <el-input clearable v-model="queryGzForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="明细项目编号" prop="mxxmbm" v-if="tabsValue==2">
-          <el-input clearable v-model="queryHcForm.mxxmbm" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="明细项目名称" prop="mxxmmc" v-if="tabsValue==2">
-          <el-input clearable v-model="queryHcForm.mxxmmc" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
+    <el-dialog title="查询条件" class="check-dialog" :visible.sync="chaxunDialog" width="800px" :modal="true">
+      <el-form ref="chaxunForm" :model="queryGzForm"  label-width="110px" size="small">
+        <div class="form-group" v-if="tabsValue==1">
+          <el-form-item label="规则分类" prop="gzfl">
+            <el-select v-model="queryGzForm.gzfl">
+              <el-option
+                v-for="item in gzflOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="规则名称" prop="gzmc">
+              <el-input clearable v-model="queryGzForm.gzmc"></el-input>
+          </el-form-item>
+          <el-form-item label="涉及就诊人次数" prop="xjjzrs">
+            <div class="item-group">
+              <el-input type="number" min="0"  v-model="queryGzForm.xjjzrs"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0"  v-model="queryGzForm.sjrcs"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="涉及明细数" prop="xjmxs" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="queryGzForm.xjmxs"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="queryGzForm.bz"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="涉及金额" prop="xjje" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="queryGzForm.xjje"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="queryGzForm.ydsm"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="结算总费用" prop="jsfy" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="queryGzForm.jsfy"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="queryGzForm.jsdj"></el-input>
+            </div>
+          </el-form-item>
+        </div>
+        <div class="form-group" v-if="tabsValue==2">
+          <el-form-item label="明细项目编号" prop="mxxmbm" >
+            <!-- <el-select v-model="queryHcForm.mxxmbm"></el-select> -->
+            <xmbm @onChecked="mxxmbmChecked" ref="mxxmbmPopo"/>
+          </el-form-item>
+          <el-form-item label="明细项目名称" prop="mxxmmc">
+            <el-input clearable v-model="queryHcForm.mxxmmc" placeholder="请输入"></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getList()" size="small">确 定</el-button>
-        <el-button @click="$refs['chaxunForm'].resetFields()" size="small">重置</el-button>
+        <el-button @click="resetCheckForm" size="small">重置</el-button>
       </div>
     </el-dialog>
   </div>
@@ -63,10 +103,14 @@
 <script>
 import { listRenwuthree,updateRenwuthree } from "@/api/renwu/renwuthree"
 import { listRenwufour,updateRenwufour } from "@/api/renwu/renwufour"
+import xmbm from './xmbm.vue'
 
 export default {
   name:"TransferItem",
   props:['options'],
+  components:{
+    xmbm
+  },
   data(){
     return{
       loading:false,
@@ -176,9 +220,17 @@ export default {
       chaxunDialog:false,
       gzflOptions:[],
       queryGzForm:{
-        ybd:'',
-        gzmc:'',
         gzfl:'',
+        gzmc:'',
+        xjjzrs:'',
+        sjrcs:'',
+        xjmxs:'',
+        bz:'',
+        xjje:'',
+        ydsm:'',
+        jsfy:'',
+        jsdj:'',
+        ybd:''
       },
       queryHcForm:{
         mxxmbm:'',
@@ -204,16 +256,42 @@ export default {
         {dictValue:'3',dictLabel:'已核实'}
       ],
       xzqOptions:[],
-      tabsValue:'1'
+      tabsValue:'1',
     }
   },
   created(){
     this.getList()
-    // this.getDicts("sys_job_jgxx").then(response => {
-    //   this.xzqOptions = response.data;
-    // });
+    this.getDicts('sys_renwu_gzfl').then(res=>{
+      if(res.code==200){
+        this.gzflOptions = res.data
+      }
+    })
   },
   methods:{
+    mxxmbmChecked(val){
+      this.queryHcForm.mxxmbm = val
+    },
+    resetCheckForm(){
+      this.queryHcForm = {
+        mxxmbm:'',
+        mxxmmc:''
+      }
+      this.queryGzForm = {
+        gzfl:'',
+        gzmc:'',
+        xjjzrs:'',
+        sjrcs:'',
+        xjmxs:'',
+        bz:'',
+        xjje:'',
+        ydsm:'',
+        jsfy:'',
+        jsdj:'',
+        ybd:''
+      }
+      this.$refs['chaxunForm'].resetFields()
+      this.$refs.mxxmbmPopo.clear()
+    },
     tabsLevelChange(val){
       this.$emit('on-change',val)
       this.getList()
@@ -239,11 +317,6 @@ export default {
           })
         }
       })
-      // selection.forEach(item => {
-      //   this.tableData = this.tableData.filter(subItem=>{
-      //     return item.hs!=subItem.hs
-      //   })
-      // })
     },
     addData(selection){
       this.tableData = this.tableData.concat(selection)
@@ -258,12 +331,16 @@ export default {
         params = {...params,...this.queryGzForm}
         res = await listRenwuthree(params)
       } else {
-        params = {...params,...this.queryHcForm,type:2}
+        params = {...params,...this.queryHcForm,type:2,ischeck:1}
         res = await listRenwufour(params)
       }
       if(res.code===200){
         this.tableData = res.rows;
         this.total = res.total;
+        if(this.chaxunDialog){
+          this.resetCheckForm()
+          this.chaxunDialog = false
+        }
       }
       this.loading = false
     },
@@ -296,3 +373,35 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.check-dialog {
+  &::v-deep .el-dialog__body {
+    padding:30px 20px 5px;
+  }
+  &::v-deep .el-dialog__footer {
+    text-align: center;
+  }
+  .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .el-select {
+      width: 100%;
+    }
+    .el-form-item {
+      width: 48%;
+      display: block;
+    }
+    .long-label {
+      &::v-deep .el-form-item__label {
+        line-height: normal;
+        font-size: 12px;
+      }
+    }
+  }
+  .item-group {
+    width: 100%;
+    display: flex;
+  }
+}
+</style>

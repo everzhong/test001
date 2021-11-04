@@ -34,11 +34,12 @@ export function addRenwutwo(data) {
 }
 
 // 修改renwutwo
-export function updateRenwutwo(data) {
+export function updateRenwutwo(data, innoreError) {
     return request({
         url: '/renwu/renwutwo',
         method: 'put',
-        data: data
+        data: data,
+        innoreError: innoreError
     })
 }
 ///setdy打印通知

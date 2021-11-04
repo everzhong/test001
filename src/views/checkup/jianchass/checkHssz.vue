@@ -5,7 +5,7 @@
         <el-col :span="1.5">
           <el-radio-group v-model="gzTabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="1">规则筛查</el-radio-button>
-            <el-radio-button label="2">进销核查</el-radio-button>
+            <el-radio-button label="2">进销存核查</el-radio-button>
           </el-radio-group>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue!=='three'">
@@ -14,7 +14,7 @@
         <div class="top-right-btn">
           <el-col :span="1.5" v-show="gzTabsValue==1">
             <span style="margin-right:10px;font-size:12px;color:#606266">参保人</span>
-            <el-select v-model="queryForm.ybd" size="small" @change="ybdChange" style="width:100px">
+            <el-select v-model="queryGzForm.ybd" size="small" @change="ybdChange" style="width:100px">
               <el-option label="本地" value="01"></el-option>
               <el-option label="异地" value="02"></el-option>
             </el-select>
@@ -57,34 +57,63 @@
       <div><span>情况说明：{{selection.qksm}}</span><span>相关资料：{{selection.xgzl}}</span></div>
     </div>
     <!-- 查询条件 -->
-    <el-dialog title="查询条件" class="msg-dialog" :visible.sync="chaxunDialog" width="650px" :modal="false">
-      <el-form ref="chaxunForm" :model="queryForm"  label-width="100px" size="small">
-        <el-form-item label="规则分类" prop="gzfl" v-if="gzTabsValue==1">
-          <el-input clearable v-model="queryForm.gzfl" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="规则名称" prop="gzmc" v-if="gzTabsValue==1">
-          <el-input clearable v-model="queryForm.gzmc" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="机构核实状态" prop="hszt" v-if="gzTabsValue==1">
-          <el-select clearable v-model="queryForm.hszt" placeholder="全部" style="width:360px">
-            <el-option
-              v-for="dict in hsztOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="明细项目编号" prop="mxxmbm" v-if="gzTabsValue==2">
-          <el-input clearable v-model="queryHcForm.mxxmbm" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
-        <el-form-item label="明细项目名称" prop="mxxmmc" v-if="gzTabsValue==2">
-          <el-input clearable v-model="queryHcForm.mxxmmc" placeholder="请输入" style="width:360px"></el-input>
-        </el-form-item>
+    <el-dialog title="查询条件" class="check-dialog" :visible.sync="chaxunDialog" width="800px" :modal="true">
+      <el-form ref="chaxunForm" :model="queryGzForm"  label-width="110px" size="small">
+        <div class="form-group" v-if="gzTabsValue==1">
+          <el-form-item label="规则分类" prop="gzfl">
+            <el-select v-model="queryGzForm.gzfl">
+              <el-option
+                v-for="item in gzflOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="规则名称" prop="gzmc">
+              <el-input clearable v-model="queryGzForm.gzmc"></el-input>
+          </el-form-item>
+          <el-form-item label="涉及就诊人次数" prop="xjjzrs">
+            <div class="item-group">
+              <el-input type="number" min="0"  v-model="queryGzForm.xjjzrs"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0"  v-model="queryGzForm.sjrcs"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="涉及明细数" prop="xjmxs" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="queryGzForm.xjmxs"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="queryGzForm.bz"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="涉及金额" prop="xjje" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="queryGzForm.xjje"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="queryGzForm.ydsm"></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="结算总费用" prop="jsfy" >
+            <div class="item-group">
+              <el-input type="number" min="0" v-model="queryGzForm.jsfy"></el-input>
+              <span>-</span>
+              <el-input type="number" min="0" v-model="queryGzForm.jsdj"></el-input>
+            </div>
+          </el-form-item>
+        </div>
+        <div class="form-group" v-if="gzTabsValue==2">
+          <el-form-item label="明细项目编号" prop="mxxmbm" >
+            <xmbm @onChecked="mxxmbmChecked" ref="mxxmbmPopo"/>
+          </el-form-item>
+          <el-form-item label="明细项目名称" prop="mxxmmc">
+            <el-input clearable v-model="queryHcForm.mxxmmc"></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getList()" size="small">确 定</el-button>
-        <el-button @click="$refs['chaxunForm'].resetFields()" size="small">重置</el-button>
+        <el-button @click="resetCheckForm" size="small">重置</el-button>
       </div>
     </el-dialog>
   </div>
@@ -95,11 +124,14 @@ import { listRenwufour } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
+import xmbm from './xmbm.vue'
+
 export default {
   name:"CheckHssz",
   components:{
     LiushuiTable,
-    Tongliumx
+    Tongliumx,
+    xmbm
   },
   data(){
     return {
@@ -255,11 +287,19 @@ export default {
         pageSize:50,
         pageNum:1
       },
-      queryForm:{
-        ybd:'',
-        gzmc:'',
+      gzflOptions:[],
+      queryGzForm:{
         gzfl:'',
-        xwrd:''
+        gzmc:'',
+        xjjzrs:'',
+        sjrcs:'',
+        xjmxs:'',
+        bz:'',
+        xjje:'',
+        ydsm:'',
+        jsfy:'',
+        jsdj:'',
+        ybd:''
       },
       queryHcForm:{
         mxxmbm:'',
@@ -280,8 +320,37 @@ export default {
   created(){
     this.queryInfoFrom = this.$route.query
     this.getList()
+    this.getDicts('sys_renwu_gzfl').then(res=>{
+      if(res.code==200){
+        this.gzflOptions = res.data
+      }
+    })
   },
   methods:{
+    mxxmbmChecked(val){
+      this.queryHcForm.mxxmbm = val
+    },
+    resetCheckForm(){
+      this.queryHcForm = {
+        mxxmbm:'',
+        mxxmmc:''
+      }
+      this.queryGzForm = {
+        gzfl:'',
+        gzmc:'',
+        xjjzrs:'',
+        sjrcs:'',
+        xjmxs:'',
+        bz:'',
+        xjje:'',
+        ydsm:'',
+        jsfy:'',
+        jsdj:'',
+        ybd:''
+      }
+      this.$refs['chaxunForm'].resetFields()
+      this.$refs.mxxmbmPopo.clear()
+    },
     tabsLevelChange(){
       this.getList()
     },
@@ -319,7 +388,7 @@ export default {
       this.getList()
     },
     async getList(query) {
-      let params = this.gzTabsValue==1? {...this.queryForm,...this.queryParams}:{...this.queryHcForm,...this.queryParams}
+      let params = this.gzTabsValue==1? {...this.queryGzForm,...this.queryParams}:{...this.queryHcForm,...this.queryParams}
       if(query){
         params = {...params,...query}
       } else {
@@ -334,7 +403,7 @@ export default {
             res = await listRenwuthree({hs:3,...params})
             break;
           case (this.gzTabsValue==='2'):
-            res = await listRenwufour({hs:3,...params,type:2})
+            res = await listRenwufour({hs:3,...params,type:2,ischeck:1})
             break;
           case (this.tabsValue === 'four'):
             res = await listRenwufour(params)
@@ -355,7 +424,7 @@ export default {
           }
           this.total = res.total;
           if(this.chaxunDialog){
-            this.$refs['chaxunForm'].resetFields()
+            this.resetCheckForm()
             this.chaxunDialog = false
           }
         }
@@ -365,7 +434,7 @@ export default {
       this.loading = false
     },
     // async getList(query){
-    //   let params ={...this.queryParams,...this.queryForm}
+    //   let params ={...this.queryParams,...this.queryGzForm}
     //   query&&(params = {...params,...query})
     //   this.loading = true
     //   const res = await listRenwuthree(params)
@@ -422,4 +491,34 @@ export default {
     height:calc(100% - 100px);
     margin-bottom:60px
   }
+.check-dialog {
+  &::v-deep .el-dialog__body {
+    padding:30px 20px 5px;
+  }
+  &::v-deep .el-dialog__footer {
+    text-align: center;
+  }
+  .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .el-select {
+      width: 100%;
+    }
+    .el-form-item {
+      width: 48%;
+      display: block;
+    }
+    .long-label {
+      &::v-deep .el-form-item__label {
+        line-height: normal;
+        font-size: 12px;
+      }
+    }
+  }
+  .item-group {
+    width: 100%;
+    display: flex;
+  }
+}
 </style>

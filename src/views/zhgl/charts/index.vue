@@ -160,11 +160,11 @@ export default {
   },
   methods: {
     getQuery(){
-      // const query = {
-      //   stime:this.parseTime(this.checkDate[0].getTime(),'{y}-{m}'),
-      //   etime:this.parseTime(this.checkDate[1].getTime(),'{y}-{m}')
-      // }
-      return {}
+      const query = {
+        stime:this.parseTime(this.checkDate[0].getTime(),'{y}-{m}'),
+        etime:this.parseTime(this.checkDate[1].getTime(),'{y}-{m}')
+      }
+      return query
     },
     handelJsdjChange(){
       this.getChart3()
@@ -190,140 +190,155 @@ export default {
     async getChart1(){
       const query = this.getQuery()
       this.loading1 = true
-      const res = await getTjjzlx1(query)
-      if(res.code===200){
-        const sdata = []
-        res.rows.forEach(element => {
-          const obj = [
-            {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
-            { value: element?.wgfy*1||0, name: '认定费用' },
-            { value: element?.xjjzrs*1||0, name: '人次' }
-          ]
-          switch(element.jslb) {
-            case '0101':
-              sdata[0]={
-                label:'住院',
-                data:obj
-              }
-              break;
-            case '0102':
-              sdata[1]={
-                label:'门诊',
-                data:obj
-              }
-              break;
-            case '0107':
-              sdata[2]={
-                label:'内设',
-                data:obj
-              }
-              break;
-            default:
-              break;
-          }
-          this.chart1Data = sdata
-        });
+      try {
+         const res = await getTjjzlx1(query)
+        if(res.code===200){
+          const sdata = []
+          res.rows.forEach(element => {
+            const obj = [
+              {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
+              { value: element?.wgfy*1||0, name: '认定费用' },
+              { value: element?.xjjzrs*1||0, name: '人次' }
+            ]
+            switch(element.jslb) {
+              case '0101':
+                sdata[0]={
+                  label:'住院',
+                  data:obj
+                }
+                break;
+              case '0102':
+                sdata[1]={
+                  label:'门诊',
+                  data:obj
+                }
+                break;
+              case '0107':
+                sdata[2]={
+                  label:'内设',
+                  data:obj
+                }
+                break;
+              default:
+                break;
+            }
+            this.chart1Data = sdata
+          });
+        }
+      } catch (error) {
+        console.log(error)
       }
       this.loading1 = false
     },
     async getChart2(){
       const query = this.getQuery()
       this.loading2 = true
-      const res = await getTjjzlx2(query)
-      if(res.code===200){
-        const gzfl = res.rows.map(item=>item.gzfl)
-        const sdata = {
-          label:gzfl,
-          data:[[],[],[]]
+      try {
+        const res = await getTjjzlx2(query)
+        if(res.code===200){
+          const gzfl = res.rows.map(item=>item.gzfl)
+          const sdata = {
+            label:gzfl,
+            data:[[],[],[]]
+          }
+          res.rows.forEach(element => {
+            sdata.data[0].push(element?.mxxmbjsfy*1||0)
+            sdata.data[1].push(element?.wgfy*1||0)
+            sdata.data[2].push(element?.xjjzrs*1||0)
+            this.chart2Data = sdata
+          });
         }
-        res.rows.forEach(element => {
-          // const obj = [
-          //   {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
-          //   { value: element?.wgfy*1||0, name: '认定费用' },
-          //   { value: element?.xjjzrs*1||0, name: '人次' }
-          // ]
-          sdata.data[0].push(element?.mxxmbjsfy*1||0)
-          sdata.data[1].push(element?.wgfy*1||0)
-          sdata.data[2].push(element?.xjjzrs*1||0)
-          this.chart2Data = sdata
-        });
+      } catch (error) {
+        console.log(error)
       }
       this.loading2 = false
     },
     async getChart3(){
       const query = this.getQuery()
       this.loading3= true
-      const res = await getTjjzlx3(query)
-      if(res.code===200){
-        const jgmc = res.rows.map(item=>item.jgmc)
-        const sdata = {
-          label:jgmc,
-          data:[[],[],[]]
+      try {
+        const res = await getTjjzlx3(query)
+        if(res.code===200){
+          const jgmc = res.rows.map(item=>item.jgmc)
+          const sdata = {
+            label:jgmc,
+            data:[[],[],[]]
+          }
+          res.rows.forEach(element => {
+            sdata.data[0].push(element?.mxxmbjsfy*1||0)
+            sdata.data[1].push(element?.wgfy*1||0)
+            sdata.data[2].push(element?.xjjzrs*1||0)
+            this.chart3Data = sdata
+          });
         }
-        res.rows.forEach(element => {
-          sdata.data[0].push(element?.mxxmbjsfy*1||0)
-          sdata.data[1].push(element?.wgfy*1||0)
-          sdata.data[2].push(element?.xjjzrs*1||0)
-          this.chart3Data = sdata
-        });
+      } catch (error) {
+        console.log(error)
       }
       this.loading3 = false
     },
     async getChart4(){
       const query = this.getQuery()
       this.loading4 = true
-      const res = await getTjjzlx4(query)
-      if(res.code===200){
-        const xm = res.rows.map(item=>item.xm)
-        const sdata = {
-          label:xm,
-          data:[[],[],[]]
+      try {
+        const res = await getTjjzlx4(query)
+        if(res.code===200){
+          const xm = res.rows.map(item=>item.xm)
+          const sdata = {
+            label:xm,
+            data:[[],[],[]]
+          }
+          res.rows.forEach(element => {
+            sdata.data[0].push(element?.mxxmbjsfy*1||0)
+            sdata.data[1].push(element?.wgfy*1||0)
+            sdata.data[2].push(element?.xjjzrs*1||0)
+            this.chart4Data = sdata
+          });
         }
-        res.rows.forEach(element => {
-          sdata.data[0].push(element?.mxxmbjsfy*1||0)
-          sdata.data[1].push(element?.wgfy*1||0)
-          sdata.data[2].push(element?.xjjzrs*1||0)
-          this.chart4Data = sdata
-        });
+      } catch (error) {
+        console.log(error)
       }
       this.loading4 = false
     },
     async getChart5(){
       const query = this.getQuery()
       this.loading3 = true
-      const res = await getTjjzlx5({...query,jsdj:this.jsdj})
-      if(res.code===200){
-        const sdata = []
-        res.rows.forEach(element => {
-          const obj = [
-            {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
-            { value: element?.wgfy*1||0, name: '认定费用' },
-            { value: element?.xjjzrs*1||0, name: '人次' }
-          ]
-          switch(element.jsdj*1) {
-            case 1:
-              sdata[0]={
-                label:'一级',
-                data:obj
-              }
-              break;
-            case 2:
-              sdata[1]={
-                label:'二级',
-                data:obj
-              }
-              break;
-            case 3:
-              sdata[2]={
-                label:'三级',
-                data:obj
-              }
-              break;
-            default:
-              break;
-          }
-        })
-        this.chart5Data = sdata
+      try {
+         const res = await getTjjzlx5({...query,jsdj:this.jsdj})
+        if(res.code===200){
+          const sdata = []
+          res.rows.forEach(element => {
+            const obj = [
+              {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
+              { value: element?.wgfy*1||0, name: '认定费用' },
+              { value: element?.xjjzrs*1||0, name: '人次' }
+            ]
+            switch(element.jsdj*1) {
+              case 1:
+                sdata[0]={
+                  label:'一级',
+                  data:obj
+                }
+                break;
+              case 2:
+                sdata[1]={
+                  label:'二级',
+                  data:obj
+                }
+                break;
+              case 3:
+                sdata[2]={
+                  label:'三级',
+                  data:obj
+                }
+                break;
+              default:
+                break;
+            }
+          })
+          this.chart5Data = sdata
+        }
+      } catch (error) {
+        console.log(error)
       }
       this.loading3 = false
     }

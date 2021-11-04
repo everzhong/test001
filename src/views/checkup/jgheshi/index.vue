@@ -4,7 +4,7 @@
       <el-col :span="1.5">
         <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
           <el-radio-button label="three">规则筛查</el-radio-button>
-          <el-radio-button label="four">进销核查</el-radio-button>
+          <el-radio-button label="four">进销存核查</el-radio-button>
         </el-radio-group>
       </el-col>
   </el-row>

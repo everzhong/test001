@@ -1,7 +1,7 @@
 <template>
     <section class="jgheshi">
       <div class="head-close">
-        <span class="title">机构核实</span>
+        <span class="hs-title">机构核实</span>
         <span class="el-icon-close" @click="$emit('on-close')"></span>
       </div>
       <el-radio-group v-model="tabsValue" size="small">
@@ -54,7 +54,7 @@ export default {
       },
       rightState:[],
       leftState:[],
-      dataType:'1',//规则筛查1，进销核查2
+      dataType:'1',//规则筛查1，进销存核查2
     }
   },
   components:{
@@ -182,12 +182,12 @@ export default {
     align-items: center;
     color: #606266;
     line-height: 32px;
+    height: 32px;
     padding-left:15px;
     padding-right:10px;
     border:1px solid #cecece;
     margin-bottom: 15px;
-    // background-color: #f8f8f9;
-    .title {
+    .hs-title {
       font-size: 14px;
       font-weight: 600;
     }
