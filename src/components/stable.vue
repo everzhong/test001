@@ -34,6 +34,7 @@
               :value="item.dictValue">
             </el-option>
           </el-select>
+          <el-button type="text" size="mini" v-if="col.viewTemp==='button' && scope.row[col.prop]" @click="poerateButton(scope.row)"> {{scope.row[col.prop]}} </el-button>
         </template>
       </el-table-column>
       <slot name="operate" @contextmenu="mouseRightClick" v-if="tableHeader.length"></slot>
@@ -295,6 +296,9 @@ export default {
     },
     ydChange(row){
       this.$emit('yd-change',row)
+    },
+    poerateButton(row){
+      this.$emit('on-click',row)
     },
     tableRowClassName({row}){
       let className = ''

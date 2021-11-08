@@ -250,8 +250,29 @@ export default {
       this[keyw].show = true
       this.mxShow = true
     },
+    getResql(){
+      let params = {
+        resql:''
+      }
+      if(this.tabsValue!=='two'){
+        if(this.ids.length) {
+          const resql = []
+          this.selectionList.forEach(item=>{
+            resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}')`)
+          })
+          params = {resql:resql.join(' or ')}
+        } else {
+          this.resql && (params ={resql:this.resql})
+        }
+      }
+      return params
+    },
     /** 查询renwutwo列表 */
     async getList(query) {
+      const data = this.getResql()
+      if(this.tabsValue!=='two' && !this.resql && !data.resql){
+        return
+      }
       const params = query?{...this.queryParams,...query}:this.queryParams
       delete params.status
       this.loading = true
@@ -259,10 +280,10 @@ export default {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
-            res = await listRenwuthreeRj(params)
+            res =  await listRenwuthreeRj({...params,...data})
             break;
           case 'four':
-            res = await listRenwufourRj({type:1,...params})
+            res = await listRenwufourRj({type:1,...params,...data})
             break;
           default:
             params.status = 0 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
@@ -568,18 +589,10 @@ export default {
       this.qmxOptions.show=false
       if(val!=='two'){
         this.tableHeight = this.calcTableHeight(46)
-        if(this.ids.length) {
-          const resql = []
-          this.selectionList.forEach(item=>{
-            resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}')`)
-          })
-          this.getList({resql:resql.join(' or ')})
-        } else {
-          this.resql && (this.getList({resql:this.resql}))
-        }
       } else {
         this.ids = []
       }
+      this.getList()
       this.submitParams.yxjg = ''
     },
   }

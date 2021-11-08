@@ -51,8 +51,8 @@ Vue.prototype.calcTableHeight = calcTableHeight
 Vue.prototype.addJcfl = function(query) {
     const params = {
         ...query,
-        zhczsj: this.parseTime(new Date(), '{y}-{m}-{d}'),
-        addtime: this.parseTime(new Date(), '{y}-{m}-{d}')
+        zhczsj: this.parseTime(new Date().getTime()),
+        addtime: this.parseTime(new Date().getTime())
     }
     addJcfl(params)
 }

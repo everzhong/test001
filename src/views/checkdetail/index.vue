@@ -342,6 +342,10 @@ export default {
     },
     /** 查询renwutwo列表 */
     async getList(options) {
+      const data = this.getResql(this.tabsValue)
+      if(this.tabsValue!=='two' && !this.resql && !data.resql){
+        return
+      }
       const params = options?{...this.queryParams,...options}:this.queryParams
       const { query } = this.$route
       params.rwpcid = query?.rwpcid
@@ -351,10 +355,10 @@ export default {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
-            res = await listRenwuthreeRj(params)
+            res = await listRenwuthreeRj({...params,...data})
             break;
           case 'four':
-            res = await listRenwufourRj({type:1,...params})
+            res = await listRenwufourRj({type:1,...params,...data})
             break;
           default:
             res = await listRenwutwo(params)
@@ -771,6 +775,29 @@ export default {
         })
       }).catch(_=>{})
     },
+    getResql(val){
+      const resql = []
+      let params = {
+        resql:''
+      }
+      if(this.ids.length && (val==='three'||(val==='four'&& this.threeIds.length===0))){
+        this.selectionList.forEach(item=>{
+          resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}')`)
+        })
+       params = {resql:resql.join(' or ')}
+      } else if(val==='four' && this.threeIds.length){//勾选了第三层，则用勾选的参数去查第四层
+        this.selectionThreeList.forEach(item=>{
+          resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}' and gzmc='${item.gzmc}')`)
+        })
+        params = {resql:resql.join(' or ')}
+      } else {
+        this.ids = []
+        if(this.resql){
+          params = {resql:this.resql}
+        }
+      }
+      return params
+    },
     /**
      * tabs切换
      */
@@ -781,26 +808,7 @@ export default {
       this.queryParams.pageNum = 1
       this.total = 0
       val!=='four' && (this.threeIds=[])
-      if(this.ids.length && (val==='three'||(val==='four'&& this.threeIds.length===0))){
-        const resql = []
-        this.selectionList.forEach(item=>{
-          resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}')`)
-        })
-        this.getList({resql:resql.join(' or ')})
-        // const jgdmList = this.selectionList.map(item=>item.jgdm)
-        // this.getList({jgdm:jgdmList.join(',')})
-      } else if(val==='four' && this.threeIds.length){//勾选了第三层，则用勾选的参数去查第四层
-        const resql = []
-        this.selectionThreeList.forEach(item=>{
-          resql.push(`(rwpcid='${item.rwpcid}' and jgdm='${item.jgdm}' and gzmc='${item.gzmc}')`)
-        })
-        this.getList({resql:resql.join(' or ')})
-      } else {
-        this.ids = []
-        if(this.resql){
-          this.getList({resql:this.resql})
-        }
-      }
+      this.getList()
     },
     statusText(status){
       if(status!==null ||status!==''||status!==undefined){

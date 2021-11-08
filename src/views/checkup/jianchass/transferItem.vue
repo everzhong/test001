@@ -61,7 +61,7 @@
               <el-input type="number" min="0"  v-model="queryGzForm.sjrcs"></el-input>
             </div>
           </el-form-item>
-          <el-form-item label="涉及明细数" prop="xjmxs" >
+          <el-form-item label="涉及项目数" prop="xjmxs" >
             <div class="item-group">
               <el-input type="number" min="0" v-model="queryGzForm.xjmxs"></el-input>
               <span>-</span>
@@ -290,7 +290,7 @@ export default {
         ybd:''
       }
       this.$refs['chaxunForm'].resetFields()
-      this.$refs.mxxmbmPopo.clear()
+      this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())
     },
     tabsLevelChange(val){
       this.$emit('on-change',val)
@@ -326,21 +326,25 @@ export default {
       let params ={...this.queryParams,hs:'1',jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       query&&(params = {...params,...query})
       this.loading = true
-      let res = ""
-      if(this.tabsValue==='1'){
-        params = {...params,...this.queryGzForm}
-        res = await listRenwuthree(params)
-      } else {
-        params = {...params,...this.queryHcForm,type:2,ischeck:1}
-        res = await listRenwufour(params)
-      }
-      if(res.code===200){
-        this.tableData = res.rows;
-        this.total = res.total;
-        if(this.chaxunDialog){
-          this.resetCheckForm()
-          this.chaxunDialog = false
+      try {
+        let res = ""
+        if(this.tabsValue==='1'){
+          params = {...params,...this.queryGzForm}
+          res = await listRenwuthree(params)
+        } else {
+          params = {...params,...this.queryHcForm,type:2,ischeck:1}
+          res = await listRenwufour(params)
         }
+        if(res.code===200){
+          this.tableData = res.rows;
+          this.total = res.total;
+          if(this.chaxunDialog){
+            this.resetCheckForm()
+            this.chaxunDialog = false
+          }
+        }
+      } catch (error) {
+        console.log(error)
       }
       this.loading = false
     },

@@ -17,10 +17,10 @@
           </div>
         </el-col>
         <el-col :span="3" :offset="4">
-          <el-button style="margin-left:20px" size="mini" type="primary">搜索</el-button>
+          <el-button @click="getList" style="margin-left:20px" size="mini" type="primary">搜索</el-button>
         </el-col>
         <el-col :span="2">
-          <el-button size="mini" type="primary">重置</el-button>
+          <el-button @click="searchMxxmbm='',getList()" size="mini" type="primary">重置</el-button>
         </el-col>
       </el-row>
       <div class="table-main" v-loading="loading">
@@ -77,7 +77,7 @@ export default {
       this.selection = val
     },
     popoConfirm(){
-      const bmList = this.selection.map(item=>item.mxxmbm)
+      const bmList = this.selection.map(item=>`'${item.mxxmbm}'`)
       this.mxxmbm = bmList.join(',')
       this.$emit('onChecked',this.mxxmbm)
       this.closePopover()

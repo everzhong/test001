@@ -68,3 +68,10 @@ export function getXgzlxm(query) {
         params: query
     })
 }
+///renwu/xgzlxm/
+export function getXghc(hcid) {
+    return request({
+        url: 'renwu/xgzlxm/' + hcid,
+        method: 'get',
+    })
+}

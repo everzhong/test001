@@ -80,7 +80,7 @@
               <el-input type="number" min="0"  v-model="queryGzForm.sjrcs"></el-input>
             </div>
           </el-form-item>
-          <el-form-item label="涉及明细数" prop="xjmxs" >
+          <el-form-item label="涉及项目数" prop="xjmxs" >
             <div class="item-group">
               <el-input type="number" min="0" v-model="queryGzForm.xjmxs"></el-input>
               <span>-</span>
@@ -349,7 +349,7 @@ export default {
         ybd:''
       }
       this.$refs['chaxunForm'].resetFields()
-      this.$refs.mxxmbmPopo.clear()
+      this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())
     },
     tabsLevelChange(){
       this.getList()

@@ -75,9 +75,6 @@ export default {
         this.msgError('请从已选列表选择需要核实的数据')
         return
       }
-      // const needHs = allSelect.filter(item=>{
-      //   return !(item.hszt && item.hszt*1>=1)
-      // })
       if(allSelect && allSelect.length){//遍历核实
         const request = []
         allSelect.forEach(need=>{

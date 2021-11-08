@@ -23,11 +23,11 @@
             <el-form-item label="机构名称" prop="jgmc">
               <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
             </el-form-item>
-              <el-form-item label="检查机构" prop="jcjg">
+              <el-form-item label="承办机构" prop="jcjg">
               <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
             </el-form-item>
-              <el-form-item label="检查组" prop="jcz">
-              <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+              <el-form-item label="检查组" prop="jczname">
+              <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
             </el-form-item>
             <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
               <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
@@ -50,7 +50,7 @@
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保人：</span>
-          <el-select v-model="gzQueryForm.ybd" size="small">
+          <el-select v-model="gzQueryForm.ybd" size="small" @change="getList">
             <el-option label="本地" value="01"></el-option>
             <el-option label="异地" value="02"></el-option>
           </el-select>
@@ -99,7 +99,7 @@
               </template>
             </el-table-column>
         </sTable>
-        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.gzmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
+        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
@@ -116,8 +116,8 @@
       />
       <div v-show="(tabsValue=='four'||tabsValue=='six')&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:10px;">
         <el-form inline :model="xwrdForm" :rules="xwRules" size="mini" ref="xwrdForm" label-width="100px">
-          <el-form-item label="名称" prop="gzmc">
-            <el-input v-model="xwrdForm.gzmc" disabled></el-input>
+          <el-form-item label="名称">
+            <el-input v-model="xwrdForm.mxxmmc" disabled></el-input>
           </el-form-item>
           <el-form-item label="行为认定" prop="xwrd">
             <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
@@ -177,7 +177,7 @@
               <el-input type="number" min="0"  v-model="gzQueryForm.sjrcs"></el-input>
             </div>
           </el-form-item>
-          <el-form-item label="涉及明细数" prop="xjmxs" >
+          <el-form-item label="涉及项目数" prop="xjmxs" >
             <div class="item-group">
               <el-input type="number" min="0" v-model="gzQueryForm.xjmxs"></el-input>
               <span>-</span>
@@ -208,23 +208,23 @@
           </el-form-item>
           <el-form-item label="明细项目数量" prop="mxxmsl">
             <div class="item-group">
-              <el-input clearable v-model="bmQueryForm.mxxmsl"></el-input>
+              <el-input type="number" v-model="bmQueryForm.mxxmsl"></el-input>
               <span>-</span>
-              <el-input clearable v-model="bmQueryForm.wgsl"></el-input>
+              <el-input type="number" v-model="bmQueryForm.wgsl"></el-input>
             </div>
           </el-form-item>
           <el-form-item class="long-label" label="明细项目医保结算范围费用" prop="mxxmbjsfy" >
             <div class="item-group">
-              <el-input clearable v-model="bmQueryForm.mxxmbjsfy"></el-input>
+              <el-input type="number" v-model="bmQueryForm.mxxmbjsfy"></el-input>
               <span>-</span>
-              <el-input clearable v-model="bmQueryForm.mxxmjyfy"></el-input>
+              <el-input type="number" v-model="bmQueryForm.mxxmjyfy"></el-input>
             </div>
           </el-form-item>
           <el-form-item label="明细项目单价" prop="mxxmdj" >
             <div class="item-group">
-              <el-input clearable v-model="bmQueryForm.mxxmdj"></el-input>
+              <el-input type="number" v-model="bmQueryForm.mxxmdj"></el-input>
               <span>-</span>
-              <el-input clearable v-model="bmQueryForm.mxxmje"></el-input>
+              <el-input type="number" v-model="bmQueryForm.mxxmje"></el-input>
             </div>
           </el-form-item>
           <el-form-item label="行为认定" prop="xwrd" >
@@ -351,7 +351,7 @@ export default {
         show:false
       },
       xwrdForm:{
-        gzmc:'',
+        mxxmmc:'',
         xwrd:'',
         bz:'',
         zkdj:'',
@@ -366,7 +366,15 @@ export default {
       //选中的违规行为对象
       xwrdChecd:{},
       xwRules:{
-        xwrd:[{required:true,message:'必填项'}]
+        xwrd:[{required:true,message:'必填项'}],
+        zkdj:[{required:true,message:'必填项'}],
+        wgsl:[{required:true,message:'必填项'}],
+        wgfy:[{required:true,message:'必填项'}],
+        qckc:[{required:true,message:'必填项'}],
+        bqgr:[{required:true,message:'必填项'}],
+        xjxs:[{required:true,message:'必填项'}],
+        qmkc:[{required:true,message:'必填项'}],
+        ybjs:[{required:true,message:'必填项'}]
       },
       guizeOptions:{
         show:false
@@ -442,7 +450,8 @@ export default {
       tabsValue:'three',
       //上页带过来的数据
       queryInfoFrom:{},
-      searchNextParams:{},
+      searchLsNextParams:{},
+      searchTlsNextParams:{},
       logOption:{
         show:false,
         xwrd:'',
@@ -455,6 +464,7 @@ export default {
   },
   created() {
     this.queryInfoFrom = this.$route.query
+    console.log(this.queryInfoFrom)
     this.getList();
   },
   methods: {
@@ -487,7 +497,7 @@ export default {
         ybd:''
       }
       this.$refs['chaxunForm'].resetFields()
-      this.$refs.mxxmbmPopo.clear()
+      this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())
     },
     showCheckForm(){
       this.chaxunDialog = true
@@ -495,7 +505,6 @@ export default {
         this.gzflOptions.length===0 && (this.remoteGzflMethod())
       }
     },
-    
     async remoteGzflMethod(){
       try {
         const res = await this.getDicts('sys_renwu_gzfl')
@@ -511,13 +520,14 @@ export default {
       this.selectedId = ''
       this.selectionList = []
       this.getList()
+      this.$refs.xwrdForm.clearValidate()
     },
     //同流水号明细，全明细切换
     tabsLevelChange(val){
       this.queryParams.pageNum=1
       this.total = 0
       const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
-      this.searchNextParams = val=='five'?{lsh:this.lsh||''}:{
+      this.searchTlsNextParams = val=='five'?{lsh:this.lsh||''}:{
         jgdm:jgdm,
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
@@ -528,10 +538,6 @@ export default {
      * 第三方筛查
      */
     handleThirdCheck(){
-      // if(this.queryInfoFrom.sccqstatus*1>=1){
-      //   this.msgSuccess('已提交过筛查')
-      //   return
-      // }
       this.$confirm('是否对当前机构进行数据筛查', "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -603,9 +609,8 @@ export default {
     //返回上一层
     goBackUpLevel(){
       this.selectedId = ''
-      const {gzmc} = this.xwrdForm
       this.xwrdForm = {
-        gzmc:'',
+        mxxmmc:'',
         xwrd:'',
         bz:'',
         zkdj:'',
@@ -621,17 +626,16 @@ export default {
         case (this.tabsValue=='five'||this.tabsValue=='qmx'):
           if(this.qmxOptions.show){
             this.qmxOptions.show = false
-            this.xwrdForm.gzmc=gzmc
           } else {
             this.tabsValue = 'four'
-            this.xwrdForm.gzmc=''
+            this.xwrdForm.mxxmmc=''
             this.lsh = ''
           }
           break
         case (this.tabsValue=='four'):
           this.tabsValue = 'three'
           this.getList()
-          this.xwrdForm.gzmc=''
+          this.xwrdForm.mxxmmc=''
           break
         default :
          break
@@ -656,20 +660,20 @@ export default {
         this.msgError('请选择一项在进行行为认定')
         return
       }
+      if(this.tabsValue==='six' && !this.pksj){//进销存核查
+        this.msgError('请选择盘库期初和盘库期末时间')
+        return   
+      }
       const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
       if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
         this.msgError('违规费用不能大于明细项目医保结算金额')
         return
       }
-      if(this.tabsValue==='six' && !this.pksj){//进销存核查
-        this.msgError('请选择盘库期初和盘库期末时间')
-        return   
-      }
       this.$refs['xwrdForm'].validate(async valid => {
           if (valid) {
             let res = ''
-            const {type,xwbh,lx} = this.xwrdChecd
-            const params = {id:this.selectedId,...this.xwrdForm,type,xwbh,wglx:lx}
+            const {type,xwbh,lx} = this.xwrdChecd//这个type是行文认定选择的类型
+            const params = {id:this.selectedId,...this.xwrdForm,xwbh,wglx:lx}
             if(this.pksj){
               params.pkqcsj = this.parseTime(this.pksj[0].getTime(),'{y}-{m}-{d}')
               params.pkqmsj = this.parseTime(this.pksj[1].getTime(),'{y}-{m}-{d}')
@@ -679,25 +683,41 @@ export default {
               delete  params.wgsl
               delete  params.wgfy
             }
+            delete params.bjsj
             res = await updateRenwufour(params)
             if(res.code===200) {
               this.msgSuccess('操作成功')
-              this.getList(this.searchNextParams)
+              if(this.tabsValue==="four"){
+                this.getList(this.searchLsNextParams)
+              } else {
+                this.getList()
+              }
               this.selectionList.forEach(item=>{
-                rendingAdd({
+                const addData = {
                   bjr: this.$store.getters.name,
                   bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
-                  zkdj:this.xwrdForm.zkdj,
-                  wgsl:this.xwrdForm.wgsl,
-                  wgfy:this.xwrdForm.wgfy,
-                  xwrd:this.xwrdForm.xwrd,
-                  xwbh:this.xwrdChecd.xwbh,
-                  bz:this.xwrdForm.bz,
+                  fid:item.id,
                   rid:item.rwpcid,
                   jgdm:item.jgdm,
-                  fid:(this.tabsValue=='four'||this.tabsValue=='six')?item.id:item.fid,
-                  type:(this.tabsValue=='four'||this.tabsValue=='six')?4:5,
-                })
+                  type:this.tabsValue==='four'?'1':'2',
+                  ...params,
+                }
+                if(this.tabsValue==='six'){//进销存核查
+                  const {ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
+                  const cesl =  ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
+                  addData.cesl = cesl
+                  addData.dzce = cesl*this.selectionList[0].mxxmdj
+                }
+                if(this.tabsValue==='four'){//流水号项目汇总
+                  delete addData.qckc
+                  delete addData.bqgr
+                  delete addData.xjxs
+                  delete addData.qmkc
+                  delete addData.ybjs
+                  delete addData.pkqmsj
+                  delete addData.pkqcsj  
+                }
+                rendingAdd(addData)
               })
 
             }
@@ -737,18 +757,15 @@ export default {
     */
     fluProject(row){
       this.$set(this,'tabsValue','four')
-      this.searchNextParams = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,type:1}
-      this.getList(this.searchNextParams)
+      this.searchLsNextParams = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,type:1}
+      this.getList(this.searchLsNextParams)
     },
     /** 查询renwu列表 */
     async getList(query) {
-      // const params = query?{...query,...this.queryParams}:this.queryParams
-      let params = {...this.queryParams}
+      const {rwpcid,jgdm} = this.queryInfoFrom
+      let params = {...this.queryParams,rwpcid,jgdm}
       if(query){
         params = {...params,...query}
-      } else {
-        const {rwpcid,jgdm} = this.queryInfoFrom
-        params = {rwpcid,jgdm,...params}
       }
       this.loading = true
       try {
@@ -759,10 +776,10 @@ export default {
             break;
           case 'four':
             params.type=1
-            res = await listRenwufour(params)
+            res = await listRenwufour({...params,...this.searchLsNextParams})
             break;
           case 'five':
-            res = await getTLS({...this.queryParams,...this.searchNextParams})
+            res = await getTLS({...this.queryParams,...this.searchTlsNextParams})
             break;
           case 'six':
             params.type=2
@@ -770,7 +787,7 @@ export default {
             res = await listRenwufour({...params,...this.bmQueryForm})
             break;
           case 'qmx':
-            res = await getQMX({...this.queryParams,...this.searchNextParams})
+            res = await getQMX({...this.queryParams,...this.searchTlsNextParams})
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
@@ -887,41 +904,6 @@ export default {
     issendFormat(row, column) {
       return this.selectDictLabels(this.issendOptions, row.issend);
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        id: null,
-        jgdm: null,
-        jgmc: null,
-        gzfl: null,
-        gzmc: null,
-        xjjzrs: null,
-        xjmxs: null,
-        xjje: null,
-        jsfy: null,
-        ybbf: null,
-        xzq: null,
-        jslb: null,
-        ybd: null,
-        datastarttime: null,
-        xydm: null,
-        addtime: null,
-        jsdj: null,
-        hsyj: null,
-        hszt: null,
-        hssj: null,
-        hsr: null,
-        hspfsj: null,
-        rwpcid: null,
-        issend: null
-      };
-      this.resetForm("form");
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -937,16 +919,15 @@ export default {
       if(selection.length!==0){
         // this.ids = selection.map(item => item.id)
         this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,gzmc,bz} = selection[0]
+        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc} = selection[0]
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
         this.xwrdForm.zkdj = mxxmdj
         this.xwrdForm.wgsl = mxxmsl
         this.xwrdForm.wgfy = mxxmje
-        this.xwrdForm.gzmc = gzmc
+        this.xwrdForm.mxxmmc = mxxmmc
         this.xwrdForm.xwrd = ''
-        // this.tabsValue==='four' && (this.xwrdForm.gzmc = gzmc)//第五层使用上一层带过来的规则名称
         if(this.tabsValue==='six'){//进销存核查
           const {qckc,bqgr,xjxs,qmkc,ybjs} = selection[0]
           this.xwrdForm.qckc = qckc
@@ -955,14 +936,11 @@ export default {
           this.xwrdForm.qmkc = qmkc
           this.xwrdForm.ybjs = ybjs
         }
-        // const shuliangList = selection.map(item=>item.mxxmsl)
-        // const feiyong = selection.map(item=>item.mxxmje)
-        // this.xwrdForm.mxxmsl = this.sum(shuliangList)
-        // this.xwrdForm.mxxmje = this.sum(feiyong)
+        this.$refs.xwrdForm.clearValidate()
       } else {
         this.ids=[]
         this.xwrdForm = {
-          gzmc:'',
+          mxxmmc:'',
           xwrd:'',
           bz:'',
           zkdj:'',
@@ -975,7 +953,6 @@ export default {
           ybjs:''
         }
       }
-
     },
     //同流水明细
     tongLiushuimx(row){
@@ -1041,76 +1018,27 @@ export default {
       }
      return {dj,sl,fy}
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加renwuthree";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getRenwuthree(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改renwuthree";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.id != null) {
-            updateRenwuthree(this.form).then(response => {
-              this.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addRenwuthree(this.form).then(response => {
-              this.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认删除renwuthree编号为"' + ids + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delRenwuthree(ids);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        }).catch(_=>{})
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有renwuthree数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportRenwuthree(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        })
-    },
     handleDjslChange(){
       if(this.xwrdForm.zkdj!==''&&this.xwrdForm.wgsl!==''){
         this.xwrdForm.wgfy = this.xwrdForm.zkdj*this.xwrdForm.wgsl
       } else {
         this.xwrdForm.wgfy = ''
+      }
+    }
+  },
+  computed:{
+    cesl(){
+      //进销存核查，计算违规数量=差额数量cesl=医保结算数量-（期初库存数量+本期购入数据-期末库存数量-现金销售数量）
+      const {wgsl,ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
+      if(this.tabsValue === 'six' && (wgsl===''||wgsl==0) && ybjs!=='' && qckc!==''&& bqgr!==''&& qmkc!==''&& xjxs!==''){
+        return  ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
+      }
+    }
+  },
+  watch:{
+    cesl(n){
+      if(n){
+        this.xwrdForm.wgsl = n
       }
     }
   }

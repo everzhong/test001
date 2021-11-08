@@ -99,12 +99,14 @@ service.interceptors.response.use(res => {
         } else if (code === 500 && !innoreError) {
             Message({
                 message: msg,
-                type: 'error'
+                type: 'error',
+                showClose: true
             })
             return Promise.reject(new Error(msg))
         } else if (code !== 200 && !innoreError) {
             Notification.error({
-                title: msg
+                title: msg,
+                showClose: true
             })
             return Promise.reject('error')
         } else {
@@ -123,7 +125,8 @@ service.interceptors.response.use(res => {
         Message({
             message: message,
             type: 'error',
-            duration: 5 * 1000
+            duration: 5 * 1000,
+            showClose: true
         })
         return Promise.reject(error)
     }
