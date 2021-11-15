@@ -168,7 +168,7 @@ export default {
         hide:true
       },{
         prop: 'jsrc',
-        label: '涉及就诊人次数',
+        label: '涉及结算人次数',
       },{
         prop: 'ydje',
         label: '疑点金额(元)',

@@ -82,6 +82,10 @@ export default {
       },{
         prop: 'ajly',
         label: '案件来源'
+      },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
       }]
     }
   },

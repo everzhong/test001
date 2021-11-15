@@ -1,81 +1,5 @@
 <template>
   <div class="jg-table">
-    <!-- <el-table
-    show-summary
-    :summary-method="getSummaries"
-    :data="tableData"
-    :span-method="objectSpanMethod"
-    style="margin-top:10px">
-    <el-table-column
-      align="center"
-      prop="wglx"
-      label="适用办法"
-      >
-    </el-table-column>
-    <el-table-column
-      align="center"
-      prop="xwrd"
-      label="行为认定"
-    />
-    <el-table-column label="门诊" align="center">
-      <el-table-column
-        align="center"
-        prop="tym"
-        label="费用（元）"
-        >
-        <template slot-scope="scope">
-          <span @click="viewDetail(scope.row,'门诊')" style="color:#1B65B9;cursor:pointer;">{{scope.row.tym}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="占比（%）"
-        >
-        <template slot-scope="scope">
-          <span>{{clacPercent(scope.row.tym,scope.row.zkdj)}}</span>
-        </template>
-      </el-table-column>
-    </el-table-column>
-    <el-table-column label="住院" align="center">
-      <el-table-column
-        align="center"
-        prop="bz"
-        label="费用（元）"
-        >
-        <template slot-scope="scope">
-          <span @click="viewDetail(scope.row,'住院')" style="color:#1B65B9;cursor:pointer;">{{scope.row.bz}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="占比（%）"
-        >
-        <template slot-scope="scope">
-          <span>{{clacPercent(scope.row.bz,scope.row.zkdj)}}</span>
-        </template>
-      </el-table-column>
-    </el-table-column>
-    <el-table-column label="合计" align="center">
-      <el-table-column
-        align="center"
-        prop="xiaoji"
-        label="费用（元）"
-        >
-        <template slot-scope="scope">
-          <span @click="viewDetail(scope.row,'')" style="color:#1B65B9;cursor:pointer;">{{scope.row.xiaoji}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="namePercent"
-        label="占比（%）"
-        >
-        <template slot-scope="scope">
-          <span>{{clacPercent(scope.row.bz*1+scope.row.tym*1,scope.row.zkdj)}}</span>
-        </template>
-      </el-table-column>
-    </el-table-column>
-    </el-table> -->
     <el-table
       :span-method="objectSpanMethod"
       :data="tableData"
@@ -104,13 +28,25 @@
           </template>
         </el-table-column>
       </el-table-column>
+      <el-table-column label="进销存核查" align="center">
+        <el-table-column label="费用" prop="bz" align="center">
+          <template slot-scope="scope"><span @click="viewDetail(scope.row,'')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.mxsum*1).toFixed(2)}}</span></template>
+        </el-table-column>
+        <el-table-column label="占比%" align="center">
+          <template slot-scope="scope">
+            <span>{{clacPercent(scope.row.mxsum*1,scope.row.zkdj*1+scope.row.mxsum*1)}}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="合计" align="center">
         <el-table-column label="费用" align="center">
-          <template slot-scope="scope"><span @click="viewDetail(scope.row, '')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.tym*1+scope.row.bz*1).toFixed(2)}}</span></template>
+          <template slot-scope="scope">
+            <span @click="viewDetail(scope.row, '')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.tym*1+scope.row.bz*1+scope.row.mxsum*1).toFixed(2)}}</span>
+          </template>
         </el-table-column>
         <el-table-column label="占比%"  align="center">
             <template slot-scope="scope">
-              <span>{{clacPercent(scope.row.tym*1+scope.row.bz*1,scope.row.zkdj)}}</span>
+              <span>{{clacPercent(scope.row.tym*1+scope.row.bz*1+scope.row.mxsum*1,scope.row.zkdj)}}</span>
             </template>
         </el-table-column>
       </el-table-column>
@@ -176,57 +112,29 @@ export default {
       let newList = []
       for (let lxkey in lxObj) {
         const lx = lxObj[lxkey][0].wglx
-        const zkdj = lxObj[lxkey][0].zkdj
+        // let zkdj = lxObj[lxkey][0].zkdj
         xiaoji[lxkey] = {}
         xiaoji[lxkey]['bz'] = lxObj[lxkey].reduce((a, b) => { return a + b.bz * 1 }, 0)
         xiaoji[lxkey]['tym'] = lxObj[lxkey].reduce((a, b) => { return a + b.tym * 1 }, 0)
-        lxObj[lxkey].push({wglx: lx, xwrd: '小计', bz: xiaoji[lxkey]['bz'], tym: xiaoji[lxkey]['tym'], zkdj})
+        xiaoji[lxkey]['mxsum'] = lxObj[lxkey].reduce((a, b) => { return a + b.mxsum * 1 }, 0)
+        let zkdj = xiaoji[lxkey]['bz']+xiaoji[lxkey]['tym'] +xiaoji[lxkey]['mxsum']
+        // if(xiaoji[lxkey]['mxsum']){
+        //   zkdj = zkdj*1+xiaoji[lxkey]['mxsum']
+        // }
+        lxObj[lxkey].push({wglx: lx, xwrd: '小计', bz: xiaoji[lxkey]['bz'], tym: xiaoji[lxkey]['tym'], mxsum:xiaoji[lxkey]['mxsum'],zkdj})
         newList = newList.concat(lxObj[lxkey])
       }
       // 添加合计
       let hjbz = 0
       let hjtym = 0
+      let mxsum = 0
       for (let key in xiaoji) {
         xiaoji[key]['bz'] && (hjbz += xiaoji[key]['bz'] * 1)
         xiaoji[key]['tym'] && (hjtym += xiaoji[key]['tym'] * 1)
+        xiaoji[key]['mxsum'] && (mxsum += xiaoji[key]['mxsum'] * 1)
       }
-      newList.push({wglx: '合计', xwrd: '', bz: hjbz, tym: hjtym, zkdj: hjbz + hjtym})
+      newList.push({wglx: '合计', xwrd: '', bz: hjbz, tym: hjtym,mxsum:mxsum, zkdj: hjbz + hjtym+mxsum})
       return newList
-      // const result = []
-      // const list = []
-      // if(data.length){
-      //   const wglx = []
-      //   data.forEach((item,i)=>{
-      //     wglx.indexOf(item.wglx)<0&&(wglx.push(item.wglx))
-      //   })
-      //   wglx.forEach((lx,i)=>{
-      //     let lxs = data.filter(subitem=>{
-      //       return subitem.wglx===lx
-      //     })
-      //     list.push(lxs)
-      //   })
-        
-      //   list.forEach(item=>{
-      //     this.concatList.push(item.length)
-      //     let tymSum = 0
-      //     let bzmSum = 0
-      //     item.forEach(subitem=>{
-      //       tymSum += subitem.tym*1
-      //       bzmSum += subitem.bz*1
-      //       subitem.xiaoji = (subitem.tym*1+subitem.bz*1).toFixed(2)
-      //       result.push(subitem)
-      //     })
-      //     result.push({
-      //       xwrd:'小计',
-      //       tym:tymSum.toFixed(2),
-      //       bz:bzmSum.toFixed(2),
-      //       xiaoji:(tymSum+bzmSum).toFixed(2),
-      //       zkdj:item[0].zkdj
-      //     })
-      //   })
-      // }
-      // console.log(result)
-      // return result
     },
     initialWgRow () {
       const firstName = this.tableData.map(item => item.wglx)
@@ -297,9 +205,16 @@ export default {
       }
     }
   }
-  &::v-deep .el-table {
+  .el-table {
     .el-table__cell {
       padding: 6px 0;
+    }
+    th {
+      padding: 0 !important;
+      height: 33px !important;
+    }
+    td {
+      padding:5px 0 !important;
     }
   }
 }

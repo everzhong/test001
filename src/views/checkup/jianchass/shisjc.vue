@@ -126,22 +126,25 @@
             <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+            <el-input style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+            <el-tooltip class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
+              <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
+            </el-tooltip>
           </el-form-item>
           <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
             <el-input type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
           </el-form-item>
           <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
           </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj" @change="hanndelChange"></el-input>
           </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj" @change="hanndelChange"></el-input>
           </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj" @change="hanndelChange"></el-input>
           </el-form-item>
           <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj"></el-input>
+            <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj" @change="hanndelChange"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="bz">
             <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
@@ -170,7 +173,7 @@
           <el-form-item label="规则名称" prop="gzmc">
               <el-input clearable v-model="gzQueryForm.gzmc"></el-input>
           </el-form-item>
-          <el-form-item label="涉及就诊人次数" prop="xjjzrs">
+          <el-form-item label="涉及结算人次数" prop="xjjzrs">
             <div class="item-group">
               <el-input type="number" min="0"  v-model="gzQueryForm.xjjzrs"></el-input>
               <span>-</span>
@@ -458,6 +461,7 @@ export default {
         type:''
       },
       lsh:'',//第四层的参数，查询同流水号明细需要用到
+      mxxmbm:'',//第四层的参数，查询同流水号明细需要用到
       pksj:'', //盘库时间
       gzflOptions:[],
     }
@@ -527,7 +531,7 @@ export default {
       this.queryParams.pageNum=1
       this.total = 0
       const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
-      this.searchTlsNextParams = val=='five'?{lsh:this.lsh||''}:{
+      this.searchTlsNextParams = val=='five'?{lsh:this.lsh||'',mxxmbm:this.mxxmbm}:{
         jgdm:jgdm,
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
@@ -683,6 +687,11 @@ export default {
               delete  params.wgsl
               delete  params.wgfy
             }
+            if(this.tabsValue==='six'){//进销存核查
+              const cesl = this.cesl()
+              params.cesl = cesl
+              params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
+            }
             delete params.bjsj
             res = await updateRenwufour(params)
             if(res.code===200) {
@@ -702,12 +711,7 @@ export default {
                   type:this.tabsValue==='four'?'1':'2',
                   ...params,
                 }
-                if(this.tabsValue==='six'){//进销存核查
-                  const {ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
-                  const cesl =  ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
-                  addData.cesl = cesl
-                  addData.dzce = cesl*this.selectionList[0].mxxmdj
-                }
+               
                 if(this.tabsValue==='four'){//流水号项目汇总
                   delete addData.qckc
                   delete addData.bqgr
@@ -716,6 +720,9 @@ export default {
                   delete addData.ybjs
                   delete addData.pkqmsj
                   delete addData.pkqcsj  
+                } else {
+                  addData.cesl = params.cesl
+                  addData.dzce = params.dzce 
                 }
                 rendingAdd(addData)
               })
@@ -844,7 +851,7 @@ export default {
     xjjeFormat(row, column) {
       return this.selectDictLabels(this.ydjeOptions, row.ydje);
     },
-    // 结算费用字典翻译
+    // 医保结算费用字典翻译
     jsfyFormat(row, column) {
       return this.selectDictLabels(this.jsfyOptions, row.jsfy);
     },
@@ -919,13 +926,12 @@ export default {
       if(selection.length!==0){
         // this.ids = selection.map(item => item.id)
         this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc} = selection[0]
+        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy} = selection[0]
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
         this.xwrdForm.zkdj = mxxmdj
-        this.xwrdForm.wgsl = mxxmsl
-        this.xwrdForm.wgfy = mxxmje
+        this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
         this.xwrdForm.mxxmmc = mxxmmc
         this.xwrdForm.xwrd = ''
         if(this.tabsValue==='six'){//进销存核查
@@ -935,6 +941,8 @@ export default {
           this.xwrdForm.xjxs = xjxs
           this.xwrdForm.qmkc = qmkc
           this.xwrdForm.ybjs = ybjs
+        } else {
+          this.xwrdForm.wgsl = mxxmsl
         }
         this.$refs.xwrdForm.clearValidate()
       } else {
@@ -959,7 +967,8 @@ export default {
       this.tabsValue = 'five'
       this.selectedId = ''
       this.lsh = row.lsh || ''
-      this.searchNextParams = {lsh:row.lsh||'',mxxmbm:row.mxxmbm}
+      this.mxxmbm = row.mxxmbm || ''
+      this.searchTlsNextParams = {lsh:row.lsh||'',mxxmbm:row.mxxmbm}
       this.getList()
     },
     //操作记录
@@ -1020,26 +1029,24 @@ export default {
     },
     handleDjslChange(){
       if(this.xwrdForm.zkdj!==''&&this.xwrdForm.wgsl!==''){
-        this.xwrdForm.wgfy = this.xwrdForm.zkdj*this.xwrdForm.wgsl
-      } else {
-        this.xwrdForm.wgfy = ''
+        this.xwrdForm.wgfy = (this.xwrdForm.zkdj*this.xwrdForm.wgsl).toFixed(2)
       }
-    }
-  },
-  computed:{
+    },
+    hanndelChange(){
+      const res = this.cesl()
+      if(res!==''){
+        this.xwrdForm.wgsl = res
+        this.handleDjslChange()
+      }
+    },
     cesl(){
-      //进销存核查，计算违规数量=差额数量cesl=医保结算数量-（期初库存数量+本期购入数据-期末库存数量-现金销售数量）
-      const {wgsl,ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
-      if(this.tabsValue === 'six' && (wgsl===''||wgsl==0) && ybjs!=='' && qckc!==''&& bqgr!==''&& qmkc!==''&& xjxs!==''){
-        return  ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
+      //进销存核查，计算违规数量=差额数量cesl=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)
+      let res = ''
+      const {ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
+      if(ybjs!=='' && qckc!==''&& bqgr!==''&& qmkc!==''&& xjxs!==''){
+        res = ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
       }
-    }
-  },
-  watch:{
-    cesl(n){
-      if(n){
-        this.xwrdForm.wgsl = n
-      }
+      return res
     }
   }
 };

@@ -58,7 +58,7 @@
     <jc-table :tableData="listjc" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <wg-table :tableData="listjg" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
-    <div v-if="viewTableObj.show" class="table-main" :style="{top:topHeight}">
+    <div v-if="viewTableObj.show" class="table-main">
       <ViewTable :options="viewTableObj.options"/>
     </div>
     <el-form inline style="margin-top:30px" v-if="!viewTableObj.show">
@@ -230,7 +230,7 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:155px;
+  top:202px;
   bottom:0;
   left: 20px;
   right: 20px;

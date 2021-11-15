@@ -44,7 +44,7 @@ export default {
         hide:true
       },{
         prop: 'sjrcs',
-        label: '涉及就诊人次数',
+        label: '涉及结算人次数',
       },{
         prop: 'xjmxs',
         label: '涉及项目数',
@@ -56,13 +56,17 @@ export default {
         }
       },{
         prop: 'jsfy',
-        label: '结算费用(元)',
+        label: '医保结算费用(元)',
         viewFun: (jsfy)=>{
           return this.formatMoney(jsfy,2)
         }  
       },{
         prop: 'ajly',
         label: '案件来源'
+      },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
       }]
     }
   },

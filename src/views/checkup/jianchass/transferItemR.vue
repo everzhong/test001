@@ -53,7 +53,7 @@
           <el-form-item label="规则名称" prop="gzmc">
               <el-input clearable v-model="queryGzForm.gzmc"></el-input>
           </el-form-item>
-          <el-form-item label="涉及就诊人次数" prop="xjjzrs">
+          <el-form-item label="涉及结算人次数" prop="xjjzrs">
             <div class="item-group">
               <el-input type="number" min="0"  v-model="queryGzForm.xjjzrs"></el-input>
               <span>-</span>
@@ -128,7 +128,7 @@ export default {
         fixedWidth:150
       },{
         prop: 'xjjzrs',
-        label: '涉及就诊人次数',
+        label: '涉及结算人次数',
       },{
         prop: 'xjmxs',
         label: '涉及明细数',
