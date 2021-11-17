@@ -97,7 +97,7 @@ export function setSancha(data) {
     return request({
         url: '/renwu/renwutwo/setsc/' + ids,
         method: 'post',
-        data: data
+        data: data,
     })
 }
 //数据筛查/setscrw
@@ -106,7 +106,8 @@ export function setShujusc(data) {
         url: '/renwu/renwutwo/setscrw',
         method: 'post',
         data: data,
-        noToken: true
+        noToken: true,
+        innoreError: true
     })
 }
 //接收数据

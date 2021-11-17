@@ -17,7 +17,7 @@
           type="primary"
           size="small"
           @click="handleThirdCheck"
-        >第三方筛查</el-button>
+        >展开第三方筛查</el-button>
       </el-col>
       <el-col :span="1.5" v-if="mxShow">
         <el-button
@@ -38,7 +38,7 @@
     <div v-loading="loading" v-show="!mxShow" :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topHeight}">
       <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
       <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
-      <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange">
+      <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange" @on-click="viewSc">
         <el-table-column v-if="!isRwcx" slot="fixed" type="selection" width="55" align="center"/>
         <el-table-column slot="fixed" label="序号" type="index" align="center"/>
         <el-table-column label="操作" align="center" width="180" slot="operate">
@@ -72,9 +72,9 @@
   </div>
 </template>
 <script>
-import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,submitNetCheck,setSancha} from "@/api/renwu/renwutwo"
-import { listRenwuthreeTab,listRenwuthreeRj } from '@/api/renwu/renwuthree'
-import { listRenwufourTab,listRenwufourRj } from '@/api/renwu/renwufour'
+import { listRenwutwo, getRenwutwo, delRenwutwo, addRenwutwo, updateRenwutwo, exportRenwutwo,setShujusc,setSancha} from "@/api/renwu/renwutwo"
+import { listRenwuthreeRj } from '@/api/renwu/renwuthree'
+import { listRenwufourRj } from '@/api/renwu/renwufour'
 import { submitDxqd} from "@/api/renwu/dcqz"
 import SearchItem from '../common/searchItems'
 import RenwuthreeTable from '../common/renwuthreeTable'
@@ -96,10 +96,13 @@ export default {
       tableHeader:[{
         prop: 'scstatus',
         label: '第三方筛查状态',
-        width: '150px',
         viewFun:function(index){
           // return (index?(index==0?'未生成筛查任务':index==1?'未开始筛查':index==2?'执行中':index==3?'完成':indexs==4?'无需抽取':''):'')
           return (index?(index==1?'未开始':index==2?'执行中':index==3?'完成':''):'')
+        },
+        viewTemp:'button',
+        noClick: function(index){
+          return !(index==1 || index==2)
         }
       },{
         prop: 'rwpcid',
@@ -294,7 +297,10 @@ export default {
       tabsValue:'two',
       noThirdCheckList:[],
       resql:'',
-      isRwcx:false
+      isRwcx:false,
+      scSucces:[], //第三方筛查成功的数据
+      duration:0,//每隔三秒，post一个筛查数据
+      postTimmer:null
     };
   },
   created() {
@@ -312,6 +318,9 @@ export default {
     this.topHeight = this.calcTableHeight(32+5+10,this.isFromLuli)
   },
   methods: {
+    viewSc(){
+      this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
+    },
     checkdetail(row,key){
       const keyw = `${key}Options`
       if(key==='xgmx'){
@@ -728,52 +737,85 @@ export default {
         type: "warning"
       }).then(()=> {
         const userNmae = this.$store.getters.name
-        const reqestList = []
-        //轮询发送
-        let selected = []
-        this.ids.forEach(id=>{
-          selected = this.selectionList.filter(item=>{
-            return item.id===id;
-          })
-          if(selected.length){
-            const {rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime} = selected[0];
-            const time = bossRand();
-            const scParams = {
-              ids:id,
-              scrwid:[rwpcid,jgdm,time].join('-'),
-              scstatus:1,
-              scname:[rwpcid,time,jgmc].join('-'),
-              scsqr:userNmae,
-              rwpcid,
-              jgdm,
-              datastarttime,
-              dataendtime
-            }
-            if(sccqstatus==0) {
-              scParams.sccqstatus = 1
-            }
-            reqestList.push(setSancha(scParams))
+        const setSCReqestList = []
+        const shujuRequestList = []
+        this.selectionList.forEach(item=>{
+          const {rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,scrwid,scname,jczid,id} = item;
+          const time = bossRand();
+          const scParams = {
+            ids:id,
+            scrwid:[rwpcid,jgdm,time].join('-'),
+            scstatus:1,
+            scname:[rwpcid,time,jgmc].join('-'),
+            scsqr:userNmae,
+            rwpcid,
+            jgdm,
+            datastarttime,
+            dataendtime
           }
-        })
-        this.loading = true
-        Promise.all(reqestList).then(()=>{
-          this.loading = false
-          this.msgSuccess('操作成功')
-          this.getList()
-          selected.forEach(item=>{
-            this.addJcfl({
-              jglc:'数据筛查',
-              gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的第三方筛查`,
-              rwpcid:item.rwpcid,
-              jgdm:item.jgdm,
-              zhczr:this.$store.getters.name,
-              sort:1
-            })
+          if(sccqstatus==0) {
+            scParams.sccqstatus = 1
+          }
+          setSCReqestList.push(scParams)
+          shujuRequestList.push({
+            id,
+            scrwid,
+            scname,
+            datastarttime,
+            dataendtime,
+            createBy:userNmae,
+            jgdm,
+            jczid,
+            deptId:this.$store.getters.userId
           })
+        })
+        this.handleSanCha(setSCReqestList,shujuRequestList)
+      }).catch(_=>{})
+    },
+    handleSanCha(scList,sjList){//执行第三方筛查
+      this.loading = true
+      for(let i=0;i<scList.length;i++) {
+        setSancha(scList[i]).then(res=>{
+            if(res.code===200){
+              this.scSucces.push(sjList[i])
+              this.handelShuju()
+              this.addJcfl({
+                jglc:'数据筛查',
+                gjxx:`提交批号为${sjList[i].rwpcid}机构代码为${sjList[i].jgdm}的第三方筛查`,
+                rwpcid:sjList[i].rwpcid,
+                jgdm:sjList[i].jgdm,
+                zhczr:this.$store.getters.name,
+                sort:1
+              })
+            }else {
+              this.loading = false
+            }
         }).catch(e=>{
           this.loading = false
         })
-      }).catch(_=>{})
+      }
+    },
+    handelShuju(){//第三方筛查成后，post数据筛查
+      if(this.duration%4!=0) {
+        this.postTimmer = setTimeout(()=>{
+          this.duration++
+          this.handelShuju()
+        },1000)
+      } else {
+        if(this.scSucces.length){
+          this.loading = true
+          const postTarget = this.scSucces.shift()
+          setShujusc(postTarget)
+          this.duration++
+          this.handelShuju()
+        } else {
+          clearTimeout(this.postTimmer)
+          this.postTimmer = null
+          this.duration = 0
+          this.loading = false
+          this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
+        }
+      }
     },
     getResql(val){
       const resql = []

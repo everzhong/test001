@@ -30,7 +30,8 @@ export default {
         width: '150px',
         viewFun: (status)=>{
           return this.selectDictLabels(this.statusOptions, status+'')
-        }
+        },
+        hide:true
       },{
         label:"承办机构",
         prop:'jcjg'

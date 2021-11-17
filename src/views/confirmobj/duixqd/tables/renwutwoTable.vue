@@ -35,7 +35,8 @@ export default {
         prop:'status',
         viewFun: (status)=>{
           return this.selectDictLabels(this.statusOptions, status+'')
-        }
+        },
+        hide:true
       },{
         label: '批次号',
         fixedWidth:30,

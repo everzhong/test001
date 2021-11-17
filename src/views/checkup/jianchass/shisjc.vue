@@ -46,7 +46,7 @@
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
-          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">第三方筛查</el-button>
+          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">展开第三方筛查</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保人：</span>
@@ -254,7 +254,7 @@
 
 <script>
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
-import { setSancha } from  '@/api/renwu/renwutwo'
+import { setSancha,setShujusc} from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
 import { updateRenwufive} from '@/api/renwu/renwufive'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
@@ -548,7 +548,7 @@ export default {
         type: "warning"
       }).then(()=> {
           const userNmae = this.$store.getters.name
-          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime} = this.queryInfoFrom
+          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,scrwid,scname,jczid} = this.queryInfoFrom
           const time = bossRand();
           const requireParams = {
             ids:id,
@@ -567,7 +567,7 @@ export default {
           setSancha(requireParams).then(()=>{
             this.loading = false
             this.msgSuccess('操作成功')
-            this.getList()
+            // this.getList()
             this.addJcfl({
               jglc:'数据筛查',
               gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
@@ -576,6 +576,18 @@ export default {
               zhczr:this.$store.getters.name,
               sort:1
             })
+            setShujusc({
+              id,
+              scrwid,
+              scname,
+              datastarttime,
+              dataendtime,
+              createBy:userNmae,
+              jgdm,
+              jczid,
+              deptId:this.$store.getters.userId
+            })
+            this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
           }).catch(e=>{
             this.loading = false
           })

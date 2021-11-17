@@ -33,7 +33,8 @@ export default {
         width:'auto',
         viewFun: (status)=>{
           return this.selectDictLabels(this.statusOptions, status+'')
-        }
+        },
+        hide:true
       },{
         label:"驳回意见",
         prop:'dxqdbh'

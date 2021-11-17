@@ -34,7 +34,10 @@
               :value="item.dictValue">
             </el-option>
           </el-select>
-          <el-button type="text" size="mini" v-if="col.viewTemp==='button' && scope.row[col.prop]" @click="poerateButton(scope.row)"> {{scope.row[col.prop]}} </el-button>
+          <div v-if="col.viewTemp==='button' && scope.row[col.prop]">
+            <span v-if="col.noClick && col.noClick(scope.row[col.prop])">{{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}}</span>
+            <el-button v-else type="text" size="mini"  @click="poerateButton(scope.row)"> {{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}} </el-button>
+          </div>
         </template>
       </el-table-column>
       <slot name="operate" @contextmenu="mouseRightClick" v-if="tableHeader.length"></slot>
