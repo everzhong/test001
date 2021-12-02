@@ -188,7 +188,7 @@ export default {
   },
   methods: {
     submitQd(xiaozu){
-      const jczlist = typeof(xiaozu.jczcy)==="object"?xiaozu.jczcy:(JSON.parse(xiaozu.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')))
+      const jczlist = typeof(xiaozu.jczcy)==="object"?xiaozu.jczcy:(JSON.parse(xiaozu.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"').replace(/userName/g,'"userName"')))
       let userIdList = []
       let nameList = []
       if(jczlist.length){
@@ -213,7 +213,10 @@ export default {
               zhczr:this.$store.getters.name,
               xydm:item.xydm,
               jgmc:item.jgmc,
-              sort:5
+              sort:5,
+              zfbmmc:xiaozu.deptName,
+              zfrymc:nameList.join('，'),
+              zfrygh:this.$store.getters.name
             })
           })
         } else {

@@ -139,7 +139,7 @@ export default {
   },
   mounted(){
     this.getJanChaxz() //检查组
-    this.getJanChacy() //检查组成员
+    // this.getJanChacy() //检查组成员
   },
   methods:{
     handleSelectionChange (selection) {
@@ -226,7 +226,7 @@ export default {
     editRole(row,index){
       let chengyuan = null
       if(row.jczcy){
-        chengyuan = typeof(row.jczcy)==="object"?row.jczcy:(JSON.parse(row.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')))
+        chengyuan = typeof(row.jczcy)==="object"?row.jczcy:(JSON.parse(row.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"').replace(/userName/g,'"userName"')))
       }
       this.addGroup = {...row}
       this.addGroup.jczcy = []
@@ -371,7 +371,7 @@ export default {
       if(typeof(jczcy)==="object"){
         cyObj = jczcy
       } else {
-        const str = jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"')
+        const str = jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"').replace(/userName/g,'"userName"')
         cyObj = JSON.parse(str)
       }
       cyObj.forEach(item=>{
