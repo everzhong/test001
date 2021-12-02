@@ -11,7 +11,8 @@ export default {
   },
   created(){
     const {protocol,hostname} = window.location
-    this.baseUrl = `${protocol}//${hostname}:8012/#/scenarioConfiguration/leftdis/1/userid/${this.$store.getters.name}`
+    const port = sessionStorage.getItem('sfPort')
+    this.baseUrl = `${protocol}//${hostname}:${port}/#/scenarioConfiguration/leftdis/1/userid/${this.$store.getters.name}`
   }
 }
 </script>

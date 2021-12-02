@@ -3,23 +3,17 @@ import { Notification, MessageBox, Message } from 'element-ui'
 import { getToken, getUid } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import Qs from 'qs'
-// axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+var baseUrl = ''
+var innoreError = false
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 axios.defaults.paramsSerializer = (params) => {
-        return Qs.stringify(params, { arrayFormat: 'brackets' });
-    }
-    // 创建axios实例
-let baseUrl = ''
-let innoreError = false
+    return Qs.stringify(params, { arrayFormat: 'brackets' });
+}
 if (process.env.NODE_ENV !== 'production') {
     baseUrl = process.env.VUE_APP_BASE_API
-} else {
-    const urlList = location.origin.split(':')
-    urlList[2] = '8010'
-    baseUrl = urlList.join(':')
 }
 axios.defaults.baseURL = baseUrl;
-const service = axios.create({
+var service = axios.create({
         // axios中请求配置有baseURL选项，表示请求URL公共部分
         baseURL: baseUrl,
         // 超时
@@ -27,44 +21,43 @@ const service = axios.create({
     })
     // request拦截器
 service.interceptors.request.use(config => {
-    // 是否需要设置 token
-    innoreError = config.innoreError
-    const isToken = (config.headers || {}).isToken === false
-    if (getToken() && !isToken && !config.noToken) {
-        config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-    }
-    if (config.contentType) {
-        config.headers['ContentType'] = config.contentType
-    }
-    // get请求映射params参数
-    if (config.method === 'get' && config.params) {
-        let url = config.url + '?';
-        for (const propName of Object.keys(config.params)) {
-            const value = config.params[propName];
-            var part = encodeURIComponent(propName) + "=";
-            if (value !== null && typeof(value) !== "undefined") {
-                if (typeof value === 'object') {
-                    for (const key of Object.keys(value)) {
-                        let params = propName + '[' + key + ']';
-                        var subPart = encodeURIComponent(params) + "=";
-                        url += subPart + encodeURIComponent(value[key]) + "&";
+        // 是否需要设置 token
+        innoreError = config.innoreError
+        const isToken = (config.headers || {}).isToken === false
+        if (getToken() && !isToken && !config.noToken) {
+            config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+        }
+        if (config.contentType) {
+            config.headers['ContentType'] = config.contentType
+        }
+        // get请求映射params参数
+        if (config.method === 'get' && config.params) {
+            let url = config.url + '?';
+            for (const propName of Object.keys(config.params)) {
+                const value = config.params[propName];
+                var part = encodeURIComponent(propName) + "=";
+                if (value !== null && typeof(value) !== "undefined") {
+                    if (typeof value === 'object') {
+                        for (const key of Object.keys(value)) {
+                            let params = propName + '[' + key + ']';
+                            var subPart = encodeURIComponent(params) + "=";
+                            url += subPart + encodeURIComponent(value[key]) + "&";
+                        }
+                    } else {
+                        url += part + encodeURIComponent(value) + "&";
                     }
-                } else {
-                    url += part + encodeURIComponent(value) + "&";
                 }
             }
+            url = url.slice(0, -1);
+            config.params = {};
+            config.url = url;
         }
-        url = url.slice(0, -1);
-        config.params = {};
-        config.url = url;
-    }
-    return config
-}, error => {
-    console.log(error)
-    Promise.reject(error)
-})
-
-// 响应拦截器
+        return config
+    }, error => {
+        console.log(error)
+        Promise.reject(error)
+    })
+    // 响应拦截器
 service.interceptors.response.use(res => {
         // 未设置状态码则默认成功状态
         const code = res.data.code || 200;
@@ -131,5 +124,26 @@ service.interceptors.response.use(res => {
         return Promise.reject(error)
     }
 )
-
-export default service
+var setPort = function(proms = () => {}) {
+    let result = null;
+    if (process.env.NODE_ENV === 'production' && !axios.defaults.baseURL) {
+        result = axios.get('./host.json').then(ports => {
+            const apiPort = ports.data.apiPort
+            const urlList = location.origin.split(':')
+            urlList[2] = apiPort
+            service.defaults.baseURL = urlList.join(':')
+            axios.defaults.baseURL = urlList.join(':')
+            sessionStorage.setItem('sfPort', ports.data.sfPort)
+            return proms();
+        });
+    } else {
+        result = proms();
+    }
+    return result;
+}
+const $http = {
+    axios(config) {
+        return setPort(() => service(config))
+    }
+}
+export default $http.axios

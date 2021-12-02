@@ -139,7 +139,7 @@ export default {
   },
   mounted(){
     this.getJanChaxz() //检查组
-    // this.getJanChacy() //检查组成员
+    this.getJanChacy() //检查组成员
   },
   methods:{
     handleSelectionChange (selection) {

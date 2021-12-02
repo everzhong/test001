@@ -191,9 +191,11 @@ export default {
       const jczlist = typeof(xiaozu.jczcy)==="object"?xiaozu.jczcy:(JSON.parse(xiaozu.jczcy.replace(/'/g,'"').replace(/userId/g,'"userId"').replace(/nickName/g,'"nickName"').replace(/userName/g,'"userName"')))
       let userIdList = []
       let nameList = []
+      let userNameList = []
       if(jczlist.length){
         userIdList = jczlist.map(item=>item.userId)
         nameList = jczlist.map(item=>item.nickName)
+        userNameList = jczlist.map(item=>item.userName)
       }
       submitJcz({
         ids:this.ids,
@@ -207,7 +209,7 @@ export default {
           this.selection.forEach(item=>{
             this.addJcfl({
               jglc:'任务派发',
-              gjxx:`派发任务到 ${xiaozu.deptName} 检查组，成员：${nameList.join('，')}`,
+              gjxx:`派发任务到 ${xiaozu.deptName} 检查组，成员：${nameList.join(',')}`,
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,
@@ -215,8 +217,8 @@ export default {
               jgmc:item.jgmc,
               sort:5,
               zfbmmc:xiaozu.deptName,
-              zfrymc:nameList.join('，'),
-              zfrygh:this.$store.getters.name
+              zfrymc:nameList.join(','),
+              zfrygh:userNameList.join(',')
             })
           })
         } else {

@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 function resolve(dir) {
     return path.join(__dirname, dir)
@@ -49,7 +50,13 @@ module.exports = {
             alias: {
                 '@': resolve('src')
             }
-        }
+        },
+        plugins: [
+            new CopyWebpackPlugin([
+                { from: './static/', to: './' },
+                { from: './static/', to: '../public' },
+            ])
+        ]
     },
     chainWebpack(config) {
         config.plugins.delete('preload') // TODO: need test

@@ -17,7 +17,7 @@
           type="primary"
           size="small"
           @click="handleThirdCheck"
-        >展开第三方筛查</el-button>
+        >开展第三方筛查</el-button>
       </el-col>
       <el-col :span="1.5" v-if="mxShow">
         <el-button

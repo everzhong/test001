@@ -114,7 +114,6 @@ export default {
       },{
         prop: 'rwmc',
         label: '任务名称',
-        hide: true
       },{
         prop: 'ajly',
         label: '案件来源',

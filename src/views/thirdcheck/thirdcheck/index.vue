@@ -286,7 +286,8 @@ export default {
         jczid,
         deptId:this.$store.getters.userId
       })
-      window.open(`${location.protocol}//${location.hostname}:8012/#/scenarioConfiguration`)
+      const port = sessionStorage.getItem('sfPort')
+      window.open(`${location.protocol}//${location.hostname}:${port}/#/scenarioConfiguration`)
     },
     /** 查询renwutwo列表 */
     async getList(options) {

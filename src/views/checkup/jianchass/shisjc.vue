@@ -46,7 +46,7 @@
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
-          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">展开第三方筛查</el-button>
+          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">开展第三方筛查</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保人：</span>
