@@ -497,6 +497,7 @@ export default {
         rwpcid:row.rwpcid
       }).then(res=>{
         if(res.code===200){
+          this.getList()
           this.msgSuccess('提交成功')
         }
       })

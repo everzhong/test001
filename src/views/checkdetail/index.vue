@@ -300,7 +300,8 @@ export default {
       isRwcx:false,
       scSucces:[], //第三方筛查成功的数据
       duration:0,//每隔三秒，post一个筛查数据
-      postTimmer:null
+      postTimmer:null,
+      waitScList:[],//等待setsc的列表
     };
   },
   created() {
@@ -775,27 +776,38 @@ export default {
     handleSanCha(scList,sjList){//执行第三方筛查
       this.loading = true
       for(let i=0;i<scList.length;i++) {
-        setSancha(scList[i]).then(res=>{
-            if(res.code===200){
-              this.scSucces.push(sjList[i])
-              this.handelShuju()
-              this.addJcfl({
-                jglc:'数据筛查',
-                gjxx:`提交批号为${sjList[i].rwpcid}机构代码为${sjList[i].jgdm}的第三方筛查`,
-                rwpcid:sjList[i].rwpcid,
-                jgdm:sjList[i].jgdm,
-                zhczr:this.$store.getters.name,
-                sort:1
-              })
-            }else {
-              this.loading = false
-            }
-        }).catch(e=>{
-          this.loading = false
+        this.scSucces.push(sjList[i])
+        this.waitScList.push(scList[i])
+        this.handelShuju()
+        this.addJcfl({
+          jglc:'数据筛查',
+          gjxx:`提交批号为${scList[i].rwpcid}机构代码为${scList[i].jgdm}的第三方筛查`,
+          rwpcid:scList[i].rwpcid,
+          jgdm:scList[i].jgdm,
+          zhczr:this.$store.getters.name,
+          sort:1
         })
+        // setSancha(scList[i]).then(res=>{
+        //     if(res.code===200){
+        //       this.scSucces.push(sjList[i])
+        //       this.handelShuju()
+        //       this.addJcfl({
+        //         jglc:'数据筛查',
+        //         gjxx:`提交批号为${sjList[i].rwpcid}机构代码为${sjList[i].jgdm}的第三方筛查`,
+        //         rwpcid:sjList[i].rwpcid,
+        //         jgdm:sjList[i].jgdm,
+        //         zhczr:this.$store.getters.name,
+        //         sort:1
+        //       })
+        //     }else {
+        //       this.loading = false
+        //     }
+        // }).catch(e=>{
+        //   this.loading = false
+        // })
       }
     },
-    handelShuju(){//第三方筛查成后，post数据筛查
+    async handelShuju(){//第三方筛查成后，post数据筛查
       if(this.duration%4!=0) {
         this.postTimmer = setTimeout(()=>{
           this.duration++
@@ -805,7 +817,14 @@ export default {
         if(this.scSucces.length){
           this.loading = true
           const postTarget = this.scSucces.shift()
-          setShujusc(postTarget)
+          setShujusc(postTarget).then(res=>{
+            const waitSc = this.waitScList.shift()
+            if(res.code===200) {
+              setSancha(waitSc)
+            }
+          }).catch(()=>{
+            this.waitScList.shift()
+          })
           this.duration++
           this.handelShuju()
         } else {

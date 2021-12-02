@@ -256,7 +256,6 @@
 import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
 import { setSancha,setShujusc} from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
-import { updateRenwufive} from '@/api/renwu/renwufive'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
@@ -468,7 +467,6 @@ export default {
   },
   created() {
     this.queryInfoFrom = this.$route.query
-    console.log(this.queryInfoFrom)
     this.getList();
   },
   methods: {
@@ -564,32 +562,33 @@ export default {
           if(sccqstatus==0){
             requireParams.sccqstatus = 1
           }
-          setSancha(requireParams).then(()=>{
+          setShujusc({
+            id,
+            scrwid,
+            scname,
+            datastarttime,
+            dataendtime,
+            createBy:userNmae,
+            jgdm,
+            jczid,
+            deptId:this.$store.getters.userId
+          }).then(res=>{
             this.loading = false
-            this.msgSuccess('操作成功')
-            // this.getList()
-            this.addJcfl({
-              jglc:'数据筛查',
-              gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
-              rwpcid:rwpcid,
-              jgdm:jgdm,
-              zhczr:this.$store.getters.name,
-              sort:1
-            })
-            setShujusc({
-              id,
-              scrwid,
-              scname,
-              datastarttime,
-              dataendtime,
-              createBy:userNmae,
-              jgdm,
-              jczid,
-              deptId:this.$store.getters.userId
-            })
+            if(res.code===200) {
+              this.msgSuccess('操作成功')
+              setSancha(requireParams)
+            }
             this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
-          }).catch(e=>{
+          }).catch(()=>{
             this.loading = false
+          })
+          this.addJcfl({
+            jglc:'数据筛查',
+            gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
+            rwpcid:rwpcid,
+            jgdm:jgdm,
+            zhczr:this.$store.getters.name,
+            sort:1
           })
       }).catch(_=>{})
     },
@@ -705,7 +704,7 @@ export default {
               params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
             }
             delete params.bjsj
-            res = await updateRenwufour(params)
+            res = await updateRenwufour({...params,jgbf:type})
             if(res.code===200) {
               this.msgSuccess('操作成功')
               if(this.tabsValue==="four"){

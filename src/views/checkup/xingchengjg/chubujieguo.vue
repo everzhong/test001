@@ -189,7 +189,9 @@ export default {
     doSubmit(params){
       submitDxqd(params).then(res=>{
         this.msgSuccess("操作成功")
-        this.getList()
+        setTimeout(()=>{
+          this.$router.back(-1)
+        },500)
         this.addJcfl({
           jglc:'初步形成结果',
           gjxx:`初步形成结果 ${params.status===5?'提交':'退回'}：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
