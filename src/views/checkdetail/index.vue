@@ -741,7 +741,7 @@ export default {
         const setSCReqestList = []
         const shujuRequestList = []
         this.selectionList.forEach(item=>{
-          const {rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,scrwid,scname,jczid,id} = item;
+          const {rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,jczid,id} = item;
           const time = bossRand();
           const scParams = {
             ids:id,
@@ -760,13 +760,13 @@ export default {
           setSCReqestList.push(scParams)
           shujuRequestList.push({
             id,
-            scrwid,
-            scname,
             datastarttime,
             dataendtime,
-            createBy:userNmae,
             jgdm,
             jczid,
+            createBy:userNmae,
+            scrwid:[rwpcid,jgdm,time].join('-'),
+            scname:[rwpcid,time,jgmc].join('-'),
             deptId:this.$store.getters.userId
           })
         })

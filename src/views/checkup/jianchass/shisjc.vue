@@ -546,12 +546,12 @@ export default {
         type: "warning"
       }).then(()=> {
           const userNmae = this.$store.getters.name
-          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,scrwid,scname,jczid} = this.queryInfoFrom
+          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,jczid} = this.queryInfoFrom
           const time = bossRand();
           const requireParams = {
+            scstatus:1,
             ids:id,
             scrwid:[rwpcid,jgdm,time].join('-'),
-            scstatus:1,
             scname:[rwpcid,time,jgmc].join('-'),
             scsqr:userNmae,
             rwpcid,
@@ -564,13 +564,13 @@ export default {
           }
           setShujusc({
             id,
-            scrwid,
-            scname,
             datastarttime,
             dataendtime,
-            createBy:userNmae,
             jgdm,
             jczid,
+            createBy:userNmae,
+            scrwid:[rwpcid,jgdm,time].join('-'),
+            scname:[rwpcid,time,jgmc].join('-'),
             deptId:this.$store.getters.userId
           }).then(res=>{
             this.loading = false
