@@ -102,7 +102,7 @@ export default {
         },
         viewTemp:'button',
         noClick: function(index){
-          return !(index==1 || index==2)
+          return index==1
         }
       },{
         prop: 'rwpcid',

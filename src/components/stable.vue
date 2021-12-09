@@ -36,7 +36,7 @@
           </el-select>
           <div v-if="col.viewTemp==='button' && scope.row[col.prop]">
             <span v-if="col.noClick && col.noClick(scope.row[col.prop])">{{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}}</span>
-            <el-button v-else type="text" size="mini"  @click="poerateButton(scope.row)"> {{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}} </el-button>
+            <span v-else @click="poerateButton(scope.row)" style="color:#1B65B9;cursor:pointer"> {{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}} </span>
           </div>
         </template>
       </el-table-column>

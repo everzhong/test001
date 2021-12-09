@@ -127,7 +127,7 @@
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
             <el-input style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
-            <el-tooltip class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
+            <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
               <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
             </el-tooltip>
           </el-form-item>
