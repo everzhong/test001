@@ -370,8 +370,9 @@ export default {
       // 核实状态字典
       hsztOptions:[
         {dictValue:'1',dictLabel:'未核实'},
-        {dictValue:'2',dictLabel:'核实中'},
-        {dictValue:'3',dictLabel:'已核实'}
+        {dictValue:'2',dictLabel:'待核实确认'},
+        {dictValue:'3',dictLabel:'核实中'},
+        {dictValue:'4',dictLabel:'已核实'}
       ],
       // 查询参数
       queryParams: {

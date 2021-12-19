@@ -171,8 +171,8 @@ export default {
       },{
         prop:'hs',
         label:'核实状态',
-        viewFun:(hs)=>{
-          return (hs==1?'未核实': hs==2?'核实中': hs==3?'已核实':'')
+        viewFun:(hszt)=>{
+          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
         }
       },{
         prop:'hsyj',
@@ -263,8 +263,8 @@ export default {
       },{
         prop:'hs',
         label:'核实状态',
-        viewFun:(hs)=>{
-          return (hs==1?'未核实': hs==2?'核实中': hs==3?'已核实':'')
+        viewFun:(hszt)=>{
+          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
         }
       },{
         prop:'hsr',
