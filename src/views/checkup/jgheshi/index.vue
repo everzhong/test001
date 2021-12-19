@@ -13,7 +13,7 @@
       <el-table-column label="序号" type="index" align="center" min-width="65" slot="fixed"/>
       <el-table-column label="操作" align="center"  width="110" slot="operate">
         <template slot-scope="scope" >
-          <el-button :disabled="scope.row.hs==4" size="mini" type="text" primary @click="submitHsyj(scope.row)">提交核实意见</el-button>
+          <el-button size="mini" type="text" primary @click="submitHsyj(scope.row)">查看反馈信息见</el-button>
         </template> 
       </el-table-column>
     </sTable>
@@ -21,7 +21,7 @@
       <el-table-column label="序号" type="index" align="center" min-width="65" slot="fixed"/>
       <el-table-column label="操作" align="center"  width="110" slot="operate">
         <template slot-scope="scope" >
-          <el-button  :disabled="scope.row.hs==4" size="mini" type="text" primary @click="submitHsyj(scope.row)">提交核实意见</el-button>
+          <el-button size="mini" type="text" primary @click="submitHsyj(scope.row)">查看反馈信息见</el-button>
         </template> 
       </el-table-column>
     </sTable>
@@ -132,7 +132,7 @@ export default {
         prop: 'hs',
         label: '核实状态',
         viewFun:(hszt)=>{
-          return hszt==4?'已机构核实':'待机构核实'
+          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
         }
       }],
       hcHeader:[{
@@ -212,7 +212,7 @@ export default {
         prop: 'hs',
         label: '核实状态',
         viewFun:(hszt)=>{
-          return hszt==4?'已机构核实':'待机构核实'
+          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
         }
       },{
         prop:'hsr',
@@ -289,43 +289,51 @@ export default {
       this.loading = false
     },
     submitHsyj(row){
-      this.$prompt('机构核实意见', '核实意见填写', {
-          inputType:'textarea',
-          inputValidator:function(value){
-            return !!value
-          },
-          inputErrorMessage: '请填写核实意见!',
-          confirmButtonText: '确定',
-          cancelButtonText: '返回',
-        }).then(async ({ value }) => {
-            let res = ''
-            if(this.tabsValue==='three'){
-              res = await updateRenwuthree({
-              id:row.id,
-              hs:'4',
-              hsyj:value,
-              hsr:this.$store.getters.name,
-              hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
-            })
-          } else {
-            res = await updateRenwufour({
-              id:row.id,
-              hs:'4',
-              hsyj:value,
-              hsr:this.$store.getters.name,
-              hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
-            })
-          }
-          if(res.code===200) { 
-            this.msgSuccess('机构核实成功')
-            this.getList()
-          } 
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });       
-        });
+      this.$router.push({
+        path:'/ssjc',
+        query:{
+          id:row.id,
+          rwpcid:row.rwpcid,
+          jgdm:row.jgdm
+        }
+      })
+    //   this.$prompt('机构核实意见', '核实意见填写', {
+    //       inputType:'textarea',
+    //       inputValidator:function(value){
+    //         return !!value
+    //       },
+    //       inputErrorMessage: '请填写核实意见!',
+    //       confirmButtonText: '确定',
+    //       cancelButtonText: '返回',
+    //     }).then(async ({ value }) => {
+    //         let res = ''
+    //         if(this.tabsValue==='three'){
+    //           res = await updateRenwuthree({
+    //           id:row.id,
+    //           hs:'4',
+    //           hsyj:value,
+    //           hsr:this.$store.getters.name,
+    //           hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
+    //         })
+    //       } else {
+    //         res = await updateRenwufour({
+    //           id:row.id,
+    //           hs:'4',
+    //           hsyj:value,
+    //           hsr:this.$store.getters.name,
+    //           hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
+    //         })
+    //       }
+    //       if(res.code===200) { 
+    //         this.msgSuccess('机构核实成功')
+    //         this.getList()
+    //       } 
+    //     }).catch(() => {
+    //       this.$message({
+    //         type: 'info',
+    //         message: '取消输入'
+    //       });       
+    //     });
     }
   }
 }

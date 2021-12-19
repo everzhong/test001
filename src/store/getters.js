@@ -7,6 +7,7 @@ const getters = {
     token: state => state.user.token,
     avatar: state => state.user.avatar,
     name: state => state.user.name,
+    dept: state => state.user.dept,
     userId: state => state.user.userId,
     remark: state => state.user.remark,
     introduction: state => state.user.introduction,
@@ -20,6 +21,5 @@ const getters = {
     jslbDic: state => state.dic.jslbOptions,
     ybbfDic: state => state.dic.ybbfOptions,
     jsdjDic: state => state.dic.jsdjOptions
-
 }
 export default getters

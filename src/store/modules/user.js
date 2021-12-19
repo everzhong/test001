@@ -9,7 +9,8 @@ const user = {
         avatar: '',
         roles: [],
         permissions: [],
-        remark: ''
+        remark: '',
+        dept: ''
     },
 
     mutations: {
@@ -18,6 +19,9 @@ const user = {
         },
         SET_NAME: (state, name) => {
             state.name = name
+        },
+        SET_DEPT: (state, dept) => {
+            state.dept = dept
         },
         SET_USERID: (state, userId) => {
             state.userId = userId
@@ -59,7 +63,7 @@ const user = {
                     setToken(res.token)
                     setUid(uid)
                     commit('SET_TOKEN', res.token)
-                    resolve()
+                    resolve(res.token)
                 }).catch(error => {
                     reject(error)
                 })
@@ -96,6 +100,7 @@ const user = {
                     }
                     commit('SET_REMARK', user.remark)
                     commit('SET_NAME', user.userName)
+                    commit('SET_DEPT', user.dept.deptName)
                     commit('SET_USERID', user.userId)
                     commit('SET_AVATAR', avatar)
                     resolve(res)

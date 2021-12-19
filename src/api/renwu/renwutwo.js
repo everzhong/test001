@@ -42,6 +42,14 @@ export function updateRenwutwo(data, innoreError) {
         innoreError: innoreError
     })
 }
+//setyynr
+export function setYynr(data) {
+    return request({
+        url: '/renwu/renwutwo/setyynr',
+        method: 'post',
+        data: data
+    })
+}
 ///setdy打印通知
 export function setDytz(data) {
     const { ids } = data

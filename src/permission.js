@@ -7,10 +7,7 @@ import 'nprogress/nprogress.css'
 import { getToken, getUid, removeToken } from '@/utils/auth'
 
 NProgress.configure({ showSpinner: false })
-
 const whiteList = ['/login', '/authLogin', '/loginapi', '/api/sendscreening', '/auth-redirect', '/bind', '/register']
-
-
 router.beforeEach((to, from, next) => {
     const uid = getUid()
     const urlUid = to.query.uid
@@ -53,8 +50,17 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        // 没有token
-        if (whiteList.indexOf(to.path) !== -1) {
+        console.log(to)
+        if (['/xcjg', '/ssjc', '/ssjcFull'].indexOf(to.path) !== -1) { //给定点系统调用页面
+            next({
+                path: '/login',
+                query: {
+                    redirect: to.path,
+                    ...to.query
+                }
+            })
+            NProgress.done()
+        } else if (whiteList.indexOf(to.path) !== -1) {
             // 在免登录白名单，直接进入
             next()
                 // NProgress.done()

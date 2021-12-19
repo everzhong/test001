@@ -115,6 +115,21 @@ export const constantRoutes = [{
             name: 'ViewNotice',
             meta: { title: '查看通知' }
         }]
+    },
+    {
+        path: '/xcjg',
+        component: (resolve) => require(['@/views/fordingdian/xcjg'], resolve),
+        hidden: true
+    },
+    {
+        path: '/ssjcFull',
+        component: (resolve) => require(['@/views/fordingdian/shisjcFull'], resolve),
+        hidden: true
+    },
+    {
+        path: '/ssjc',
+        component: (resolve) => require(['@/views/fordingdian/shisjc'], resolve),
+        hidden: true
     }
     // {
     //     alwaysShow: true,

@@ -13,7 +13,7 @@
         </el-col>
         <div class="top-right-btn">
           <el-col :span="1.5" v-show="gzTabsValue==1">
-            <span style="margin-right:10px;font-size:12px;color:#606266">参保人</span>
+            <span style="margin-right:10px;font-size:12px;color:#606266">参保地</span>
             <el-select v-model="queryGzForm.ybd" size="small" @change="ybdChange" style="width:100px">
               <el-option label="本地" value="01"></el-option>
               <el-option label="异地" value="02"></el-option>
@@ -400,10 +400,10 @@ export default {
         let  res = null
         switch(true) {
           case (this.gzTabsValue==='1' && this.tabsValue==='three'):
-            res = await listRenwuthree({hs:3,...params})
+            res = await listRenwuthree({hszt:3,...params})
             break;
           case (this.gzTabsValue==='2'):
-            res = await listRenwufour({hs:3,...params,type:2,ischeck:1})
+            res = await listRenwufour({hszt:3,...params,type:2,ischeck:1})
             break;
           case (this.tabsValue === 'four'):
             res = await listRenwufour(params)

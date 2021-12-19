@@ -82,10 +82,13 @@ export default {
         code: [{ required: true, trigger: "change", message: "验证码不能为空" }]
       },
       loading: false,
-      redirect: undefined
+      redirect: '',
+      urlQuery:{}
     };
   },
   created() {
+    this.urlQuery = this.$route.query
+    this.redirect = this.$route.query.redirect||''
     const self = this
     window.onmessage = function(e){
       const UID = e.data['loginToken']
@@ -121,7 +124,7 @@ export default {
       Cookies.remove('username')
       this.$store.dispatch('ClearInfo')
       this.$store.dispatch("LoginApi", info).then(() => {
-          this.$router.push({ path: this.redirect||"/renwu/renwulist"}).catch(()=>{});
+          this.$router.push({ path: this.redirect||"/renwu/renwulist",query:this.urlQuery}).catch(()=>{});
           this.$store.dispatch('GetFyList');
           this.$store.dispatch('GetJsList');
           this.$store.dispatch('GetYbbfList');
@@ -134,7 +137,7 @@ export default {
           }, '*');
           this.loading = false;
         });
-      },
+    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {

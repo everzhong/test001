@@ -1,53 +1,8 @@
 <template>
-  <div class="app-container">
-    <section v-show="!heshiOption.show" >
-      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true" v-show="showSearch">
-            <el-form-item label="案件来源" prop="ajly">
-              <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
-            </el-form-item>
-            <el-form-item label="险种" prop="ybbf">
-              <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
-            </el-form-item>
-            <el-form-item label="就医类型" prop="jslb">
-              <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
-            </el-form-item>
-            <el-form-item label="批次号" prop="rwpcid">
-              <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-            </el-form-item>
-            <el-form-item label="数据开始日期" prop="datastarttime">
-              <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-            </el-form-item>
-            <el-form-item label="数据结束日期" prop="dataendtime">
-              <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-            </el-form-item>
-            <el-form-item label="机构名称" prop="jgmc">
-              <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-            </el-form-item>
-              <el-form-item label="承办机构" prop="jcjg">
-              <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
-            </el-form-item>
-              <el-form-item label="检查组" prop="jczname">
-              <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
-            </el-form-item>
-            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
-              <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
-              <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
-              <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-            </div>
-            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-else>
-              <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-            </div>
-      </el-form>
+  <div class="app-container" style="height:100%" v-loading="pageLoaing">
+    <section>
       <el-row :gutter="10">
-        <el-col :span="1.5">
-          <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
-          <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
-          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">开展第三方筛查</el-button>
-        </el-col>
+        
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保地：</span>
           <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
@@ -55,14 +10,19 @@
             <el-option label="异地" value="02"></el-option>
           </el-select>
         </el-col>
-
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+        <el-col :span="1.5">
+          <el-button type="primary" plain size="small" @click="setyy('1')">有异议</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" plain size="small" @click="setyy('2')">无异议</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='six'">
           <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
-        <!-- <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="canclHc">取消核查</el-button>
-        </el-col> -->
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+        <el-col :span="1.5" v-if="tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
           <el-date-picker
           v-model="pksj"
@@ -74,37 +34,19 @@
          >
         </el-date-picker>
         </el-col>
-        <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
-          <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
-        </el-col>
         <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
           <el-radio-button label="three">规则筛查</el-radio-button>
           <el-radio-button label="six">进销存核查</el-radio-button>
         </el-radio-group>
-        <div class="top-right-btn" v-if="tabsValue=='five'||tabsValue=='qmx'">
-          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-            <el-radio-button label="five">同流水号明细</el-radio-button>
-            <el-radio-button label="qmx">全明细</el-radio-button>
-          </el-radio-group>
-        </div>
       </el-row>
       <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
-        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
+        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="2" :checkAll="false"  @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55" align="center" slot="fixed"/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-            <el-table-column label="操作" align="center" min-width="160" slot="operate">
-              <template slot-scope="scope">
-                <el-button type="text" size="mini" @click="fluProject(scope.row)">
-                  流水号项目汇总
-                </el-button>
-              </template>
-            </el-table-column>
         </sTable>
-        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
-        <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
-        <jinxiaohecha v-show="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
-        <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+        <jinxiaohecha v-if="tabsValue=='six'" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <pagination
         class="fixed-bottom"
@@ -114,45 +56,28 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      <div v-show="(tabsValue=='four'||tabsValue=='six')&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:10px;">
-        <el-form inline :model="xwrdForm" :rules="xwRules" size="mini" ref="xwrdForm" label-width="100px">
-          <el-form-item label="名称">
-            <el-input v-model="xwrdForm.mxxmmc" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="行为认定" prop="xwrd">
-            <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
-          </el-form-item>
-          <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
-          </el-form-item>
-          <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
-            <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
-              <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
-            </el-tooltip>
-          </el-form-item>
-          <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
-          </el-form-item>
-          <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item>
-          <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="bz">
-            <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="xwrdSubmit">确定</el-button>
-          </el-form-item>
-        </el-form>
+      <div class="xingweirz">
+        <div class="yy-content">
+          <span>异议内容</span>
+          <el-input rows="3" type="textarea" v-model="yynr"></el-input>
+        </div>
+        <div>
+          <div style="margin-bottom:8px"><span>上传相关资料（格式：jpg、png、pdf、doc、docx、xls、xlsx，单个文件不超过10M）</span></div>
+          <div>
+            <fileUpload
+              v-model="wenjian.wenjianurl"
+              :fileSize="10"
+              :fileType='["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"]'
+              :isShowTip="false"
+              :needHide="true"
+              :hideFileList="false"
+              :buttonOPtions="{size:'mini',text:'选择文件'}"
+              @input="upSuccess"
+              ref="fileUpload"
+            />
+          </div>
+        </div>
+        <div><el-button type="primary" size="mini" @click="handleSubmit">保存</el-button></div>
       </div>
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
@@ -246,46 +171,39 @@
       </div>
     </el-dialog>
     <guizeshuom :options="guizeOptions"></guizeshuom>
-    <xwrd-dialog :options="xwrdDialog" @on-checked="onChecked" v-if="xwrdDialog.show"></xwrd-dialog>
-    <jgheshi :options="heshiOption" v-if="heshiOption.show" @on-close="heshiOption.show=false"></jgheshi>
     <operate-log v-if="logOption.show" :options="logOption"></operate-log>
   </div>
 </template>
 
 <script>
-import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
-import { setSancha,setShujusc} from  '@/api/renwu/renwutwo'
-import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
-import { getTLS,getQMX} from '@/api/renwu/mingxi'
-import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
-import { bossRand } from "@/utils/ruoyi"
-import LiushuiTable from './liushiTable.vue'
-import Tongliumx from './tongliumx.vue'
-import Guizeshuom from './guizeshuom.vue'
-import XwrdDialog from './xwrdDialog.vue'
-import Jgheshi from './jgheshi.vue'
-import operateLog from './operateLog.vue'
-import Quanmingxi from '../../common/quanmingxi.vue'
+import { listRenwuthree,updateRenwuthree} from "@/api/renwu/renwuthree";
+import {setYynr} from  '@/api/renwu/renwutwo'
+import { listRenwufour, updateRenwufour } from '@/api/renwu/renwufour'
+import { addDcqz} from "@/api/renwu/dcqz"
+import Guizeshuom from '../checkup/jianchass/guizeshuom.vue'
+import operateLog from '../checkup/jianchass/operateLog.vue'
 import Jinxiaohecha from './jinxiaohecha.vue'
-import Hechashuju from './hechashuju.vue'
-import xmbm from './xmbm.vue'
-
+import Hechashuju from '../checkup/jianchass/hechashuju.vue'
+import xmbm from '../checkup/jianchass/xmbm.vue'
+import FileUpload from '@/components/FileUpload';
+import { getToken } from '@/utils/auth'
 export default {
   name: "Shisjc",
   components: {
-    LiushuiTable,
     Guizeshuom,
-    XwrdDialog,
-    Tongliumx,
-    Jgheshi,
     operateLog,
-    Quanmingxi,
     Jinxiaohecha,
     Hechashuju,
-    xmbm
+    xmbm,
+    FileUpload
   },
   data() {
     return {
+      pageLoaing:true,
+      wenjian:{
+        wenjianurl:'',
+        wenjian:''
+      },
       showHecha:false,//显示选择核查数据
       tableHeader:[{
         prop: 'ydlx',
@@ -335,6 +253,12 @@ export default {
         viewFun: (jsfy)=>{
           return this.formatMoney(jsfy,2)
         }
+      },{
+        prop: 'yy',
+        label: '有无异议',
+        viewFun:function(yy){
+          return (yy?(yy==0?'未反馈':yy==1?'有异议':yy==2?'无异议':''):'')
+        },
       }],
       qmxOptions:{
         show:false,
@@ -352,6 +276,7 @@ export default {
       xwrdDialog:{
         show:false
       },
+      yynr:'',
       xwrdForm:{
         mxxmmc:'',
         xwrd:'',
@@ -405,12 +330,6 @@ export default {
       renwusixList:[],
       // 弹出层标题
       title: "",
-      // 核实状态字典
-      hsztOptions:[
-        {dictValue:'1',dictLabel:'未核实'},
-        {dictValue:'2',dictLabel:'核实中'},
-        {dictValue:'3',dictLabel:'已核实'}
-      ],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -467,9 +386,69 @@ export default {
   },
   created() {
     this.queryInfoFrom = this.$route.query
-    this.getList();
+
+    if(getToken()){
+      this.pageLoaing = false;
+      this.getList();
+    }
   },
   methods: {
+    setyy(yy){
+      if(!this.ids.length){
+        this.msgError('请至少选择一项')
+        return
+      }
+      let api = this.tabsValue==='three'?updateRenwuthree:updateRenwufour
+      let responseCount = 0
+      this.loading = true
+      this.ids.forEach(async id=>{
+        try {
+          await api({id,yy})
+          responseCount++
+          if(responseCount===this.ids.length){
+            this.getList()
+          }
+        } catch (error) {
+          this.loading = false
+          responseCount++
+        }
+      })
+    },
+    handleSubmit(){
+      if(!this.yynr){
+        this.msgError('请输入异议内容')
+        return
+      }
+      setYynr({
+        ...this.queryInfoFrom,
+        yynr:this.yynr
+      }).then(res=>{
+        if(res.code===200){
+          this.msgSuccess('操作成功')
+          this.yynr = ''
+        }
+      })
+      if(this.wenjian.wenjianurl){
+        this.submitFileInfo()
+      }
+    },
+    submitFileInfo(){
+      const {wenjian,wenjianurl} = this.wenjian
+      addDcqz({
+        type:6,//文件资料type:6
+        rwpcid:this.queryInfoFrom.rwpcid,
+        jgdm:this.queryInfoFrom.jgdm,
+        upman:this.$store.getters.name,
+        addtime: this.parseTime(new Date().getTime()),
+        wenjian,
+        wenjianurl,
+      }).then(res=>{
+        if(res.code===200) {
+          this.wenjian.wenjian = ''
+          this.wenjian.wenjianurl = ''
+        }
+      })
+    },
     mxxmbmChecked(val){
       this.bmQueryForm.mxxmbm = val
     },
@@ -519,230 +498,13 @@ export default {
     },
     //规则筛查，进销存核查切换
     tabsLevelChange1(val){
-      this.selectedId = ''
-      this.selectionList = []
+      this.ids = []
       this.getList()
-      this.$refs.xwrdForm.clearValidate()
-    },
-    //同流水号明细，全明细切换
-    tabsLevelChange(val){
-      this.queryParams.pageNum=1
-      this.total = 0
-      const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
-      this.searchTlsNextParams = val=='five'?{lsh:this.lsh||'',mxxmbm:this.mxxmbm}:{
-        jgdm:jgdm,
-        zdbm:this.parseTime(datastarttime, '{y}{m}'),
-        zdbm1:this.parseTime(dataendtime, '{y}{m}')
-      }
-      this.getList()
-    },
-    /**
-     * 第三方筛查
-     */
-    handleThirdCheck(){
-      this.$confirm('是否对当前机构进行数据筛查', "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(()=> {
-          const userNmae = this.$store.getters.name
-          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,jczid} = this.queryInfoFrom
-          const time = bossRand();
-          const requireParams = {
-            scstatus:1,
-            ids:id,
-            scrwid:[rwpcid,jgdm,time].join('-'),
-            scname:[rwpcid,time,jgmc].join('-'),
-            scsqr:userNmae,
-            rwpcid,
-            jgdm,
-            datastarttime,
-            dataendtime
-          }
-          if(sccqstatus==0){
-            requireParams.sccqstatus = 1
-          }
-          setShujusc({
-            id,
-            datastarttime,
-            dataendtime,
-            jgdm,
-            jczid,
-            createBy:userNmae,
-            scrwid:[rwpcid,jgdm,time].join('-'),
-            scname:[rwpcid,time,jgmc].join('-'),
-            deptId:this.$store.getters.userId
-          }).then(res=>{
-            this.loading = false
-            if(res.code===200) {
-              this.msgSuccess('操作成功')
-              setSancha(requireParams)
-            }
-            this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
-          }).catch(()=>{
-            this.loading = false
-          })
-          this.addJcfl({
-            jglc:'数据筛查',
-            gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
-            rwpcid:rwpcid,
-            jgdm:jgdm,
-            zhczr:this.$store.getters.name,
-            sort:1
-          })
-      }).catch(_=>{})
-    },
-    tableFourRadioChange(e){
-      console.log(e)
-    },
-    //点击检查完成状态跳到4
-    doSubmit() {
-      this.$confirm("请确认所有规则均已完成检查，是否提交？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(()=>{
-          const params = {
-            ids:[this.queryInfoFrom.id],
-            status:4,//检查完成去到状态4，形成结果
-            dxqd:'检查完成',
-          }
-          return submitDxqd(params);
-        }).then(()=>{
-          this.msgSuccess("操作成功")
-          this.getList()
-          this.addJcfl({
-            jglc:'检查实施',
-            gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
-            rwpcid:this.queryInfoFrom.rwpcid,
-            jgdm:this.queryInfoFrom.jgdm,
-            zhczr:this.$store.getters.name,
-            sort:7
-          })
-        }).catch(_=>{})
-    },
-    //返回上一层
-    goBackUpLevel(){
-      this.selectedId = ''
-      this.xwrdForm = {
-        mxxmmc:'',
-        xwrd:'',
-        bz:'',
-        zkdj:'',
-        wgsl:'',
-        wgfy:'',
-        qckc:'',
-        bqgr:'',
-        xjxs:'',
-        qmkc:'',
-        ybjs:''
-      }
-      switch(true) {
-        case (this.tabsValue=='five'||this.tabsValue=='qmx'):
-          if(this.qmxOptions.show){
-            this.qmxOptions.show = false
-          } else {
-            this.tabsValue = 'four'
-            this.xwrdForm.mxxmmc=''
-            this.lsh = ''
-          }
-          break
-        case (this.tabsValue=='four'):
-          this.tabsValue = 'three'
-          this.getList()
-          this.xwrdForm.mxxmmc=''
-          break
-        default :
-         break
-      }
-      this.logShow&&(this.logShow = false)
     },
     //选择行为回调
     onChecked(res){
       this.xwrdChecd = res
       this.xwrdForm.xwrd = res.wgxw
-    },
-    //点击行为认定
-    handelXwrdDialog(){
-      if(!this.selectedId){
-        this.msgError('请选择规则后再点行为认定')
-      } else {
-        this.xwrdDialog.show = true
-      }
-    },
-    xwrdSubmit(){
-      if(this.selectionList.length===0){
-        this.msgError('请选择一项在进行行为认定')
-        return
-      }
-      if(this.tabsValue==='six' && !this.pksj){//进销存核查
-        this.msgError('请选择盘库期初和盘库期末时间')
-        return   
-      }
-      const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-      if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
-        this.msgError('违规费用不能大于明细项目医保结算金额')
-        return
-      }
-      this.$refs['xwrdForm'].validate(async valid => {
-          if (valid) {
-            let res = ''
-            const {type,xwbh,lx} = this.xwrdChecd//这个type是行文认定选择的类型
-            const params = {id:this.selectedId,...this.xwrdForm,xwbh,wglx:lx}
-            if(this.pksj){
-              params.pkqcsj = this.parseTime(this.pksj[0].getTime(),'{y}-{m}-{d}')
-              params.pkqmsj = this.parseTime(this.pksj[1].getTime(),'{y}-{m}-{d}')
-            }
-            if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
-              delete params.zkdj
-              delete  params.wgsl
-              delete  params.wgfy
-            }
-            if(this.tabsValue==='six'){//进销存核查
-              const cesl = this.cesl()
-              params.cesl = cesl
-              params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
-            }
-            delete params.bjsj
-            res = await updateRenwufour({...params,jgbf:type})
-            if(res.code===200) {
-              this.msgSuccess('操作成功')
-              if(this.tabsValue==="four"){
-                this.getList(this.searchLsNextParams)
-              } else {
-                this.getList()
-              }
-              this.selectionList.forEach(item=>{
-                const addData = {
-                  bjr: this.$store.getters.name,
-                  bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
-                  fid:item.id,
-                  rid:item.rwpcid,
-                  jgdm:item.jgdm,
-                  type:this.tabsValue==='four'?'1':'2',
-                  ...params,
-                }
-               
-                if(this.tabsValue==='four'){//流水号项目汇总
-                  delete addData.qckc
-                  delete addData.bqgr
-                  delete addData.xjxs
-                  delete addData.qmkc
-                  delete addData.ybjs
-                  delete addData.pkqmsj
-                  delete addData.pkqcsj  
-                } else {
-                  addData.cesl = params.cesl
-                  addData.dzce = params.dzce 
-                }
-                rendingAdd(addData)
-              })
-
-            }
-          } else {
-            return false;
-          }
-        });
     },
     getGuizList(){
       console.log(this.guizefl)
@@ -752,22 +514,6 @@ export default {
     */
     handleGuizeChange(selection){
       this.guizefl.selection = selection
-    },
-    /**
-     * selectedGuize规则选择确定
-     */
-    selectedGuize(){
-
-    },
-    /**
-     * 流水号项目列表全选
-     * 
-    /**
-     * 全选，取消全选
-     */
-    selectEvent(type,isAll) {
-      this.isAll = isAll
-      this.$refs.liuShuiTable[type]()
     },
     /**
      * 
@@ -781,7 +527,7 @@ export default {
     /** 查询renwu列表 */
     async getList(query) {
       const {rwpcid,jgdm} = this.queryInfoFrom
-      let params = {...this.queryParams,rwpcid,jgdm}
+      let params = {...this.queryParams,rwpcid,jgdm, hszt:'3'}
       if(query){
         params = {...params,...query}
       }
@@ -792,20 +538,10 @@ export default {
           case 'three':
             res = await listRenwuthree({...params,...this.gzQueryForm})
             break;
-          case 'four':
-            params.type=1
-            res = await listRenwufour({...params,...this.searchLsNextParams})
-            break;
-          case 'five':
-            res = await getTLS({...this.queryParams,...this.searchTlsNextParams})
-            break;
           case 'six':
             params.type=2
             params.ischeck=1
             res = await listRenwufour({...params,...this.bmQueryForm})
-            break;
-          case 'qmx':
-            res = await getQMX({...this.queryParams,...this.searchTlsNextParams})
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
@@ -898,10 +634,6 @@ export default {
     hsyjFormat(row, column) {
       return this.selectDictLabels(this.hsyjOptions, row.hsyj);
     },
-    // 核实状态字典翻译
-    hsztFormat(row, column) {
-      return this.selectDictLabels(this.hsztOptions, row.hszt);
-    },
     // 核实时间字典翻译
     hssjFormat(row, column) {
       return this.selectDictLabels(this.hssjOptions, row.hssj);
@@ -935,42 +667,9 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       if(selection.length!==0){
-        // this.ids = selection.map(item => item.id)
-        this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy} = selection[0]
-        this.selectedId = id
-        this.selectionList = selection
-        this.xwrdForm.bz = bz
-        this.xwrdForm.zkdj = mxxmdj
-        this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
-        this.xwrdForm.mxxmmc = mxxmmc
-        this.xwrdForm.xwrd = ''
-        if(this.tabsValue==='six'){//进销存核查
-          const {qckc,bqgr,xjxs,qmkc,ybjs} = selection[0]
-          this.xwrdForm.qckc = qckc
-          this.xwrdForm.bqgr = bqgr
-          this.xwrdForm.xjxs = xjxs
-          this.xwrdForm.qmkc = qmkc
-          this.xwrdForm.ybjs = ybjs
-        } else {
-          this.xwrdForm.wgsl = mxxmsl
-        }
-        this.$refs.xwrdForm.clearValidate()
+        this.ids = selection.map(item => item.id)
       } else {
         this.ids=[]
-        this.xwrdForm = {
-          mxxmmc:'',
-          xwrd:'',
-          bz:'',
-          zkdj:'',
-          wgsl:'',
-          wgfy:'',
-          qckc:'',
-          bqgr:'',
-          xjxs:'',
-          qmkc:'',
-          ybjs:''
-        }
       }
     },
     //同流水明细
@@ -989,15 +688,6 @@ export default {
       this.logOption.fid = row.fid
       this.logOption.xwrd = row.xwrd
       this.logOption.show = true
-    },
-    //全明细
-    checkMx(row){
-      this.qmxOptions.query = {
-        jgdm:row.jgdm,
-        zdbm:this.parseTime(this.queryInfoFrom.datastarttime, '{y}{m}'),
-        zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}')
-      }
-      this.qmxOptions.show = true
     },
     sum(arr){
       let s = 0
@@ -1058,29 +748,53 @@ export default {
         res = ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
       }
       return res
-    }
+    },
+    upSuccess(fileUrl,file){
+      if(fileUrl) {
+        this.wenjian.wenjian = file.name
+      } else {
+        this.wenjian.wenjian = ''
+      }
+    },
   }
 };
 </script>
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:153px;
-  bottom:70px;
+  top:60px;
+  bottom:150px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
-  right: 0px;
+  bottom:115px;
+  left: 0px;
 }
 .xingweirz {
-  .el-form-item {
-    margin-bottom: 12px !important;
+  width: 100%;
+  height: 80px;
+  position: absolute;
+  bottom: 15px;
+  font-size: 14px;
+  color: #606266;
+  >div {
+    float: left;
+    margin-right: 20px;
+    position: relative;
+    &::v-deep .el-upload-list {
+      position: absolute !important;
+      width: 100%;
+      top:15px;
+    }
   }
-  &::v-deep .el-form-item__label {
-    font-size: 12px !important;
+  .yy-content {
+    display: flex;
+    width: 450px;
+    span {
+      width:80px;
+    }
   }
 }
 .check-dialog {

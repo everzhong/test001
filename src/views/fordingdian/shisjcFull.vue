@@ -1,53 +1,16 @@
 <template>
-  <div class="app-container">
-    <section v-show="!heshiOption.show" >
-      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true" v-show="showSearch">
-            <el-form-item label="案件来源" prop="ajly">
-              <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
-            </el-form-item>
-            <el-form-item label="险种" prop="ybbf">
-              <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
-            </el-form-item>
-            <el-form-item label="就医类型" prop="jslb">
-              <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
-            </el-form-item>
-            <el-form-item label="批次号" prop="rwpcid">
-              <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-            </el-form-item>
-            <el-form-item label="数据开始日期" prop="datastarttime">
-              <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-            </el-form-item>
-            <el-form-item label="数据结束日期" prop="dataendtime">
-              <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-            </el-form-item>
-            <el-form-item label="机构名称" prop="jgmc">
-              <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-            </el-form-item>
-              <el-form-item label="承办机构" prop="jcjg">
-              <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
-            </el-form-item>
-              <el-form-item label="检查组" prop="jczname">
-              <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
-            </el-form-item>
-            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
-              <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
-              <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
-              <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-            </div>
-            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-else>
-              <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-            </div>
-      </el-form>
+  <div class="app-container" style="height:100%" v-loading="pageLoaing">
+    <section>
       <el-row :gutter="10">
         <el-col :span="1.5">
           <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
+        <!-- <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
           <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
         </el-col>
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
           <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">开展第三方筛查</el-button>
-        </el-col>
+        </el-col> -->
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保地：</span>
           <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
@@ -56,13 +19,10 @@
           </el-select>
         </el-col>
 
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+        <el-col :span="1.5" v-if="tabsValue==='six'">
           <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
-        <!-- <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="canclHc">取消核查</el-button>
-        </el-col> -->
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+        <el-col :span="1.5" v-if="tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
           <el-date-picker
           v-model="pksj"
@@ -103,7 +63,7 @@
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
-        <jinxiaohecha v-show="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
+        <jinxiaohecha v-if="tabsValue=='six'" fromLog="true" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
         <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
       </div>
       <pagination
@@ -253,22 +213,23 @@
 </template>
 
 <script>
-import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
+import { listRenwuthree} from "@/api/renwu/renwuthree";
 import { setSancha,setShujusc} from  '@/api/renwu/renwutwo'
 import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
 import LiushuiTable from './liushiTable.vue'
-import Tongliumx from './tongliumx.vue'
-import Guizeshuom from './guizeshuom.vue'
-import XwrdDialog from './xwrdDialog.vue'
-import Jgheshi from './jgheshi.vue'
-import operateLog from './operateLog.vue'
-import Quanmingxi from '../../common/quanmingxi.vue'
-import Jinxiaohecha from './jinxiaohecha.vue'
-import Hechashuju from './hechashuju.vue'
-import xmbm from './xmbm.vue'
+import Tongliumx from '../checkup/jianchass/tongliumx.vue'
+import Guizeshuom from '../checkup/jianchass/guizeshuom.vue'
+import XwrdDialog from '../checkup/jianchass/xwrdDialog.vue'
+import Jgheshi from '../checkup/jianchass/jgheshi.vue'
+import operateLog from '../checkup/jianchass/operateLog.vue'
+import Quanmingxi from '../common/quanmingxi.vue'
+import Jinxiaohecha from '../checkup/jianchass/jinxiaohecha.vue'
+import Hechashuju from '../checkup/jianchass/hechashuju.vue'
+import xmbm from '../checkup/jianchass/xmbm.vue'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: "Shisjc",
@@ -286,6 +247,7 @@ export default {
   },
   data() {
     return {
+      pageLoaing:true,
       showHecha:false,//显示选择核查数据
       tableHeader:[{
         prop: 'ydlx',
@@ -467,7 +429,10 @@ export default {
   },
   created() {
     this.queryInfoFrom = this.$route.query
-    this.getList();
+    if(getToken()){
+      this.pageLoaing = false;
+      this.getList();
+    }
   },
   methods: {
     mxxmbmChecked(val){
@@ -1065,7 +1030,7 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:153px;
+  top:60px;
   bottom:70px;
   left: 20px;
   right: 20px;
