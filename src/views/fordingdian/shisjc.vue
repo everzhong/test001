@@ -56,29 +56,6 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      <div class="xingweirz">
-        <div class="yy-content">
-          <span>异议内容</span>
-          <el-input rows="3" type="textarea" v-model="yynr"></el-input>
-        </div>
-        <div>
-          <div style="margin-bottom:8px"><span>上传相关资料（格式：jpg、png、pdf、doc、docx、xls、xlsx，单个文件不超过10M）</span></div>
-          <div>
-            <fileUpload
-              v-model="wenjian.wenjianurl"
-              :fileSize="10"
-              :fileType='["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"]'
-              :isShowTip="false"
-              :needHide="true"
-              :hideFileList="false"
-              :buttonOPtions="{size:'mini',text:'选择文件'}"
-              @input="upSuccess"
-              ref="fileUpload"
-            />
-          </div>
-        </div>
-        <div><el-button type="primary" size="mini" @click="handleSubmit">保存</el-button></div>
-      </div>
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
      <!-- 查询条件 -->
@@ -200,10 +177,10 @@ export default {
   data() {
     return {
       pageLoaing:true,
-      wenjian:{
-        wenjianurl:'',
-        wenjian:''
-      },
+      // wenjian:{
+      //   wenjianurl:'',
+      //   wenjian:''
+      // },
       showHecha:false,//显示选择核查数据
       tableHeader:[{
         prop: 'ydlx',
@@ -292,38 +269,18 @@ export default {
       },
       //选中的违规行为对象
       xwrdChecd:{},
-      xwRules:{
-        xwrd:[{required:true,message:'必填项'}],
-        zkdj:[{required:true,message:'必填项'}],
-        wgsl:[{required:true,message:'必填项'}],
-        wgfy:[{required:true,message:'必填项'}],
-        qckc:[{required:true,message:'必填项'}],
-        bqgr:[{required:true,message:'必填项'}],
-        xjxs:[{required:true,message:'必填项'}],
-        qmkc:[{required:true,message:'必填项'}],
-        ybjs:[{required:true,message:'必填项'}]
-      },
       guizeOptions:{
         show:false
       },
       chaxunDialog:false,
-      isAll:false,
-      liushuiSetions:[],
       selectedId:"",
       selectionList:[],
       // 遮罩层
       loading: true,
       // 选中数组
       ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 0,
-      // renwuthree表格数据
       renwuthreeList: [],
       renwufourList:[],
       renwufiveList:[],
@@ -386,7 +343,6 @@ export default {
   },
   created() {
     this.queryInfoFrom = this.$route.query
-
     if(getToken()){
       this.pageLoaing = false;
       this.getList();
@@ -565,38 +521,9 @@ export default {
       }
       this.loading = false
     },
-
-    // 序号字典翻译
-    idFormat(row, column) {
-      return this.selectDictLabels(this.idOptions, row.id);
-    },
-    // 机构代码字典翻译
-    jgdmFormat(row, column) {
-      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
-    },
-    // 机构名称字典翻译
-    jgmcFormat(row, column) {
-      return this.selectDictLabels(this.jgmcOptions, row.jgmc);
-    },
     // 规则分类字典翻译
     gzflFormat(row, column) {
       return this.selectDictLabels(this.gzflOptions, row.gzfl);
-    },
-    // 规则名称字典翻译
-    gzmcFormat(row, column) {
-      return this.selectDictLabels(this.gzmcOptions, row.gzmc);
-    },
-    // 涉及就诊人员数字典翻译
-    xjjzrsFormat(row, column) {
-      return this.selectDictLabels(this.xjjzrsOptions, row.xjjzrs);
-    },
-    // 涉及明细数字典翻译
-    xjmxsFormat(row, column) {
-      return this.selectDictLabels(this.xjmxsOptions, row.xjmxs);
-    },
-    // 疑点金额字典翻译
-    xjjeFormat(row, column) {
-      return this.selectDictLabels(this.ydjeOptions, row.ydje);
     },
     // 医保结算费用字典翻译
     jsfyFormat(row, column) {
@@ -613,46 +540,6 @@ export default {
     // 异本地字典翻译
     ybdFormat(row, column) {
       return this.selectDictLabels(this.ybdOptions, row.ybd);
-    },
-    // 数据开始时间字典翻译
-    datastarttimeFormat(row, column) {
-      return this.selectDictLabels(this.datastarttimeOptions, row.datastarttime);
-    },
-    // 信用代码字典翻译
-    xydmFormat(row, column) {
-      return this.selectDictLabels(this.xydmOptions, row.xydm);
-    },
-    // 添加时间字典翻译
-    addtimeFormat(row, column) {
-      return this.selectDictLabels(this.addtimeOptions, row.addtime);
-    },
-    // 结算等级字典翻译
-    jsdjFormat(row, column) {
-      return this.selectDictLabels(this.jsdjOptions, row.jsdj);
-    },
-    // 机构核实意见字典翻译
-    hsyjFormat(row, column) {
-      return this.selectDictLabels(this.hsyjOptions, row.hsyj);
-    },
-    // 核实时间字典翻译
-    hssjFormat(row, column) {
-      return this.selectDictLabels(this.hssjOptions, row.hssj);
-    },
-    // 核实人字典翻译
-    hsrFormat(row, column) {
-      return this.selectDictLabels(this.hsrOptions, row.hsr);
-    },
-    // 核实派发时间字典翻译
-    hspfsjFormat(row, column) {
-      return this.selectDictLabels(this.hspfsjOptions, row.hspfsj);
-    },
-    // 批次号字典翻译
-    rwpcidFormat(row, column) {
-      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
-    },
-    // 已发送回智审字典翻译
-    issendFormat(row, column) {
-      return this.selectDictLabels(this.issendOptions, row.issend);
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -763,14 +650,14 @@ export default {
 .table-main {
   position: absolute;
   top:60px;
-  bottom:150px;
+  bottom:60px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:115px;
-  left: 0px;
+  bottom:25px;
+  right:0;
 }
 .xingweirz {
   width: 100%;

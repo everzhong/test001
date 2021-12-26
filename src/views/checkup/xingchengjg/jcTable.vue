@@ -1,8 +1,8 @@
 <template>
-  <div class="jc-table">
+  <div class="jc-table" v-loading="loading">
     <el-table
       :span-method="objectSpanMethod"
-      :data="tableData"
+      :data="rows"
       :cell-style="handelCellStyle"
       style="margin-top: 10px"
     >
@@ -68,7 +68,8 @@ export default {
   name: "JcTable",
   data() {
     return {
-      tableData: [],
+      loading:false,
+      rows: [],
       splitList: {}
     };
   },
@@ -77,13 +78,13 @@ export default {
   },
   methods: {
     handelCellStyle ({row, column, rowIndex, columnIndex}) {
-      if (rowIndex === this.tableData.length - 1 && columnIndex === 0) {
+      if (rowIndex === this.rows.length - 1 && columnIndex === 0) {
         return {borderRight: 'none', textAlign: 'right', backgroundColor: 'rgb(253, 246, 236)'}
       }
       if (row.jcfs === '小计') {
         return {backgroundColor: 'rgb(254, 240, 240)', padding: '7px 0'}
       }
-      if (rowIndex === this.tableData.length - 1) {
+      if (rowIndex === this.rows.length - 1) {
         return {backgroundColor: 'rgb(253, 246, 236)', padding: '7px 0'}
       }
       if(row.jslb === '进销存核查' && columnIndex === 0){
@@ -94,7 +95,7 @@ export default {
       }
     },
     initialJcRow () {
-      const firstName = this.tableData.map(item => item.jslb)
+      const firstName = this.rows.map(item => item.jslb)
       const rowInfo = {}
       firstName.forEach(item => {
         if (!rowInfo.hasOwnProperty(item)) {
@@ -194,14 +195,14 @@ export default {
       return newList
     },
     /** 查询renwu列表 */
-    async getList() {
+    async getList(query) {
       const { rwpcid, jgdm } = this.$route.query;
       const params = { rwpcid, jgdm };
       this.loading = true;
       try {
-        let res = await getListjc(params);
+        let res = await getListjc(query?query:params);
         if (res.code === 200) {
-          this.tableData = this.initList(res.rows);
+          this.rows = this.initList(res.rows);
           this.splitList = this.initialJcRow()
         }
       } catch (error) {
@@ -227,7 +228,7 @@ export default {
       }
       return percent;
     },
-  },
+  }
 };
 </script>
 <style lang="scss">

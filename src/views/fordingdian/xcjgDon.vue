@@ -17,8 +17,8 @@
         <!-- <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button> -->
       </el-radio-group>
     </el-row>
-    <jc-table  ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show && !pageLoaing" @view-detail="viewHanddle"/>
-    <wg-table  ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show && !pageLoaing" @view-detail="viewHanddle"/>
+    <jc-table ref="listjcTable"  v-if="tabsValue=='listjc'&&!viewTableObj.show && !pageLoaing" @view-detail="viewHanddle"/>
+    <wg-table ref="listjgTable"  v-if="tabsValue=='listjg'&&!viewTableObj.show && !pageLoaing" @view-detail="viewHanddle"/>
     <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
     <div v-if="viewTableObj.show" class="table-main">
       <ViewTable :options="viewTableObj.options"/>
@@ -38,11 +38,11 @@
   </div>
 </template>
 <script>
-import { getListjg,getListjc} from '@/api/renwu/renwufour'
+// import { getListjgDone,getListjc} from '@/api/renwu/renwufour'
 // import { listRenwufive } from '@/api/renwu/renwufive'
 import { submitDxqd} from "@/api/renwu/dcqz"
 import JcTable from '../checkup/xingchengjg/jcTable.vue'
-import WgTable from '../checkup/xingchengjg/wgTable.vue'
+import WgTable from './wgTable.vue'
 // import CbdTable from './cbdTable.vue'
 import ViewTable from '../checkup/xingchengjg/viewTable.vue'
 import { getToken } from '@/utils/auth'
@@ -171,11 +171,23 @@ export default {
     async getList() {
       const {rwpcid,jgdm} = this.queryInfoFrom
       const params = {rwpcid,jgdm,ybd:this.queryParams.ybd}
-      await this.$refs[`${this.tabsValue}Table`].getList(params)
+      await this.$refs[`${this.tabsValue}Table`].getList(params,'listjgdone')
+      // try {
+      //   let res = null
+      //   if(this.tabsValue === 'listjc') {
+      //     res = await getListjc(params)
+      //   } else {
+      //     res = await getListjgDone(params)
+      //   }
+      //   if(res.code===200){
+      //     this[this.tabsValue] = res.data
+      //   }
+      // } catch (error) {
+      //   console.log(error)
+      // }
     },
     typeChange(){
       this.viewTableObj.show = false
-      // this.getList()
     }
   }
 }

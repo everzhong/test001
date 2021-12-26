@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { getListjg } from '@/api/renwu/renwufour'
+import { getListjgDone } from '@/api/renwu/renwufour'
 export default {
   name:'Wgtable',
   data(){
@@ -167,7 +167,7 @@ export default {
       const params = {rwpcid,jgdm}
       this.loading = true
       try {
-        let  res = await getListjg(query?query:params)
+        let  res = await getListjgDone(query?query:params)
         if(res.code===200){
           // this.rows = res.rows
           this.rows = this.initList(res.rows)

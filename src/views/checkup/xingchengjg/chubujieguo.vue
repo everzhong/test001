@@ -55,8 +55,8 @@
         <!-- <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button> -->
       </el-radio-group>
     </el-row>
-    <jc-table :tableData="listjc" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
-    <wg-table :tableData="listjg" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
+    <jc-table ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
+    <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
     <div v-if="viewTableObj.show" class="table-main">
       <ViewTable :options="viewTableObj.options"/>
@@ -76,7 +76,7 @@
   </div>
 </template>
 <script>
-import { getListjg,getListjc} from '@/api/renwu/renwufour'
+// import { getListjg,getListjc} from '@/api/renwu/renwufour'
 // import { listRenwufive } from '@/api/renwu/renwufive'
 import { submitDxqd} from "@/api/renwu/dcqz"
 import JcTable from './jcTable.vue'
@@ -114,7 +114,6 @@ export default {
   },
   created(){
     this.queryInfoFrom = this.$route.query
-    // this.getList();
   },
    mounted(){
     this.topHeight = this.calcTableHeight(68)
@@ -209,25 +208,25 @@ export default {
     async getList() {
       const {rwpcid,jgdm} = this.queryInfoFrom
       const params = {rwpcid,jgdm,ybd:this.queryParams.ybd}
-      this.loading = true
-      try {
-        let res = null
-        if(this.tabsValue === 'listjc') {
-          res = await getListjc(params)
-        } else {
-          res = await getListjg(params)
-        }
-        if(res.code===200){
-          this[this.tabsValue] = res.data
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      this.loading = false
+      await this.$refs[`${this.tabsValue}Table`].getList(params)
+      // this.loading = true
+      // try {
+      //   let res = null
+      //   if(this.tabsValue === 'listjc') {
+      //     res = await getListjc(params)
+      //   } else {
+      //     res = await getListjg(params)
+      //   }
+      //   if(res.code===200){
+      //     this[this.tabsValue] = res.data
+      //   }
+      // } catch (error) {
+      //   console.log(error)
+      // }
+      // this.loading = false
     },
     typeChange(){
       this.viewTableObj.show = false
-      this.getList()
     }
   }
 }

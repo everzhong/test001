@@ -24,10 +24,6 @@ router.beforeEach((to, from, next) => {
             if (store.getters.roles.length === 0) {
                 // 判断当前用户是否已拉取完user_info信息
                 store.dispatch('GetInfo').then((res) => {
-                    store.dispatch('GetFyList');
-                    store.dispatch('GetJsList');
-                    store.dispatch('GetYbbfList');
-                    store.dispatch('GetJsdjList');
                     const roles = res.roles;
                     store.dispatch('GenerateRoutes').then(accessRoutes => {
                         router.addRoutes(accessRoutes) // 动态添加可访问路由表
@@ -38,6 +34,10 @@ router.beforeEach((to, from, next) => {
                         } else {
                             next(to.path ? {...to, replace: true } : { path: '/renwu/renwulist', replace: true }) // hack方法 确保addRoutes已完成
                         }
+                        store.dispatch('GetFyList');
+                        store.dispatch('GetJsList');
+                        store.dispatch('GetYbbfList');
+                        store.dispatch('GetJsdjList');
                     })
                 }).catch(err => {
                     store.dispatch('LogOut').then(() => {
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         console.log(to)
-        if (['/xcjg', '/ssjc', '/ssjcFull'].indexOf(to.path) !== -1) { //给定点系统调用页面
+        if (['/xcjg', '/ssjc', '/ssjcFull', '/xcjgd', '/ssjcr', '/ssjcFullr'].indexOf(to.path) !== -1) { //给定点系统调用页面
             next({
                 path: '/login',
                 query: {

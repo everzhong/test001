@@ -75,6 +75,14 @@ export function getListjg(query) {
         params: query
     })
 }
+// /listjg  是按违规类型分组  
+export function getListjgDone(query) {
+    return request({
+        url: '/renwu/renwufour/listjgdone',
+        method: 'get',
+        params: query
+    })
+}
 //listjc  是按检查方式分组
 export function getListjc(query) {
     return request({

@@ -53,12 +53,12 @@
               </template>
             </el-table-column>
         </sTable>
-        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
+        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList"  @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
         <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
       </div>
       <div v-loading="loading" v-else>
-        <jinxiaohecha v-if="tabsValue=='six'" fromLog="true" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
-        <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+        <jinxiaohecha v-if="tabsValue=='six'" fromLog="true" :tableData="renwusixList" :hasNoRending="true"  @on-log="checkLog" @update="getList"/>
+        <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :hasNoRending="true" :tableData="renwufourList" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
       </div>
       <pagination
         class="fixed-bottom"
@@ -68,46 +68,6 @@
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
-      <div v-show="(tabsValue=='four'||tabsValue=='six')&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:10px;">
-        <el-form inline :model="xwrdForm" :rules="xwRules" size="mini" ref="xwrdForm" label-width="100px">
-          <el-form-item label="名称">
-            <el-input v-model="xwrdForm.mxxmmc" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="行为认定" prop="xwrd">
-            <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
-          </el-form-item>
-          <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
-          </el-form-item>
-          <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
-            <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
-              <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
-            </el-tooltip>
-          </el-form-item>
-          <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
-          </el-form-item>
-          <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item>
-          <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="bz">
-            <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="xwrdSubmit">确定</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
      <!-- 查询条件 -->
@@ -220,7 +180,7 @@ import XwrdDialog from '../checkup/jianchass/xwrdDialog.vue'
 import Jgheshi from '../checkup/jianchass/jgheshi.vue'
 import operateLog from '../checkup/jianchass/operateLog.vue'
 import Quanmingxi from '../common/quanmingxi.vue'
-import Jinxiaohecha from '../checkup/jianchass/jinxiaohecha.vue'
+import Jinxiaohecha from './jinxiaohecha.vue'
 import Hechashuju from '../checkup/jianchass/hechashuju.vue'
 import xmbm from '../checkup/jianchass/xmbm.vue'
 import { getToken } from '@/utils/auth'
@@ -307,19 +267,6 @@ export default {
       },
       xwrdDialog:{
         show:false
-      },
-      xwrdForm:{
-        mxxmmc:'',
-        xwrd:'',
-        bz:'',
-        zkdj:'',
-        wgsl:'',
-        wgfy:'',
-        qckc:'',
-        bqgr:'',
-        xjxs:'',
-        qmkc:'',
-        ybjs:''
       },
       //选中的违规行为对象
       xwrdChecd:{},
@@ -474,7 +421,7 @@ export default {
       this.selectedId = ''
       this.selectionList = []
       this.getList()
-      this.$refs.xwrdForm.clearValidate()
+      // this.$refs.xwrdForm.clearValidate()
     },
     //同流水号明细，全明细切换
     tabsLevelChange(val){
@@ -576,33 +523,31 @@ export default {
     //返回上一层
     goBackUpLevel(){
       this.selectedId = ''
-      this.xwrdForm = {
-        mxxmmc:'',
-        xwrd:'',
-        bz:'',
-        zkdj:'',
-        wgsl:'',
-        wgfy:'',
-        qckc:'',
-        bqgr:'',
-        xjxs:'',
-        qmkc:'',
-        ybjs:''
-      }
+      // this.xwrdForm = {
+      //   mxxmmc:'',
+      //   xwrd:'',
+      //   bz:'',
+      //   zkdj:'',
+      //   wgsl:'',
+      //   wgfy:'',
+      //   qckc:'',
+      //   bqgr:'',
+      //   xjxs:'',
+      //   qmkc:'',
+      //   ybjs:''
+      // }
       switch(true) {
         case (this.tabsValue=='five'||this.tabsValue=='qmx'):
           if(this.qmxOptions.show){
             this.qmxOptions.show = false
           } else {
             this.tabsValue = 'four'
-            this.xwrdForm.mxxmmc=''
             this.lsh = ''
           }
           break
         case (this.tabsValue=='four'):
           this.tabsValue = 'three'
           this.getList()
-          this.xwrdForm.mxxmmc=''
           break
         default :
          break
@@ -612,7 +557,6 @@ export default {
     //选择行为回调
     onChecked(res){
       this.xwrdChecd = res
-      this.xwrdForm.xwrd = res.wgxw
     },
     //点击行为认定
     handelXwrdDialog(){
@@ -622,80 +566,80 @@ export default {
         this.xwrdDialog.show = true
       }
     },
-    xwrdSubmit(){
-      if(this.selectionList.length===0){
-        this.msgError('请选择一项在进行行为认定')
-        return
-      }
-      if(this.tabsValue==='six' && !this.pksj){//进销存核查
-        this.msgError('请选择盘库期初和盘库期末时间')
-        return   
-      }
-      const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-      if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
-        this.msgError('违规费用不能大于明细项目医保结算金额')
-        return
-      }
-      this.$refs['xwrdForm'].validate(async valid => {
-          if (valid) {
-            let res = ''
-            const {type,xwbh,lx} = this.xwrdChecd//这个type是行文认定选择的类型
-            const params = {id:this.selectedId,...this.xwrdForm,xwbh,wglx:lx}
-            if(this.pksj){
-              params.pkqcsj = this.parseTime(this.pksj[0].getTime(),'{y}-{m}-{d}')
-              params.pkqmsj = this.parseTime(this.pksj[1].getTime(),'{y}-{m}-{d}')
-            }
-            if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
-              delete params.zkdj
-              delete  params.wgsl
-              delete  params.wgfy
-            }
-            if(this.tabsValue==='six'){//进销存核查
-              const cesl = this.cesl()
-              params.cesl = cesl
-              params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
-            }
-            delete params.bjsj
-            res = await updateRenwufour({...params,jgbf:type})
-            if(res.code===200) {
-              this.msgSuccess('操作成功')
-              if(this.tabsValue==="four"){
-                this.getList(this.searchLsNextParams)
-              } else {
-                this.getList()
-              }
-              this.selectionList.forEach(item=>{
-                const addData = {
-                  bjr: this.$store.getters.name,
-                  bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
-                  fid:item.id,
-                  rid:item.rwpcid,
-                  jgdm:item.jgdm,
-                  type:this.tabsValue==='four'?'1':'2',
-                  ...params,
-                }
+    // xwrdSubmit(){
+    //   if(this.selectionList.length===0){
+    //     this.msgError('请选择一项在进行行为认定')
+    //     return
+    //   }
+    //   if(this.tabsValue==='six' && !this.pksj){//进销存核查
+    //     this.msgError('请选择盘库期初和盘库期末时间')
+    //     return   
+    //   }
+    //   const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
+    //   if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
+    //     this.msgError('违规费用不能大于明细项目医保结算金额')
+    //     return
+    //   }
+    //   this.$refs['xwrdForm'].validate(async valid => {
+    //       if (valid) {
+    //         let res = ''
+    //         const {type,xwbh,lx} = this.xwrdChecd//这个type是行文认定选择的类型
+    //         const params = {id:this.selectedId,...this.xwrdForm,xwbh,wglx:lx}
+    //         if(this.pksj){
+    //           params.pkqcsj = this.parseTime(this.pksj[0].getTime(),'{y}-{m}-{d}')
+    //           params.pkqmsj = this.parseTime(this.pksj[1].getTime(),'{y}-{m}-{d}')
+    //         }
+    //         if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
+    //           delete params.zkdj
+    //           delete  params.wgsl
+    //           delete  params.wgfy
+    //         }
+    //         if(this.tabsValue==='six'){//进销存核查
+    //           const cesl = this.cesl()
+    //           params.cesl = cesl
+    //           params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
+    //         }
+    //         delete params.bjsj
+    //         res = await updateRenwufour({...params,jgbf:type})
+    //         if(res.code===200) {
+    //           this.msgSuccess('操作成功')
+    //           if(this.tabsValue==="four"){
+    //             this.getList(this.searchLsNextParams)
+    //           } else {
+    //             this.getList()
+    //           }
+    //           this.selectionList.forEach(item=>{
+    //             const addData = {
+    //               bjr: this.$store.getters.name,
+    //               bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
+    //               fid:item.id,
+    //               rid:item.rwpcid,
+    //               jgdm:item.jgdm,
+    //               type:this.tabsValue==='four'?'1':'2',
+    //               ...params,
+    //             }
                
-                if(this.tabsValue==='four'){//流水号项目汇总
-                  delete addData.qckc
-                  delete addData.bqgr
-                  delete addData.xjxs
-                  delete addData.qmkc
-                  delete addData.ybjs
-                  delete addData.pkqmsj
-                  delete addData.pkqcsj  
-                } else {
-                  addData.cesl = params.cesl
-                  addData.dzce = params.dzce 
-                }
-                rendingAdd(addData)
-              })
+    //             if(this.tabsValue==='four'){//流水号项目汇总
+    //               delete addData.qckc
+    //               delete addData.bqgr
+    //               delete addData.xjxs
+    //               delete addData.qmkc
+    //               delete addData.ybjs
+    //               delete addData.pkqmsj
+    //               delete addData.pkqcsj  
+    //             } else {
+    //               addData.cesl = params.cesl
+    //               addData.dzce = params.dzce 
+    //             }
+    //             rendingAdd(addData)
+    //           })
 
-            }
-          } else {
-            return false;
-          }
-        });
-    },
+    //         }
+    //       } else {
+    //         return false;
+    //       }
+    //     });
+    // },
     /**
      * 
      * 查看流水号项目汇总
@@ -786,47 +730,6 @@ export default {
       this.resetForm("bmQueryForm");
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      if(selection.length!==0){
-        // this.ids = selection.map(item => item.id)
-        this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy} = selection[0]
-        this.selectedId = id
-        this.selectionList = selection
-        this.xwrdForm.bz = bz
-        this.xwrdForm.zkdj = mxxmdj
-        this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
-        this.xwrdForm.mxxmmc = mxxmmc
-        this.xwrdForm.xwrd = ''
-        if(this.tabsValue==='six'){//进销存核查
-          const {qckc,bqgr,xjxs,qmkc,ybjs} = selection[0]
-          this.xwrdForm.qckc = qckc
-          this.xwrdForm.bqgr = bqgr
-          this.xwrdForm.xjxs = xjxs
-          this.xwrdForm.qmkc = qmkc
-          this.xwrdForm.ybjs = ybjs
-        } else {
-          this.xwrdForm.wgsl = mxxmsl
-        }
-        this.$refs.xwrdForm.clearValidate()
-      } else {
-        this.ids=[]
-        this.xwrdForm = {
-          mxxmmc:'',
-          xwrd:'',
-          bz:'',
-          zkdj:'',
-          wgsl:'',
-          wgfy:'',
-          qckc:'',
-          bqgr:'',
-          xjxs:'',
-          qmkc:'',
-          ybjs:''
-        }
-      }
-    },
     //同流水明细
     tongLiushuimx(row){
       this.tabsValue = 'five'
@@ -892,27 +795,6 @@ export default {
       }
      return {dj,sl,fy}
     },
-    handleDjslChange(){
-      if(this.xwrdForm.zkdj!==''&&this.xwrdForm.wgsl!==''){
-        this.xwrdForm.wgfy = (this.xwrdForm.zkdj*this.xwrdForm.wgsl).toFixed(2)
-      }
-    },
-    hanndelChange(){
-      const res = this.cesl()
-      if(res!==''){
-        this.xwrdForm.wgsl = res
-        this.handleDjslChange()
-      }
-    },
-    cesl(){
-      //进销存核查，计算违规数量=差额数量cesl=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)
-      let res = ''
-      const {ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
-      if(ybjs!=='' && qckc!==''&& bqgr!==''&& qmkc!==''&& xjxs!==''){
-        res = ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
-      }
-      return res
-    }
   }
 };
 </script>
@@ -920,13 +802,13 @@ export default {
 .table-main {
   position: absolute;
   top:60px;
-  bottom:70px;
+  bottom:60px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:25px;
   right: 0px;
 }
 .xingweirz {

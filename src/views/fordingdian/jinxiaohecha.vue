@@ -2,8 +2,9 @@
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
   <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->
-  <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true" @selection-change="handleSelectionChange">
-    <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="hasNoRending?1:2" :isrowClassName="true" @selection-change="handleSelectionChange">
+    <el-table-column v-if="!hasNoRending" type="selection" width="55" align="center" slot="fixed"/>
+    <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
     <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
       <template slot-scope="scope">
         <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
@@ -117,13 +118,13 @@ export default {
       }]
     }
   },
-  props:['tableData','fromLog','noLog'],
+  props:['tableData','fromLog','noLog','hasNoRending'],
   created(){
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
-    this.tableHeight = `${document.body.offsetHeight - 82-130}px` ;
+    this.tableHeight = `${document.body.offsetHeight - (this.hasNoRending?122:212)}px` ;
   },
   methods:{
     cancelHc(row){//取消核查

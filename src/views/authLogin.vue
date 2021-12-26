@@ -130,9 +130,9 @@ export default {
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || "/renwu/renwulist" }).catch(()=>{});
-            this.$store.dispatch('GetFyList');
-            this.$store.dispatch('GetJsList');
-            this.$store.dispatch('GetYbbfList');
+            // this.$store.dispatch('GetFyList');
+            // this.$store.dispatch('GetJsList');
+            // this.$store.dispatch('GetYbbfList');
           }).catch(() => {
             this.loading = false;
           });

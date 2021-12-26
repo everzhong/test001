@@ -2,12 +2,13 @@
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
   <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->
-  <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
-    <el-table-column  align="center" width="55" slot="fixed">
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="hasNoRending?0:1" :isrowClassName="true">
+    <el-table-column  align="center" width="55" slot="fixed" v-if="!hasNoRending">
       <template slot-scope="scope">
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
     </el-table-column>
+    <el-table-column v-else label="序号" width="55" type="index" align="center" slot="fixed"/>
     <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
       <template slot-scope="scope">
         <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
@@ -149,14 +150,14 @@ export default {
       }]
     }
   },
-  props:['tableData','fromLog','noLog'],
+  props:['tableData','fromLog','noLog','hasNoRending'],
   created(){
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
   },
   mounted(){
-    const th = document.body.offsetHeight - 50-34-138;
-    this.tableHeight = this.fromLog?`${th+90}px`:`${th}px` ;
+    const th = document.body.offsetHeight - (this.hasNoRending?132:212);
+    this.tableHeight = `${th}px` ;
   },
   methods:{
     fylbFormat(row, column) {
