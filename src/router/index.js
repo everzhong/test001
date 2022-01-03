@@ -145,6 +145,11 @@ export const constantRoutes = [{
         path: '/ssjcr',
         component: (resolve) => require(['@/views/fordingdian/shisjcr'], resolve),
         hidden: true
+    },
+    {
+        path: '/vtmp',
+        component: (resolve) => require(['@/views/fordingdian/viewNotice'], resolve),
+        hidden: true
     }
 ]
 
