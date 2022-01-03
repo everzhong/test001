@@ -119,7 +119,7 @@
             >
               <el-button type="text" size="mini">添加附件</el-button>
             </el-upload>
-            <div class="file-item" v-for="(item,i) in fileList" :key="item.url">
+            <div class="file-item" v-for="(item,i) in fileList" :key="i">
               <el-input :disabled="!editType" @blur="fileNameBlur(i)" :ref="'fileName'+i" :class="item.isEdit?'':'no-border'" v-model="item.fileName" size="mini"></el-input>
               <el-button type="text" size="mini" @click="eidtFileName(i)" v-if="editType">编辑名称</el-button>
               <el-button type="text" size="mini" @click="delFile(i)" v-if="editType">删除</el-button>

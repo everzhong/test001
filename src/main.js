@@ -24,14 +24,11 @@ import RightToolbar from "@/components/RightToolbar"
 import vueToPdf from 'vue-to-pdf'
 
 import Print from '@/utils/print' // 注册
-import mPrint from 'vue-print-nb' // 引入附件的js文件 v-print方式
 import { checkRole } from '@/utils/permission'
 import { addJcfl } from '@/api/renwu/jcfl.js' //新增检查履历
 import sTable from '@/components/stable.vue'
 
 Vue.use(Print)
-Vue.use(mPrint)
-
 Vue.use(vueToPdf)
 
 // 全局方法挂载

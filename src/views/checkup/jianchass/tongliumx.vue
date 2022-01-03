@@ -1,6 +1,5 @@
 /**项目流水号汇总 第5层数据*/
 <template>
-  <!-- <el-table v-show="!showLog" class="qztable" :row-class-name="tableRowClassName"  ref="multipleTable" :data="tableData" border height="100%" style="width:100%"> -->
   <sTable v-show="!showLog" :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
     <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
   </sTable>
@@ -135,17 +134,11 @@ export default {
       this.$emit('handleSelectionChange',selection)
     },
     checkLog(row){
-      // this.showLog = true
-      // this.logList = [row]
       this.$emit('on-log',row,5)
     },
     checkMx(row){
       this.$emit('check-mx',row)
     },
-    // closedetail(){
-    //   this.showLog = false
-    //   this.$emit('on-close')
-    // },
     selectAll(){
       this.tableData.forEach(row => {
         this.$refs.multipleTable.toggleRowSelection(row)
@@ -154,11 +147,7 @@ export default {
     clearAll(){
       this.$refs.multipleTable.clearSelection()
     },
-    
   },
-  components:{
-    // OperateLog
-  }
 }
 </script>
 <style lang="scss" scoped>

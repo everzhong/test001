@@ -14,36 +14,20 @@
       <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
         <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>
         <el-radio-button label="listjg" value="listjg">按违规类别汇总</el-radio-button>
-        <!-- <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button> -->
       </el-radio-group>
     </el-row>
     <jc-table ref="listjcTable"  v-if="tabsValue=='listjc'&&!viewTableObj.show && !pageLoaing" @view-detail="viewHanddle"/>
     <wg-table ref="listjgTable"  v-if="tabsValue=='listjg'&&!viewTableObj.show && !pageLoaing" @view-detail="viewHanddle"/>
-    <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
     <div v-if="viewTableObj.show" class="table-main">
       <ViewTable :options="viewTableObj.options"/>
     </div>
-    <!-- <el-form inline style="margin-top:30px" v-if="!viewTableObj.show">
-      <el-form-item label="复核意见：" style="margin-right:50px">
-        <el-radio v-model="status" label="5">同意</el-radio>
-        <el-radio v-model="status" label="3">驳回</el-radio>
-      </el-form-item>
-      <el-form-item label="具体说明：" style="margin-right:30px">
-        <el-input v-model="qdbh" type="textarea" style="width:300px"/>
-      </el-form-item>
-      <el-form-item >
-        <el-button type="primary" size="small" @click="saveDxqd">保存</el-button>
-      </el-form-item>
-    </el-form> -->
   </div>
 </template>
 <script>
-// import { getListjgDone,getListjc} from '@/api/renwu/renwufour'
-// import { listRenwufive } from '@/api/renwu/renwufive'
+
 import { submitDxqd} from "@/api/renwu/dcqz"
 import JcTable from '../checkup/xingchengjg/jcTable.vue'
 import WgTable from './wgTable.vue'
-// import CbdTable from './cbdTable.vue'
 import ViewTable from '../checkup/xingchengjg/viewTable.vue'
 import { getToken } from '@/utils/auth'
 export default {
@@ -100,91 +84,11 @@ export default {
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
       this.viewTableObj.show = true
     },
-    saveDxqd(){
-      if(!this.status){
-        this.msgError('请选择复核意见')
-        return false
-      }
-      const params = {
-        ids:[this.queryInfoFrom.id],
-        status:this.status,//提交5，退回3
-        dxqd:this.status==5?'提交':'退回',
-        qdbh:this.qdbh//驳回意见字段
-      }
-      this.doSubmit(params)
-    },
-     /**
-     *  
-     */
-    handleAgree(type){
-      if(type===5){
-        this.doSubmit({
-          ids:[this.queryInfoFrom.id],
-          status:type,//提交5，退回3
-          dxqd:'提交',
-          qdbh:''//驳回意见字段
-        },type)
-      } else {
-        this.handleNg()
-      }
-    },
-    /**
-     * 第三方筛查
-     */
-    handleNg(){
-      const self = this
-      this.$prompt('退回意见', '退回意见填写', {
-          inputType:'textarea',
-          confirmButtonText: '确定',
-          cancelButtonText: '返回',
-        }).then(({ value }) => {
-          self.doSubmit({
-            ids:[this.queryInfoFrom.id],
-            status:3,//驳回到4
-            dxqd:'退回',
-            qdbh:value//驳回意见字段
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });       
-        });
-    },
-    doSubmit(params){
-      submitDxqd(params).then(res=>{
-        this.msgSuccess("操作成功")
-        setTimeout(()=>{
-          this.$router.back(-1)
-        },500)
-        this.addJcfl({
-          jglc:'初步形成结果',
-          gjxx:`初步形成结果 ${params.status===5?'提交':'退回'}：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
-          rwpcid:this.queryInfoFrom.rwpcid,
-          jgdm:this.queryInfoFrom.jgdm,
-          zhczr:this.$store.getters.name,
-          sort:8
-        })
-      })
-    },
     /** 查询renwu列表 */
     async getList() {
       const {rwpcid,jgdm} = this.queryInfoFrom
       const params = {rwpcid,jgdm,ybd:this.queryParams.ybd}
       await this.$refs[`${this.tabsValue}Table`].getList(params,'listjgdone')
-      // try {
-      //   let res = null
-      //   if(this.tabsValue === 'listjc') {
-      //     res = await getListjc(params)
-      //   } else {
-      //     res = await getListjgDone(params)
-      //   }
-      //   if(res.code===200){
-      //     this[this.tabsValue] = res.data
-      //   }
-      // } catch (error) {
-      //   console.log(error)
-      // }
     },
     typeChange(){
       this.viewTableObj.show = false

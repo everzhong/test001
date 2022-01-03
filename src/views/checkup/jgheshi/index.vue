@@ -36,8 +36,8 @@
   </div>
 </template>
 <script>
-import {listRenwuthreeHs, updateRenwuthree} from '@/api/renwu/renwuthree'
-import {listRenwufourHs, updateRenwufour } from '@/api/renwu/renwufour'
+import {listRenwuthreeHs} from '@/api/renwu/renwuthree'
+import {listRenwufourHs} from '@/api/renwu/renwufour'
 
 export default {
   name:'Listjg',
@@ -250,13 +250,6 @@ export default {
     jslbFormat(row, column) {
       return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      // this.$emit('handleSelectionChange',selection)
-      // this.ids = selection.map(item => item.rwpcid)
-      // this.single = selection.length!==1
-      // this.multiple = !selection.length
-    },
     checkdetail(row){
       this.$emit('checkdetail',row)
     },
@@ -297,43 +290,6 @@ export default {
           jgdm:row.jgdm
         }
       })
-    //   this.$prompt('机构核实意见', '核实意见填写', {
-    //       inputType:'textarea',
-    //       inputValidator:function(value){
-    //         return !!value
-    //       },
-    //       inputErrorMessage: '请填写核实意见!',
-    //       confirmButtonText: '确定',
-    //       cancelButtonText: '返回',
-    //     }).then(async ({ value }) => {
-    //         let res = ''
-    //         if(this.tabsValue==='three'){
-    //           res = await updateRenwuthree({
-    //           id:row.id,
-    //           hs:'4',
-    //           hsyj:value,
-    //           hsr:this.$store.getters.name,
-    //           hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
-    //         })
-    //       } else {
-    //         res = await updateRenwufour({
-    //           id:row.id,
-    //           hs:'4',
-    //           hsyj:value,
-    //           hsr:this.$store.getters.name,
-    //           hssj: this.parseTime(new Date(),'{y}-{m}-{d} {h}:{m}:{s}')
-    //         })
-    //       }
-    //       if(res.code===200) { 
-    //         this.msgSuccess('机构核实成功')
-    //         this.getList()
-    //       } 
-    //     }).catch(() => {
-    //       this.$message({
-    //         type: 'info',
-    //         message: '取消输入'
-    //       });       
-    //     });
     }
   }
 }

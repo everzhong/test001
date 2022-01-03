@@ -5,10 +5,6 @@
   :visible.sync="options.show"
   width="1100px"
   >
-    <!-- <div class="head-close">
-      <span class="title">操作记录</span>
-      <span class="el-icon-close" @click="$emit('on-close')"></span>
-    </div> -->
     <div style="height:500px" v-loading="logLoading">
       <el-table class="qztable" ref="multipleTable" max-height="500" :data="tableData" border>
         <el-table-column label="序号" align="center" type="index"  width="50"/>

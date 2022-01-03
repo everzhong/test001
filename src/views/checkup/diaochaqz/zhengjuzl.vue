@@ -55,7 +55,7 @@
 </template>
 <script>
 import FileUpload from '@/components/FileUpload';
-import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
+import { listDcqz, delDcqz, addDcqz } from "@/api/renwu/dcqz";
 export default {
   name:'zhengjuzl',
   components:{

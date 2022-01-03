@@ -47,10 +47,6 @@ export default {
   },
   props:['tableData'],
   methods:{
-    // 多选框选中数据
-    // handleSelectionChange(selection) {
-    //   this.$emit('handleSelectionChange',selection)
-    // },
     checkdetail(row){
       this.$emit('docheck',row)
     }

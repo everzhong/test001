@@ -159,7 +159,7 @@
   </div>
 </template>
 <script>
-import { listDcqz, getDcqz, delDcqz, addDcqz, updateDcqz, exportDcqz } from "@/api/renwu/dcqz";
+import { listDcqz, delDcqz, addDcqz, updateDcqz } from "@/api/renwu/dcqz";
 import FileUpload from '@/components/FileUpload';
 import XwDoc from './xwDoc.vue'
 import html2canvas from 'html2canvas'

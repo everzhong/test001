@@ -306,7 +306,8 @@ export default {
          const res = await getTjjzlx5({...query,jsdj:this.jsdj})
         if(res.code===200){
           const sdata = []
-          res.rows.forEach(element => {
+          res.rows.forEach(item => {
+            let element = item?item:{}
             const obj = [
               {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
               { value: element?.wgfy*1||0, name: '认定费用' },

@@ -28,11 +28,6 @@
             <el-form-item label="检查组" prop="jczname">
             <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
           </el-form-item>
-          <!-- <div style="position:absolute;right:20px;top:-31px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
-            <el-button type="primary" size="mini" @click="handleAgree(5)">提交</el-button>
-            <el-button type="primary" size="mini" @click="handleAgree(3)">回退</el-button>
-            <el-button type="primary" plain icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
-          </div> -->
           <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
             <el-button type="primary" icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
           </div>
@@ -52,12 +47,10 @@
       <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
         <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>
         <el-radio-button label="listjg" value="listjg">按违规类别汇总</el-radio-button>
-        <!-- <el-radio-button label="3" :value="3">按参保地汇总</el-radio-button> -->
       </el-radio-group>
     </el-row>
     <jc-table ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
     <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
-    <!-- <cbd-table v-if="tabsValue==3&&!viewTableObj.show" @view-detail="viewTableObj.show = true"/> -->
     <div v-if="viewTableObj.show" class="table-main">
       <ViewTable :options="viewTableObj.options"/>
     </div>
@@ -76,12 +69,10 @@
   </div>
 </template>
 <script>
-// import { getListjg,getListjc} from '@/api/renwu/renwufour'
-// import { listRenwufive } from '@/api/renwu/renwufive'
+
 import { submitDxqd} from "@/api/renwu/dcqz"
 import JcTable from './jcTable.vue'
 import WgTable from './wgTable.vue'
-// import CbdTable from './cbdTable.vue'
 import ViewTable from './viewTable.vue'
 
 export default {
@@ -109,7 +100,6 @@ export default {
   components:{
     JcTable,
     WgTable,
-    // CbdTable,
     ViewTable
   },
   created(){
@@ -209,21 +199,6 @@ export default {
       const {rwpcid,jgdm} = this.queryInfoFrom
       const params = {rwpcid,jgdm,ybd:this.queryParams.ybd}
       await this.$refs[`${this.tabsValue}Table`].getList(params)
-      // this.loading = true
-      // try {
-      //   let res = null
-      //   if(this.tabsValue === 'listjc') {
-      //     res = await getListjc(params)
-      //   } else {
-      //     res = await getListjg(params)
-      //   }
-      //   if(res.code===200){
-      //     this[this.tabsValue] = res.data
-      //   }
-      // } catch (error) {
-      //   console.log(error)
-      // }
-      // this.loading = false
     },
     typeChange(){
       this.viewTableObj.show = false

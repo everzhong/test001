@@ -1,7 +1,6 @@
 /**项目流水号汇总 第四层数据 type=1*/
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
-  <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
     <el-table-column  align="center" width="55" slot="fixed">
       <template slot-scope="scope">

@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <SearchItem @handleQuery="handleQuery"/> -->
     <el-form class="top-search" :model="query" ref="searchForm" :inline="true"  label-width="60px" style="max-height:94px;overflow:auto">
       <div>
         <el-form-item label="批次号" prop="rwpcid">
@@ -62,7 +61,6 @@
       </div>
     </el-form>
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
-      <!-- <RenwuthreeTable :tableData="renwuthreeList"/> -->
       <sTable :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
         <el-table-column type="selection" width="55" align="center" slot="fixed"/>
         <el-table-column label="操作" align="center" slot="operate" min-width="100">
@@ -84,12 +82,10 @@
 </template>
 <script>
 import { setShujusc,listRenwutwosc} from '@/api/renwu/renwutwo'
-// import SearchItem from '../../common/searchItems'
 import RenwuthreeTable from '../../common/renwuthreeTable'
 export default {
   name: "Thirdcheck",
   components: {
-    // SearchItem,
     RenwuthreeTable,
   },
   data() {
@@ -153,70 +149,12 @@ export default {
       tableHeight:0,
       // 遮罩层
       loading: true,
-      // 导出遮罩层
-      exportLoading: false,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 0,
       // renwutwo表格数据
       renwutwoList: [],
       renwuthreeList: [],
       renwufourList: [],
-      // 弹出层标题
-      title: "",
-      // 是否显示弹出层
-      open: false,
-      // 异本地字典
-      ybdOptions: [],
-      // 数据开始时间字典
-      datastarttimeOptions: [],
-      // 批次号字典
-      rwpcidOptions: [],
-      // 险种字典
-      ybbfOptions: [],
-      // 数据结束时间字典
-      dataendtimeOptions: [],
-      // 就医类型字典
-      jslbOptions: [],
-      // 行政区字典
-      xzqOptions: [],
-      // 网审意见字典
-      wsyjOptions: [],
-      // 更新时间字典
-      uptimeOptions: [],
-      // 网审人员字典
-      wsryOptions: [],
-      // 涉及规则数字典
-      sjwgsOptions: [],
-      // 疑点金额字典
-      ydjeOptions: [],
-      // 结算金额字典
-      jsjeOptions: [],
-      // 涉及就诊人次字典
-      jsrcOptions: [],
-      // 添加时间字典
-      addtimeOptions: [],
-      // 信用代码字典
-      xydmOptions: [],
-      // 机构代码字典
-      jgdmOptions: [],
-      // 机构名称字典
-      jgmcOptions: [],
-      // 结算等级字典
-      jsdjOptions: [],
-      // 网审人员2字典
-      wsry2Options: [],
-      // 对象同意或驳回字典
-      dxqdOptions: [],
-      // 流程识别ID字典
-      statusOptions: [],
       chouquOptions: [
         {dictValue:1,dictLabel:'未开始'},
         {dictValue:2,dictLabel:'执行中'},
@@ -228,22 +166,6 @@ export default {
         {dictValue:2,dictLabel:'执行中'},
         {dictValue:3,dictLabel:'完成'},
       ],
-      // 检查组ID字典
-      jczidOptions: [],
-      // 是否打印了通知字典
-      isdayinOptions: [],
-      // 打印通知书联系人字典
-      dayinnameOptions: [],
-      // 打印通知书联系电话(检查通知书)字典
-      dayintelOptions: [],
-      // 打印日期字典
-      dayinriqiOptions: [],
-      // 打印通知书联系电话(纪律告知书)字典
-      dayinphoneOptions: [],
-      // 打印中的检查开始日期字典
-      dayinstarttimeOptions: [],
-      // 形成结果同意或驳回字典
-      dcjgOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -255,11 +177,6 @@ export default {
         jgdm:'',//机构代码
         sccqstatus:'',//抽取状态
         scstatus:''//执行状态
-      },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
       },
       //
       tabsValue:'two',
@@ -289,10 +206,8 @@ export default {
       const port = sessionStorage.getItem('sfPort')
       window.open(`${location.protocol}//${location.hostname}:${port}/#/scenarioConfiguration`)
     },
-    /** 查询renwutwo列表 */
     async getList(options) {
       const params = options?{...this.queryParams,...options}:this.queryParams
-      // params.scstatus=1
       this.loading = true
       try {
         const res = await listRenwutwosc(params)
@@ -305,143 +220,7 @@ export default {
       }
       this.loading = false
     },
-    /**
-     * 医院维度tabsValue=Two
-    */
-    async getRenwTwo(params){
-      this.loading = true;
-      try {
-        const res =  await listRenwutwo(params)
-        if(res.code===200){
-          this[`renwu${this.tabsValue}List`] = res.rows
-          this.total = res.total;
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      this.loading = false;
-    },
     
-    // 异本地字典翻译
-    ybdFormat(row, column) {
-      return this.selectDictLabels(this.ybdOptions, row.ybd);
-    },
-    // 数据开始时间字典翻译
-    datastarttimeFormat(row, column) {
-      return this.selectDictLabels(this.datastarttimeOptions, row.datastarttime);
-    },
-    // 批次号字典翻译
-    rwpcidFormat(row, column) {
-      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
-    },
-    // 险种字典翻译
-    ybbfFormat(row, column) {
-      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
-    },
-    // 数据结束时间字典翻译
-    dataendtimeFormat(row, column) {
-      return this.selectDictLabels(this.dataendtimeOptions, row.dataendtime);
-    },
-    // 就医类型字典翻译
-    jslbFormat(row, column) {
-      return this.selectDictLabels(this.jslbOptions, row.jslb);
-    },
-    // 行政区字典翻译
-    xzqFormat(row, column) {
-      return this.selectDictLabels(this.xzqOptions, row.xzq);
-    },
-    // 网审意见字典翻译
-    wsyjFormat(row, column) {
-      return this.selectDictLabels(this.wsyjOptions, row.wsyj);
-    },
-    // 更新时间字典翻译
-    uptimeFormat(row, column) {
-      return this.selectDictLabels(this.uptimeOptions, row.uptime);
-    },
-    // 网审人员字典翻译
-    wsryFormat(row, column) {
-      return this.selectDictLabels(this.wsryOptions, row.wsry);
-    },
-    // 涉及规则数字典翻译
-    sjwgsFormat(row, column) {
-      return this.selectDictLabels(this.sjwgsOptions, row.sjwgs);
-    },
-    // 疑点金额字典翻译
-    ydjeFormat(row, column) {
-      return this.selectDictLabels(this.ydjeOptions, row.ydje);
-    },
-    // 结算金额字典翻译
-    jsjeFormat(row, column) {
-      return this.selectDictLabels(this.jsjeOptions, row.jsje);
-    },
-    // 涉及就诊人次字典翻译
-    jsrcFormat(row, column) {
-      return this.selectDictLabels(this.jsrcOptions, row.jsrc);
-    },
-    // 添加时间字典翻译
-    addtimeFormat(row, column) {
-      return this.selectDictLabels(this.addtimeOptions, row.addtime);
-    },
-    // 信用代码字典翻译
-    xydmFormat(row, column) {
-      return this.selectDictLabels(this.xydmOptions, row.xydm);
-    },
-    // 机构代码字典翻译
-    jgdmFormat(row, column) {
-      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
-    },
-    // 机构名称字典翻译
-    jgmcFormat(row, column) {
-      return this.selectDictLabels(this.jgmcOptions, row.jgmc);
-    },
-    // 结算等级字典翻译
-    jsdjFormat(row, column) {
-      return this.selectDictLabels(this.jsdjOptions, row.jsdj);
-    },
-    // 网审人员2字典翻译
-    wsry2Format(row, column) {
-      return this.selectDictLabels(this.wsry2Options, row.wsry2);
-    },
-    // 对象同意或驳回字典翻译
-    dxqdFormat(row, column) {
-      return this.selectDictLabels(this.dxqdOptions, row.dxqd);
-    },
-    // 流程识别ID字典翻译
-    statusFormat(row, column) {
-      return this.selectDictLabels(this.statusOptions, row.status);
-    },
-    // 检查组ID字典翻译
-    jczidFormat(row, column) {
-      return this.selectDictLabels(this.jczidOptions, row.jczid);
-    },
-    // 是否打印了通知字典翻译
-    isdayinFormat(row, column) {
-      return this.selectDictLabels(this.isdayinOptions, row.isdayin);
-    },
-    // 打印通知书联系人字典翻译
-    dayinnameFormat(row, column) {
-      return this.selectDictLabels(this.dayinnameOptions, row.dayinname);
-    },
-    // 打印通知书联系电话(检查通知书)字典翻译
-    dayintelFormat(row, column) {
-      return this.selectDictLabels(this.dayintelOptions, row.dayintel);
-    },
-    // 打印日期字典翻译
-    dayinriqiFormat(row, column) {
-      return this.selectDictLabels(this.dayinriqiOptions, row.dayinriqi);
-    },
-    // 打印通知书联系电话(纪律告知书)字典翻译
-    dayinphoneFormat(row, column) {
-      return this.selectDictLabels(this.dayinphoneOptions, row.dayinphone);
-    },
-    // 打印中的检查开始日期字典翻译
-    dayinstarttimeFormat(row, column) {
-      return this.selectDictLabels(this.dayinstarttimeOptions, row.dayinstarttime);
-    },
-    // 形成结果同意或驳回字典翻译
-    dcjgFormat(row, column) {
-      return this.selectDictLabels(this.dcjgOptions, row.dcjg);
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -452,17 +231,6 @@ export default {
     resetQuery() {
       this.resetForm("searchForm");
       this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      const hasuncheck = selection.filter(item => {
-        return (item.sancha && item.sancha*1 === 1)
-      });
-      //第三方筛查状态sancha 1已查 0未查
-      this.hasThirdUncheck = hasuncheck && hasuncheck.length>0
-      this.single = selection.length!==1
-      this.multiple = !selection.length
     },
   }
 };

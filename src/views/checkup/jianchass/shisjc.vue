@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <section v-show="!heshiOption.show" >
-      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true" v-show="showSearch">
+      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true">
             <el-form-item label="案件来源" prop="ajly">
               <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
             </el-form-item>
@@ -59,9 +59,6 @@
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
           <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
-        <!-- <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="canclHc">取消核查</el-button>
-        </el-col> -->
         <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
           <el-date-picker
@@ -253,9 +250,9 @@
 </template>
 
 <script>
-import { listRenwuthree, getRenwuthree, delRenwuthree, addRenwuthree, updateRenwuthree, exportRenwuthree } from "@/api/renwu/renwuthree";
+import { listRenwuthree } from "@/api/renwu/renwuthree";
 import { setSancha,setShujusc} from  '@/api/renwu/renwutwo'
-import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
+import { listRenwufour, updateRenwufour } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
@@ -382,23 +379,14 @@ export default {
         show:false
       },
       chaxunDialog:false,
-      isAll:false,
-      liushuiSetions:[],
       selectedId:"",
       selectionList:[],
       // 遮罩层
       loading: true,
       // 选中数组
       ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 0,
-      // renwuthree表格数据
       renwuthreeList: [],
       renwufourList:[],
       renwufiveList:[],
@@ -755,22 +743,6 @@ export default {
       this.guizefl.selection = selection
     },
     /**
-     * selectedGuize规则选择确定
-     */
-    selectedGuize(){
-
-    },
-    /**
-     * 流水号项目列表全选
-     * 
-    /**
-     * 全选，取消全选
-     */
-    selectEvent(type,isAll) {
-      this.isAll = isAll
-      this.$refs.liuShuiTable[type]()
-    },
-    /**
      * 
      * 查看流水号项目汇总
     */
@@ -830,99 +802,11 @@ export default {
       }
       this.loading = false
     },
-
-    // 序号字典翻译
-    idFormat(row, column) {
-      return this.selectDictLabels(this.idOptions, row.id);
-    },
-    // 机构代码字典翻译
-    jgdmFormat(row, column) {
-      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
-    },
-    // 机构名称字典翻译
-    jgmcFormat(row, column) {
-      return this.selectDictLabels(this.jgmcOptions, row.jgmc);
-    },
     // 规则分类字典翻译
     gzflFormat(row, column) {
       return this.selectDictLabels(this.gzflOptions, row.gzfl);
     },
-    // 规则名称字典翻译
-    gzmcFormat(row, column) {
-      return this.selectDictLabels(this.gzmcOptions, row.gzmc);
-    },
-    // 涉及就诊人员数字典翻译
-    xjjzrsFormat(row, column) {
-      return this.selectDictLabels(this.xjjzrsOptions, row.xjjzrs);
-    },
-    // 涉及明细数字典翻译
-    xjmxsFormat(row, column) {
-      return this.selectDictLabels(this.xjmxsOptions, row.xjmxs);
-    },
-    // 疑点金额字典翻译
-    xjjeFormat(row, column) {
-      return this.selectDictLabels(this.ydjeOptions, row.ydje);
-    },
-    // 医保结算费用字典翻译
-    jsfyFormat(row, column) {
-      return this.selectDictLabels(this.jsfyOptions, row.jsfy);
-    },
-    // 险种字典翻译
-    ybbfFormat(row, column) {
-      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
-    },
-    // 就医类型字典翻译
-    jslbFormat(row, column) {
-      return this.selectDictLabels(this.jslbOptions, row.jslb);
-    },
-    // 异本地字典翻译
-    ybdFormat(row, column) {
-      return this.selectDictLabels(this.ybdOptions, row.ybd);
-    },
-    // 数据开始时间字典翻译
-    datastarttimeFormat(row, column) {
-      return this.selectDictLabels(this.datastarttimeOptions, row.datastarttime);
-    },
-    // 信用代码字典翻译
-    xydmFormat(row, column) {
-      return this.selectDictLabels(this.xydmOptions, row.xydm);
-    },
-    // 添加时间字典翻译
-    addtimeFormat(row, column) {
-      return this.selectDictLabels(this.addtimeOptions, row.addtime);
-    },
-    // 结算等级字典翻译
-    jsdjFormat(row, column) {
-      return this.selectDictLabels(this.jsdjOptions, row.jsdj);
-    },
-    // 机构核实意见字典翻译
-    hsyjFormat(row, column) {
-      return this.selectDictLabels(this.hsyjOptions, row.hsyj);
-    },
-    // 核实状态字典翻译
-    hsztFormat(row, column) {
-      return this.selectDictLabels(this.hsztOptions, row.hszt);
-    },
-    // 核实时间字典翻译
-    hssjFormat(row, column) {
-      return this.selectDictLabels(this.hssjOptions, row.hssj);
-    },
-    // 核实人字典翻译
-    hsrFormat(row, column) {
-      return this.selectDictLabels(this.hsrOptions, row.hsr);
-    },
-    // 核实派发时间字典翻译
-    hspfsjFormat(row, column) {
-      return this.selectDictLabels(this.hspfsjOptions, row.hspfsj);
-    },
-    // 批次号字典翻译
-    rwpcidFormat(row, column) {
-      return this.selectDictLabels(this.rwpcidOptions, row.rwpcid);
-    },
-    // 已发送回智审字典翻译
-    issendFormat(row, column) {
-      return this.selectDictLabels(this.issendOptions, row.issend);
-    },
+    
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -999,13 +883,6 @@ export default {
         zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}')
       }
       this.qmxOptions.show = true
-    },
-    sum(arr){
-      let s = 0
-      arr.forEach(item=>{
-        item && (s+=item)
-      })
-      return s
     },
     //判断是否可以修改单价，数量，费用
     isDisabledEvent(sellection){

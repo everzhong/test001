@@ -1,7 +1,6 @@
 /**项目流水号汇总 第四层数据 type=1*/
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
-  <!-- <el-table :row-class-name="tableRowClassName" class="qztable" ref="multipleTable" :data="tableData" border height="100%"> -->
   <sTable :data="tableData" :header="tableHeader" :fixedNum="hasNoRending?0:1" :isrowClassName="true">
     <el-table-column  align="center" width="55" slot="fixed" v-if="!hasNoRending">
       <template slot-scope="scope">
@@ -177,10 +176,6 @@ export default {
       })
       this.$emit('radio-change',selection)
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.$emit('handleSelectionChange',selection)
-    },
     //操作记录
     operateLog(row){
       this.$emit('on-log',row,4)
@@ -188,23 +183,6 @@ export default {
     checkdetail(row){
       this.$emit('checkdetail',row)
     },
-    selectAll(){
-      this.tableData.forEach(row => {
-        this.$refs.multipleTable.toggleRowSelection(row)
-      })
-    },
-    clearAll(){
-      this.$refs.multipleTable.clearSelection()
-    },
-    tableRowClassName({row}){
-      let className = ''
-      if(row.xwrd){
-        className = row.xwrd.indexOf('未发现违规')>-1?'xwrd-table-row-normal':'xwrd-table-row';
-      } else {
-        className = ''
-      }
-      return  className    
-    }
   }
 }
 </script>

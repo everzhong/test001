@@ -177,10 +177,6 @@ export default {
   data() {
     return {
       pageLoaing:true,
-      // wenjian:{
-      //   wenjianurl:'',
-      //   wenjian:''
-      // },
       showHecha:false,//显示选择核查数据
       tableHeader:[{
         prop: 'ydlx',
@@ -285,8 +281,6 @@ export default {
       renwufourList:[],
       renwufiveList:[],
       renwusixList:[],
-      // 弹出层标题
-      title: "",
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -316,8 +310,6 @@ export default {
         jsdj:'',
         ybd:''
       },
-      // 表单参数
-      form: {},
       // 表单校验
       rules: {
         id: [
@@ -462,24 +454,6 @@ export default {
       this.xwrdChecd = res
       this.xwrdForm.xwrd = res.wgxw
     },
-    getGuizList(){
-      console.log(this.guizefl)
-    },
-    /**
-     * 规则选择
-    */
-    handleGuizeChange(selection){
-      this.guizefl.selection = selection
-    },
-    /**
-     * 
-     * 查看流水号项目汇总
-    */
-    fluProject(row){
-      this.$set(this,'tabsValue','four')
-      this.searchLsNextParams = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,type:1}
-      this.getList(this.searchLsNextParams)
-    },
     /** 查询renwu列表 */
     async getList(query) {
       const {rwpcid,jgdm} = this.queryInfoFrom
@@ -525,32 +499,6 @@ export default {
     gzflFormat(row, column) {
       return this.selectDictLabels(this.gzflOptions, row.gzfl);
     },
-    // 医保结算费用字典翻译
-    jsfyFormat(row, column) {
-      return this.selectDictLabels(this.jsfyOptions, row.jsfy);
-    },
-    // 险种字典翻译
-    ybbfFormat(row, column) {
-      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
-    },
-    // 就医类型字典翻译
-    jslbFormat(row, column) {
-      return this.selectDictLabels(this.jslbOptions, row.jslb);
-    },
-    // 异本地字典翻译
-    ybdFormat(row, column) {
-      return this.selectDictLabels(this.ybdOptions, row.ybd);
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("bmQueryForm");
-      this.handleQuery();
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       if(selection.length!==0){
@@ -559,15 +507,6 @@ export default {
         this.ids=[]
       }
     },
-    //同流水明细
-    tongLiushuimx(row){
-      this.tabsValue = 'five'
-      this.selectedId = ''
-      this.lsh = row.lsh || ''
-      this.mxxmbm = row.mxxmbm || ''
-      this.searchTlsNextParams = {lsh:row.lsh||'',mxxmbm:row.mxxmbm}
-      this.getList()
-    },
     //操作记录
     checkLog(row,type){
       this.logOption.type = type
@@ -575,73 +514,6 @@ export default {
       this.logOption.fid = row.fid
       this.logOption.xwrd = row.xwrd
       this.logOption.show = true
-    },
-    sum(arr){
-      let s = 0
-      arr.forEach(item=>{
-        item && (s+=item)
-      })
-      return s
-    },
-    //判断是否可以修改单价，数量，费用
-    isDisabledEvent(sellection){
-      let dj = true//单价
-      let sl = false//数量
-      let fy = false//费用
-      if(sellection.length<1){
-        dj = true
-        sl = false
-        fy = false
-      } else {
-        const mxxmbm = []
-        const mxxmdj = []
-        sellection.forEach(item => {
-          if(!(mxxmbm.includes(item.mxxmbm))) {
-            mxxmbm.push(item.mxxmbm)
-          } 
-          if(!(mxxmdj.includes(item.mxxmdj))) {
-            mxxmdj.push(item.mxxmdj)
-          }
-        });
-        if(mxxmbm.length===1){//项目明细编号相同,
-          sl = false
-          dj = mxxmdj.length>1?true:false
-          fy = false
-        }else{
-          sl = true
-          fy = true
-          dj = true
-        }
-      }
-     return {dj,sl,fy}
-    },
-    handleDjslChange(){
-      if(this.xwrdForm.zkdj!==''&&this.xwrdForm.wgsl!==''){
-        this.xwrdForm.wgfy = (this.xwrdForm.zkdj*this.xwrdForm.wgsl).toFixed(2)
-      }
-    },
-    hanndelChange(){
-      const res = this.cesl()
-      if(res!==''){
-        this.xwrdForm.wgsl = res
-        this.handleDjslChange()
-      }
-    },
-    cesl(){
-      //进销存核查，计算违规数量=差额数量cesl=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)
-      let res = ''
-      const {ybjs,qckc,bqgr,qmkc,xjxs} = this.xwrdForm
-      if(ybjs!=='' && qckc!==''&& bqgr!==''&& qmkc!==''&& xjxs!==''){
-        res = ybjs*1-(qckc*1+bqgr*1-qmkc*1-xjxs*1)
-      }
-      return res
-    },
-    upSuccess(fileUrl,file){
-      if(fileUrl) {
-        this.wenjian.wenjian = file.name
-      } else {
-        this.wenjian.wenjian = ''
-      }
     },
   }
 };

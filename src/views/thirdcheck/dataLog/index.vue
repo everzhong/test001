@@ -468,69 +468,13 @@ export default {
         this.loading = false;
       });
     },
-    // ID字典翻译
-    idFormat(row, column) {
-      return this.selectDictLabels(this.idOptions, row.id);
-    },
-    // 创建时间字典翻译
-    createDateFormat(row, column) {
-      return this.selectDictLabels(this.createDateOptions, row.createDate);
-    },
-    // 更新人字典翻译
-    updateByFormat(row, column) {
-      return this.selectDictLabels(this.updateByOptions, row.updateBy);
-    },
-    // 开始时间字典翻译
-    stimeFormat(row, column) {
-      return this.selectDictLabels(this.stimeOptions, row.stime);
-    },
-    // 任务层ID字典翻译
-    jobIdFormat(row, column) {
-      return this.selectDictLabels(this.jobIdOptions, row.jobId);
-    },
-    // 日志路径字典翻译
-    logFilePathFormat(row, column) {
-      return this.selectDictLabels(this.logFilePathOptions, row.logFilePath);
-    },
-    // 更新时间字典翻译
-    updateDateFormat(row, column) {
-      return this.selectDictLabels(this.updateDateOptions, row.updateDate);
-    },
     // 抽取分类字典翻译
     typeFormat(row, column) {
       return this.selectDictLabels(this.typeOptions, row.type);
     },
-    // 成功条数字典翻译
-    succFormat(row, column) {
-      return this.selectDictLabels(this.succOptions, row.succ);
-    },
-    // 机构代码字典翻译
-    jgdmFormat(row, column) {
-      return this.selectDictLabels(this.jgdmOptions, row.jgdm);
-    },
-    // 年月份字典翻译
-    nyFormat(row, column) {
-      return this.selectDictLabels(this.nyOptions, row.ny);
-    },
     // 状态字典翻译
     statusFormat(row, column) {
       return this.selectDictLabels(this.statusOptions, row.status);
-    },
-    // 创建人字典翻译
-    createByFormat(row, column) {
-      return this.selectDictLabels(this.createByOptions, row.createBy);
-    },
-    // 总耗时字典翻译
-    ztimeFormat(row, column) {
-      return this.selectDictLabels(this.ztimeOptions, row.ztime);
-    },
-    // 结束时间字典翻译
-    etimeFormat(row, column) {
-      return this.selectDictLabels(this.etimeOptions, row.etime);
-    },
-    // 失败条数字典翻译
-    fuccFormat(row, column) {
-      return this.selectDictLabels(this.fuccOptions, row.fucc);
     },
     // 抽取状态字典翻译
     endsFormat(row, column) {
@@ -574,18 +518,6 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
-    },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加数据抽取日志";
-    },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -602,8 +534,6 @@ export default {
         if (valid) {
           if (this.form.id != null) {
             const params = {...this.form}
-            // params.createDate = this.parseTime(this.form.createDate, '{y}-{m}-{d} {h}:{m}:{s}')
-            // params.updateDate = this.parseTime(this.form.updateDate, '{y}-{m}-{d} {h}:{m}:{s}')
             delete params.createDate
             delete params.updateDate
             updateLog(params).then(response => {
@@ -621,35 +551,8 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认删除数据抽取日志编号为"' + ids + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delLog(ids);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有数据抽取日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.exportLoading = true;
-          return exportLog(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-          this.exportLoading = false;
-        })
-    }
+    
+    
   }
 };
 </script>

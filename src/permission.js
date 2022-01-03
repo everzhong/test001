@@ -50,7 +50,6 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        console.log(to)
         if (['/xcjg', '/ssjc', '/ssjcFull', '/xcjgd', '/ssjcr', '/ssjcFullr'].indexOf(to.path) !== -1) { //给定点系统调用页面
             next({
                 path: '/login',

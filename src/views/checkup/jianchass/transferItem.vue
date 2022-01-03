@@ -322,7 +322,6 @@ export default {
       this.tableData = this.tableData.concat(selection)
     },
     async getList(query){
-      // let params ={...this.queryParams,...this.queryGzForm,hszt:'1',jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       let params ={...this.queryParams,hszt:'1',jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       query&&(params = {...params,...query})
       this.loading = true
@@ -352,27 +351,16 @@ export default {
       this.queryParams.pageNum = 1
       this.getList()
     },
-    getGuizList(){
-      console.log(this.guizefl)
-    },
     /**
      * 规则选择
     */
     handleGuizeChange(selection){
       this.guizefl.selection = selection
     },
-    /**
-     * selectedGuize规则选择确定
-     */
-    selectedGuize(){
-
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.$emit('select',selection)
-      // this.single = selection.length!==1
-      // this.multiple = !selection.length
     },
   }
 }

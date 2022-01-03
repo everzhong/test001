@@ -110,8 +110,6 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 10,
       // renwutwo表格数据

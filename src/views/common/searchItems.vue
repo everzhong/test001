@@ -124,10 +124,7 @@ export default {
       this.handleQuery();
     },
     getDic(){
-      // this.getDicts("renwu_ss_ybbf").then(response => {
-        // this.ybbfOptions = response.data;
       this.ybbfOptions = this.$store.getters.ybbfDic;
-      // });
       this.getDicts("renwu_ss_jslb").then(response => {
         this.jslbOptions = response.data;
       });

@@ -285,7 +285,6 @@ export default {
         show:false
       },
       chaxunDialog:false,
-      liushuiSetions:[],
       selectedId:"",
       selectionList:[],
       // 遮罩层
@@ -298,8 +297,6 @@ export default {
       renwufourList:[],
       renwufiveList:[],
       renwusixList:[],
-      // 弹出层标题
-      title: "",
       // 核实状态字典
       hsztOptions:[
         {dictValue:'1',dictLabel:'未核实'},
@@ -336,8 +333,6 @@ export default {
         jsdj:'',
         ybd:''
       },
-      // 表单参数
-      form: {},
       // 表单校验
       rules: {
         id: [
@@ -435,65 +430,6 @@ export default {
       }
       this.getList()
     },
-    /**
-     * 第三方筛查
-     */
-    handleThirdCheck(){
-      this.$confirm('是否对当前机构进行数据筛查', "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(()=> {
-          const userNmae = this.$store.getters.name
-          const {id,rwpcid,jgdm,jgmc,sccqstatus,datastarttime,dataendtime,jczid} = this.queryInfoFrom
-          const time = bossRand();
-          const requireParams = {
-            scstatus:1,
-            ids:id,
-            scrwid:[rwpcid,jgdm,time].join('-'),
-            scname:[rwpcid,time,jgmc].join('-'),
-            scsqr:userNmae,
-            rwpcid,
-            jgdm,
-            datastarttime,
-            dataendtime
-          }
-          if(sccqstatus==0){
-            requireParams.sccqstatus = 1
-          }
-          setShujusc({
-            id,
-            datastarttime,
-            dataendtime,
-            jgdm,
-            jczid,
-            createBy:userNmae,
-            scrwid:[rwpcid,jgdm,time].join('-'),
-            scname:[rwpcid,time,jgmc].join('-'),
-            deptId:this.$store.getters.userId
-          }).then(res=>{
-            this.loading = false
-            if(res.code===200) {
-              this.msgSuccess('操作成功')
-              setSancha(requireParams)
-            }
-            this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
-          }).catch(()=>{
-            this.loading = false
-          })
-          this.addJcfl({
-            jglc:'数据筛查',
-            gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
-            rwpcid:rwpcid,
-            jgdm:jgdm,
-            zhczr:this.$store.getters.name,
-            sort:1
-          })
-      }).catch(_=>{})
-    },
-    tableFourRadioChange(e){
-      console.log(e)
-    },
     //点击检查完成状态跳到4
     doSubmit() {
       this.$confirm("请确认所有规则均已完成检查，是否提交？", "提示", {
@@ -523,19 +459,6 @@ export default {
     //返回上一层
     goBackUpLevel(){
       this.selectedId = ''
-      // this.xwrdForm = {
-      //   mxxmmc:'',
-      //   xwrd:'',
-      //   bz:'',
-      //   zkdj:'',
-      //   wgsl:'',
-      //   wgfy:'',
-      //   qckc:'',
-      //   bqgr:'',
-      //   xjxs:'',
-      //   qmkc:'',
-      //   ybjs:''
-      // }
       switch(true) {
         case (this.tabsValue=='five'||this.tabsValue=='qmx'):
           if(this.qmxOptions.show){
@@ -558,88 +481,6 @@ export default {
     onChecked(res){
       this.xwrdChecd = res
     },
-    //点击行为认定
-    handelXwrdDialog(){
-      if(!this.selectedId){
-        this.msgError('请选择规则后再点行为认定')
-      } else {
-        this.xwrdDialog.show = true
-      }
-    },
-    // xwrdSubmit(){
-    //   if(this.selectionList.length===0){
-    //     this.msgError('请选择一项在进行行为认定')
-    //     return
-    //   }
-    //   if(this.tabsValue==='six' && !this.pksj){//进销存核查
-    //     this.msgError('请选择盘库期初和盘库期末时间')
-    //     return   
-    //   }
-    //   const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-    //   if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
-    //     this.msgError('违规费用不能大于明细项目医保结算金额')
-    //     return
-    //   }
-    //   this.$refs['xwrdForm'].validate(async valid => {
-    //       if (valid) {
-    //         let res = ''
-    //         const {type,xwbh,lx} = this.xwrdChecd//这个type是行文认定选择的类型
-    //         const params = {id:this.selectedId,...this.xwrdForm,xwbh,wglx:lx}
-    //         if(this.pksj){
-    //           params.pkqcsj = this.parseTime(this.pksj[0].getTime(),'{y}-{m}-{d}')
-    //           params.pkqmsj = this.parseTime(this.pksj[1].getTime(),'{y}-{m}-{d}')
-    //         }
-    //         if(this.xwrdForm.xwrd.indexOf('未发现违规')>-1){
-    //           delete params.zkdj
-    //           delete  params.wgsl
-    //           delete  params.wgfy
-    //         }
-    //         if(this.tabsValue==='six'){//进销存核查
-    //           const cesl = this.cesl()
-    //           params.cesl = cesl
-    //           params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
-    //         }
-    //         delete params.bjsj
-    //         res = await updateRenwufour({...params,jgbf:type})
-    //         if(res.code===200) {
-    //           this.msgSuccess('操作成功')
-    //           if(this.tabsValue==="four"){
-    //             this.getList(this.searchLsNextParams)
-    //           } else {
-    //             this.getList()
-    //           }
-    //           this.selectionList.forEach(item=>{
-    //             const addData = {
-    //               bjr: this.$store.getters.name,
-    //               bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
-    //               fid:item.id,
-    //               rid:item.rwpcid,
-    //               jgdm:item.jgdm,
-    //               type:this.tabsValue==='four'?'1':'2',
-    //               ...params,
-    //             }
-               
-    //             if(this.tabsValue==='four'){//流水号项目汇总
-    //               delete addData.qckc
-    //               delete addData.bqgr
-    //               delete addData.xjxs
-    //               delete addData.qmkc
-    //               delete addData.ybjs
-    //               delete addData.pkqmsj
-    //               delete addData.pkqcsj  
-    //             } else {
-    //               addData.cesl = params.cesl
-    //               addData.dzce = params.dzce 
-    //             }
-    //             rendingAdd(addData)
-    //           })
-
-    //         }
-    //       } else {
-    //         return false;
-    //       }
-    //     });
-    // },
     /**
      * 
      * 查看流水号项目汇总
@@ -700,36 +541,6 @@ export default {
       }
       this.loading = false
     },
-    // 医保结算费用字典翻译
-    jsfyFormat(row, column) {
-      return this.selectDictLabels(this.jsfyOptions, row.jsfy);
-    },
-    // 险种字典翻译
-    ybbfFormat(row, column) {
-      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
-    },
-    // 就医类型字典翻译
-    jslbFormat(row, column) {
-      return this.selectDictLabels(this.jslbOptions, row.jslb);
-    },
-    // 异本地字典翻译
-    ybdFormat(row, column) {
-      return this.selectDictLabels(this.ybdOptions, row.ybd);
-    },
-    // 机构核实意见字典翻译
-    hsyjFormat(row, column) {
-      return this.selectDictLabels(this.hsyjOptions, row.hsyj);
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("bmQueryForm");
-      this.handleQuery();
-    },
     //同流水明细
     tongLiushuimx(row){
       this.tabsValue = 'five'
@@ -755,45 +566,6 @@ export default {
         zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}')
       }
       this.qmxOptions.show = true
-    },
-    sum(arr){
-      let s = 0
-      arr.forEach(item=>{
-        item && (s+=item)
-      })
-      return s
-    },
-    //判断是否可以修改单价，数量，费用
-    isDisabledEvent(sellection){
-      let dj = true//单价
-      let sl = false//数量
-      let fy = false//费用
-      if(sellection.length<1){
-        dj = true
-        sl = false
-        fy = false
-      } else {
-        const mxxmbm = []
-        const mxxmdj = []
-        sellection.forEach(item => {
-          if(!(mxxmbm.includes(item.mxxmbm))) {
-            mxxmbm.push(item.mxxmbm)
-          } 
-          if(!(mxxmdj.includes(item.mxxmdj))) {
-            mxxmdj.push(item.mxxmdj)
-          }
-        });
-        if(mxxmbm.length===1){//项目明细编号相同,
-          sl = false
-          dj = mxxmdj.length>1?true:false
-          fy = false
-        }else{
-          sl = true
-          fy = true
-          dj = true
-        }
-      }
-     return {dj,sl,fy}
     },
   }
 };

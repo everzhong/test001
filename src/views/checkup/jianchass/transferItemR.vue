@@ -361,34 +361,17 @@ export default {
       this.tableData = []
       this.total = 0
     },
-    // getList(){
-    //   const pageData = this.allSelection.filter((item,i)=>{
-    //     return  i>=this.queryParams.pageNum*this.queryParams.pageSize-this.queryParams.pageSize && i< this.queryParams.pageNum*this.queryParams.pageSize
-    //   })
-    //   this.tableData = [...pageData]
-    // },
-    getGuizList(){
-      console.log(this.guizefl)
-    },
     /**
      * 规则选择
     */
     handleGuizeChange(selection){
       this.guizefl.selection = selection
     },
-    /**
-     * selectedGuize规则选择确定
-     */
-    selectedGuize(){
-
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.allSelection = selection
       this.$emit('select',selection)
-      // this.single = selection.length!==1
-      // this.multiple = !selection.length
     },
   }
 }

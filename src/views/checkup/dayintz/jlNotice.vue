@@ -45,10 +45,6 @@
       </section>
       <div style="border:1px solid #303313;border-top:none;padding:3px 20px 10px;">备注：本文书一式三份，一份留存执法案卷，一份交被检机构，一份张贴检查室门上。</div>
     </div>
-    <!-- <div style="text-align:right;padding-right:19px">
-      <el-button size="mini" type="primary" v-print="printJilv">打印</el-button>
-      <el-button size="mini" type="primary" @click="printEvent('printJl')">打印</el-button>
-    </div> -->
   </section>
 </template>
 <script>

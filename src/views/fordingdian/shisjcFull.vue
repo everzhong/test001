@@ -209,7 +209,7 @@
 <script>
 import { listRenwuthree} from "@/api/renwu/renwuthree";
 import { setSancha,setShujusc} from  '@/api/renwu/renwutwo'
-import { listRenwufour, updateRenwufour, listXmbm } from '@/api/renwu/renwufour'
+import { listRenwufour, updateRenwufour } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import { submitDxqd, rendingAdd } from "@/api/renwu/dcqz"
 import { bossRand } from "@/utils/ruoyi"
@@ -338,7 +338,6 @@ export default {
         show:false
       },
       chaxunDialog:false,
-      liushuiSetions:[],
       selectedId:"",
       selectionList:[],
       // 遮罩层
@@ -351,8 +350,6 @@ export default {
       renwufourList:[],
       renwufiveList:[],
       renwusixList:[],
-      // 弹出层标题
-      title: "",
       // 核实状态字典
       hsztOptions:[
         {dictValue:'1',dictLabel:'未核实'},
@@ -389,8 +386,6 @@ export default {
         jsdj:'',
         ybd:''
       },
-      // 表单参数
-      form: {},
       // 表单校验
       rules: {
         id: [
@@ -756,40 +751,9 @@ export default {
       }
       this.loading = false
     },
-    // 医保结算费用字典翻译
-    jsfyFormat(row, column) {
-      return this.selectDictLabels(this.jsfyOptions, row.jsfy);
-    },
-    // 险种字典翻译
-    ybbfFormat(row, column) {
-      return this.selectDictLabels(this.ybbfOptions, row.ybbf);
-    },
-    // 就医类型字典翻译
-    jslbFormat(row, column) {
-      return this.selectDictLabels(this.jslbOptions, row.jslb);
-    },
-    // 异本地字典翻译
-    ybdFormat(row, column) {
-      return this.selectDictLabels(this.ybdOptions, row.ybd);
-    },
-    // 机构核实意见字典翻译
-    hsyjFormat(row, column) {
-      return this.selectDictLabels(this.hsyjOptions, row.hsyj);
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("bmQueryForm");
-      this.handleQuery();
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       if(selection.length!==0){
-        // this.ids = selection.map(item => item.id)
         this.isDisabled = this.isDisabledEvent(selection)
         const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy} = selection[0]
         this.selectedId = id
@@ -852,13 +816,6 @@ export default {
         zdbm1:this.parseTime(this.queryInfoFrom.dataendtime, '{y}{m}')
       }
       this.qmxOptions.show = true
-    },
-    sum(arr){
-      let s = 0
-      arr.forEach(item=>{
-        item && (s+=item)
-      })
-      return s
     },
     //判断是否可以修改单价，数量，费用
     isDisabledEvent(sellection){
