@@ -39,7 +39,7 @@ export default {
       // 查询参数
       xzqOptions:[],
       zhizuo:{
-        lianriq:'',
+        lianrq:'',
         lianyy:'',
         cbr:'',
       },
@@ -90,6 +90,9 @@ export default {
       }).then(res => {
         if(res.code===200){
           this.msgSuccess("操作成功！");
+          setTimeout(()=>{
+            this.lianBack()
+          },1000)
         }
       });
     }

@@ -146,7 +146,7 @@ export default {
         jbr:'',
         bjbr:'',
         lian:'',
-        slDate:null
+        slDate:[]
       },
       tableHeader:[{
         label: '受理编号',
@@ -175,7 +175,7 @@ export default {
         prop:'slr',
       },{
         label:"受理日期",
-        prop:'cbrq',
+        prop:'lianrq',
         viewFun:(time)=>{
           return this.parseTime(time,'{y}-{m}-{d}')
         }
@@ -243,8 +243,8 @@ export default {
     },
     /** 查询renwutwo列表 */
     async getList() {
-      const lianrq = this.query.slDate?this.parseTime(this.query.slDate[0],'{y}-{m}-{d}'):''
-      const cbrq = this.query.slDate?this.parseTime(this.query.slDate[1],'{y}-{m}-{d}'):''
+      const lianrq = this.query.slDate[0]?this.parseTime(this.query.slDate[0],'{y}-{m}-{d}'):''
+      const cbrq = this.query.slDate[1]?this.parseTime(this.query.slDate[1],'{y}-{m}-{d}'):''
       const params = {...this.queryParams,...this.query}
       console.log(lianrq,cbrq)
       params.lianrq = lianrq

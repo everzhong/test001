@@ -24,7 +24,7 @@
       <div class="rq-cbr" style="padding-bottom:30px">
         <span style="width:95px">确定立案日期</span>
         <el-date-picker
-          v-model="zhizuo.lianriq"
+          v-model="zhizuo.lianrq"
           type="date"
           size="small"
           placeholder="选择承办日期"
@@ -57,7 +57,7 @@ export default {
       // 查询参数
       xzqOptions:[],
       zhizuo:{
-        lianriq:'',
+        lianrq:'',
         lianyy:'',
         cbr:'',
       },
@@ -95,13 +95,16 @@ export default {
         id:this.zhizuo.id,
         lian:this.radio,
         lianyy:this.zhizuo.lianyy,
-        lianriq:this.zhizuo.lianriq,
+        lianrq:this.zhizuo.lianrq,
         cbr:this.zhizuo.cbr,
         rwpcid:this.zhizuo.rwpcid,
         jgdm:this.zhizuo.jgdm
       }).then(res => {
         if(res.code===200){
           this.msgSuccess("操作成功！");
+          setTimeout(()=>{
+            this.lianBack()
+          },1000)
         }
       });
     }

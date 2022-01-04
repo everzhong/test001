@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
-      <el-button type="primary" plain size="mini">查看案件信息</el-button>
+      <el-button type="primary" plain size="mini" @click="checkLiAn">查看案件信息</el-button>
       <el-button type="primary" size="mini" @click="submitForm">提交审批</el-button>
        <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button>
     </div>
@@ -88,6 +88,16 @@ export default {
     });
   },
   methods: {
+    //查看案件信息
+    checkLiAn(){
+      this.$router.push({
+        path:'/checkup/jcss/checkaj',
+        query:{
+          jgdm:this.zhizuo.jgdm,
+          rwpcid:this.zhizuo.rwpcid
+        }
+      })
+    },
     lianBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
@@ -125,6 +135,9 @@ export default {
       }).then(res => {
         if(res.code===200){
           this.msgSuccess("操作成功！");
+          setTimeout(()=>{
+            this.lianBack()
+          },1000)
         }
       });
     }

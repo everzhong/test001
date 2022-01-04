@@ -8,7 +8,7 @@
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">{{noLian?'不予':''}}立案报告</div>
           <div style="margin-bottom:20px">
             <span style="width:60%;display:inline-block">案件受理编号：{{pageData.slbh}}</span>
-            <span style="width:40%;display:inline-block;text-align:right">受理时间：<span style="margin:0 5px 0 0;">{{parseTime(pageData.cbrq,'{y}')}}</span>年<span style="margin:0 8px">{{parseTime(pageData.cbrq,'{m}')}}</span>月<span style="margin:0 8px">{{parseTime(pageData.cbrq,'{d}')}}</span>日</span>
+            <span style="width:40%;display:inline-block;text-align:right">受理时间：<span style="margin:0 5px 0 0;">{{parseTime(pageData.lianrq,'{y}')}}</span>年<span style="margin:0 8px">{{parseTime(pageData.lianrq,'{m}')}}</span>月<span style="margin:0 8px">{{parseTime(pageData.lianrq,'{d}')}}</span>日</span>
           </div>
           <div style="margin-bottom:20px">
             <span style="width:100%;display:inline-block">案件来源：{{pageData.ajly}}</span>
@@ -44,7 +44,7 @@
       <div style="font-size:14px;border:1px solid #303313;border-top:none;padding:10px 40px 10px;">
         负责人审批意见：
         <div style="padding-left:50px;margin-top:15px;font-size:14px;">
-          本案自<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.cbrq,'{y}')}}</span>年<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.cbrq,'{m}')}}</span>月<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.cbrq,'{d}')}}</span>日起立案，由<span style="text-align:center;min-width:140px;display:inline-block;border-bottom:1px solid #454545">{{pageData.cbr}}</span>承办
+          本案自<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.lianrq,'{y}')}}</span>年<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.lianrq,'{m}')}}</span>月<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.lianrq,'{d}')}}</span>日起立案，由<span style="text-align:center;min-width:140px;display:inline-block;border-bottom:1px solid #454545">{{pageData.cbr}}</span>承办
         </div>
         <div style="margin-top:30px;font-size:14px;">
             <div style="width:60%;display:inline-block;margin-bottom:20px"></div>

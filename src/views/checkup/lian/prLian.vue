@@ -6,7 +6,7 @@
     </div>
     <div class="zhizuo-port">
         <div class="zhizuo">
-          <div class="zhizuo-titlev1">{{zhizuo.lian==3?'已立案':'未立案'}}<span>{{zhizuo.lianriq}}</span></div>
+          <div class="zhizuo-titlev1">{{zhizuo.lian==3?'已立案':'未立案'}}<span>{{zhizuo.lianrq}}</span></div>
           <div class="zhizuo-title">{{zhizuo.lian==3?'':'不予'}}立案报告</div>
         </div>
         <div :class="['pre-view']">
