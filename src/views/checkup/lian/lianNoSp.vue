@@ -3,24 +3,28 @@
     <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button>
     </div>
-    <div class="zhizuo-port">
-        <div class="zhizuo">
-          <div class="zhizuo-title">申请不予立案</div>
+    <section class="section-main">
+      <div class="left-part">
+        <div class="shenpi">
+          <div class="item-title">审批意见：</div>
+          <div class="radios">
+            <el-radio v-model="radio" label="4">同意</el-radio>
+            <el-radio v-model="radio" label="5">驳回</el-radio>
+          </div>
+          <!-- <div class="mark" style="margin-right:20px"><el-input v-model="zhizuo.lianyy" type="text" size="small" ></el-input></div> -->
         </div>
+        <el-button style="float:right;margin-right:50px" type="primary" size="small" @click="submitForm">提交</el-button>
+      </div>
+      <div class="zhizuo-port">
+        <!-- <div class="zhizuo">
+          <div class="zhizuo-title">申请不予立案</div>
+        </div> -->
         <div :class="['pre-view']">
           <!-- <p class="top-tip">预览立案报告</p> -->
-          <lianTemplate :noLian="true" :noPrint="true" :pageData="zhizuo"></lianTemplate>
+          <lianTemplate :noLian="true" :pageData="zhizuo"></lianTemplate>
         </div>
-    </div>
-    <div class="shenpi">
-      <div>审批意见：</div>
-      <div class="radios">
-        <el-radio v-model="radio" label="4">同意</el-radio>
-        <el-radio v-model="radio" label="5">驳回</el-radio>
       </div>
-      <div class="mark" style="margin-right:20px"><el-input v-model="zhizuo.lianyy" type="text" size="small" ></el-input></div>
-      <el-button type="primary" size="small" @click="submitForm">提交</el-button>
-    </div>
+    </section>
 </div>
 </template> 
 
@@ -40,7 +44,7 @@ export default {
       xzqOptions:[],
       zhizuo:{
         lianrq:'',
-        lianyy:'',
+        // lianyy:'',
         cbr:'',
       },
       zhzList:[],
@@ -84,7 +88,7 @@ export default {
       updateRenwutwo({
         id:this.zhizuo.id,
         lian:this.radio,
-        lianyy:this.zhizuo.lianyy,
+        // lianyy:this.zhizuo.lianyy,
         rwpcid:this.zhizuo.rwpcid,
         jgdm:this.zhizuo.jgdm
       }).then(res => {
@@ -101,6 +105,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .app-container  {
+  padding-top:10px;
+  .section-main {
+    display: flex;
+    .left-part {
+      margin-left: 20px;
+      margin-top: 50px;
+      .item-title {
+        width: 95px;
+      }
+    }
+  }
   .zhizuo-outer {
     height:380px;
     overflow: auto;
@@ -226,10 +241,9 @@ export default {
   }
   .shenpi {
     font-size: 14px;
-    padding-left: 150px;
     display: flex;
     align-items: center;
-    padding-bottom: 15px;
+    padding-bottom: 25px;
     .radios {
       margin-left: 10px;
       margin-right: 60px;

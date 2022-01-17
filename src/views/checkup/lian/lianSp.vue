@@ -3,48 +3,70 @@
     <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button>
     </div>
-    <div class="zhizuo-port">
-        <div class="zhizuo">
-          <div class="zhizuo-title">申请立案</div>
+    <section class="section-main">
+      <div class="left-part">
+        <div class="shenpi">
+          <div class="item-title">审批意见</div>
+          <div class="radios">
+            <el-radio v-model="radio" label="3">同意</el-radio>
+            <el-radio v-model="radio" label="5">驳回</el-radio>
+          </div>
         </div>
-        <div :class="['pre-view']">
-          <!-- <p class="top-tip">预览立案报告</p> -->
-          <lianTemplate :noPrint="true" :pageData="zhizuo"></lianTemplate>
+        <div class="shenpi">
+          <span class="item-title">立案日期</span>
+          <el-date-picker
+            v-model="zhizuo.lianrq"
+            type="date"
+            size="small"
+            placeholder="选择承办日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
         </div>
-    </div>
-    <div class="shenpi">
-      <div>审批意见：</div>
-      <div class="radios">
-        <el-radio v-model="radio" label="3">同意</el-radio>
-        <el-radio v-model="radio" label="5">驳回</el-radio>
+        <div class="shenpi">
+            <span class="item-title">案件承办人</span>
+            <el-select v-model="cbrList" multiple placeholder="请选择">
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.nickName"
+                :value="item.userId">
+              </el-option>
+           </el-select>
+            <!-- <el-input clearable v-model="zhizuo.cbr" style="width:220px;margin-right:20px" type="text" size="small"></el-input> -->
+        </div>
+        <div class="shenpi">
+          <span class="item-title">审批日期</span>
+          <el-date-picker
+            v-model="zhizuo.sprq"
+            type="date"
+            size="small"
+            placeholder="选择审批日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </div>
+        <el-button style="float:right" type="primary" size="small" @click="submitForm">提交</el-button>
       </div>
-      <div class="mark"><el-input type="text" size="small"  v-model="zhizuo.lianyy"></el-input></div>
-    </div>
-    <div class="shenpi">
-      <div class="rq-cbr" style="padding-bottom:30px">
-        <span style="width:95px">确定立案日期</span>
-        <el-date-picker
-          v-model="zhizuo.lianrq"
-          type="date"
-          size="small"
-          placeholder="选择承办日期"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd hh:mm:ss"
-        >
-        </el-date-picker>
+      <div class="zhizuo-port">
+          <!-- <div class="zhizuo">
+            <div class="zhizuo-title">申请立案</div>
+          </div> -->
+          <div :class="['pre-view']">
+            <!-- <p class="top-tip">预览立案报告</p> -->
+            <lianTemplate :pageData="zhizuo"></lianTemplate>
+          </div>
       </div>
-      <div class="rq-cbr" style="padding-bottom:30px">
-        <span style="width:110px;margin-left:45px">确定案件承办人</span>
-        <el-input clearable v-model="zhizuo.cbr" style="width:305px;margin-right:20px" type="text" size="small"></el-input>
-        <el-button type="primary" size="small" @click="submitForm">提交</el-button>
-      </div>
-    </div>
+    </section>
 </div>
 </template> 
 
 <script>
 import { updateRenwutwo } from "@/api/renwu/renwutwo"
 import lianTemplate from './lianTemplate.vue'
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "LianSp",
@@ -57,11 +79,15 @@ export default {
       // 查询参数
       xzqOptions:[],
       zhizuo:{
+        id:'',
+        rwpcid:'',
+        jgdm:'',
         lianrq:'',
-        lianyy:'',
-        cbr:'',
+        sprq:''
       },
+      cbrList:[],
       zhzList:[],
+      userList:[]
     };
   },
   created() {
@@ -70,7 +96,10 @@ export default {
       lianData = JSON.parse(lianData)
       this.zhzList = lianData
       this.zhizuo = lianData[0]
+      const jczId = lianData[0]['jczid']
+      this.cbrList = jczId?(jczId.split(',').map(id=>id*1)):[]
     }
+    this.getJanChacy()
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
@@ -87,18 +116,31 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      const {id,lianrq,sprq,rwpcid,jgdm} = this.zhizuo
       if(!this.radio){
         this.msgError('请选择审批意见')
         return false
-      } 
+      }
+      if(!lianrq){
+        this.msgError('请选择立案日期')
+        return false
+      }
+      if(!this.cbrList.length){
+        this.msgError('请选择立案承办人')
+        return false
+      }
+      if(!sprq){
+        this.msgError('请选择审批日期')
+        return false
+      }
       updateRenwutwo({
-        id:this.zhizuo.id,
+        id,
+        lianrq,
+        sprq,
+        rwpcid,
+        jgdm,
         lian:this.radio,
-        lianyy:this.zhizuo.lianyy,
-        lianrq:this.zhizuo.lianrq,
-        cbr:this.zhizuo.cbr,
-        rwpcid:this.zhizuo.rwpcid,
-        jgdm:this.zhizuo.jgdm
+        cbr:this.cbrList.join(',')
       }).then(res => {
         if(res.code===200){
           this.msgSuccess("操作成功！");
@@ -107,12 +149,35 @@ export default {
           },1000)
         }
       });
-    }
+    },
+    async getJanChacy(){
+      try {
+        const res = await listUser({pageNum:1,pageSize: 10000})
+      if(res.code === 200 && res.rows.length) {
+        this.userList = res.rows.filter(item=>{
+          return item.roleId==2 || item.roleId==4
+        })
+      }
+      } catch (error) { 
+        console.log(error)
+      }
+    },
   }
 };
 </script>
 <style lang="scss" scoped>
 .app-container  {
+  padding-top:10px;
+  .section-main {
+    display: flex;
+    .left-part {
+      margin-left: 20px;
+      margin-top: 30px;
+      .item-title {
+        width: 95px;
+      }
+    }
+  }
   .zhizuo-outer {
     height:380px;
     overflow: auto;
@@ -238,7 +303,6 @@ export default {
   }
   .shenpi {
     font-size: 14px;
-    padding-left: 150px;
     display: flex;
     align-items: center;
     padding-bottom: 15px;

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
+    <!-- <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
         <div>
             <el-form-item label="受理编号" prop="slbh">
               <el-input
@@ -70,7 +70,8 @@
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
         </div>
-    </el-form>
+    </el-form> -->
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="height:94px;overflow:auto"/>
     <div v-loading="loading" class="table-main">
     <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
         <el-table-column type="index" width="55" align="center" slot="fixed" label="序号"></el-table-column>
@@ -131,66 +132,66 @@
 import { listRenwutwo } from "@/api/renwu/renwutwo"
 import lianTemplate from './lianTemplate.vue'
 import Stable from '../../../components/stable.vue'
+import SearchItem from '../../common/objSearchItem'
 
 export default {
   name: "Lian",
   components: {
     lianTemplate,
-    Stable
+    Stable,
+    SearchItem
   },
   data() {
     return {
-      query:{
-        slbh:'',
-        ajlx:'',
-        jbr:'',
-        bjbr:'',
-        lian:'',
-        slDate:[]
-      },
       tableHeader:[{
-        label: '受理编号',
+        label: '批次号',
         fixedWidth:30,
-        prop:'slbh'
+        prop:'rwpcid'
       },{
-       label: '案件类型',
+       label: '案件来源',
         fixedWidth:55,
-        prop:'ajlx',
-        viewFun: (ajlx)=>{
-          return this.selectDictLabels(this.ajlxOptions, ajlx)
-        }
+        prop:'ajly'
       },{
-        label: '举报人',
+        label: '检查方式',
         fixedWidth:60,
-        prop:'jbr'
+        prop:'jcfs'
       },{
-         label: '被举报人',
+         label: '险种',
         fixedWidth:50,
-        prop:'bjbr',
+        prop:'ybbf',
+        viewFun: (ybbf)=>{
+          return this.selectDictLabels(this.$store.getters.ybbfDic, ybbf)
+        },
       },{
-        label:"承办部门",
-        prop:'cbr',
+        label:"就医类型",
+        prop:'jslb',
+        viewFun:(jslb)=>{
+          return this.selectDictLabels(this.$store.getters.jslbDic,jslb)
+        },
       },{
-        label:"受理人",
-        prop:'slr',
-      },{
-        label:"受理日期",
-        prop:'lianrq',
+        label:"数据开始日期",
+        prop:'datastarttime',
         viewFun:(time)=>{
           return this.parseTime(time,'{y}-{m}-{d}')
         }
       },{
-        label:"督办案件",
-        prop:'dbaj',
-        viewFun:(dbaj)=>{
-          return dbaj==1?'是':dbaj==2?'否':''
-        }
-      },{
-        label:"办结时限",
-        prop:'bjsx',
+        label:"数据结束日期",
+        prop:'dataendtime',
         viewFun:(time)=>{
           return this.parseTime(time,'{y}-{m}-{d}')
         }
+      },{
+        label:"机构代码",
+        prop:'jgdm',
+      },{
+        label:"机构名称",
+        prop:'jgmc',
+      },{
+        label:"检查机构",
+        prop:'jcjg',
+      },{
+        label:"检查组",
+        prop:'jczname',
       },{
         label:"立案状态",
         prop:'lian',
@@ -230,9 +231,9 @@ export default {
     };
   },
   created() {
-    this.getDicts("sys_renwu_ajlx").then(response => {
-      this.ajlxOptions = response.data;
-    });
+    // this.getDicts("sys_renwu_ajlx").then(response => {
+    //   this.ajlxOptions = response.data;
+    // });
     this.getList();
   },
   methods: {
@@ -242,14 +243,8 @@ export default {
       this.handleQuery();
     },
     /** 查询renwutwo列表 */
-    async getList() {
-      const lianrq = this.query.slDate[0]?this.parseTime(this.query.slDate[0],'{y}-{m}-{d}'):''
-      const cbrq = this.query.slDate[1]?this.parseTime(this.query.slDate[1],'{y}-{m}-{d}'):''
-      const params = {...this.queryParams,...this.query}
-      console.log(lianrq,cbrq)
-      params.lianrq = lianrq
-      params.cbrq = cbrq
-      delete params.slDate
+    async getList(query) {
+      const params = query?{...this.queryParams,...query}:this.queryParams
       this.loading = true
       try {
         const res = await listRenwutwo(params)
@@ -272,9 +267,9 @@ export default {
       })
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery(query) {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.getList(query);
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -353,7 +348,7 @@ export default {
 }
 .table-main {
   position: absolute;
-  top:110px;
+  top:115px;
   bottom:70px;
   left: 20px;
   right: 20px;

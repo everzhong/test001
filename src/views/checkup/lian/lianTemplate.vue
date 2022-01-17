@@ -3,7 +3,7 @@
     <div id="printJc" class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0;margin-bottom:15px">
       <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
-      <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/医保案立{{pageData.wjh}}号</div>
+      <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/医保案立{{pageData.slbh}}号</div>
         <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
           <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 45px;">{{noLian?'不予':''}}立案报告</div>
           <div style="margin-bottom:20px">
@@ -57,11 +57,14 @@
       </div>
     </div>
     <div style="text-align:right;margin-bottom:30px;" v-if="!noPrint">
-      <el-button @click="printFile()" size="small" type="primary">打印</el-button>
+      <el-button @click ="toImage()" size="mini" type="primary">下载</el-button>
+      <el-button @click="printFile()" size="mini" type="primary">打印</el-button>
     </div>
   </section>
 </template>
 <script>
+import html2canvas from 'html2canvas'
+import JsPDf from 'jspdf'
 export default {
   name:'LianTemplate',
   data(){
@@ -81,6 +84,25 @@ export default {
           newWin.print() // 打印
           newWin.close() // 关闭窗口
       }, 10)
+    },
+    toImage(){
+      const name = `${this.noLian?'不予':''}立案报告`
+      const {rwpcid,jgmc} = this.pageData
+      let canvasImg = document.getElementById('printJc')
+      html2canvas(canvasImg,{
+        width:1000,
+        allowTaint:true,
+        useCORS:true
+      }).then(canvas=>{
+        let url = canvas.toDataURL('image/jpeg');
+        let contentWidth = canvas.width
+        let contentHeight = canvas.height
+        let imgWidth = 595.28
+        let imgHeight = 595.28/(contentWidth/contentHeight)
+        let PDF = new JsPDf('p','px','a4')
+        PDF.addImage(url,"JPEG",36,25,imgWidth,imgHeight)
+        PDF.save(`${[rwpcid,jgmc,name].join('-')}.pdf`)
+      })
     },
   },
 }

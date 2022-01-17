@@ -46,7 +46,7 @@
         </div>
         <div :class="['pre-view']">
           <p class="top-tip">预览立案报告</p>
-          <lianTemplate :pageData="zhizuo"></lianTemplate>
+          <lianTemplate :noPrint="true" :pageData="zhizuo"></lianTemplate>
         </div>
     </div>
   </div>
