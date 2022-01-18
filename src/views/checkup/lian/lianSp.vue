@@ -26,14 +26,14 @@
         </div>
         <div class="shenpi">
             <span class="item-title">案件承办人</span>
-            <el-select v-model="cbrList" multiple placeholder="请选择">
+            <el-select v-model="cbrList" multiple @change="handleCbrChange" placeholder="请选择">
               <el-option
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.nickName"
-                :value="item.userId">
+                :value="item.nickName">
               </el-option>
-           </el-select>
+            </el-select>
             <!-- <el-input clearable v-model="zhizuo.cbr" style="width:220px;margin-right:20px" type="text" size="small"></el-input> -->
         </div>
         <div class="shenpi">
@@ -83,7 +83,7 @@ export default {
         rwpcid:'',
         jgdm:'',
         lianrq:'',
-        sprq:''
+        sprq:'',
       },
       cbrList:[],
       zhzList:[],
@@ -96,8 +96,6 @@ export default {
       lianData = JSON.parse(lianData)
       this.zhzList = lianData
       this.zhizuo = lianData[0]
-      const jczId = lianData[0]['jczid']
-      this.cbrList = jczId?(jczId.split(',').map(id=>id*1)):[]
     }
     this.getJanChacy()
     this.getDicts("sys_job_jgxx").then(response => {
@@ -105,6 +103,10 @@ export default {
     });
   },
   methods: {
+    //承办人选择
+    handleCbrChange(){
+      this.zhizuo.cbr = this.cbrList.join(',')
+    },
     lianBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
@@ -153,11 +155,29 @@ export default {
     async getJanChacy(){
       try {
         const res = await listUser({pageNum:1,pageSize: 10000})
-      if(res.code === 200 && res.rows.length) {
-        this.userList = res.rows.filter(item=>{
-          return item.roleId==2 || item.roleId==4
-        })
-      }
+        if(res.code === 200 && res.rows.length) {
+          const rows = res.rows
+          if(this.zhizuo.cbr){
+            this.cbrList = this.zhizuo.cbr.split(',')
+          } else {
+            const jczId = this.zhizuo['jczid']
+            const idList = jczId?(jczId.split(',').map(id=>id*1)):[]
+            if(idList.length){
+              const targetNameList = []
+              idList.forEach(id => {
+                let target = rows.find((item)=>{
+                  return item.userId === id
+                })
+                target && (targetNameList.push(target.nickName))
+              });
+              this.cbrList = targetNameList
+              this.zhizuo.cbr = targetNameList.join(',')
+            }
+          }
+          this.userList = rows.filter(item=>{
+            return item.roleId==2 || item.roleId==4
+          })
+        }
       } catch (error) { 
         console.log(error)
       }

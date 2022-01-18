@@ -26,7 +26,15 @@
           </div>
           <div class="zhizuo-item">
             <span>承办人</span>
-            <el-input size="small" v-model="zhizuo.cbr" maxlength="20"></el-input>
+            <el-select v-model="cbrList" multiple @change="handleCbrChange" placeholder="请选择">
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.nickName"
+                :value="item.nickName">
+              </el-option>
+            </el-select>
+            <!-- <el-input size="small" v-model="zhizuo.cbr" maxlength="20"></el-input> -->
           </div>
           <div class="zhizuo-item">
             <span>承办日期</span>
@@ -36,7 +44,7 @@
               size="small"
               placeholder="选择承办日期"
               format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd hh:mm:ss"
+              value-format="yyyy-MM-dd"
               @change="satrtTimeCgange"
               >
             </el-date-picker>
@@ -56,6 +64,7 @@
 <script>
 import { updateRenwutwo } from "@/api/renwu/renwutwo"
 import lianTemplate from './lianTemplate.vue'
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "NoLian",
@@ -75,6 +84,8 @@ export default {
         cbrq:''
       },
       zhzList:[],
+      cbrList:[],
+      userList:[]
     };
   },
   created() {
@@ -84,11 +95,15 @@ export default {
       this.zhzList = lianData
       this.zhizuo = lianData[0]
     }
+    this.getJanChacy()
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
     });
   },
   methods: {
+    handleCbrChange(){
+      this.zhizuo.cbr = this.cbrList.join(',')
+    },
      //查看案件信息
     checkLiAn(){
       this.$router.push({
@@ -122,7 +137,7 @@ export default {
       if(!(bjbr&&lxdh&&sid&&ajzy&&cbr&&cbrq)){
         this.msgError('请填完所有项目后再点保存')
         return false
-      } 
+      }
       updateRenwutwo({
         id:this.zhizuo.id,
         lian:'2',
@@ -148,6 +163,36 @@ export default {
         item.dayinstarttime = val
         return item
       })
+    },
+    async getJanChacy(){
+      try {
+        const res = await listUser({pageNum:1,pageSize: 10000})
+        if(res.code === 200 && res.rows.length) {
+          const rows = res.rows
+          if(this.zhizuo.cbr){
+            this.cbrList = this.zhizuo.cbr.split(',')
+          } else {
+            const jczId = this.zhizuo['jczid']
+            const idList = jczId?(jczId.split(',').map(id=>id*1)):[]
+            if(idList.length){
+              const targetNameList = []
+              idList.forEach(id => {
+                let target = rows.find((item)=>{
+                  return item.userId === id
+                })
+                target && (targetNameList.push(target.nickName))
+              });
+              this.cbrList = targetNameList
+              this.zhizuo.cbr = targetNameList.join(',')
+            }
+          }
+          this.userList = rows.filter(item=>{
+            return item.roleId==2 || item.roleId==4
+          })
+        }
+      } catch (error) { 
+        console.log(error)
+      }
     }
   }
 };
