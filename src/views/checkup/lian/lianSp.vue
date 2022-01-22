@@ -110,7 +110,7 @@ export default {
     lianBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
-      this.$router.back(-1)
+      this.$router.replace('/checkup/jcss/lian')
     },
     // 行政区字典翻译
     xzqFormat(row, column) {
@@ -171,7 +171,6 @@ export default {
                 target && (targetNameList.push(target.nickName))
               });
               this.cbrList = targetNameList
-              this.zhizuo.cbr = targetNameList.join(',')
             }
           }
           this.userList = rows.filter(item=>{

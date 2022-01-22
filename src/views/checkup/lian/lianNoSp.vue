@@ -11,9 +11,9 @@
             <el-radio v-model="radio" label="4">同意</el-radio>
             <el-radio v-model="radio" label="5">驳回</el-radio>
           </div>
-          <!-- <div class="mark" style="margin-right:20px"><el-input v-model="zhizuo.lianyy" type="text" size="small" ></el-input></div> -->
         </div>
-        <el-button style="float:right;margin-right:50px" type="primary" size="small" @click="submitForm">提交</el-button>
+        <div class="shenpi" style="margin-right:20px"><el-input v-model="zhizuo.lianyy" type="textarea" :rows="5"></el-input></div>
+        <el-button style="float:right" type="primary" size="small" @click="submitForm">提交</el-button>
       </div>
       <div class="zhizuo-port">
         <!-- <div class="zhizuo">
@@ -65,7 +65,7 @@ export default {
     lianBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
-      this.$router.back(-1)
+      this.$router.replace('/checkup/jcss/lian')
     },
     // 行政区字典翻译
     xzqFormat(row, column) {

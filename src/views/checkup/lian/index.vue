@@ -1,76 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <el-form class="top-search" :model="query" ref="queryForm" :inline="true"  label-width="68px">
-        <div>
-            <el-form-item label="受理编号" prop="slbh">
-              <el-input
-                v-model="query.slbh"
-                placeholder="请输入"
-                clearable
-                size="small"
-                style="width: 180px"
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="案件类型" prop="anlx">
-              <el-select v-model="query.anlx" placeholder="全部" clearable size="small" style="width: 180px">
-                <el-option
-                  v-for="dict in ajlxOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictLabel"
-                  :value="dict.dictValue"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="举报人" prop="jbr">
-              <el-input
-                v-model="query.jbr"
-                placeholder="请输入"
-                clearable
-                size="small"
-                style="width: 180px"
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="被举报人" prop="bjbr">
-              <el-input
-                v-model="query.bjbr"
-                placeholder="请输入"
-                clearable
-                size="small"
-                style="width: 180px"
-                @keyup.enter.native="handleQuery"
-              />
-            </el-form-item>
-            <el-form-item label="立案状态" prop="lian">
-              <el-select v-model="query.lian" placeholder="全部" clearable size="small" style="width: 180px">
-                <el-option
-                  v-for="dict in lianOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictLabel"
-                  :value="dict.dictValue"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="受理日期" prop="slDate">
-              <el-date-picker
-                style="width: 230px"
-                size="small"
-                v-model="query.slDate"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期">
-              </el-date-picker>
-            </el-form-item>
-        </div>
-        <div>
-          <el-form-item style="margin-right:0;text-align:right">
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </div>
-    </el-form> -->
     <SearchItem ref="searchForm" @handleQuery="handleQuery" style="height:94px;overflow:auto"/>
     <div v-loading="loading" class="table-main">
     <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
@@ -245,6 +174,7 @@ export default {
     /** 查询renwutwo列表 */
     async getList(query) {
       const params = query?{...this.queryParams,...query}:this.queryParams
+      params.status = 3
       this.loading = true
       try {
         const res = await listRenwutwo(params)

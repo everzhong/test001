@@ -1,24 +1,31 @@
 <template>
   <div class="app-container">
     <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
-      <el-button type="primary" plain size="mini" @click="checkLiAn">查看案件信息</el-button>
-      <el-button type="primary" size="mini" @click="submitForm">提交审批</el-button>
+      <!-- <el-button type="primary" plain size="mini" @click="checkLiAn">查看案件信息</el-button> -->
+      <el-button type="primary" size="mini" @click="submitForm('submit')">提交</el-button>
        <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button>
     </div>
     <div class="zhizuo-port">
         <div class="zhizuo">
           <div class="zhizuo-title">制作不予立案报告</div>
           <div class="zhizuo-item">
-            <span>被举报人</span>
-            <el-input size="small" v-model="zhizuo.bjbr"></el-input>
+            <span>单位名称（检查部门）</span>
+            <el-input size="small" v-model="zhizuo.jbr"></el-input>
           </div>
           <div class="zhizuo-item">
-            <span>联系电话</span>
+            <span>联系电话（检查部门）</span>
+            <el-input size="small" v-model="zhizuo.jcbmdh" maxlength="12"></el-input>
+          </div>
+          <div class="zhizuo-item">
+            <span>联系电话（被检查单位）</span>
             <el-input size="small" v-model="zhizuo.lxdh" maxlength="12"></el-input>
           </div>
-          <div class="zhizuo-item">
-            <span>身份证号码</span>
-            <el-input size="small" v-model="zhizuo.sid" maxlength="19"></el-input>
+          <div class="zhizuo-item" style="position:relative">
+            <span>机构代码（被检查单位）</span>
+            <el-input size="small" v-model="zhizuo.sid"></el-input>
+            <el-tooltip class="item" effect="dark" content="非部队医院为“统一社会信用代码”，部队医院为“机构代码”" placement="top">
+              <i class="el-icon-info" style="position:absolute;right:35px;font-size:18px;color:#666666;cursor:pointer;"></i>
+            </el-tooltip>
           </div>
           <div class="zhizuo-item">
             <span>案情摘要</span>
@@ -45,12 +52,11 @@
               placeholder="选择承办日期"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
-              @change="satrtTimeCgange"
-              >
+            >
             </el-date-picker>
           </div>
           <div style="text-align:right;padding:10px 60px 0 0">
-            <el-button size="mini" type="primary" @click="submitForm">保存</el-button>
+            <el-button size="mini" type="primary" @click="submitForm('save')">保存</el-button>
           </div>
         </div>
         <div :class="['pre-view']">
@@ -76,7 +82,8 @@ export default {
       // 查询参数
       xzqOptions:[],
       zhizuo:{
-        bjbr:'',
+        jbr:'',
+        jcbmdh:'',
         lxdh:'',
         sid:'',
         ajzy:'',
@@ -104,7 +111,7 @@ export default {
     handleCbrChange(){
       this.zhizuo.cbr = this.cbrList.join(',')
     },
-     //查看案件信息
+    //查看案件信息
     checkLiAn(){
       this.$router.push({
         path:'/checkup/jcss/checkaj',
@@ -117,39 +124,63 @@ export default {
     lianBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
-      this.$router.back(-1)
+      this.$router.replace('/checkup/jcss/lian')
     },
     // 行政区字典翻译
     xzqFormat(row, column) {
       return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
-    
     /** 提交按钮 */
-    submitForm() {
+    submitForm(type) {
+      let params = {}
       const {
-        bjbr,
-        lxdh,
-        sid,
-        ajzy,
-        cbr,
-        cbrq
+          id,
+          jbr,
+          jcbmdh,
+          lxdh,
+          sid,
+          ajzy,
+          cbr,
+          cbrq,
+          rwpcid,
+          jgdm
       } = this.zhizuo
-      if(!(bjbr&&lxdh&&sid&&ajzy&&cbr&&cbrq)){
+      if(!(jbr&&jcbmdh&&lxdh&&sid&&ajzy&&cbr&&cbrq)){
         this.msgError('请填完所有项目后再点保存')
         return false
       }
-      updateRenwutwo({
-        id:this.zhizuo.id,
-        lian:'2',
-        bjbr,
-        lxdh,
-        sid,
-        ajzy,
-        cbr,
-        cbrq,
-        rwpcid:this.zhizuo.rwpcid,
-        jgdm:this.zhizuo.jgdm
-      }).then(res => {
+      if(type==='save'){
+        params = {
+          id,
+          jbr,
+          jcbmdh,
+          lxdh,
+          sid,
+          ajzy,
+          cbr,
+          cbrq,
+          rwpcid,
+          jgdm
+        }
+        this.handleUpdate(params)
+      } else {
+        params = {
+          id,
+          lian:'2',
+          rwpcid,
+          jgdm
+        }
+        this.$confirm('确定提交审批？(未保存的改动不会提交)', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.handleUpdate(params)
+        }).catch(_=>{})
+      }
+    },
+    handleUpdate(params){
+       updateRenwutwo(params).then(res => {
         if(res.code===200){
           this.msgSuccess("操作成功！");
           setTimeout(()=>{
@@ -157,12 +188,6 @@ export default {
           },1000)
         }
       });
-    },
-    satrtTimeCgange(val){
-      this.zhzList = this.zhzList.map(item=>{
-        item.dayinstarttime = val
-        return item
-      })
     },
     async getJanChacy(){
       try {
@@ -183,7 +208,6 @@ export default {
                 target && (targetNameList.push(target.nickName))
               });
               this.cbrList = targetNameList
-              this.zhizuo.cbr = targetNameList.join(',')
             }
           }
           this.userList = rows.filter(item=>{
@@ -210,7 +234,7 @@ export default {
   }
   .zhizuo {
     flex-shrink: 0;
-    width:450px;
+    width:520px;
     color:#606266;
     .zhizuo-title {
       font-size: 18px;
@@ -220,8 +244,8 @@ export default {
       display: flex;
       font-size: 14px;
       align-items: center;
-      margin-bottom: 15px;
-      width: 450px;
+      margin-bottom: 8px;
+      width: 520px;
       &::v-deep .el-input__inner {
         color:#303313;
         width: 300px;
@@ -232,7 +256,7 @@ export default {
       }
       >span {
         display: block;
-        width: 88px;
+        width: 160px;
         color:#606266;
         flex-shrink: 0;
       }

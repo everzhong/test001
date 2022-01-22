@@ -51,7 +51,7 @@ export default {
     lianBack(){
       this.zhzList = []
       window.localStorage.removeItem('PRDATA')
-      this.$router.back(-1)
+      this.$router.replace('/checkup/jcss/lian')
     },
   }
 };

@@ -15,17 +15,23 @@
           </div>
           <div style="margin-bottom:20px">
             <span style="width:100%;display:inline-block;margin-bottom:20px">举报人/检查部门（单位）信息：</span>
+            <div style="padding-left:50px;margin-bottom:15px">
+              单位名称：<span style="text-align:center;display:inline-block;">{{pageData.jbr}}</span>
+            </div>
             <div style="padding-left:50px;">
-              姓名（单位名称）：<span style="text-align:center;min-width:90px;display:inline-block;border-bottom:1px solid #454545">{{pageData.jbr}}</span>，&nbsp;&nbsp;联系电话：<span style="text-align:center;min-width:120px;display:inline-block;border-bottom:1px solid #454545">{{pageData.jbrdh}}</span>
+              联系电话：<span style="text-align:center;display:inline-block;">{{pageData.jcbmdh}}</span>
             </div>
           </div>
           <div style="margin-bottom:20px">
             <span style="width:100%;display:inline-block;margin-bottom:20px">被举报人/被检查人（单位）信息：</span>
             <div style="padding-left:50px;margin-bottom:15px">
-              姓名（单位名称）：<span style="text-align:center;min-width:90px;display:inline-block;border-bottom:1px solid #454545">{{pageData.bjbr}}</span>，&nbsp;&nbsp;联系电话：<span style="text-align:center;min-width:120px;display:inline-block;border-bottom:1px solid #454545">{{pageData.lxdh}}</span>
+              单位名称：<span style="text-align:center;display:inline-block;">{{pageData.bjbr}}</span>
+            </div>
+            <div style="padding-left:50px;margin-bottom:15px">
+              联系电话：<span style="text-align:center;display:inline-block;">{{pageData.lxdh}}</span>
             </div>
             <div style="padding-left:50px;">
-              身份证号码（机构代码）：<span style="min-width:180px;display:inline-block;border-bottom:1px solid #454545">{{pageData.sid}}</span>
+              机构代码：<span style="display:inline-block">{{pageData.sid}}</span>
             </div>
           </div>
           <div style="margin-bottom:20px">
@@ -36,21 +42,21 @@
           <div>
             <div style="width:60%;display:inline-block;margin-bottom:20px"></div>
             <div style="width:40%;display:inline-block;margin-bottom:10px">
-              <p style="margin-bottom:10px">承办人（签名）：<span style="width:108px;display:inline-block;border-bottom:1px solid #454545;text-align:center">{{pageData.cbr}}</span></p>
+              <p style="margin-bottom:10px">承办人（签名）：<span style="width:108px;display:inline-block;text-align:center">{{pageData.cbr}}</span></p>
               <p style="text-align:right"><span style="display:inline-block;min-width:30px;text-align:center">{{parseTime(pageData.cbrq,'{y}')}}</span >年<span style="display:inline-block;min-width:30px;text-align:center">{{parseTime(pageData.cbrq,'{m}')}}</span>月<span style="display:inline-block;min-width:30px;text-align:center">{{parseTime(pageData.cbrq,'{d}')}}</span>日</p>
             </div>
           </div>
         </section>
       <div style="font-size:14px;border:1px solid #303313;border-top:none;padding:10px 40px 10px;">
         负责人审批意见：
-        <div style="padding-left:50px;margin-top:15px;font-size:14px;">
-          本案自<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.lianrq,'{y}')}}</span>年<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.lianrq,'{m}')}}</span>月<span style="text-align:center;min-width:60px;display:inline-block;border-bottom:1px solid #454545">{{parseTime(pageData.lianrq,'{d}')}}</span>日起立案，由<span style="text-align:center;min-width:140px;display:inline-block;border-bottom:1px solid #454545">{{pageData.cbr}}</span>承办
+        <div v-if="!noLian" style="padding-left:50px;margin-top:15px;font-size:14px;">
+          本案自<span style="text-align:center;min-width:60px;display:inline-block;padding:0 5px;border-bottom:1px solid #000">{{parseTime(pageData.cbrq,'{y}年{m}月{d}日')}}</span>起立案，由<span style="text-align:center;min-width:60px;display:inline-block;padding:0 5px;border-bottom:1px solid #000">{{pageData.cbr}}</span>承办
         </div>
+        <div v-else style="margin-top:15px">{{pageData.lianyy}}</div>
         <div style="margin-top:30px;font-size:14px;">
             <div style="width:60%;display:inline-block;margin-bottom:20px"></div>
             <div style="width:40%;display:inline-block;margin-bottom:10px">
-              <p style="margin-bottom:10px">负责人（签名）：<span style="width:108px;display:inline-block;border-bottom:1px solid #454545"></span></p>
-              <!-- <p style="text-align:right"><span style="margin-left:30px">年</span ><span style="margin-left:15px">月</span><span style="margin-left:15px">日</span></p> -->
+              <p style="margin-bottom:10px">负责人（签名）：<span style="width:108px;display:inline-block;"></span></p>
               <p style="text-align:right"><span style="display:inline-block;min-width:30px;text-align:center"></span >年<span style="display:inline-block;min-width:30px;text-align:center"></span>月<span style="display:inline-block;min-width:30px;text-align:center"></span>日</p>
             </div>
           </div>
