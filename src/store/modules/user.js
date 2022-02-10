@@ -59,7 +59,7 @@ const user = {
         LoginApi({ commit }, userInfo) {
             const uid = userInfo.uid
             return new Promise((resolve, reject) => {
-                loginApi({ uid }).then(res => {
+                loginApi(userInfo).then(res => {
                     setToken(res.token)
                     setUid(uid)
                     commit('SET_TOKEN', res.token)
