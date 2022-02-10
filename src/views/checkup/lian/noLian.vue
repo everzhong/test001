@@ -101,6 +101,8 @@ export default {
       lianData = JSON.parse(lianData)
       this.zhzList = lianData
       this.zhizuo = lianData[0]
+      this.zhizuo.jbr = '上海市医疗保障局监督检查所'
+
     }
     this.getJanChacy()
     this.getDicts("sys_job_jgxx").then(response => {

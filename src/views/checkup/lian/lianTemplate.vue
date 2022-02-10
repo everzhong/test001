@@ -16,7 +16,7 @@
           <div style="margin-bottom:20px">
             <span style="width:100%;display:inline-block;margin-bottom:20px">举报人/检查部门（单位）信息：</span>
             <div style="padding-left:50px;margin-bottom:15px">
-              单位名称：<span style="text-align:center;display:inline-block;">{{pageData.jbr}}</span>
+              单位名称：<span style="text-align:center;display:inline-block;">上海市医疗保障局监督检查所</span>
             </div>
             <div style="padding-left:50px;">
               联系电话：<span style="text-align:center;display:inline-block;">{{pageData.jcbmdh}}</span>

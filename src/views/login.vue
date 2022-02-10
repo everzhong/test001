@@ -89,18 +89,31 @@ export default {
   created() {
     this.urlQuery = this.$route.query
     this.redirect = this.$route.query.redirect||''
+    const { userToken }= this.$route.query
     const self = this
-    window.onmessage = function(e){
-      const UID = e.data['loginToken']
-      if(UID){
-        // Cookies.set("username", UID, { expires: 30 });
-        self.handlerLoginapi({uid:UID});
-      } else {
-        self.$router.push({
-          path:'/authLogin',
-        })
+    if(userToken){
+      self.handlerLoginapi({uid:'',userToken});
+    } else {
+      window.onmessage = function(e){
+        const UID = e.data['loginToken']
+        if(UID){
+          // Cookies.set("username", UID, { expires: 30 });
+          self.handlerLoginapi({uid:UID},1);
+        } else {
+          const queryStr = [];
+          for(let key in self.urlQuery) {
+            queryStr.push(`${key}=${self.urlQuery[key]}`)
+          }
+          window.parent.postMessage({
+            'loginFailed': {
+                'systemName': '第三方监管',
+                'redirectUrl': `window.location.origin/#${self.redirect}?${queryStr.join('&')}`
+            }
+          }, '*');
+        }
       }
     }
+    
   },
   methods: {
     getCode() {
@@ -119,7 +132,7 @@ export default {
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
     },
-    handlerLoginapi(info){
+    handlerLoginapi(info,flag){
       Cookies.remove('rememberMe')
       Cookies.remove('username')
       this.$store.dispatch('ClearInfo')
@@ -129,12 +142,15 @@ export default {
           // this.$store.dispatch('GetJsList');
           // this.$store.dispatch('GetYbbfList');
         }).catch(() => {
-          window.parent.postMessage({
-            'loginFailed': {
-                'systemName': '第三方监管',
-                'redirectUrl': window.location.origin + '/#/login'
-            }
-          }, '*');
+          if(flag) {
+            const redirec = window.location.origin + '/#/login'+(this.redirect?`?redirect=${this.redirect}`:'')
+            window.parent.postMessage({
+              'loginFailed': {
+                  'systemName': '第三方监管',
+                  'redirectUrl': redirec
+              }
+            }, '*');
+          }
           this.loading = false;
         });
     },
