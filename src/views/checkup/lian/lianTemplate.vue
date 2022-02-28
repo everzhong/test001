@@ -25,7 +25,7 @@
           <div style="margin-bottom:20px">
             <span style="width:100%;display:inline-block;margin-bottom:20px">被举报人/被检查人（单位）信息：</span>
             <div style="padding-left:50px;margin-bottom:15px">
-              单位名称：<span style="text-align:center;display:inline-block;">{{pageData.bjbr}}</span>
+              单位名称：<span style="text-align:center;display:inline-block;">{{pageData.jgmc}}</span>
             </div>
             <div style="padding-left:50px;margin-bottom:15px">
               联系电话：<span style="text-align:center;display:inline-block;">{{pageData.lxdh}}</span>

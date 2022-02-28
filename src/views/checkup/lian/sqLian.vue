@@ -102,6 +102,9 @@ export default {
       this.zhzList = lianData
       this.zhizuo = lianData[0]
       this.zhizuo.jbr = '上海市医疗保障局监督检查所'
+      if(!this.zhizuo.sid) {
+        this.zhizuo.sid = lianData[0].jgdm
+      }
     }
     this.getJanChacy()
     this.getDicts("sys_job_jgxx").then(response => {
@@ -134,7 +137,7 @@ export default {
     /** 提交按钮 */
     submitForm(type) {
       let params = {}
-      const {
+      let {
           id,
           jbr,
           jcbmdh,
@@ -146,6 +149,9 @@ export default {
           rwpcid,
           jgdm
       } = this.zhizuo
+      if(!cbr && this.cbrList.length){
+        cbr = this.cbrList.join(',')
+      }
       if(!(jbr&&jcbmdh&&lxdh&&sid&&ajzy&&cbr&&cbrq)){
         this.msgError('请填完所有项目后再点保存')
         return false
@@ -163,7 +169,7 @@ export default {
           rwpcid,
           jgdm
         }
-        this.handleUpdate(params)
+        this.handleUpdate(params,'save')
       } else {
         params = {
           id,
@@ -180,13 +186,15 @@ export default {
         }).catch(_=>{})
       }
     },
-    handleUpdate(params){
+    handleUpdate(params,isSave){
        updateRenwutwo(params).then(res => {
         if(res.code===200){
-          this.msgSuccess("操作成功！");
-          setTimeout(()=>{
-            this.lianBack()
-          },1000)
+          this.msgSuccess(isSave?'保存成功！':'操作成功！');
+          if(!isSave){
+            setTimeout(()=>{
+              this.lianBack()
+            },1000)
+          }
         }
       });
     },

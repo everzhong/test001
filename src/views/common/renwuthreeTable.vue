@@ -62,7 +62,10 @@ export default {
         }  
       },{
         prop: 'ajly',
-        label: '案件来源'
+        label: '案件来源',
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        }
       },{
         label: '规则来源',
         fixedWidth:55,

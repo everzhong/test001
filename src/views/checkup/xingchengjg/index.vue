@@ -56,7 +56,9 @@ export default {
         prop: 'ajly',
         label: '案件来源',
         fixedWidth:50,
-        width:'auto'
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        }
       },{
         prop: 'jcfs',
         label: '检查方式',

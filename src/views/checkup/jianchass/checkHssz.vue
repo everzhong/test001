@@ -169,11 +169,11 @@ export default {
           return this.parseTime(hssj)
         }
       },{
-        prop:'hs',
-        label:'核实状态',
-        viewFun:(hszt)=>{
-          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
-        }
+        prop: 'yy',
+        label: '有无异议',
+        viewFun:function(yy){
+          return (yy?(yy==0?'未反馈':yy==1?'有异议':yy==2?'无异议':''):'')
+        },
       },{
         prop:'hsyj',
         label:'核实意见'
@@ -261,11 +261,11 @@ export default {
           return this.parseTime(hssj)
         }
       },{
-        prop:'hs',
-        label:'核实状态',
-        viewFun:(hszt)=>{
-          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
-        }
+        prop: 'yy',
+        label: '有无异议',
+        viewFun:function(yy){
+          return (yy?(yy==0?'未反馈':yy==1?'有异议':yy==2?'无异议':''):'')
+        },
       },{
         prop:'hsr',
         label:'核实人'

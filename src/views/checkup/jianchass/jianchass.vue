@@ -55,10 +55,12 @@ export default {
         fixedWidth:60,
         prop:'jgmc'
       },{
-         label: '案件来源',
+        label: '案件来源',
         fixedWidth:50,
         prop:'ajly',
-        width:'auto'
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        },
       },{
         label:"检查方式",
         prop:'jcfs',

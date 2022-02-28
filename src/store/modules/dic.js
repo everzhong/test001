@@ -6,6 +6,7 @@ const user = {
         jslbOptions: [], //就医类型
         ybbfOptions: [], //险种
         jsdjOptions: [], //结算等级
+        ajlyOptions: [], //案件来源
     },
 
     mutations: {
@@ -20,6 +21,9 @@ const user = {
         },
         SET_JSDJOPTIONS: (state, list) => {
             state.jsdjOptions = list
+        },
+        SET_AJLYOPTIONS: (state, list) => {
+            state.ajlyOptions = list
         }
     },
 
@@ -58,6 +62,16 @@ const user = {
             return new Promise((resolve, reject) => {
                 getDicts("renwu_ss_jgdj").then(res => {
                     commit('SET_JSDJOPTIONS', res.data)
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                });
+            })
+        },
+        GetAjlyList({ commit }, userInfo) {
+            return new Promise((resolve, reject) => {
+                getDicts("sys_renwu_ajly").then(res => {
+                    commit('SET_AJLYOPTIONS', res.data)
                     resolve()
                 }).catch(error => {
                     reject(error)

@@ -41,7 +41,10 @@ export default {
       },{
          label: '案件来源',
         fixedWidth:50,
-        prop:'ajly'
+        prop:'ajly',
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        }
       },{
         label:"检查方式",
         prop:'jcfs',

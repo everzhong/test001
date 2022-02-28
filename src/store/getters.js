@@ -20,6 +20,8 @@ const getters = {
     fyDic: state => state.dic.fylbOptions,
     jslbDic: state => state.dic.jslbOptions,
     ybbfDic: state => state.dic.ybbfOptions,
-    jsdjDic: state => state.dic.jsdjOptions
+    jsdjDic: state => state.dic.jsdjOptions,
+    ajlyDic: state => state.dic.ajlyOptions
+
 }
 export default getters

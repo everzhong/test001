@@ -51,7 +51,9 @@ export default {
          label: '案件来源',
         fixedWidth:50,
         prop:'ajly',
-        width:'auto'
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        }
       },{
         prop: 'jsdj',
         label: '结算等级',

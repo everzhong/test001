@@ -38,6 +38,8 @@ router.beforeEach((to, from, next) => {
                         store.dispatch('GetJsList');
                         store.dispatch('GetYbbfList');
                         store.dispatch('GetJsdjList');
+                        store.dispatch('GetAjlyList');
+
                     })
                 }).catch(err => {
                     store.dispatch('LogOut').then(() => {

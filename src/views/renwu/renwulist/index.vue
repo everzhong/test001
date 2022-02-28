@@ -101,7 +101,10 @@ export default {
       },{
         prop: 'ajly',
         label: '案件来源',
-        fixedWidth:55
+        fixedWidth:55,
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        }
       },{
         prop: 'datastarttime',
         label: '数据开始日期',
