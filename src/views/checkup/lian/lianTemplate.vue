@@ -11,7 +11,7 @@
             <span style="width:40%;display:inline-block;text-align:right">受理时间：<span style="margin:0 5px 0 0;">{{parseTime(pageData.lianrq,'{y}')}}</span>年<span style="margin:0 8px">{{parseTime(pageData.lianrq,'{m}')}}</span>月<span style="margin:0 8px">{{parseTime(pageData.lianrq,'{d}')}}</span>日</span>
           </div>
           <div style="margin-bottom:20px">
-            <span style="width:100%;display:inline-block">案件来源：{{pageData.ajly}}</span>
+            <span style="width:100%;display:inline-block">案件来源：{{selectDictLabels($store.getters.ajlyDic, pageData.ajly)}}</span>
           </div>
           <div style="margin-bottom:20px">
             <span style="width:100%;display:inline-block;margin-bottom:20px">举报人/检查部门（单位）信息：</span>

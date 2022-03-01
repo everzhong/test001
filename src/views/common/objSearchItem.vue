@@ -13,15 +13,15 @@
           />
         </el-form-item>
         <el-form-item label="案件来源" prop="ajly">
-          <el-input v-model="query.ajly" clearable size="small" style="width: 180px"></el-input>
-          <!-- <el-select v-model="query.ajly" placeholder="全部" clearable size="small" style="width: 180px">
+          <!-- <el-input v-model="query.ajly" clearable size="small" style="width: 180px"></el-input> -->
+          <el-select v-model="query.ajly" placeholder="" clearable size="small" style="width: 180px">
             <el-option
-              v-for="dict in ajlyOptions"
+              v-for="dict in $store.getters.ajlyDic"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
             />
-          </el-select> -->
+          </el-select>
         </el-form-item>
         <el-form-item label="险种" prop="ybbf">
           <el-select v-model="query.ybbf" placeholder="全部" clearable size="small" style="width: 180px">

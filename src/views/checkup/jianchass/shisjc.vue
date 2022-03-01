@@ -3,7 +3,7 @@
     <section v-show="!heshiOption.show" >
       <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true">
             <el-form-item label="案件来源" prop="ajly">
-              <el-input readonly v-model="queryInfoFrom.ajly"></el-input>
+              <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
             </el-form-item>
             <el-form-item label="险种" prop="ybbf">
               <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
