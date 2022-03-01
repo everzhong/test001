@@ -267,6 +267,14 @@ export default {
         if(res.code===200) {
           this.msgSuccess('保存成功')
           this.getList()
+          this.addJcfl({
+            jglc:'调查取证',
+            gjxx:`检查笔录`,
+            rwpcid:params.rwpcid,
+            jgdm:params.jgdm,
+            zhczr:this.$store.getters.name,
+            sort:9
+          })
         }
       } catch (error) {
         console.log(error)

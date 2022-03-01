@@ -246,7 +246,7 @@ export default {
             this.selectionList.forEach(item=>{
               this.addJcfl({
                 jglc:'实施网审',
-                gjxx:`实施批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+                gjxx:`网审意见：${this.submitParams.wsyj}；网审人员：${this.submitParams.wsry}`,
                 rwpcid:item.rwpcid,
                 jgdm:item.jgdm,
                 zhczr:this.$store.getters.name,

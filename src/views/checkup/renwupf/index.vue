@@ -137,7 +137,7 @@ export default {
           this.selection.forEach(item=>{
             this.addJcfl({
               jglc:'任务派发',
-              gjxx:`派发任务到 ${xiaozu.deptName} 检查组，成员：${nameList.join(',')}`,
+              gjxx:`承办部门： ${xiaozu.deptName}`,
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,

@@ -173,7 +173,7 @@ export default {
       } else {
         params = {
           id,
-          lian:'2',
+          lian:'1',
           rwpcid,
           jgdm
         }

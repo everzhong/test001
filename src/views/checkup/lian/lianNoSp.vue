@@ -94,6 +94,14 @@ export default {
       }).then(res => {
         if(res.code===200){
           this.msgSuccess("操作成功！");
+          this.addJcfl({
+              jglc:'申请不予立案',
+              gjxx:`不予立案`,
+              rwpcid:this.zhizuo.rwpcid,
+              jgdm:this.zhizuo.jgdm,
+              zhczr:this.$store.getters.name,
+              sort:8
+            })
           setTimeout(()=>{
             this.lianBack()
           },1000)

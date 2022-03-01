@@ -380,8 +380,8 @@ export default {
         this.msgSuccess("操作成功")
         this.selectionList.forEach(item=>{
           this.addJcfl({
-            jglc:'提交网审',
-            gjxx:`提交批号为${item.rwpcid}机构代码为${item.jgdm}的网审`,
+            jglc:'网审分工',
+            gjxx:``,
             rwpcid:item.rwpcid,
             jgdm:item.jgdm,
             zhczr:this.$store.getters.name,

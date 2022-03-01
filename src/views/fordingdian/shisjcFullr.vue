@@ -448,7 +448,7 @@ export default {
           this.getList()
           this.addJcfl({
             jglc:'检查实施',
-            gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+            gjxx:`发现问题`,
             rwpcid:this.queryInfoFrom.rwpcid,
             jgdm:this.queryInfoFrom.jgdm,
             zhczr:this.$store.getters.name,

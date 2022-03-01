@@ -90,8 +90,7 @@
           <template slot-scope="scope">
             <el-button
               v-if="
-                [1, 7, 8].indexOf(scope.row.sort * 1) > -1 ||
-                (scope.row.sort == 6 && queryInfoFrom.isdayin == 1)
+                [1,7,6,8,9,10].indexOf(scope.row.sort * 1) > -1
               "
               size="mini"
               type="text"
@@ -218,7 +217,7 @@ export default {
           },
           () => {}
         );
-      } else if (sort == 6) {
+      } else if (sort == 6) {//打印通知
         window.localStorage.setItem(
           "PRDATA",
           JSON.stringify([this.queryInfoFrom])
@@ -229,7 +228,7 @@ export default {
           },
           () => {}
         );
-      } else if (sort == 7) {
+      } else if (sort == 7) {//检查实施
         this.$router.push(
           {
             path: "/checkup/jcss/shisjc",
@@ -237,10 +236,27 @@ export default {
           },
           () => {}
         );
-      } else if (sort == 8) {
+      } else if (sort == 10) {//形成结果
         this.$router.push(
           {
             path: "/checkup/chubujieguo",
+            query: { ...this.queryInfoFrom, fromLuli: 1 },
+          },
+          () => {}
+        );
+      }  else if (sort == 8) {//立案、不予立案
+       window.localStorage.setItem('LADATA',JSON.stringify(this.queryInfoFrom))
+        this.$router.push(
+          {
+            path: "/checkup/jcss/prlian",
+            query: { ...this.queryInfoFrom, fromLuli: 1 },
+          },
+          () => {}
+        );
+      } else if (sort == 9) {//调查取证
+        this.$router.push(
+          {
+            path: "/checkup/jcss/dcqz",
             query: { ...this.queryInfoFrom, fromLuli: 1 },
           },
           () => {}

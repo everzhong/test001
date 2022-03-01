@@ -245,7 +245,7 @@ export default {
         this.selectionList.forEach(item=>{
             this.addJcfl({
               jglc:'对象确定',
-              gjxx:`对象确定 ${params.status?'同意':'驳回'}：批号为${item.rwpcid}机构代码为${item.jgdm}`,
+              gjxx:`确定意见:${params.status?'同意':'驳回'}`,
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,

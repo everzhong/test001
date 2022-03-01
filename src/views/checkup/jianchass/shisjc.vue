@@ -573,7 +573,8 @@ export default {
           })
           this.addJcfl({
             jglc:'数据筛查',
-            gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
+            gjxx:``,
+            // gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
             rwpcid:rwpcid,
             jgdm:jgdm,
             zhczr:this.$store.getters.name,
@@ -602,7 +603,7 @@ export default {
           this.getList()
           this.addJcfl({
             jglc:'检查实施',
-            gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+            gjxx:`发现问题`,
             rwpcid:this.queryInfoFrom.rwpcid,
             jgdm:this.queryInfoFrom.jgdm,
             zhczr:this.$store.getters.name,
@@ -668,8 +669,8 @@ export default {
         this.msgError('请选择盘库期初和盘库期末时间')
         return   
       }
-      const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-      if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
+      const mxxmbjsfy = this.selectionList[0].mxxmbjsfy*1
+      if(this.xwrdForm.wgfy*1>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
         this.msgError('违规费用不能大于明细项目医保结算金额')
         return
       }

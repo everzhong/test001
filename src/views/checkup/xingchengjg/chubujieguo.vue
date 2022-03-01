@@ -185,12 +185,13 @@ export default {
           this.$router.back(-1)
         },500)
         this.addJcfl({
-          jglc:'初步形成结果',
-          gjxx:`初步形成结果 ${params.status===5?'提交':'退回'}：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+          jglc:'形成结果',
+          // gjxx:`形成结果 ${params.status===5?'提交':'退回'}：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+          gjxx:``,
           rwpcid:this.queryInfoFrom.rwpcid,
           jgdm:this.queryInfoFrom.jgdm,
           zhczr:this.$store.getters.name,
-          sort:8
+          sort:10
         })
       })
     },
