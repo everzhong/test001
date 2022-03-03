@@ -627,8 +627,9 @@ export default {
         this.msgError('请选择盘库期初和盘库期末时间')
         return   
       }
-      const mxxmbjsfy = this.tabsValue==='four'?this.selectionList[0].mxxmbjsfy:this.selectionList[0].mxxmybjsfy
-      if(this.xwrdForm.wgfy>mxxmbjsfy && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
+      const mxxmbjsfy = this.selectionList[0]?.mxxmbjsfy||0
+      const wgfy = this.xwrdForm?.wgfy||0
+      if(wgfy*1>mxxmbjsfy*1 && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
         this.msgError('违规费用不能大于明细项目医保结算金额')
         return
       }
