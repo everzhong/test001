@@ -491,9 +491,11 @@ export default {
       console.log(val)
     },
     doCheck(row){
+      const query = {...row}
+      delete query.params 
       this.$router.push({
         path:'/zhgl/lulidetail',
-        query:{...row}
+        query: query
       },()=>{})
     }
   }

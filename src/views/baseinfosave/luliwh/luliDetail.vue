@@ -61,31 +61,6 @@
     <div class="table-main" v-loading="loading">
       <sTable :data="jcflList" :header="tableHeader" :fixedNum="1">
         <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
-        <el-table-column
-          label="监管流程"
-          align="center"
-          prop="jglc"
-          :width="flexColumnWidth('jglc', jcflList)"
-        />
-        <el-table-column
-          label="关键信息"
-          align="center"
-          prop="gjxx"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          label="最新操作人"
-          align="center"
-          prop="zhczr"
-          :width="flexColumnWidth('zhczr', jcflList)"
-        />
-        <el-table-column
-          label="最新操作时间"
-          align="center"
-          prop="zhczsj"
-          show-overflow-tooltip
-          width="300"
-        ></el-table-column>
         <el-table-column label="操作" align="center" width="150" slot="operate">
           <template slot-scope="scope">
             <el-button
@@ -133,7 +108,9 @@ export default {
       },{
         prop: 'gjxx',
         label: '关键信息',
-        width:'auto',
+        viewFun:(gjxx)=>{
+          return gjxx
+        },
       },{
         prop: 'zhczr',
         label: '最新操作人',
@@ -245,7 +222,7 @@ export default {
           () => {}
         );
       }  else if (sort == 8) {//立案、不予立案
-       window.localStorage.setItem('LADATA',JSON.stringify(this.queryInfoFrom))
+       window.localStorage.setItem('LADATA',JSON.stringify([this.queryInfoFrom]))
         this.$router.push(
           {
             path: "/checkup/jcss/prlian",
@@ -254,10 +231,12 @@ export default {
           () => {}
         );
       } else if (sort == 9) {//调查取证
+        const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczname,jcjg,jsdj,gjxx }  = this.queryInfoFrom //关键信息
+        const tabkey = tabkey?(gjxx.indexOf('证据')>-1?'1':gjxx.indexOf('检查')>-1?'2':gjxx.indexOf('询问')>-1?'3':''):''
         this.$router.push(
           {
             path: "/checkup/jcss/dcqz",
-            query: { ...this.queryInfoFrom, fromLuli: 1 },
+            query: { jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczname,jcjg,jsdj,tabkey, fromLuli: 1},
           },
           () => {}
         );

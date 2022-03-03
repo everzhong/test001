@@ -127,7 +127,7 @@ export default {
           this.getList()
           this.addJcfl({
             jglc:'调查取证',
-            gjxx:`证据资料`,
+            gjxx:`上传证据资料`,
             rwpcid:this.$route.query.rwpcid,
             jgdm:this.$route.query.jgdm,
             zhczr:this.$store.getters.name,

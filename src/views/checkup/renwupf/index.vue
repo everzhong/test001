@@ -125,6 +125,24 @@ export default {
         nameList = jczlist.map(item=>item.nickName)
         userNameList = jczlist.map(item=>item.userName)
       }
+      const zfrymc = nameList?nameList.join(','):''
+      const zfrygh = userNameList?userNameList.join(','):''
+
+      this.selection.forEach(item=>{
+        this.addJcfl({
+          sort:5,
+          jglc:'任务派发',
+          gjxx:`承办部门： ${xiaozu.deptName}`,
+          rwpcid:item.rwpcid,
+          jgdm:item.jgdm,
+          zhczr:this.$store.getters.name,
+          xydm:item.xydm,
+          jgmc:item.jgmc,
+          zfbmmc:xiaozu.deptName,
+          zfrymc,
+          zfrygh,
+        })
+      })
       submitJcz({
         ids:this.ids,
         jczid:userIdList.join(','),
@@ -134,21 +152,21 @@ export default {
         if(res.code===200){
           this.msgSuccess('派发成功')
           this.getList()
-          this.selection.forEach(item=>{
-            this.addJcfl({
-              jglc:'任务派发',
-              gjxx:`承办部门： ${xiaozu.deptName}`,
-              rwpcid:item.rwpcid,
-              jgdm:item.jgdm,
-              zhczr:this.$store.getters.name,
-              xydm:item.xydm,
-              jgmc:item.jgmc,
-              sort:5,
-              zfbmmc:xiaozu.deptName,
-              zfrymc:nameList.join(','),
-              zfrygh:userNameList.join(',')
-            })
-          })
+          // this.selection.forEach(item=>{
+          //   this.addJcfl({
+          //     jglc:'任务派发',
+          //     gjxx:`承办部门： ${xiaozu.deptName}`,
+          //     rwpcid:item.rwpcid,
+          //     jgdm:item.jgdm,
+          //     zhczr:this.$store.getters.name,
+          //     xydm:item.xydm,
+          //     jgmc:item.jgmc,
+          //     sort:5,
+          //     zfbmmc:xiaozu.deptName,
+          //     zfrymc:nameList.join(','),
+          //     zfrygh:userNameList.join(',')
+          //   })
+          // })
         } else {
           this.msgError('派发失败')
         }

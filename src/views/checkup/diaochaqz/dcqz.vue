@@ -84,6 +84,7 @@ export default {
       this.jsdjOptions = response.data;
     });
     this.queryInfoFrom = this.$route.query
+    this.tabsValue = this.$route.query.tabKey || '1'
   },
 };
 </script>
