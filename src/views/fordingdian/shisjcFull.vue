@@ -531,7 +531,7 @@ export default {
           })
           this.addJcfl({
             jglc:'数据筛查',
-            gjxx:`提交批号为${rwpcid}机构代码为${jgdm}的第三方筛查`,
+            gjxx:``,
             rwpcid:rwpcid,
             jgdm:jgdm,
             zhczr:this.$store.getters.name,

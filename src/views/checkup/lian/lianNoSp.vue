@@ -44,7 +44,7 @@ export default {
       xzqOptions:[],
       zhizuo:{
         lianrq:'',
-        // lianyy:'',
+        lianyy:'',
         cbr:'',
       },
       zhzList:[],
@@ -88,7 +88,7 @@ export default {
       updateRenwutwo({
         id:this.zhizuo.id,
         lian:this.radio,
-        // lianyy:this.zhizuo.lianyy,
+        lianyy:this.zhizuo.lianyy,
         rwpcid:this.zhizuo.rwpcid,
         jgdm:this.zhizuo.jgdm
       }).then(res => {

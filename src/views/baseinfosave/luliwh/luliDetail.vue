@@ -109,7 +109,7 @@ export default {
         prop: 'gjxx',
         label: '关键信息',
         viewFun:(gjxx)=>{
-          return gjxx
+          return ['上传证据资料','检查笔录','询问笔录'].indexOf(gjxx)>-1?'':gjxx
         },
       },{
         prop: 'zhczr',
@@ -222,14 +222,16 @@ export default {
           () => {}
         );
       }  else if (sort == 8) {//立案、不予立案
-       window.localStorage.setItem('LADATA',JSON.stringify([this.queryInfoFrom]))
-        this.$router.push(
-          {
-            path: "/checkup/jcss/prlian",
-            query: { ...this.queryInfoFrom, fromLuli: 1 },
-          },
-          () => {}
-        );
+        const ladata = {...this.queryInfoFrom}
+        ladata.lian = this.queryInfoFrom.gjxx=='已立案'?3:4
+        window.localStorage.setItem('LADATA',JSON.stringify([ladata]))
+          this.$router.push(
+            {
+              path: "/checkup/jcss/prlian",
+              query: { ...this.queryInfoFrom, fromLuli: 1 },
+            },
+            () => {}
+          );
       } else if (sort == 9) {//调查取证
         const {jgdm,rwpcid,ybbf,jslb,datastarttime,dataendtime,jgmc,jczname,jcjg,jsdj,gjxx }  = this.queryInfoFrom //关键信息
         const tabkey = tabkey?(gjxx.indexOf('证据')>-1?'1':gjxx.indexOf('检查')>-1?'2':gjxx.indexOf('询问')>-1?'3':''):''

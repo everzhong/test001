@@ -54,7 +54,7 @@
     <div v-if="viewTableObj.show" class="table-main">
       <ViewTable :options="viewTableObj.options"/>
     </div>
-    <el-form inline style="margin-top:30px" v-if="!viewTableObj.show">
+    <el-form inline style="margin-top:30px" v-if="!viewTableObj.show && !queryInfoFrom.fromLuli">
       <el-form-item label="复核意见：" style="margin-right:50px">
         <el-radio v-model="status" label="5">同意</el-radio>
         <el-radio v-model="status" label="3">驳回</el-radio>
@@ -125,7 +125,6 @@ export default {
       this.viewTableObj.show = true
     },
     saveDxqd(){
-      console.log(this.$store.getters)
       if(!this.status){
         this.msgError('请选择复核意见')
         return false
@@ -192,6 +191,14 @@ export default {
           jgdm:this.queryInfoFrom.jgdm,
           zhczr:this.$store.getters.name,
           sort:10
+        })
+        this.addJcfl({
+          jglc:'结果复核',
+          gjxx:`复核意见：${this.status==5?'提交':'退回'}；具体说明：${this.qdbh}`,
+          rwpcid:this.queryInfoFrom.rwpcid,
+          jgdm:this.queryInfoFrom.jgdm,
+          zhczr:this.$store.getters.name,
+          sort:11
         })
       })
     },
