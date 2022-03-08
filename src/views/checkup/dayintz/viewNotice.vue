@@ -5,7 +5,7 @@
     </div>
     <div class="zhizuo-port">
         <div class="zhizuo">
-          <el-table v-if="zhzList.length>1" :data="zhzList" border style="margin-bottom:10px">
+          <el-table v-if="zhzList.length>1 && !$route.query.fromLuli" :data="zhzList" border style="margin-bottom:10px">
             <el-table-column label="机构代码" prop="jgdm" align="center" :width="flexColumnWidth('jgdm',zhzList)"></el-table-column>
             <el-table-column label="机构名称" prop="jgmc" align="center" :width="flexColumnWidth('jgmc',zhzList)"></el-table-column>
             <el-table-column label="行政区" align="center" prop="xzq" :formatter="xzqFormat"  show-overflow-tooltip/>
@@ -80,6 +80,7 @@
 </template> 
 
 <script>
+import { listRenwutwo } from "@/api/renwu/renwutwo"
 import SingleNotice from './singleNotice.vue'
 import JcNotice from './jcNotice.vue'
 import JlNotice from './jlNotice.vue'
@@ -107,13 +108,17 @@ export default {
     };
   },
   created() {
-    let printData = localStorage.getItem('PRDATA')
-    if(printData){
-      printData = JSON.parse(printData)
-      this.zhzList = printData
-      //不管批量还是单个，首先默认编辑的都是第一份
-      this.zhizuo = printData[0]
-      this.ids = printData.map(item => item.id)
+    if(this.$route.query.fromLuli){
+      this.getList()
+    } else {
+      let printData = localStorage.getItem('PRDATA')
+      if(printData){
+        printData = JSON.parse(printData)
+        this.zhzList = printData
+        //不管批量还是单个，首先默认编辑的都是第一份
+        this.zhizuo = printData[0]
+        this.ids = printData.map(item => item.id)
+      }
     }
     this.getDicts("sys_job_jgxx").then(response => {
       this.xzqOptions = response.data;
@@ -179,7 +184,25 @@ export default {
     xzqFormat(row, column) {
       return this.selectDictLabels(this.xzqOptions, row.xzq);
     },
-    
+    async getList(){
+      const {jgdm,rwpcid} =  this.$route.query
+      this.loading = true
+      try {
+        const res = await listRenwutwo({
+          jgdm:jgdm||'',
+          rwpcid:rwpcid||'',
+          ...this.queryParams
+        })
+        if(res.code==200) {
+          this.zhzList = res.rows[0]
+          this.zhizuo = res.rows[0]
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
+
+    }
   }
 };
 </script>

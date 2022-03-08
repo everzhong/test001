@@ -447,7 +447,7 @@ export default {
     checkLog(row,type){
       this.logOption.type = type
       this.logOption.rwpcid = row.rwpcid
-      this.logOption.fid = row.fid
+      this.logOption.id = row.id
       this.logOption.xwrd = row.xwrd
       this.logOption.show = true
     },

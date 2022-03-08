@@ -62,8 +62,8 @@ export default {
     async getList(){
       try {
         this.logLoading = true
-        const {rwpcid,fid,type,xwrd} = this.options
-        const params = {...this.queryParams,rwpcid,fid,type,xwrd}
+        const {rwpcid,id} = this.options
+        const params = {...this.queryParams,fid:id}
         const res  = await getRending(params)
         if(res.code==200) {
           this.total = res.total

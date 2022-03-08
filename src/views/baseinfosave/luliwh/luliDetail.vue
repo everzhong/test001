@@ -195,13 +195,11 @@ export default {
           () => {}
         );
       } else if (sort == 6) {//打印通知
-        window.localStorage.setItem(
-          "PRDATA",
-          JSON.stringify([this.queryInfoFrom])
-        );
+      const {rwpcid,jgdm,jgmc} = this.queryInfoFrom
         this.$router.push(
           {
             path: "/checkup/viewNotice",
+            query:{rwpcid,jgdm,jgmc,fromLuli: 1}
           },
           () => {}
         );

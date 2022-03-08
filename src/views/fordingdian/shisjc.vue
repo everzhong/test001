@@ -325,7 +325,8 @@ export default {
       logOption:{
         show:false,
         xwrd:'',
-        type:''
+        type:'',
+        id:''
       },
       lsh:'',//第四层的参数，查询同流水号明细需要用到
       mxxmbm:'',//第四层的参数，查询同流水号明细需要用到
@@ -511,7 +512,7 @@ export default {
     checkLog(row,type){
       this.logOption.type = type
       this.logOption.rwpcid = row.rwpcid
-      this.logOption.fid = row.fid
+      this.logOption.id = row.id
       this.logOption.xwrd = row.xwrd
       this.logOption.show = true
     },

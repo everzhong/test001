@@ -123,13 +123,13 @@
             <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+            <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
             <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
               <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
             </el-tooltip>
           </el-form-item>
           <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
+            <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
           </el-form-item>
           <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
             <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
@@ -446,7 +446,8 @@ export default {
       logOption:{
         show:false,
         xwrd:'',
-        type:''
+        type:'',
+        id:''
       },
       lsh:'',//第四层的参数，查询同流水号明细需要用到
       mxxmbm:'',//第四层的参数，查询同流水号明细需要用到
@@ -603,7 +604,7 @@ export default {
           this.getList()
           this.addJcfl({
             jglc:'检查实施',
-            gjxx:`发现问题`,
+            gjxx:`检查完成`,
             rwpcid:this.queryInfoFrom.rwpcid,
             jgdm:this.queryInfoFrom.jgdm,
             zhczr:this.$store.getters.name,
@@ -873,7 +874,7 @@ export default {
     checkLog(row,type){
       this.logOption.type = type
       this.logOption.rwpcid = row.rwpcid
-      this.logOption.fid = row.fid
+      this.logOption.id = row.id
       this.logOption.xwrd = row.xwrd
       this.logOption.show = true
     },

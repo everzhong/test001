@@ -169,30 +169,27 @@ export default {
       let selectRoleList = this.gridData.filter(item => {//9也是除2个监管机构的人之外需要随机选择的人
         return item.roleId == 9
       })
+
       let selected = []
       let otherObj = []
       if(!jgRoleList || jgRoleList.length==0){
         otherObj = this.randomObj(selectRoleList,this.randomCount*1)
       }else if(jgRoleList.length>2){
         selected = this.randomObj(jgRoleList,2)
-        jgRoleList.forEach(item=>{
-          const hasInjg = selected.filter(subItem=>{
-            return item.userId !== subItem.userId
-          })
-          if(hasInjg && hasInjg.length){//把roleId=4剩下未选择的人员添加到roleId=9列表中，一起作为剩余随机选择的列表
-            selectRoleList.push(item)
-          }
+        const left = jgRoleList.concat(selected).filter(function(v, i, arr) {
+            return arr.indexOf(v) === arr.lastIndexOf(v);
         })
+        selectRoleList = [...selectRoleList,...left]//把roleId=4剩下未选择的人员添加到roleId=9列表中，一起作为剩余随机选择的列表
         otherObj = this.randomObj(selectRoleList,this.randomCount*1-selected.length)//剩下随机人员从roleId=9里面取
       } else {
         selected = jgRoleList
         otherObj = this.randomObj(selectRoleList,this.randomCount*1-selected.length)//剩下随机人员从roleId=9里面取
       }
-      selected = selected.concat(otherObj)
+      selected = [...selected,...otherObj]
       this.$refs.multipleTable.clearSelection()
       selected.forEach(element => {
         const tIdx = this.gridData.findIndex(data => {
-          return data.roleId === element.roleId && data.userId === element.userId
+          return data.roleId == element.roleId && data.userId == element.userId
         })
         this.$refs.multipleTable.toggleRowSelection(this.gridData[tIdx])
       })
@@ -212,9 +209,9 @@ export default {
     async getJanChacy(){
       try {
         const res = await listUser({pageNum:1,pageSize: 10000})
-      if(res.code === 200) {
-        this.gridData = res.rows
-      }
+        if(res.code === 200) {
+          this.gridData = res.rows
+        }
       } catch (error) { 
         console.log(error)
       }

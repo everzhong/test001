@@ -560,8 +560,8 @@ export default {
           this.getList()
           this.addJcfl({
             jglc:'检查实施',
-            // gjxx:`发现问题：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
-            gjxx:`发现问题`,
+            // gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+            gjxx:`检查完成`,
             rwpcid:this.queryInfoFrom.rwpcid,
             jgdm:this.queryInfoFrom.jgdm,
             zhczr:this.$store.getters.name,
@@ -806,7 +806,7 @@ export default {
     checkLog(row,type){
       this.logOption.type = type
       this.logOption.rwpcid = row.rwpcid
-      this.logOption.fid = row.fid
+      this.logOption.id = row.id
       this.logOption.xwrd = row.xwrd
       this.logOption.show = true
     },
