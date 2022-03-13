@@ -268,7 +268,7 @@ export function flexColumnWidth(str, tableData, flag = 'max') {
  */
 
 export function formatMoney(value, num) {
-    if (value === null || value === undefined) {
+    if (value === null || value === undefined || value === 'null' || value === 'undefined' || value === '') {
         return ''
     }
     num = num > 0 && num <= 20 ? num : 2;

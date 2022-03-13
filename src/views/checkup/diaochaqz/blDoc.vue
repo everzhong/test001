@@ -1,6 +1,6 @@
 <template>
   <div id="jcbl" style="width:655px;padding:0;margin-left:32px;margin:auto">
-    <h1 style="margin:0 0 12px 0;font-size:18px;font-weight:normal;text-align:center">上海市医疗保险监督检查所{{pageData.dcjg?`/${pageData.dcjg}`:''}}</h1>
+    <h1 style="margin:0 0 12px 0;font-size:18px;font-weight:normal;text-align:center">上海市医疗保障局监督检查所{{pageData.dcjg?`/${pageData.dcjg}`:''}}</h1>
     <p style="font-size:14px;text-align:center;letter-spacing:5px">行政执法文书</p>
     <div style="text-align:right;font-size: 12px;margin-bottom: 10px;margin-right: 10px;margin-top: 10px;">
       第<span style="padding:0 8px"></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span style="padding:0 8px"></span>页</div>
@@ -18,7 +18,7 @@
       <br/>
       <br/>
       <div style="text-indent:2em;letter-spacing:2px;margin-top:10px;margin-bottom:40px;text-align:justify;line-height: 28px;">
-        我们（至少2人）是上海市医疗保险监督检查所的行政执法人员，负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;"> {{pageData.z1}} </span>进行检查。
+        我们（至少2人）是上海市医疗保障局监督检查所的行政执法人员，负责辖区内的医疗保障行政执法工作，这是我们的执法证件，现对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;"> {{pageData.z1}} </span>进行检查。
       <br/>检查情况：{{pageData.z2}}</div>
       <br/>
       <div style="margin-bottom:40px;padding-right:90px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;"><span>被检查人（被检查单位）（签名）：</span><span>见证人（签名）：</span></div>

@@ -37,10 +37,10 @@ export default {
     return {
       tableHeader:[{
         label:"状态",
-        prop:"status",
+        prop:"istui",
         width:'140px',
-        viewFun:()=>{
-          return '待检查实施'
+        viewFun:(istui)=>{
+          return istui&&istui==1?'待检查/法核退回':'待检查实施'
         }
       },{
         label: '批次号',

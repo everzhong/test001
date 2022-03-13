@@ -144,3 +144,12 @@ export function listXmbm(query) {
         params: query
     })
 }
+
+// 点形成结果金额进去的查询列表
+export function listXcjg(query) {
+    return request({
+        url: '/renwu/renwufour/listxcjg',
+        method: 'get',
+        params: query
+    })
+}

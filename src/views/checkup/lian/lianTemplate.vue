@@ -1,7 +1,7 @@
 <template>
   <section>
     <div id="printJc" class="print-area" ref="printJc" style="width:635px;padding:0px;flex-shrink:0;margin-bottom:15px">
-      <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所</h1>
+      <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保障局监督检查所</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <div style="text-align:right;font-size:12px;margin-bottom:10px;margin-right:10px;margin-top:10px;">沪/医保案立{{pageData.slbh}}号</div>
         <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">

@@ -18,7 +18,7 @@
       <div style="line-height:36px;margin-left:16px;">记录人：{{pageData.upman}}</div>
       <br/>
       <p style="text-indent:2em;letter-spacing:2px;margin-top:10px;margin-bottom:40px;text-align:justify;line-height: 28px;">
-        告知（宣读）：我们是上海市医疗保险监督检查所的行政执法人员{{pageData.dcjg?`/${pageData.dcjg}`:''}}，这是我们的执法证件，现在对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;">{{pageData.z1}}</span>之事进行调查。你享有以下权利：执法人员少于两人或执法证件与身份不符的，有权拒绝调查询问；同时你应承担以下义务：如实提供有关材料、回答询问，不得拒绝、阻挠调查。请你配合我们。
+        告知（宣读）：我们是上海市医疗保障局监督检查所的行政执法人员{{pageData.dcjg?`/${pageData.dcjg}`:''}}，这是我们的执法证件，现在对<span style="display:inline-block;text-indent:0;min-width:80px;border-bottom:1px solid #333;padding:0;margin:0 5px;">{{pageData.z1}}</span>之事进行调查。你享有以下权利：执法人员少于两人或执法证件与身份不符的，有权拒绝调查询问；同时你应承担以下义务：如实提供有关材料、回答询问，不得拒绝、阻挠调查。请你配合我们。
       <br>询问内容：{{pageData.z2}}
       </p>
       <br/>

@@ -1,7 +1,7 @@
 <template>
   <section id="jlNotice">
     <div class="print-area" ref="printJl" style="width:635px;padding:0px;flex-shrink:0">
-      <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保险监督检查所</h1>
+      <h1 style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 15px">上海市医疗保障局监督检查所</h1>
       <p style="font-size: 14px;text-align: center;letter-spacing: 5px;margin-bottom: 10px;">行政执法文书</p>
       <section style="padding: 20px 40px;font-size: 14px;border: 1px solid #303313;">
         <div style="font-weight: 600;font-size: 16px;text-align: center;margin-bottom: 30px;">监督检查纪律告知书</div>
@@ -26,7 +26,7 @@
           联系电话：{{pageData.dayinphone}}
         </div>
         <div style="text-align:right;margin-bottom:30px">
-          <p style="text-align:right;margin-bottom:10px">上海市医疗保险监督检查所</p>
+          <p style="text-align:right;margin-bottom:10px">上海市医疗保障局监督检查所</p>
           <p style="text-align:right">
             <span style="margin-right:5px">{{parseTime(pageData.dayinriqi,'{y}')}}</span>年
             <span style="margin:0 5px">{{parseTime(pageData.dayinriqi,'{m}')}}</span>月
