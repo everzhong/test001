@@ -89,7 +89,10 @@ export default {
       },
       viewTableObj:{
         show:false,
-        options:{}
+        options:{
+          rwpcid:"",
+          jgdm:""
+        }
       },
       listjc:[],
       listjg:[],
@@ -122,6 +125,7 @@ export default {
         }
       }
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
+      this.viewTableObj.options.jgdm = this.queryInfoFrom.jgdm
       this.viewTableObj.show = true
     },
     saveDxqd(){
@@ -135,7 +139,8 @@ export default {
         dxqd:this.status==5?'提交':'退回',
         qdbh:this.qdbh,//驳回意见字段
         fhry:this.$store.getters.name,//登录账户
-        fhbm:this.$store.getters.dept//登录人员部门
+        fhbm:this.$store.getters.dept,//登录人员部门
+        type:this.queryInfoFrom.mxsum?2:1
       }
       this.doSubmit(params)
     },

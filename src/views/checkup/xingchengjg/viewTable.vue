@@ -13,7 +13,7 @@
 </div>
 </template>
 <script>
-import { listRenwufour } from "@/api/renwu/renwufour";
+import { listXcjg } from "@/api/renwu/renwufour";
  
 export default {
   name:'ViewTable',
@@ -100,7 +100,7 @@ export default {
   methods:{
     getList(){
       const params = {...this.queryParams,...this.options}
-     listRenwufour(params).then(response => {
+      listXcjg(params).then(response => {
         this.renwufourList = response.rows;
         this.total = response.total;
         this.loading = false;
