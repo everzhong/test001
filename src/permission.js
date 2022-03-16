@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
                     store.dispatch('GenerateRoutes').then(accessRoutes => {
                         router.addRoutes(accessRoutes) // 动态添加可访问路由表
                         if (roles.indexOf('jigou') > -1 || roles.indexOf('JDSCXBDDYLJG') > -1) {
-                            next({ path: '/checkup/listjg', replace: true })
+                            next({ path: '/checkup/jcss/listjg', replace: true })
                         } else if (roles.indexOf('xianchangjc') > -1 || roles.indexOf('JDSCXBXXRY') > -1) {
                             next({ path: '/checkup/dayintz', replace: true })
                         } else {
@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        if (['/xcjg', '/ssjc', '/ssjcFull', '/xcjgd', '/ssjcr', '/ssjcFullr', 'vtmp'].indexOf(to.path) !== -1) { //给定点系统调用页面
+        if (['/xcjg', '/ssjc', '/ssjcFull', '/xcjgd', '/ssjcr', '/ssjcFullr', 'vtmp', 'report', 'zjzl'].indexOf(to.path) !== -1) { //给定点系统调用页面
             next({
                 path: '/login',
                 query: {

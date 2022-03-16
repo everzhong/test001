@@ -150,6 +150,16 @@ export const constantRoutes = [{
         path: '/vtmp',
         component: (resolve) => require(['@/views/fordingdian/viewNotice'], resolve),
         hidden: true
+    },
+    {
+        path: '/report',
+        component: (resolve) => require(['@/views/fordingdian/lianReport'], resolve),
+        hidden: true
+    },
+    {
+        path: '/zjzl',
+        component: (resolve) => require(['@/views/checkup/lian/checkAnjian'], resolve),
+        hidden: true
     }
 ]
 

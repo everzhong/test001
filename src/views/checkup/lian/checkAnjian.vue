@@ -24,7 +24,7 @@ export default {
       xwList:[],
       queryParams:{
         pageNum: 1,
-        pageSize: 100
+        pageSize: 10000
       },
     };
   },
