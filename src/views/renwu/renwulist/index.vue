@@ -1,52 +1,59 @@
 <template>
   <div class="app-container">
-    <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" label-width="60px" style="max-height:80px;overflow:auto;margin-bottom:5px">
-      <div>
-        <el-form-item label="批次号" prop="rwpcid">
-          <el-input
-            v-model="queryParams.rwpcid"
-            placeholder="请输入"
-            clearable
-            size="small"
-            style="width: 170px"
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="任务名称" prop="rwmc">
-          <el-input
-            v-model="queryParams.rwmc"
-            placeholder="请输入，支持模糊搜索"
-            clearable
-            size="small"
-            style="width: 170px"
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="承办机构" prop="cbjg">
-          <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 170px"></el-input>
-        </el-form-item>
-        <el-form-item label="任务推送日期" label-width="80px">
-          <el-date-picker
-            v-model="dateRange"
-            size="small"
-            style="width: 210px"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          ></el-date-picker>
-        </el-form-item>
+    <div ref="containerTop">
+      <div class="container-top" v-show="showShearch">
+        <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" label-width="60px">
+          <div>
+            <el-form-item label="批次号" prop="rwpcid">
+              <el-input
+                v-model="queryParams.rwpcid"
+                placeholder="请输入"
+                clearable
+                size="small"
+                style="width: 170px"
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="任务名称" prop="rwmc">
+              <el-input
+                v-model="queryParams.rwmc"
+                placeholder="请输入，支持模糊搜索"
+                clearable
+                size="small"
+                style="width: 170px"
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item label="承办机构" prop="cbjg">
+              <el-input placeholder="请输入，支持模糊搜索" v-model="queryParams.cbjg" clearable size="small" style="width: 170px"></el-input>
+            </el-form-item>
+            <el-form-item label="任务推送日期" label-width="80px">
+              <el-date-picker
+                v-model="dateRange"
+                size="small"
+                style="width: 210px"
+                value-format="yyyy-MM-dd"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </el-form-item>
+          </div>
+          <div>
+            <el-form-item style="margin-right:0;text-align:right">
+              <el-button style="margin-right:10px;" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+              <el-button style="margin-right:10px;" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </div>
+        </el-form>
       </div>
-      <div>
-        <el-form-item style="margin-right:0;text-align:right">
-          <el-button style="margin-right:10px;" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-          <el-button style="margin-right:10px;" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        </el-form-item>
+      <div class="toggle-search" @click="toggleShearch">
+        <i v-if="this.showShearch" class = "el-icon-caret-top"></i>
+        <i v-else class = "el-icon-caret-bottom"></i>
       </div>
-    </el-form>
-   
-    <div class="table-main" :style="{top:tableHeight}" v-loading="loading">
+    </div>
+    <div class="table-main" :style="{top:topValue}" v-loading="loading">
       <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="1" :checkAll="false">
         <el-table-column label="序号" type="index" align="center"  slot="fixed" width="55px"/>
         <el-table-column label="操作" align="center" min-width="200" slot="operate">
@@ -80,9 +87,10 @@
 <script>
 import { listRenwuone } from "@/api/renwu/renwuone";
 import {setYd} from "@/api/renwu/renwutwo"
-
+import { pageMixin } from '@/utils/pageMixin.js'
 export default {
   name: "Renwuone",
+  mixins:[pageMixin],
   data() {
     return {
       tableHeader:[{
@@ -168,7 +176,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
         rwmc: null,
         cbjg: null,
         rwpcid:'',
@@ -181,7 +189,6 @@ export default {
           { required: true, message: "批次号不能为空", trigger: "blur" }
         ],
       },
-      tableHeight:0,
       isRwcx:false,//任务列表，任务查询菜单都指向此页面，通过路由区分是任务列表还是任务查询
     };
   },
@@ -190,9 +197,6 @@ export default {
     this.getList();
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
-  },
-  mounted(){
-    this.tableHeight = this.calcTableHeight(5)
   },
   methods: {
     /** 查询renwuone列表 */
@@ -257,21 +261,57 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.app-container {
+  // display: flex;
+  // flex-direction: column;
+  // box-sizing: border-box;
+  // height: 100% !important;
+  padding:0 20px;
+  .container-top{
+    box-sizing: content-box;
+    padding: 20px 0 0;
+    width: 100%;
+  }
+  .toggle-search {
+      width: 100%;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      cursor: pointer;
+      color: #515a6e;
+      &:hover {
+        color: #1B65B9;
+      }
+  }
+  .fixed-bottom {
+    position: absolute;
+    bottom:5px;
+    left: 0;
+  }
+  .table-main {
+    position: absolute;
+    height: auto;
+    bottom: 40px;
+    left: 20px;
+    right: 20px;
+    top: 90px;
+  }
+}
 .qztable {
     &::v-deep .el-radio__label {
       display: none !important;
     }
 }
-.table-main {
-  position: absolute;
-  top:160px;
-  bottom:70px;
-  left: 20px;
-  right: 20px;
-}
-.fixed-bottom {
-  position: absolute;
-  bottom:30px;
-  right: 0px;
-}
+// .table-main {
+//   position: absolute;
+//   top:160px;
+//   bottom:70px;
+//   left: 20px;
+//   right: 20px;
+// }
+// .fixed-bottom {
+//   position: absolute;
+//   bottom:30px;
+//   right: 0px;
+// }
 </style>

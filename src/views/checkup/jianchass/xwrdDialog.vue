@@ -5,7 +5,7 @@
       <el-option label="监督管理办法（第60号令）" value="2"></el-option>
     </el-select>
     <el-table size="small" v-loading="loading" :data="filterList" @selection-change="handleSelectionChange" border height="350px">
-      <el-table-column width="40px" align="center">
+      <el-table-column width="40px" align="center" fixed>
             <template slot-scope="scope">
               <el-radio :label="scope.row.xwbh" v-model="xwChecked"></el-radio>
             </template>
@@ -49,7 +49,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
         type: null,
         xwbh: null,
         wgxw: null,

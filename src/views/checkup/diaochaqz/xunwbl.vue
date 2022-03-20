@@ -98,7 +98,7 @@
     <div v-show="tabsValue==='3'">
     <el-table class="qztable" :data="tableData" border style="margin-top:10px">
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
-        <el-table-column  align="center" width="55">
+        <el-table-column  align="center" width="55" fixed>
           <template slot-scope="scope">
             <el-radio :label="scope.row.qzid" v-model="blCheck"></el-radio>
           </template>
@@ -176,11 +176,11 @@ export default {
       sexOptions:[],
       queryParams:{
         pageNum: 1,
-        pageSize: 10
+        pageSize: 50
       },
       uploadQuery:{
         pageNum: 1,
-        pageSize: 10
+        pageSize: 50
       },
       zhizuo:{
         jcsj:[],

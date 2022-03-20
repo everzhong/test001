@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" style="height:100%" v-loading="pageLoaing">
+  <div class="app-container" style="padding-top:20px;height:100%" v-loading="pageLoaing">
     <section>
       <el-row :gutter="10">
         
@@ -41,7 +41,7 @@
       </el-row>
       <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="2" :checkAll="false"  @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+            <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
         </sTable>
       </div>

@@ -1,7 +1,10 @@
 <template>
-  <div class="app-container">
-    <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
+  <div class="app-container" style="padding-top:20px">
+    <!-- <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="dayinBack">返回</el-button>
+    </div> -->
+    <div class="page-back-icon" @click="dayinBack">
+      <i class="el-icon-arrow-left"></i>
     </div>
     <div class="zhizuo-port">
         <div class="zhizuo">
@@ -35,7 +38,7 @@
           <div class="zhizuo-item">
             <span>联系电话</span>
             <el-input size="small" v-model="zhizuo.dayintel" maxlength="12" disabled></el-input>
-            <span>(检查通知书)</span>
+            <span style="font-size:12px">(检查通知书)</span>
           </div>
           <div class="zhizuo-item">
             <span>制作日期</span>
@@ -53,7 +56,7 @@
           <div class="zhizuo-item">
             <span>联系电话</span>
             <el-input size="small" v-model="zhizuo.dayinphone" maxlength="12" disabled></el-input>
-            <span>(纪律告知书)</span>
+            <span style="font-size:12px">(纪律告知书)</span>
           </div>
         </div>
         <div :class="['pre-view']">
@@ -219,9 +222,9 @@ export default {
   }
   .zhizuo {
     flex-shrink: 0;
-    width: 500px;
+    width: 390px;
     color:#606266;
-    padding-top: 10px;
+    padding-top: 5px;
     .zhizuo-item {
       display: flex;
       font-size: 14px;
@@ -229,11 +232,11 @@ export default {
       margin-bottom: 5px;
       &::v-deep .el-input__inner {
         color:#303313;
-        width: 290px;
+        width: 210px;
         margin-right: 5px;
       }
       &::v-deep .el-date-editor.el-input {
-        width: 290px;
+        width: 210px;
       }
       >span {
         display: block;

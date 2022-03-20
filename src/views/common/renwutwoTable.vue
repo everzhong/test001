@@ -1,6 +1,6 @@
 <template>
   <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width:100%" height="100%">
-    <el-table-column type="selection" width="55" align="center"/>
+    <el-table-column type="selection" width="55" align="center" fixed/>
     <el-table-column label="序号" type="index" align="center"  />
     <el-table-column label="批次号" align="center" prop="rwpcid"  :width="flexColumnWidth('rwpcid',tableData)"/>
     <el-table-column label="统一社会信用代码" align="center" prop="xydm"  :width="flexColumnWidth('xydm',tableData)"/>

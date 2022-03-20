@@ -1,7 +1,7 @@
 <template>
-<div :style="{minHeight:'300px',height:tableHeight}">
+<div style="height:100%">
   <sTable :data="tableData" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
-    <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+    <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
     <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
     <el-table-column label="操作" align="center" width="180" slot="operate">
       <template slot-scope="scope">
@@ -25,7 +25,6 @@ export default {
   name:'RenwutwoTable',
   data(){
     return {
-      tableHeight:0,
       xzqOptions:[],
       tableHeader:[{
         label:"监管状态",
@@ -65,9 +64,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         label:"就医类型",
         prop:'jslb',
@@ -133,9 +132,6 @@ export default {
     });
     this.jslbOptions = this.$store.getters.jslbDic
     this.ybbfOptions = this.$store.getters.ybbfDic
-  },
-  mounted(){
-    this.tableHeight = document.body.offsetHeight - 50-34-118-40-70-50-35+'px';
   },
   methods:{
     // 多选框选中数据

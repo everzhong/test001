@@ -28,6 +28,9 @@ import { checkRole } from '@/utils/permission'
 import { addJcfl } from '@/api/renwu/jcfl.js' //新增检查履历
 import sTable from '@/components/stable.vue'
 
+// import { pageMixin } from '@/utils/pageMixin.js'
+// Vue.mixin(pageMixin)
+
 Vue.use(Print)
 Vue.use(vueToPdf)
 
@@ -68,6 +71,7 @@ Vue.prototype.msgWarning = function(msg) {
 Vue.prototype.msgInfo = function(msg) {
     this.$message.info(msg);
 }
+
 
 // 全局组件挂载
 Vue.component('Pagination', Pagination)

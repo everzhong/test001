@@ -1,8 +1,11 @@
 // 打印文书
 <template>
-  <div class="app-container">
-    <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
+  <div class="app-container" style="padding-top:20px">
+    <!-- <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button>
+    </div> -->
+    <div class="page-back-icon" @click="lianBack">
+       <i class="el-icon-arrow-left"></i>
     </div>
     <div class="zhizuo-port">
         <div class="zhizuo">

@@ -1,6 +1,6 @@
 <template>
   <div style="height:100%" v-loading="loading">
-  <sTable :data="renwufourList" :header="tableHeader" :fixedNum="1" style="height:calc(100% - 70px)">
+  <sTable :data="renwufourList" :header="tableHeader" :fixedNum="1" style="height:100%">
     <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
   </sTable>
   <pagination
@@ -48,7 +48,7 @@ export default {
         prop: 'mxxmdj',
         label: '标准单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmdw',
@@ -57,13 +57,13 @@ export default {
         prop: 'mxxmjyfy',
         label: '医院单价(元)',
         viewFun: (mxxmjyfy)=>{
-          return this.formatMoney(mxxmjyfy,3)
+          return this.formatMoney(mxxmjyfy,2)
         }
       },{
         prop: 'zkdj',
         label: '追款单价(元)',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }
       },{
         prop: 'wgsl',
@@ -115,7 +115,7 @@ export default {
 <style lang="scss" scoped>
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

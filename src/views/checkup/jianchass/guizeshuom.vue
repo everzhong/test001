@@ -17,7 +17,7 @@
     </el-form>
     <div class="main">
         <el-table border :data="roleList">
-          <el-table-column width="40px" align="center">
+          <el-table-column width="40px" align="center" fixed>
             <template slot-scope="scope">
               <el-radio :label="scope.row.id" v-model="roleCheck"></el-radio>
             </template>

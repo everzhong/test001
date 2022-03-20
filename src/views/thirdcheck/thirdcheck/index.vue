@@ -62,7 +62,7 @@
     </el-form>
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <sTable :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
-        <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+        <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
         <el-table-column label="操作" align="center" slot="operate" min-width="100">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="openUrl(scope.row)" :disabled="scope.row.sccqstatus!=3">数据筛查</el-button>
@@ -128,9 +128,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         prop: 'sccqstatus',
         label: '数据抽取状态',
@@ -169,7 +169,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       query:{
         rwpcid:'',//任务批次号

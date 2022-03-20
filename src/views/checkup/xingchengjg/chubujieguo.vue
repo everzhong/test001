@@ -1,71 +1,84 @@
 <template>
   <div class="app-container">
-    <el-form size="small" label-width="100px" class="top-search1" ref="searchForm" :inline="true">
-          <el-form-item label="案件来源" prop="ajly">
-            <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
-          </el-form-item>
-          <el-form-item label="险种" prop="ybbf">
-            <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
-          </el-form-item>
-          <el-form-item label="就医类型" prop="jslb">
-            <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
-          </el-form-item>
-          <el-form-item label="批次号" prop="rwpcid">
-            <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-          </el-form-item>
-          <el-form-item label="数据开始日期" prop="datastarttime">
-            <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-          </el-form-item>
-          <el-form-item label="数据结束日期" prop="dataendtime">
-            <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-          </el-form-item>
-          <el-form-item label="机构名称" prop="jgmc">
-            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-          </el-form-item>
-            <el-form-item label="承办机构" prop="jcjg">
-            <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
-          </el-form-item>
-            <el-form-item label="检查组" prop="jczname">
-            <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
-          </el-form-item>
-          <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
-            <el-button type="primary" icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
-          </div>
-    </el-form>
-    <p style="font-size:12px;margin:0px 0 10px 0;color:#606626">初步结果-预览</p>
-    <el-row :gutter="10">
-      <el-col :span="1.5">
-        <span style="color:#606266;font-size:14px">参保地：</span>
-        <el-select v-model="queryParams.ybd" size="small" @change="getList()">
-          <el-option label="本地" value="01"></el-option>
-          <el-option label="异地" value="02"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="1.5" v-if="viewTableObj.show">
-        <el-button type="warning" plain size="small" @click="viewTableObj.show = false">返回上一层</el-button>
-      </el-col>
-      <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
-        <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>
-        <el-radio-button label="listjg" value="listjg">按违规类别汇总</el-radio-button>
-      </el-radio-group>
-    </el-row>
-    <jc-table ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
-    <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
-    <div v-if="viewTableObj.show" class="table-main">
-      <ViewTable :options="viewTableObj.options"/>
+    <div ref="containerTop">
+      <div class="container-top" v-show="showShearch">
+        <el-form size="small" label-width="100px" class="top-search1" ref="searchForm" :inline="true">
+              <el-form-item label="案件来源" prop="ajly">
+                <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
+              </el-form-item>
+              <el-form-item label="险种" prop="ybbf">
+                <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
+              </el-form-item>
+              <el-form-item label="就医类型" prop="jslb">
+                <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
+              </el-form-item>
+              <el-form-item label="批次号" prop="rwpcid">
+                <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
+              </el-form-item>
+              <el-form-item label="数据开始日期" prop="datastarttime">
+                <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
+              </el-form-item>
+              <el-form-item label="数据结束日期" prop="dataendtime">
+                <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
+              </el-form-item>
+              <el-form-item label="机构名称" prop="jgmc">
+                <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+              </el-form-item>
+                <el-form-item label="承办机构" prop="jcjg">
+                <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
+              </el-form-item>
+                <el-form-item label="检查组" prop="jczname">
+                <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
+              </el-form-item>
+              <!-- <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
+                <el-button type="primary" icon="el-icon-back" style="margin-left:50px" size="mini" @click="$router.back(-1)">返回</el-button>
+              </div> -->
+              <div class="page-back-icon" @click="$router.back(-1)">
+                  <i class="el-icon-arrow-left"></i>
+                </div>
+        </el-form>
+      </div>
+      <div class="toggle-search" @click="toggleShearch">
+        <i v-if="this.showShearch" class = "el-icon-caret-top"></i>
+        <i v-else class = "el-icon-caret-bottom"></i>
+      </div>
     </div>
-    <el-form inline style="margin-top:30px" v-if="!viewTableObj.show && !queryInfoFrom.fromLuli">
-      <el-form-item label="复核意见：" style="margin-right:50px">
-        <el-radio v-model="status" label="5">同意</el-radio>
-        <el-radio v-model="status" label="3">驳回</el-radio>
-      </el-form-item>
-      <el-form-item label="具体说明：" style="margin-right:30px">
-        <el-input v-model="qdbh" type="textarea" style="width:300px"/>
-      </el-form-item>
-      <el-form-item >
-        <el-button type="primary" size="small" @click="saveDxqd">保存</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="table-main" :style="{top:topValue}">
+      <p style="font-size:12px;margin:0px 0 10px 0;color:#606626">初步结果-预览</p>
+      <el-row :gutter="10">
+        <el-col :span="1.5">
+          <span style="color:#606266;font-size:14px">参保地：</span>
+          <el-select v-model="queryParams.ybd" size="small" @change="getList()">
+            <el-option label="本地" value="01"></el-option>
+            <el-option label="异地" value="02"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="1.5" v-if="viewTableObj.show">
+          <el-button type="warning" plain size="small" @click="viewTableObj.show = false">返回上一层</el-button>
+        </el-col>
+        <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
+          <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>
+          <el-radio-button label="listjg" value="listjg">按违规类别汇总</el-radio-button>
+        </el-radio-group>
+      </el-row>
+      <div v-if="viewTableObj.show" style="height:calc(100% - 110px);margin-top:5px">
+        <ViewTable :options="viewTableObj.options"/>
+      </div>
+      <jc-table ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
+      <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
+      <el-form style="margin-top:10px" inline v-if="!viewTableObj.show && !queryInfoFrom.fromLuli">
+        <el-form-item label="复核意见：" style="margin-right:50px">
+          <el-radio v-model="status" label="5">同意</el-radio>
+          <el-radio v-model="status" label="3">驳回</el-radio>
+        </el-form-item>
+        <el-form-item label="具体说明：" style="margin-right:30px">
+          <el-input v-model="qdbh" type="textarea" style="width:300px"/>
+        </el-form-item>
+        <el-form-item >
+          <el-button type="primary" size="small" @click="saveDxqd">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
@@ -74,12 +87,13 @@ import { submitDxqd} from "@/api/renwu/dcqz"
 import JcTable from './jcTable.vue'
 import WgTable from './wgTable.vue'
 import ViewTable from './viewTable.vue'
-
+import {pageMixin} from '@/utils/pageMixin.js'
 export default {
   name:"Chubujieguo",
+  mixins:[pageMixin],
   data(){
     return {
-      topHeight:0,
+      topValue:0,
       tabsValue:'listjc',
       //上页带过来的info
       queryInfoFrom:{},
@@ -107,9 +121,6 @@ export default {
   },
   created(){
     this.queryInfoFrom = this.$route.query
-  },
-   mounted(){
-    this.topHeight = this.calcTableHeight(68)
   },
   methods:{
     viewHanddle(row,type){
@@ -226,5 +237,11 @@ export default {
   bottom:0;
   left: 20px;
   right: 20px;
+}
+.fixed-bottom {
+  padding-left: 20px;
+  position: absolute;
+  bottom:0;
+  left:0;
 }
 </style>

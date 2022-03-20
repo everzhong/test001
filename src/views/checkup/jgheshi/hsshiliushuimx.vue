@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%">
+  <div style="height:100%;padding-top:20px">
     <section style="height:100%">
       <el-row :gutter="10">
         <el-col :span="1.5" v-if="tabsValue==='three'">
@@ -40,7 +40,7 @@
       </el-row>
       <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="2" :checkAll="false"  @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+            <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
             <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
               <template slot-scope="scope">
@@ -49,49 +49,50 @@
             </el-table-column>
         </sTable>
       </div>
-      <div v-loading="loading" v-else>
+      <div v-loading="loading" v-else style="height:calc(100% - 159px)">
         <jxhecha v-if="tabsValue=='six'" :exHeight="88" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <tongls ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc"></tongls>
-      <pagination
-        class="fixed-bottom"
-        v-show="!logShow&&!qmxOptions.show&&tabsValue!=='three'&&tabsValue!=='six'"
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="getList"
-      />
-      <div class="xingweirz" v-show="tabsValue!=='five'">
-        <div class="yy-content">
-          <span>核实意见</span>
-          <el-radio-group v-model="queren" size="small">
-            <el-radio label="1">确认</el-radio>
-            <el-radio  label="2">不确认--需要说明并提供材料</el-radio>
-          </el-radio-group>
-        </div>
-        <div>
-          <div style="margin-bottom:8px">
-            <span>上传相关资料（格式：jpg、png、pdf、doc、docx、xls、xlsx，单个文件不超过10M）</span>
+      <div  class="fixed-bottom">
+        <pagination
+          v-show="!logShow&&!qmxOptions.show"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+        <div class="xingweirz" v-show="tabsValue!=='five'">
+          <div class="yy-content">
+            <span>核实意见</span>
+            <el-radio-group v-model="queren" size="small">
+              <el-radio label="1">确认</el-radio>
+              <el-radio  label="2">不确认--需要说明并提供材料</el-radio>
+            </el-radio-group>
           </div>
           <div>
-            <fileUpload
-              v-model="wenjian.wenjianurl"
-              :fileSize="10"
-              :fileType='["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"]'
-              :isShowTip="false"
-              :needHide="true"
-              :hideFileList="false"
-              :buttonOPtions="{size:'mini',text:'选择文件'}"
-              @input="upSuccess"
-              ref="fileUpload"
-            />
+            <div style="margin-bottom:8px">
+              <span>上传相关资料（格式：jpg、png、pdf、doc、docx、xls、xlsx，单个文件不超过10M）</span>
+            </div>
+            <div>
+              <fileUpload
+                v-model="wenjian.wenjianurl"
+                :fileSize="10"
+                :fileType='["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"]'
+                :isShowTip="false"
+                :needHide="true"
+                :hideFileList="false"
+                :buttonOPtions="{size:'mini',text:'选择文件'}"
+                @input="upSuccess"
+                ref="fileUpload"
+              />
+            </div>
           </div>
+          <div class="yy-content">
+            <span>情况说明</span>
+            <el-input rows="2" type="textarea" v-model="hsyj"></el-input>
+          </div>
+          <el-button type="primary" size="mini" @click="handleSubmit">保存</el-button>
         </div>
-        <div class="yy-content">
-          <span>情况说明</span>
-          <el-input rows="2" type="textarea" v-model="hsyj"></el-input>
-        </div>
-        <el-button type="primary" size="mini" @click="handleSubmit">保存</el-button>
       </div>
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
@@ -299,7 +300,7 @@ export default {
         prop: 'mxxmdj',
         label: '明细项目单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmsl',
@@ -333,7 +334,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',
@@ -701,22 +702,23 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:60px;
-  bottom:150px;
+  top:58px;
+  bottom:162px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:50px;
+  width: 100%;
+  bottom:0px;
   left:0;
+  padding-bottom: 10px;
 }
 .xingweirz {
   height: 80px;
-  position: absolute;
-  bottom: 50px;
   font-size: 14px;
   color: #606266;
+  padding:0 20px;
   >div {
     float: left;
     margin-right: 30px;

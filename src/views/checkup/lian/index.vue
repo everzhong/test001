@@ -1,49 +1,49 @@
 <template>
   <div class="app-container">
-    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="height:94px;overflow:auto"/>
-    <div v-loading="loading" class="table-main">
-    <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
-        <el-table-column type="index" width="55" align="center" slot="fixed" label="序号"></el-table-column>
-        <el-table-column label="操作" align="center" min-width="210" slot="operate">
-          <template slot-scope="scope">
-            <el-button
-              v-if="scope.row.lian==0||scope.row.lian==5"
-              size="mini"
-              type="text"
-              @click="navigateToLian([scope.row],'sqLian')"
-            >申请立案</el-button>
-            <el-button
-               v-if="scope.row.lian==0||scope.row.lian==5"
-              size="mini"
-              type="text"
-              @click="navigateToLian([scope.row],'noLian')"
-            >申请不予立案</el-button>
-            <span v-hasRole="['jiancha', 'common']">
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <div v-loading="loading" class="table-main" :style="{top:topValue}">
+      <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
+          <el-table-column type="index" width="55" align="center" slot="fixed" label="序号"></el-table-column>
+          <el-table-column label="操作" align="center" min-width="210" slot="operate">
+            <template slot-scope="scope">
               <el-button
-                v-if="scope.row.lian==1"
+                v-if="scope.row.lian==0||scope.row.lian==5"
                 size="mini"
                 type="text"
-                @click="navigateToLian([scope.row],'lasp')"
-              >立案审批</el-button>
-            </span>
-            <span v-hasRole="['jiancha', 'common']">
+                @click="navigateToLian([scope.row],'sqLian')"
+              >申请立案</el-button>
               <el-button
-                v-if="scope.row.lian==2"
+                v-if="scope.row.lian==0||scope.row.lian==5"
                 size="mini"
                 type="text"
-                @click="navigateToLian([scope.row],'lansp')"
-              >不予立案审批</el-button>
-            </span>
-            <el-button
-              v-if="scope.row.lian==3||scope.row.lian==4"
-              size="mini"
-              type="text"
-              @click="navigateToLian([scope.row],'prlian')"
-            >打印文书</el-button>
-          </template>
-        </el-table-column>
-    </sTable>
-  </div>
+                @click="navigateToLian([scope.row],'noLian')"
+              >申请不予立案</el-button>
+              <span v-hasRole="['jiancha', 'common']">
+                <el-button
+                  v-if="scope.row.lian==1"
+                  size="mini"
+                  type="text"
+                  @click="navigateToLian([scope.row],'lasp')"
+                >立案审批</el-button>
+              </span>
+              <span v-hasRole="['jiancha', 'common']">
+                <el-button
+                  v-if="scope.row.lian==2"
+                  size="mini"
+                  type="text"
+                  @click="navigateToLian([scope.row],'lansp')"
+                >不予立案审批</el-button>
+              </span>
+              <el-button
+                v-if="scope.row.lian==3||scope.row.lian==4"
+                size="mini"
+                type="text"
+                @click="navigateToLian([scope.row],'prlian')"
+              >打印文书</el-button>
+            </template>
+          </el-table-column>
+      </sTable>
+    </div>
   <pagination
       class="fixed-bottom"
       v-show="total>0"
@@ -72,6 +72,7 @@ export default {
   },
   data() {
     return {
+      topValue:0,
       tableHeader:[{
         label: '批次号',
         fixedWidth:30,
@@ -156,7 +157,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       //选中的数据 
       selectionData:[]
@@ -282,13 +283,13 @@ export default {
 .table-main {
   position: absolute;
   top:115px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

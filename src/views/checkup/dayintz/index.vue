@@ -1,54 +1,56 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="height:94px"/>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          size="small"
-          @click="handeMutilDo"
-        >批量制作通知</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          size="small"
-          @click="handeMutilPrint"
-        >批量打印通知</el-button>
-      </el-col>
-    </el-row>
-      <div v-loading="loading" class="table-main">
-      <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" slot="fixed"></el-table-column>
-        <el-table-column label="操作" align="center" min-width="280" slot="operate">
-          <template slot-scope="scope">
-            <el-button
-              v-if="scope.row.isdayin!=1"
-              size="mini"
-              type="text"
-              @click="navigateToAdd([scope.row])"
-            >制作通知</el-button>
-            <el-button
-              v-if="scope.row.isdayin==1"
-              size="mini"
-              type="text"
-              @click="navigateToAdd([scope.row],true)"
-            >查看通知</el-button>
-            <el-button
-              v-if="scope.row.isdayin==1"
-              size="mini"
-              type="text"
-              @click="printFile([scope.row],'jianca')"
-            >打印检查通知书</el-button>
-            <el-button
-              v-if="scope.row.isdayin==1"
-              size="mini"
-              type="text"
-              @click="printFile([scope.row],'jilv')"
-            >打印纪律告知书</el-button>
-          </template>
-        </el-table-column>
-      </sTable>
+    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <div class="table-main" :style="{top:topValue}">
+      <el-row :gutter="10" class="mb5">
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handeMutilDo"
+          >批量制作通知</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handeMutilPrint"
+          >批量打印通知</el-button>
+        </el-col>
+      </el-row>
+      <div v-loading="loading" style="height:calc(100% - 37px)">
+        <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" align="center" slot="fixed" fixed></el-table-column>
+          <el-table-column label="操作" align="center" min-width="280" slot="operate">
+            <template slot-scope="scope">
+              <el-button
+                v-if="scope.row.isdayin!=1"
+                size="mini"
+                type="text"
+                @click="navigateToAdd([scope.row])"
+              >制作通知</el-button>
+              <el-button
+                v-if="scope.row.isdayin==1"
+                size="mini"
+                type="text"
+                @click="navigateToAdd([scope.row],true)"
+              >查看通知</el-button>
+              <el-button
+                v-if="scope.row.isdayin==1"
+                size="mini"
+                type="text"
+                @click="printFile([scope.row],'jianca')"
+              >打印检查通知书</el-button>
+              <el-button
+                v-if="scope.row.isdayin==1"
+                size="mini"
+                type="text"
+                @click="printFile([scope.row],'jilv')"
+              >打印纪律告知书</el-button>
+            </template>
+          </el-table-column>
+        </sTable>
+      </div>
     </div>
     <pagination
       class="fixed-bottom"
@@ -88,6 +90,7 @@ export default {
   },
   data() {
     return {
+      topValue:0,
       tableHeader:[{
         label:"是否制作",
         prop:"isdayin",
@@ -136,9 +139,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         label:"承办机构",
         prop:'jcjg'
@@ -178,7 +181,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       //选中的数据 
       selectionData:[]
@@ -312,13 +315,13 @@ export default {
 .table-main {
   position: absolute;
   top:155px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

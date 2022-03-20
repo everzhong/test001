@@ -1,6 +1,6 @@
 <template>
-  <div style="height:100%" v-loading="loading">
-    <section>
+  <div style="height:100%;padding-top:20px" v-loading="loading">
+    <section style="height:100%">
       <el-row :gutter="10">
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保地：</span>
@@ -45,12 +45,12 @@
             <el-table-column label="操作" align="center"  width="210" slot="operate">
             <template slot-scope="scope">
               <el-button size="mini" type="text" primary @click="hangdleLiushui(scope.row)">流水号项目汇总</el-button>
-              <el-button size="mini" type="text" primary @click="handleXguanmx(scope.row)">查看相关明细</el-button>
+              <!-- <el-button size="mini" type="text" primary @click="handleXguanmx(scope.row)">查看相关明细</el-button> -->
             </template> 
           </el-table-column>
         </sTable>
       </div>
-      <div v-loading="loading" v-else>
+      <div v-loading="loading" v-else style="height:calc(100% - 37px)">
         <jxhecha v-if="tabsValue=='six'" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <pagination
@@ -218,9 +218,9 @@ export default {
       {
         prop: 'jsdj',
         label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         prop: 'ybbf',
         label: '险种',
@@ -548,14 +548,14 @@ export default {
 <style lang="scss" scoped>
 .table-main {
   position: absolute;
-  top:62px;
-  bottom:65px;
+  top:58px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:25px;
+  bottom:8px;
   right:0;
 }
 .xingweirz {

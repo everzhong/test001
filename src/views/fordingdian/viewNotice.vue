@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" v-loading="loading">
+  <div class="app-container" v-loading="loading" style="padding-top:20px">
     <div class="zhizuo-port">
       <div :class="['pre-view']">
         <jc-notice :pageData="zhizuo"/>
@@ -45,7 +45,7 @@ export default {
       zhzList:[],
       queryParams: {
         pageNum: 1,
-        pageSize: 100,
+        pageSize: 500,
       },
     };
   },

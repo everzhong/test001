@@ -1,42 +1,47 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="height:94px;margin-bottom:10px"/>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="tabsValue==='two'">
-        <el-button
-          type="primary"
-          size="small"
-          @click="handleAgree(2)"
-        >同意</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'">
-        <el-button
-          type="primary"
-          size="small"
-          plain
-          @click="handleAgree(0)"
-        >驳回</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="mxShow">
-        <el-button
-          type="warning"
-          size="small"
-          plain
-          @click="mxShow=false,xgmxOptions.show=false,qmxOptions.show=false"
-        >返回上一层</el-button>
-      </el-col>
-      <div class="top-right-btn">
-        <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two">任务列表</el-radio-button>
-          <el-radio-button label="three">任务列表-规则列表</el-radio-button>
-          <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
-        </el-radio-group>
+    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <div class="table-main" :style="{top:topValue}">
+      <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
+        <el-col :span="1.5" v-if="tabsValue==='two'">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleAgree(2)"
+          >确认</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='two'">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleAgree(0)"
+          >驳回</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="mxShow">
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            @click="mxShow=false,xgmxOptions.show=false,qmxOptions.show=false"
+          >返回上一层</el-button>
+        </el-col>
+        <div class="top-right-btn">
+          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+            <el-radio-button label="two">任务列表</el-radio-button>
+            <el-radio-button label="three">任务列表-规则列表</el-radio-button>
+            <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
+          </el-radio-group>
+        </div>
+      </el-row>
+      <div v-loading="loading" v-show="!mxShow" style="height:calc(100% - 37px)">
+        <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"  @check-xgmx="checkMix($event,'xgmx')"/>
+        <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
+        <RenwutwoTable v-else :tableData="renwutwoList" @check-xgmx="checkMix($event,'xgmx')"  @check-qmx="checkMix($event,'qmx')" @handleSelectionChange="handleSelectionChange"/>
       </div>
-    </el-row>
-    <div v-loading="loading" v-show="!mxShow" class="table-main">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList"  @check-xgmx="checkMix($event,'xgmx')"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
-      <RenwutwoTable v-else :tableData="renwutwoList" @check-xgmx="checkMix($event,'xgmx')"  @check-qmx="checkMix($event,'qmx')" @handleSelectionChange="handleSelectionChange"/>
+       <div v-show="mxShow" style="height:calc(100% - 37px)">
+        <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+        <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
+      </div>
     </div>
     <pagination
      class="fixed-bottom"
@@ -46,10 +51,37 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div class="table-main" v-show="mxShow">
-      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
-      <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
-    </div>
+    <!-- <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:5px;">
+      <el-form-item label="已选机构" prop="yxjg">
+        <el-input
+          style="width:280px;"
+          disabled
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          v-model="submitParams.yxjg">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="网审意见" prop="wsyj">
+        <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
+          <el-option
+            key="1"
+            label="同意"
+            value="2"
+          />
+          <el-option
+            key="2"
+            label="驳回"
+            value="0"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="检查人员" prop="wsry">
+        <el-input readonly :value="submitParams.wsry"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary"  @click="handleSubmit" :disabled="ids.length<1">提交</el-button>
+      </el-form-item>
+    </el-form> -->
   </div>
 </template>
 <script>
@@ -76,6 +108,7 @@ export default {
   },
   data() {
     return {
+      topValue:0,
       xgmxOptions:{
         show:false,
         query:{}
@@ -98,16 +131,23 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-      },
       //
       tabsValue:'two',
-      resql:''
+      resql:'',
+      rules: {
+        yxjg:[{require:true,message:'请选择机构'}],
+        wsry:[{require:true,message:'请选择检查人员'}],
+        wsyj:[{require:true,message:'请选网审意见'}]
+      },
+      submitParams:{
+        yxjg:'',
+        wsry:'',
+        wsyj:''
+      },
     };
   },
   created() {
@@ -183,16 +223,19 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
+      this.submitParams.yxjg = (selection.map(item => item.jgmc)).join(' ')
+      this.submitParams.wsry = this.$store.getters.name
       this.ids = selection.map(item => item.id)
       this.selectionList = selection
-      this.single = selection.length!==1
-      this.multiple = !selection.length
     },
     async updateTwo(ids){//提交暂不检查的，把第二层status改成4
       ids.forEach(item=>{
         updateRenwutwo({id:item.id,status:4},'innoreError')
       })
     },
+    handleSubmit(){
+      this.handleAgree(this.submitParams.wsyj)
+    }, 
     /**
      * 实施网申 type:2同意 0驳回
      */
@@ -201,7 +244,7 @@ export default {
         this.msgError('请至少选择一项')
         return
       } 
-      if(type===2){
+      if(type==2){
         this.doSubmit({
           ids:this.ids,
           status:2,//同意2 ，驳回0
@@ -237,6 +280,12 @@ export default {
             message: '取消输入'
           });       
         });
+      // this.doSubmit({
+      //   ids:this.ids,
+      //   status:0,//同意2 ，驳回0
+      //   dxqd:'驳回',
+      //   dxqdbh:value//驳回意见字段
+      // })
     },
     doSubmit(params){
       submitDxqd(params).then(res=>{
@@ -303,13 +352,13 @@ export default {
 .table-main {
   position: absolute;
   top:165px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

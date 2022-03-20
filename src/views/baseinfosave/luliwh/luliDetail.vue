@@ -1,84 +1,94 @@
 <template>
   <div class="app-container">
-    <el-form
-      size="small"
-      label-width="80px"
-      class="top-search"
-      style="display:block;overflow:auto;max-height:129px"
-      ref="queryForm"
-      :inline="true"
-    >
-      <el-form-item label="批次号" prop="rwpcid">
-        <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-      </el-form-item>
-      <el-form-item label="案件来源" prop="ajly">
-        <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
-      </el-form-item>
-      <el-form-item label="险种" prop="ybbf">
-        <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
-      </el-form-item>
-      <el-form-item label="就医类型" prop="jslb">
-        <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
-      </el-form-item>
-      <el-form-item label="数据开始日期" prop="datastarttime">
-        <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-      </el-form-item>
-      <el-form-item label="数据结束日期" prop="dataendtime">
-        <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-      </el-form-item>
-      <el-form-item label="机构代码" prop="jgmc">
-        <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-      </el-form-item>
-      <el-form-item label="机构名称" prop="jgmc">
-        <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-      </el-form-item>
-      <el-form-item label="机构等级" prop="jgdj">
-        <el-input readonly :value="selectDictLabels(jgdjOptions, queryInfoFrom.jgdj)"></el-input>
-      </el-form-item>
-      <el-form-item label="行政区" prop="xzq">
-        <el-input readonly :value="selectDictLabels(xzqOptions, queryInfoFrom.xzq)"></el-input>
-      </el-form-item>
-      <!-- <el-form-item label="监管状态" prop="jgjd">
-        <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
-      </el-form-item> -->
-      <div
-        style="
-          position: absolute;
-          right: 20px;
-          top: -72px;
-          background-color: #fff;
-        "
-      >
-        <el-button
-          type="primary"
-          icon="el-icon-back"
-          size="mini"
-          @click="$router.back(-1)"
-          >返回</el-button
+     <div ref="containerTop">
+      <div class="container-top" v-show="showShearch">
+        <el-form
+          size="small"
+          label-width="80px"
+          class="top-search"
+          style="display:block;"
+          ref="queryForm"
+          :inline="true"
         >
-      </div>
-    </el-form>
-    <div class="table-main" v-loading="loading">
-      <sTable :data="jcflList" :header="tableHeader" :fixedNum="1">
-        <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
-        <el-table-column label="操作" align="center" width="150" slot="operate">
-          <template slot-scope="scope">
+          <el-form-item label="批次号" prop="rwpcid">
+            <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
+          </el-form-item>
+          <el-form-item label="案件来源" prop="ajly">
+            <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
+          </el-form-item>
+          <el-form-item label="险种" prop="ybbf">
+            <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
+          </el-form-item>
+          <el-form-item label="就医类型" prop="jslb">
+            <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
+          </el-form-item>
+          <el-form-item label="数据开始日期" prop="datastarttime">
+            <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
+          </el-form-item>
+          <el-form-item label="数据结束日期" prop="dataendtime">
+            <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
+          </el-form-item>
+          <el-form-item label="机构代码" prop="jgmc">
+            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+          </el-form-item>
+          <el-form-item label="机构名称" prop="jgmc">
+            <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+          </el-form-item>
+          <el-form-item label="机构等级" prop="jgdj">
+            <el-input readonly :value="selectDictLabels(jgdjOptions, queryInfoFrom.jgdj)"></el-input>
+          </el-form-item>
+          <el-form-item label="行政区" prop="xzq">
+            <el-input readonly :value="selectDictLabels(xzqOptions, queryInfoFrom.xzq)"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="监管状态" prop="jgjd">
+            <el-input readonly v-model="queryInfoFrom.jcz"></el-input>
+          </el-form-item> -->
+          <!-- <div
+            style="
+              position: absolute;
+              right: 20px;
+              top: -72px;
+              background-color: #fff;
+            "
+          >
             <el-button
-              v-if="
-                [1,7,6,8,9,10].indexOf(scope.row.sort * 1) > -1
-              "
+              type="primary"
+              icon="el-icon-back"
               size="mini"
-              type="text"
-              @click="doCheck(scope.row)"
-              >查看详情</el-button
+              @click="$router.back(-1)"
+              >返回</el-button
             >
-          </template>
-        </el-table-column>
-      </sTable>
-    </div>
+          </div> -->
+        <div class="page-back-icon" @click="$router.back(-1)">
+          <i class="el-icon-arrow-left"></i>
+        </div>
+        </el-form>
+      </div>
+      <div class="toggle-search" @click="toggleShearch">
+        <i v-if="this.showShearch" class = "el-icon-caret-top"></i>
+        <i v-else class = "el-icon-caret-bottom"></i>
+      </div>
+     </div>
+      <div class="table-main" v-loading="loading" :style="{top:topValue}">
+        <sTable :data="jcflList" :header="tableHeader" :fixedNum="1">
+          <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
+          <el-table-column label="操作" align="center" width="150" slot="operate">
+            <template slot-scope="scope">
+              <el-button
+                v-if="
+                  [1,7,6,8,9,10].indexOf(scope.row.sort * 1) > -1
+                "
+                size="mini"
+                type="text"
+                @click="doCheck(scope.row)"
+                >查看详情</el-button
+              >
+            </template>
+          </el-table-column>
+        </sTable>
+      </div>
     <pagination
       class="fixed-bottom"
-      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -87,6 +97,7 @@
   </div>
 </template>
 <script>
+import  {pageMixin} from '@/utils/pageMixin.js'
 import {
   listJcfl,
   getJcfl,
@@ -98,7 +109,7 @@ import {
 
 export default {
   name: "Lulidetail",
-  components: {},
+  mixins:[pageMixin],
   data() {
     return {
       tableHeader:[{
@@ -165,7 +176,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       // 表单参数
       form: {},
@@ -406,13 +417,13 @@ export default {
 .table-main {
   position: absolute;
   top: 145px;
-  bottom: 70px;
+  bottom: 45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom: 30px;
+  bottom: 8px;
   right: 0px;
 }
 </style>

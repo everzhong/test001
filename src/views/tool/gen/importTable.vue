@@ -27,7 +27,7 @@
     </el-form>
     <el-row>
       <el-table @row-click="clickRow" ref="table" :data="dbTableList" @selection-change="handleSelectionChange" height="260px">
-        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="tableComment" label="表描述" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -64,7 +64,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
         tableName: undefined,
         tableComment: undefined
       }

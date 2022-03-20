@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="max-height:138px;overflow:auto"/>
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" @toggle-search="h=>tableHeight=h"/>
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
         <el-table-column label="序号" type="index" align="center" slot="fixed"/>
-        <el-table-column label="操作" align="center" min-width="100" slot="operate">
+        <el-table-column label="查处详情" align="center" min-width="100" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -54,10 +54,10 @@ export default {
         }
       },{
         prop: 'jsdj',
-        label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        label: '结算等级'
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         prop: 'xzq',
         label: '行政区',
@@ -111,7 +111,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 总条数
-      total: 10,
+      total: 0,
       // renwutwo表格数据
       renwutwoList: [],
       renwuthreeList: [],
@@ -184,7 +184,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       // 表单参数
       form: {},
@@ -208,9 +208,6 @@ export default {
     });
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
-  },
-  mounted(){
-    this.tableHeight = this.calcTableHeight(5)
   },
   methods: {
     /** 查询renwutwo列表 */
@@ -508,13 +505,13 @@ export default {
 .table-main {
   position: absolute;
   top:162px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

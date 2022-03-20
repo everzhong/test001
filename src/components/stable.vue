@@ -348,14 +348,17 @@ export default {
     background-color: rgba(27,101,185,.15);
   }
   .el-table td {
-    padding:2px 0;
+    padding:0;
+    height: 40px;
+    line-height: 40px;
     .cell {
       width: 100% !important;
     }
   }
   .el-table th {
     padding:6px 0 1px;
-    height: 40px;
+    height: 44px;
+    background-color: #f0f2f5;
     .cell {
       height: 100%;
       display: flex;
@@ -397,6 +400,9 @@ export default {
         z-index: 99;
       }
     }
+  }
+  .el-table th.is-leaf, .el-table td {
+    border-bottom:1px solid rgba(206,206,206,.3);
   }
   .thead-cell {
     padding: 0;

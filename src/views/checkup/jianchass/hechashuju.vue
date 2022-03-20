@@ -32,7 +32,7 @@
       </div>
       <div style="display:flex;flex-direction:column;height:100%" v-loading="loading">
         <sTable class="hc-s-table" :data="gridData" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange" @on-click="checkXghc">
-          <el-table-column slot="fixed" type="selection" width="55" align="center"/>
+          <el-table-column slot="fixed" type="selection" width="55" align="center" fixed/>
         </sTable>
       </div>
       <pagination
@@ -60,7 +60,7 @@
       <el-dialog class="hc-add-dialog" append-to-body title="新增诊疗相关耗材" :visible.sync="dialogAddHcVisible" :modal="true" width="1000px">
           <div style="display:flex;flex-direction:column;height:100%" v-loading="addHcLoading">
             <sTable class="hc-s-table" :data="hcData" :header="tableHcHeader" :fixedNum="1">
-              <el-table-column width="40px" label="序号" align="center" slot="fixed">
+              <el-table-column width="40px" label="序号" align="center" slot="fixed" fixed>
                 <template slot-scope="scope">
                   <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
                 </template>
@@ -131,7 +131,7 @@ export default {
         label: '明细项目单价(元)',
         prop: 'mxxmdj',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         label: '明细项目单位',
@@ -170,7 +170,7 @@ export default {
         label: '明细项目单价(元)',
         prop: 'mxxmdj',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         label: '明细项目单位',

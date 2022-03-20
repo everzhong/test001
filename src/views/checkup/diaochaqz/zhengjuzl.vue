@@ -67,7 +67,7 @@ export default {
       tableData:[],
       queryParams:{
         pageNum: 1,
-        pageSize: 10
+        pageSize: 50
       },
       total:0,
       wenjian:{

@@ -1,8 +1,8 @@
 /**进销存核查 第四层数据 type=2*/
 <template>
-<div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
+<div class="liushui-table" :style="{height:'100%'}">
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
-    <el-table-column  align="center" width="40" slot="fixed">
+    <el-table-column  align="center" width="40" slot="fixed" fixed>
       <template slot-scope="scope">
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
@@ -23,7 +23,6 @@ export default {
   data(){
     return {
       wsCheck:'',
-      tableHeight:0,
       tableHeader:[{
         prop: 'xwrd',
         label: '认定行为',
@@ -45,7 +44,7 @@ export default {
         prop: 'mxxmdj',
         label: '明细项目单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmdw',
@@ -99,7 +98,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',
@@ -119,10 +118,6 @@ export default {
   created(){
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
-  },
-  mounted(){
-    const th = document.body.offsetHeight - 50-34-138-32-165;
-    this.tableHeight = this.fromLog?`${th+90}px`:`${th}px` ;
   },
   methods:{
     cancelHc(row){//取消核查

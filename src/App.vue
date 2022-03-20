@@ -134,5 +134,46 @@ export default  {
 ::v-deep .el-table--medium td {
   padding:5px 0 !important;
 }
+.page-back-icon {
+  height: 28px;
+  line-height: 30px;
+  position:absolute;
+  right:0px;
+  padding-right: 15px;
+  padding-left: 15px;
+  top:-30px;
+  background-color:#fff;
+  cursor:pointer;
+  i:hover {
+    color: #1b65b9;
+  }
+}
+.container-top{
+    box-sizing: content-box;
+    padding: 20px 0 0;
+    width: 100%;
+  }
+  .toggle-search {
+      width: 100%;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      cursor: pointer;
+      color: #515a6e;
+      &:hover {
+        color: #1B65B9;
+      }
+  }
+// #app .el-radio-button__inner {
+//   background-color: rgba(144,147,153,.15);
+//   border-color: rgba(144,147,153,.3);
+//   color:rgba(144,147,153,1);
+//   box-shadow: none !important;
 
+// }
+// #app .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+//     color: #1B65B9;
+//     background-color: rgba(27,202,185,.15);
+//     border-color: rgba(27,202,185,.3);
+// }
 </style>

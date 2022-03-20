@@ -1,155 +1,169 @@
 <template>
   <div class="app-container">
     <section v-show="!heshiOption.show" >
-      <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search1" ref="bmQueryForm" :inline="true">
-            <el-form-item label="案件来源" prop="ajly">
-              <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
-            </el-form-item>
-            <el-form-item label="险种" prop="ybbf">
-              <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
-            </el-form-item>
-            <el-form-item label="就医类型" prop="jslb">
-              <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
-            </el-form-item>
-            <el-form-item label="批次号" prop="rwpcid">
-              <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
-            </el-form-item>
-            <el-form-item label="数据开始日期" prop="datastarttime">
-              <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
-            </el-form-item>
-            <el-form-item label="数据结束日期" prop="dataendtime">
-              <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
-            </el-form-item>
-            <el-form-item label="机构名称" prop="jgmc">
-              <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
-            </el-form-item>
-              <el-form-item label="承办机构" prop="jcjg">
-              <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
-            </el-form-item>
-              <el-form-item label="检查组" prop="jczname">
-              <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
-            </el-form-item>
-            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
-              <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
-              <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
-              <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-            </div>
-            <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-else>
-              <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
-            </div>
-      </el-form>
-      <el-row :gutter="10">
-        <el-col :span="1.5">
-          <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
-          <el-button type="primary" plain size="small" @click="guizeOptions.show = true">规则说明</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
-          <el-button type="primary" plain size="small" @click="handleThirdCheck" style="margin-right:15px">开展第三方筛查</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="tabsValue==='three'">
-          <span style="color:#606266;font-size:14px">参保地：</span>
-          <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
-            <el-option label="本地" value="01"></el-option>
-            <el-option label="异地" value="02"></el-option>
-          </el-select>
-        </el-col>
-
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
-          <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
-          <el-date-picker
-          v-model="pksj"
-          align="right"
-          type="daterange"
-          size="small"
-          start-placeholder="盘库期初时间"
-          end-placeholder="盘库期末时间"
-         >
-        </el-date-picker>
-        </el-col>
-        <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
-          <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
-        </el-col>
-        <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
-          <el-radio-button label="three">规则筛查</el-radio-button>
-          <el-radio-button label="six">进销存核查</el-radio-button>
-        </el-radio-group>
-        <div class="top-right-btn" v-if="tabsValue=='five'||tabsValue=='qmx'">
-          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-            <el-radio-button label="five">同流水号明细</el-radio-button>
-            <el-radio-button label="qmx">全明细</el-radio-button>
-          </el-radio-group>
+      <div ref="containerTop">
+        <div class="container-top" v-show="showShearch">
+          <el-form  size="small" label-width="80px" class="top-search1" ref="bmQueryForm" :inline="true">
+                <el-form-item label="案件来源" prop="ajly">
+                  <el-input readonly :value="selectDictLabels($store.getters.ajlyDic, queryInfoFrom.ajly)"></el-input>
+                </el-form-item>
+                <el-form-item label="险种" prop="ybbf">
+                  <el-input readonly :value="selectDictLabels($store.getters.ybbfDic, queryInfoFrom.ybbf)"></el-input>
+                </el-form-item>
+                <el-form-item label="就医类型" prop="jslb">
+                  <el-input readonly :value="selectDictLabels($store.getters.jslbDic, queryInfoFrom.jslb)"></el-input>
+                </el-form-item>
+                <el-form-item label="批次号" prop="rwpcid">
+                  <el-input readonly v-model="queryInfoFrom.rwpcid"></el-input>
+                </el-form-item>
+                <el-form-item label="数据开始日期" prop="datastarttime">
+                  <el-input readonly v-model="queryInfoFrom.datastarttime"></el-input>
+                </el-form-item>
+                <el-form-item label="数据结束日期" prop="dataendtime">
+                  <el-input readonly v-model="queryInfoFrom.dataendtime"></el-input>
+                </el-form-item>
+                <el-form-item label="机构名称" prop="jgmc">
+                  <el-input readonly v-model="queryInfoFrom.jgmc"></el-input>
+                </el-form-item>
+                  <el-form-item label="承办机构" prop="jcjg">
+                  <el-input readonly v-model="queryInfoFrom.jcjg"></el-input>
+                </el-form-item>
+                  <el-form-item label="检查组" prop="jczname">
+                  <el-input readonly v-model="queryInfoFrom.jczname"></el-input>
+                </el-form-item>
+                <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
+                  <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
+                  <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
+                  <!-- <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button> -->
+                </div>
+                <!-- <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-else>
+                  <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+                </div> -->
+                <div class="page-back-icon" @click="$router.back(-1)">
+                  <i class="el-icon-arrow-left"></i>
+                </div>
+          </el-form>
         </div>
-      </el-row>
-      <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
-        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
-            <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-            <el-table-column label="操作" align="center" min-width="160" slot="operate">
-              <template slot-scope="scope">
-                <el-button type="text" size="mini" @click="fluProject(scope.row)">
-                  流水号项目汇总
-                </el-button>
-              </template>
-            </el-table-column>
-        </sTable>
-        <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
-        <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
+        <div class="toggle-search" @click="toggleShearch">
+          <i v-if="this.showShearch" class = "el-icon-caret-top"></i>
+          <i v-else class = "el-icon-caret-bottom"></i>
+        </div>
       </div>
-      <div v-loading="loading" v-else>
-        <jinxiaohecha v-show="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
-        <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+      <div class="table-main" :style="{top:topValue}"> 
+        <el-row :gutter="10" class="mb5">
+          <el-col :span="1.5">
+            <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary" size="small" @click="showCheckForm">查询条件</el-button>
+          </el-col>
+          <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
+            <el-button type="primary" size="small" @click="guizeOptions.show = true">规则说明</el-button>
+          </el-col>
+          <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='three'">
+            <el-button type="primary"  size="small" @click="handleThirdCheck" style="margin-right:15px">开展第三方筛查</el-button>
+          </el-col>
+          <el-col :span="1.5" v-if="tabsValue==='three'">
+            <span style="color:#606266;font-size:14px">参保地：</span>
+            <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
+              <el-option label="本地" value="01"></el-option>
+              <el-option label="异地" value="02"></el-option>
+            </el-select>
+          </el-col>
+
+          <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+            <el-button type="primary" size="small" @click="showHecha=true">选择核查数据</el-button>
+          </el-col>
+          <el-col :span="1.5" v-if="!queryInfoFrom.fromLuli && tabsValue==='six'">
+            <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
+            <el-date-picker
+            v-model="pksj"
+            align="right"
+            type="daterange"
+            size="small"
+            start-placeholder="盘库期初时间"
+            end-placeholder="盘库期末时间"
+          >
+          </el-date-picker>
+          </el-col>
+          <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
+            <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
+          </el-col>
+          <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
+            <el-radio-button label="three">规则筛查</el-radio-button>
+            <el-radio-button label="six">进销存核查</el-radio-button>
+          </el-radio-group>
+          <div class="top-right-btn" v-if="tabsValue=='five'||tabsValue=='qmx'">
+            <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+              <el-radio-button label="five">同流水号明细</el-radio-button>
+              <el-radio-button label="qmx">全明细</el-radio-button>
+            </el-radio-group>
+          </div>
+        </el-row>
+        <div v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'" style="height:calc(100% - 37px)">
+          <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
+              <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
+              <el-table-column label="操作" align="center" min-width="160" slot="operate">
+                <template slot-scope="scope">
+                  <el-button type="text" size="mini" @click="fluProject(scope.row)">
+                    流水号项目汇总
+                  </el-button>
+                </template>
+              </el-table-column>
+          </sTable>
+          <tongliumx ref="tongLiumx" v-if="(tabsValue==='five'||tabsValue==='qmx')&&!qmxOptions.show" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc" @radio-change="handleSelectionChange" @on-log="checkLog" @check-mx="checkMx" @on-close="logShow=false"></tongliumx>
+          <quanmingxi v-if="qmxOptions.show" :options="qmxOptions"/>
+        </div>
+        <div v-loading="loading" v-else :style="{height:`calc(100% - ${tabsValue=='six'?153:113}px)`}">
+          <jinxiaohecha v-show="tabsValue=='six'" :tableData="renwusixList" @radio-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
+          <liushui-table v-if="tabsValue=='four'" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table>
+        </div>
       </div>
-      <pagination
-        class="fixed-bottom"
-        v-show="!logShow&&!qmxOptions.show"
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="getList"
-      />
-      <div v-show="(tabsValue=='four'||tabsValue=='six')&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz" style="margin-top:10px;">
-        <el-form inline :model="xwrdForm" :rules="xwRules" size="mini" ref="xwrdForm" label-width="100px">
-          <el-form-item label="名称">
-            <el-input v-model="xwrdForm.mxxmmc" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="行为认定" prop="xwrd">
-            <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
-          </el-form-item>
-          <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
-          </el-form-item>
-          <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
-            <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
-              <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
-            </el-tooltip>
-          </el-form-item>
-          <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
-          </el-form-item>
-          <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item>
-          <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
-            <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj" @change="hanndelChange"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="bz">
-            <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="xwrdSubmit">确定</el-button>
-          </el-form-item>
-        </el-form>
+      <div class="fixed-bottom" :class="[tabsValue=='four'||tabsValue=='six'?'fixed-bottom1':'']">
+        <pagination
+          v-show="!logShow&&!qmxOptions.show"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+        <div v-show="(tabsValue=='four'||tabsValue=='six')&&!logShow &&!queryInfoFrom.fromLuli &&!qmxOptions.show"  class="xingweirz">
+          <el-form inline :model="xwrdForm" :rules="xwRules" size="mini" ref="xwrdForm" label-width="100px">
+            <el-form-item label="名称">
+              <el-input v-model="xwrdForm.mxxmmc" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="行为认定" prop="xwrd">
+              <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
+            </el-form-item>
+            <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
+              <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
+            </el-form-item>
+            <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
+              <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+              <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
+                <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
+              <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
+            </el-form-item>
+            <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
+              <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
+            </el-form-item><el-form-item label="本期购入数量" prop="bqgr" v-if="tabsValue==='six'" >
+              <el-input type="number" min="0" v-model="xwrdForm.bqgr" :disabled="!pksj" @change="hanndelChange"></el-input>
+            </el-form-item><el-form-item label="现金销售数量" prop="xjxs" v-if="tabsValue==='six'" >
+              <el-input type="number" min="0" v-model="xwrdForm.xjxs" :disabled="!pksj" @change="hanndelChange"></el-input>
+            </el-form-item><el-form-item label="期末库存数量" prop="qmkc" v-if="tabsValue==='six'" >
+              <el-input type="number" min="0" v-model="xwrdForm.qmkc" :disabled="!pksj" @change="hanndelChange"></el-input>
+            </el-form-item>
+            <el-form-item label="医保结算数量" prop="ybjs" v-if="tabsValue==='six'" >
+              <el-input type="number" min="0" v-model="xwrdForm.ybjs" :disabled="!pksj" @change="hanndelChange"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="bz">
+              <el-input v-model="xwrdForm.bz" maxlength="50"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="xwrdSubmit">确定</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
@@ -266,9 +280,10 @@ import Quanmingxi from '../../common/quanmingxi.vue'
 import Jinxiaohecha from './jinxiaohecha.vue'
 import Hechashuju from './hechashuju.vue'
 import xmbm from './xmbm.vue'
-
+import { pageMixin } from '@/utils/pageMixin.js'
 export default {
   name: "Shisjc",
+  mixins:[pageMixin],
   components: {
     LiushuiTable,
     Guizeshuom,
@@ -947,14 +962,18 @@ export default {
 .table-main {
   position: absolute;
   top:153px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
+  width: 100%;
+  &.fixed-bottom1 {
+    bottom: 0;
+  }
 }
 .xingweirz {
   .el-form-item {

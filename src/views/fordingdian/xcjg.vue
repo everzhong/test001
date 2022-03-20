@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" v-loading="pageLoaing">
+  <div class="app-container" v-loading="pageLoaing" style="padding-top:20px">
     <el-row :gutter="10">
       <el-col :span="1.5">
         <span style="color:#606266;font-size:14px">参保地：</span>

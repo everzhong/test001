@@ -1,6 +1,6 @@
 <template>
   <sTable :data="tableData" :header="tableHeader" :fixedNum="2" @selection-change="handleSelectionChange">
-    <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+    <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
     <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
     <el-table-column label="操作" align="center" width="150" slot="operate">
       <template slot-scope="scope">
@@ -100,9 +100,9 @@ export default {
       },{
         label: '结算等级',
         prop:'jsdj',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         label:"涉及规则数",
         prop:'sjwgs'

@@ -2,7 +2,7 @@
 <div class="app-container" v-loading="loading">
   <div v-if="pageView!=='main'" style="position:absolute;right:20px;top:-31px;background-color:rgb(255, 255, 255);">
     <el-button type="primary" size="mini" @click="submit">提交</el-button>
-    <el-button type="primary" size="mini" @click="pageView='main'">返回</el-button>
+    <i class="el-icon-arrow-left" @click="pageView='main'" style="cursor:pointer;margin-left:15px;vertical-align:middle"></i>
   </div>
   <jgheshi v-if="pageView==='main'" @on-heshi="handleLink($event,'heshuju')"/>
   <heshishuju v-if="pageView==='heshuju'"  :listConfig="xmInfos" @on-liushui="handleLink($event,'lshhz')" @on-xgmx="handleLink($event,'xgmx')"/>

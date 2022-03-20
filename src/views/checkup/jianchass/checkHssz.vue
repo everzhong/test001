@@ -208,7 +208,7 @@ export default {
         prop: 'mxxmdj',
         label: '单价(元)',
         viewFun: (dj)=>{
-          return this.formatMoney(dj,3)
+          return this.formatMoney(dj,2)
         }
       },{
         prop: 'qckc',
@@ -241,7 +241,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',

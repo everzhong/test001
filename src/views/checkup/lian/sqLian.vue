@@ -1,9 +1,12 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" style="padding-top:20px">
     <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
       <!-- <el-button type="primary" plain size="mini" @click="checkLiAn">查看案件信息</el-button> -->
       <el-button type="primary" size="mini" @click="submitForm('submit')">提交审批</el-button>
-       <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button>
+       <!-- <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button> -->
+    </div>
+    <div class="page-back-icon" @click="lianBack">
+       <i class="el-icon-arrow-left"></i>
     </div>
     <div class="zhizuo-port">
         <div class="zhizuo">
@@ -200,7 +203,7 @@ export default {
     },
     async getJanChacy(){
       try {
-        const res = await listUser({pageNum:1,pageSize: 10000})
+        const res = await listUser({pageNum:1,pageSize: 50000})
         if(res.code === 200 && res.rows.length) {
           const rows = res.rows
           if(this.zhizuo.cbr){

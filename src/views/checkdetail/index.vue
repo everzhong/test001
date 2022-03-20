@@ -1,61 +1,64 @@
 <template>
-  <div class="app-container">
-    <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" style="margin-bottom:6px"/>
-    <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
-      <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
+  <div :class="['app-container',isFromLuli?'from-luli':'']">
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" @toggle-search="toggleSearch"/>
+    <div class="page-back-icon" @click="$router.back(-1)">
+      <!-- <el-button type="primary" icon="el-icon-back" size="mini" >返回</el-button> -->
+      <i class="el-icon-arrow-left"></i>
     </div>
-    <el-row :gutter="10">
-      <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
-        <el-button
-          type="primary"
-          size="small"
-          @click="handleNetCheck"
-        >派发网审</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
-        <el-button
-          type="primary"
-          size="small"
-          @click="handleThirdCheck"
-        >开展第三方筛查</el-button>
-      </el-col>
-      <el-col :span="1.5" v-if="mxShow">
-        <el-button
-          type="warning"
-          size="small"
-          plain
-          @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
-        >返回上一层</el-button>
-      </el-col>
-      <div class="top-right-btn">
-        <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two" v-if="!isFromLuli">任务列表</el-radio-button>
-          <el-radio-button label="three">任务列表-规则列表</el-radio-button>
-          <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
-        </el-radio-group>
+    <div class="table-main" :style="{top:topValue}">
+      <el-row :gutter="10" style="margin-bottom:5px">
+        <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleNetCheck"
+          >派发网审</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleThirdCheck"
+          >开展第三方筛查</el-button>
+        </el-col>
+        <el-col :span="1.5" v-if="mxShow">
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
+          >返回上一层</el-button>
+        </el-col>
+        <div class="top-right-btn">
+          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+            <el-radio-button label="two" v-if="!isFromLuli">任务列表</el-radio-button>
+            <el-radio-button label="three">任务列表-规则列表</el-radio-button>
+            <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
+          </el-radio-group>
+        </div>
+      </el-row>
+      <div v-loading="loading" v-show="!mxShow" style="height:calc(100% - 37px)">
+        <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
+        <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
+        <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange" @on-click="viewSc">
+          <el-table-column v-if="!isRwcx" slot="fixed" type="selection" width="55" align="center"/>
+          <el-table-column slot="fixed" label="序号" type="index" align="center"/>
+          <el-table-column label="操作" align="center" width="180" slot="operate">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                @click="checkdetail(scope.row,'xgmx')"
+              >查看相关明细</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                @click="checkdetail(scope.row,'qmx')"
+              >全明细</el-button>
+            </template>
+          </el-table-column>
+        </sTable>
       </div>
-    </el-row>
-    <div v-loading="loading" v-show="!mxShow" :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topHeight}">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
-      <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
-      <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange" @on-click="viewSc">
-        <el-table-column v-if="!isRwcx" slot="fixed" type="selection" width="55" align="center"/>
-        <el-table-column slot="fixed" label="序号" type="index" align="center"/>
-        <el-table-column label="操作" align="center" width="180" slot="operate">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="text"
-              @click="checkdetail(scope.row,'xgmx')"
-            >查看相关明细</el-button>
-            <el-button
-              size="mini"
-              type="text"
-              @click="checkdetail(scope.row,'qmx')"
-            >全明细</el-button>
-          </template>
-        </el-table-column>
-      </sTable>
     </div>
     <pagination
       v-show="!mxShow"
@@ -65,7 +68,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div :class="[isFromLuli?'table-main1':'table-main']" v-if="xgmxOptions.show||qmxOptions.show" :style="{top:topHeight}">
+    <div :class="[isFromLuli?'table-main1':'table-main']" v-if="xgmxOptions.show||qmxOptions.show" :style="{top:topValue}">
       <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
       <quanmingxi :options="qmxOptions" v-else />
     </div>
@@ -139,9 +142,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         prop: 'datastarttime',
         label: '数据开始日期',
@@ -189,7 +192,6 @@ export default {
         query:{}
       },
       mxShow:false,
-      topHeight:0,
       isFromLuli:false,//从履历查询过来
       submitParams:{
         yxjg:'',
@@ -220,7 +222,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
         status:-1
       },
       // 表单参数
@@ -236,6 +238,7 @@ export default {
       duration:0,//每隔三秒，post一个筛查数据
       postTimmer:null,
       waitScList:[],//等待setsc的列表
+      topValue:0
     };
   },
   created() {
@@ -249,10 +252,10 @@ export default {
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
   },
-  mounted(){
-    this.topHeight = this.calcTableHeight(32+5+10,this.isFromLuli)
-  },
   methods: {
+    toggleSearch(val){
+      this.topValue = val
+    },
     viewSc(){
       this.$router.push({path:'/zhgl/dsfgz/fasc/scenarioConfiguration'})
     },
@@ -529,7 +532,7 @@ export default {
 }
 .table-main,.table-main1{
   position: absolute;
-  bottom:70px;
+  bottom:40px;
   left: 20px;
   right: 20px;
 }
@@ -541,7 +544,7 @@ export default {
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:5px;
   right: 0px;
 }
 </style>

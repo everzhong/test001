@@ -41,7 +41,7 @@ export default {
         prop: 'mxxmdj',
         label: '明细项目单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmdw',
@@ -95,7 +95,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',

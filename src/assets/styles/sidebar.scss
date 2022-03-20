@@ -6,6 +6,7 @@
         position: relative;
     }
     .sidebar-container {
+        width: 210px;
         -webkit-transition: width .28s;
         transition: width 0.28s;
         width: $sideBarWidth !important;
@@ -84,11 +85,11 @@
                 background-color: $subMenuHover !important;
             }
             &.is-active {
-                background-color: #001528 !important;
+                background-color: $subMenuHover !important;
             }
         }
         & .theme-dark .nest-menu .is-active .el-submenu__title {
-            background-color: #001528 !important;
+            background-color: $subMenuHover !important;
         }
     }
     .hideSidebar {

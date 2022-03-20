@@ -1,6 +1,6 @@
 <template>
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1"  @selection-change="handleSelectionChange">
-    <el-table-column type="selection" width="55" align="center" slot="fixed"/>
+    <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
     <!-- <el-table-column label="序号" type="index" align="center"  slot="fixed"/> -->
     <el-table-column label="操作" align="center" width="180" slot="operate">
       <template slot-scope="scope">

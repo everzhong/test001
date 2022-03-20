@@ -1,6 +1,6 @@
 /**项目流水号汇总 第5层数据*/
 <template>
-  <div style="height:calc(100% - 70px)">
+  <div style="height:calc(100% - 35px)">
     <sTable v-show="!showLog" :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
       <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
     </sTable>
@@ -86,7 +86,7 @@ export default {
         prop: 'mxxmdj',
         label: '明细项目单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmsl',

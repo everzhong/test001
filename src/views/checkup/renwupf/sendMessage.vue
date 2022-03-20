@@ -18,7 +18,7 @@
     </el-form>
     <div class="main" v-loading="loading">
       <el-table border :data="roleList">
-        <el-table-column width="40px" align="center">
+        <el-table-column width="40px" align="center" fixed>
           <template slot-scope="scope">
             <el-radio :label="scope.$index" v-model="roleCheck"></el-radio>
           </template>
@@ -74,7 +74,7 @@
               </div>
               <div style="min-height:150px;max-height:270px;overflow:auto">
                 <el-table ref="multipleTable" :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
-                  <el-table-column type="selection" width="50" align="center" />
+                  <el-table-column type="selection" width="50" align="center" fixed/>
                   <el-table-column property="jgdm" label="机构ID" align="center" show-overflow-tooltip></el-table-column>
                   <el-table-column property="jgmc" label="机构名称" align="center" show-overflow-tooltip></el-table-column>
                   <el-table-column property="roleName" label="人员类型" align="center" show-overflow-tooltip>
@@ -208,7 +208,7 @@ export default {
     },
     async getJanChacy(){
       try {
-        const res = await listUser({pageNum:1,pageSize: 10000})
+        const res = await listUser({pageNum:1,pageSize: 50000})
         if(res.code === 200) {
           this.gridData = res.rows
         }

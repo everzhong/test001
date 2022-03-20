@@ -2,7 +2,7 @@
 <template>
 <div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
   <sTable :data="tableData" :header="tableHeader" :fixedNum="hasNoRending?0:1" :isrowClassName="true">
-    <el-table-column  align="center" width="55" slot="fixed" v-if="!hasNoRending">
+    <el-table-column  align="center" width="55" slot="fixed" v-if="!hasNoRending" fixed>
       <template slot-scope="scope">
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
@@ -89,7 +89,7 @@ export default {
         prop: 'mxxmdj',
         label: '明细项目单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmsl',
@@ -123,7 +123,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',

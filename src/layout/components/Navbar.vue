@@ -16,7 +16,7 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import RuoYiGit from '@/components/RuoYi/Git'
 import RuoYiDoc from '@/components/RuoYi/Doc'
-
+import {EventBus} from '@/utils/eventBus.js'
 export default {
   components: {
     Breadcrumb,
@@ -53,6 +53,13 @@ export default {
   },
   methods: {
     toggleSideBar() {
+      try{
+        e.stopPropagation();//非IE浏览器
+      }
+      catch(e){
+        window.event.cancelBubble = true;//IE浏览器
+      }
+      EventBus.$emit('menue-toggle')
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {

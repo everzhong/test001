@@ -24,7 +24,7 @@ export default {
       total:0,
       queryParams:{
         pageNum:1,
-        pageSize:10
+        pageSize:50
       },
       tableData:[],
       tableHeader:[{
@@ -78,7 +78,7 @@ export default {
         prop: 'mxxmdj',
         label: '明细项目单价(元)',
         viewFun: (mxxmdj)=>{
-          return this.formatMoney(mxxmdj,3)
+          return this.formatMoney(mxxmdj,2)
         }
       },{
         prop: 'mxxmsl',

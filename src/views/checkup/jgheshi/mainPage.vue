@@ -1,62 +1,70 @@
 <template>
 <div>
-  <el-form style="height:70px;overflow:auto;margin-bottom:20px;" size="small" label-width="100px" class="top-search" ref="bmQueryForm" :inline="true">
-    <div>
-      <el-form-item label="险种" prop="ybbf">
-        <el-select v-model="searchForm.ybbf" placeholder="全部" clearable size="small">
-          <el-option
-            v-for="dict in ybbfOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="就医类型" prop="jslb">
-        <el-select v-model="searchForm.jslb" placeholder="全部" clearable size="small">
-          <el-option
-            v-for="dict in jslbOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="联系人" prop="hsr">
-        <el-input  v-model="searchForm.hsr"></el-input>
-      </el-form-item>
-      <el-form-item label="数据开始日期" prop="datastarttime">
-        <el-date-picker
-          style="width:205px"
-          v-model="searchForm.datastarttime"
-          align="right"
-          type="date"
-          size="small"
-         >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="数据结束日期" prop="dataendtime">
-        <el-date-picker
-          style="width: 206px"
-          v-model="searchForm.dataendtime"
-          align="right"
-          type="date"
-          size="small"
-         >
-        </el-date-picker>
-      </el-form-item>
-       <el-form-item label="联系电话" prop="hsr">
-        <el-input  v-model="searchForm.mobile"></el-input>
-      </el-form-item>
-    </div> 
-    <div>
-      <el-form-item style="margin-right:0;text-align:right">
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
+  <div ref="containerTop">
+    <div class="container-top" v-show="showShearch">
+      <el-form style="height:70px;overflow:auto;margin-bottom:0px;" size="small" label-width="100px" class="top-search" ref="bmQueryForm" :inline="true">
+        <div>
+          <el-form-item label="险种" prop="ybbf">
+            <el-select v-model="searchForm.ybbf" placeholder="全部" clearable size="small">
+              <el-option
+                v-for="dict in ybbfOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="就医类型" prop="jslb">
+            <el-select v-model="searchForm.jslb" placeholder="全部" clearable size="small">
+              <el-option
+                v-for="dict in jslbOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="联系人" prop="hsr">
+            <el-input  v-model="searchForm.hsr"></el-input>
+          </el-form-item>
+          <el-form-item label="数据开始日期" prop="datastarttime">
+            <el-date-picker
+              style="width:205px"
+              v-model="searchForm.datastarttime"
+              align="right"
+              type="date"
+              size="small"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="数据结束日期" prop="dataendtime">
+            <el-date-picker
+              style="width: 206px"
+              v-model="searchForm.dataendtime"
+              align="right"
+              type="date"
+              size="small"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="hsr">
+            <el-input  v-model="searchForm.mobile"></el-input>
+          </el-form-item>
+        </div> 
+        <div>
+          <el-form-item style="margin-right:0;text-align:right">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </div>
+      </el-form>
     </div>
-  </el-form>
-  <div class="table-main">
+    <div class="toggle-search" @click="toggleShearch">
+      <i v-if="this.showShearch" class = "el-icon-caret-top"></i>
+      <i v-else class = "el-icon-caret-bottom"></i>
+    </div>
+  </div>
+  <div class="table-main" :style="{top:topValue}">
     <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
       <el-table-column label="序号" type="index" align="center" min-width="65" slot="fixed"/>
       <el-table-column label="操作" align="center"  width="110" slot="operate">
@@ -77,8 +85,10 @@
 </template>
 <script>
 import {listRenwutwo} from '@/api/renwu/renwutwo'
+import { pageMixin } from '@/utils/pageMixin.js'
 export default {
   name:'Jgheshi',
+  mixins:[pageMixin],
   data(){
     return {
       total:0,
@@ -183,13 +193,13 @@ export default {
 .table-main {
   position: absolute;
   top:110px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

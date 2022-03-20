@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="height:94px"/>
-    <div v-loading="loading" class="table-main">
+    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <div v-loading="loading" class="table-main" :style="{top:topValue}">
       <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
         <el-table-column label="序号" type="index" align="center" slot="fixed" width="70"/>
         <el-table-column label="操作" align="center" min-width="100" slot="operate">
@@ -35,6 +35,7 @@ export default {
   },
   data() {
     return {
+      topValue:0,
       tableHeader:[{
         prop: 'rwpcid',
         label: '批次号',
@@ -75,9 +76,9 @@ export default {
       },{
         prop: 'jsdj',
         label: '结算等级',
-        viewFun: (jsdj)=>{
-          return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
-        }
+        // viewFun: (jsdj)=>{
+        //   return this.selectDictLabels(this.$store.getters.jsdjDic, jsdj)
+        // }
       },{
         label:"数据开始日期",
         prop:'datastarttime',
@@ -116,7 +117,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       // 表单参数
       form: {},
@@ -192,13 +193,13 @@ export default {
 .table-main {
   position: absolute;
   top:114px;
-  bottom:70px;
+  bottom:45px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

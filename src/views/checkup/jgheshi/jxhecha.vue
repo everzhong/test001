@@ -1,16 +1,18 @@
 /**进销存核查 第四层数据 type=2*/
 <template>
-<div class="liushui-table" :style="{height:tableHeight,marginTop:'10px'}">
-  <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true" @selection-change="handleSelectionChange">
-    <!-- <el-table-column v-if="!hasNoRending" type="selection" width="55" align="center" slot="fixed"/> -->
-    <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-    <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
-      <template slot-scope="scope">
-        <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
-        <el-button :disabled="!!scope.row.xwrd" type="text" @click="cancelHc(scope.row)" size="mini">取消核查</el-button>
-      </template>
-    </el-table-column>
-  </sTable>
+<div class="liushui-table" style="height:calc(100% - 20px);margin-top:5px">
+  <div style="height:100%">
+    <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true" @selection-change="handleSelectionChange">
+      <!-- <el-table-column v-if="!hasNoRending" type="selection" width="55" align="center" slot="fixed"/> -->
+      <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
+      <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
+        <template slot-scope="scope">
+          <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
+          <el-button :disabled="!!scope.row.xwrd" type="text" @click="cancelHc(scope.row)" size="mini">取消核查</el-button>
+        </template>
+      </el-table-column>
+    </sTable>
+  </div>
 </div>
 </template>
 <script>
@@ -19,7 +21,6 @@ export default {
   name:'Jxhecha',
   data(){
     return {
-      tableHeight:0,
       tableHeader:[{
         prop: 'xwrd',
         label: '行为认定',
@@ -41,7 +42,7 @@ export default {
         prop: 'mxxmdj',
         label: '单价(元)',
         viewFun: (dj)=>{
-          return this.formatMoney(dj,3)
+          return this.formatMoney(dj,2)
         }
       },{
         prop: 'qckc',
@@ -74,7 +75,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',
@@ -115,10 +116,6 @@ export default {
   created(){
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
-  },
-  mounted(){
-    let th = `${document.body.offsetHeight - (this.hasNoRending?122:212)}` 
-    this.tableHeight = `${this.exHeight?th-this.exHeight:th}px` ;
   },
   methods:{
     cancelHc(row){//取消核查

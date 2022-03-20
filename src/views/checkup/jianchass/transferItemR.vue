@@ -20,10 +20,10 @@
     </el-row>
     <div style="height:calc(100% - 80px)" v-loading="loading">
       <sTable v-show="tabsValue==1" style="margin-top:8px;height:100%" :fixedNum="1" :data="tableData" @selection-change="handleSelectionChange" :header="gzHeader">
-        <el-table-column type="selection" width="40" align="center" slot="fixed"/>
+        <el-table-column type="selection" width="40" align="center" slot="fixed" fixed/>
       </sTable>
       <sTable  v-show="tabsValue==2" style="margin-top:8px;height:100%" :fixedNum="1" :data="tableData" @selection-change="handleSelectionChange" :header="hcHeader">
-        <el-table-column type="selection" width="40" align="center" slot="fixed"/>
+        <el-table-column type="selection" width="40" align="center" slot="fixed" fixed/>
       </sTable>
       <pagination
       style="float:right"
@@ -166,7 +166,7 @@ export default {
         prop: 'mxxmdj',
         label: '单价(元)',
         viewFun: (dj)=>{
-          return this.formatMoney(dj,3)
+          return this.formatMoney(dj,2)
         }
       },{
         prop: 'qckc',
@@ -199,7 +199,7 @@ export default {
         prop: 'zkdj',
         label: '追款单价',
         viewFun: (zkdj)=>{
-          return this.formatMoney(zkdj,3)
+          return this.formatMoney(zkdj,2)
         }  
       },{
         prop: 'wgsl',
@@ -243,7 +243,7 @@ export default {
         selection:[],
         total:0,
         pageNum:1,
-        pageSize:10
+        pageSize:50
       },
       ids:[],
       queryParams:{

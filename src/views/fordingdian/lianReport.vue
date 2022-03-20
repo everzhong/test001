@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" style="padding-top:20px;">
     <div class="zhizuo-port" >
         <div class="zhizuo">
           <div class="zhizuo-titlev1">{{zhizuo.lian==3?'已立案':'未立案'}}<span>{{zhizuo.lianrq}}</span></div>

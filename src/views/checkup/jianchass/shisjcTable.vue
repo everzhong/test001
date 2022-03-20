@@ -9,7 +9,7 @@
     <el-table-column label="通用名" align="center" prop="tym"  show-overflow-tooltip/>
     <el-table-column label="明细项目单价(元)" align="center" prop="mxxmdj"  show-overflow-tooltip>
        <template slot-scope="scope">
-        <span>{{formatMoney(scope.row.mxxmdj,3)}}</span>
+        <span>{{formatMoney(scope.row.mxxmdj,2)}}</span>
       </template>
     </el-table-column>
     <el-table-column label="明细项目数量" align="center" prop="mxxmsl"  show-overflow-tooltip/>

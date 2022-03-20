@@ -1,70 +1,73 @@
 <template>
   <div class="app-container">
-    <SearchItem ref="searchForm" @handleQuery="handleQuery" style="margin-bottom:6px"/>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="mxShow">
-        <el-button
-          type="warning"
-          size="small"
-          plain
-          @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
-        >返回上一层</el-button>
-      </el-col>
-      <div class="top-right-btn">
-        <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-          <el-radio-button label="two">任务列表</el-radio-button>
-          <el-radio-button label="three">任务列表-规则列表</el-radio-button>
-          <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
-        </el-radio-group>
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" @toggle-search="h=>tableHeight = h"/>
+    <div :class="['table-main',tabsValue!=='two'||mxShow?'table-main1':'']" :style="{top:tableHeight}">
+      <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
+        <el-col :span="1.5" v-if="mxShow">
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
+          >返回上一层</el-button>
+        </el-col>
+        <div class="top-right-btn">
+          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+            <el-radio-button label="two">任务列表</el-radio-button>
+            <el-radio-button label="three">任务列表-规则列表</el-radio-button>
+            <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
+          </el-radio-group>
+        </div>
+      </el-row>
+      <div v-loading="loading"  v-show="!mxShow && tabsValue==='two'" style="height:calc(100% - 37px)">
+        <RenwutwoTable v-if="tabsValue==='two'" :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
       </div>
-    </el-row>
-    <div v-loading="loading"  v-show="!mxShow && tabsValue==='two'">
-      <RenwutwoTable v-if="tabsValue==='two'" :tableData="renwutwoList"  @check-mx="checkMix" @handleSelectionChange="handleSelectionChange"/>
+      <div v-loading="loading"  v-show="tabsValue!=='two'||mxShow" style="height:calc(100% - 37px)">
+        <RenwuthreeTable v-if="tabsValue==='three'&!mxShow" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
+        <RenwufourTable  v-if="tabsValue==='four'&!mxShow" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
+        <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+        <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
+      </div>
     </div>
-    <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:15px;">
-      <el-form-item label="已选机构" prop="yxjg">
-        <el-input
-          style="width:280px;"
-          disabled
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          v-model="submitParams.yxjg">
-        </el-input>
-      </el-form-item>
-      <el-form-item label="网审意见" prop="wsyj">
-        <el-select v-model="submitParams.wsyj" placeholder="全部" clearable  style="width: 180px">
-          <el-option
-            key="1"
-            label="建议检查"
-            value="建议检查"
-          />
-          <el-option
-            key="2"
-            label="暂不检查"
-            value="暂不检查"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="检查人员" prop="wsry">
-        <el-input readonly :value="submitParams.wsry"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
-      </el-form-item>
-    </el-form>
-    <pagination
-      class="fixed-bottom"
-      v-show="!mxShow"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-    <div v-loading="loading" class="table-main" v-show="tabsValue!=='two'||mxShow" :style="{top:tableHeight}">
-      <RenwuthreeTable v-if="tabsValue==='three'&!mxShow" :tableData="renwuthreeList" @check-xgmx="checkMix($event,'xgmx')"/>
-      <RenwufourTable  v-if="tabsValue==='four'&!mxShow" :tableData="renwufourList" @check-xgmx="checkMix($event,'xgmx')"/>
-      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
-      <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
+    <div class="fixed-bottom">
+      <pagination
+        v-show="!mxShow"
+        :total="total"
+        :page.sync="queryParams.pageNum"
+        :limit.sync="queryParams.pageSize"
+        @pagination="getList"
+      />
+      <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="padding-left:20px;">
+        <el-form-item label="已选机构" prop="yxjg">
+          <el-input
+            style="width:280px;"
+            disabled
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            v-model="submitParams.yxjg">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="网审意见" prop="wsyj">
+          <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
+            <el-option
+              key="1"
+              label="建议检查"
+              value="建议检查"
+            />
+            <el-option
+              key="2"
+              label="暂不检查"
+              value="暂不检查"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="检查人员" prop="wsry">
+          <el-input readonly :value="submitParams.wsry"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"  @click="handleNetCheck" :disabled="ids.length<1">提交</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -114,7 +117,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       // 表单参数
       form: {},
@@ -139,7 +142,6 @@ export default {
   },
   methods: {
     checkMix(row,key){
-      this.tableHeight = this.calcTableHeight(46)
       const keyw = `${key}Options`
       if(key==='xgmx'){
         const query = {
@@ -267,7 +269,6 @@ export default {
       this.xgmxOptions.show=false
       this.qmxOptions.show=false
       if(val!=='two'){
-        this.tableHeight = this.calcTableHeight(46)
       } else {
         this.ids = []
       }
@@ -291,11 +292,15 @@ export default {
   left:20px;
   right:20px;
   top:178px;
-  bottom:70px;
+  bottom:96px;
+}
+.table-main1 {
+  bottom:45px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
-  right: 5px;
+  width: 100%;
+  bottom:8px;
+  right: 0px;
 }
 </style>

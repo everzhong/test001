@@ -1,40 +1,42 @@
 <template>
   <div class="app-container">
-    <SearchItem @handleQuery="handleQuery" style="height:82px"/>
-    <div class="middle-btn">
-      <el-row :gutter="10" class="mb8">
-        <el-col :span="1.5" v-if="tabsValue==='two'">
-          <el-button
-            type="primary"
-            size="small"
-            @click="handleNetCheck"
-          >派发检查组</el-button>
-        </el-col>
-        <el-col :span="1.5" v-if="mxShow">
-          <el-button
-            type="warning"
-            size="small"
-            plain
-            @click="qmxOptions.show=false,xgmxOptions.show=false,mxShow=false"
-          >返回上一层</el-button>
-        </el-col>
-        <div class="top-right-btn">
-          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-            <el-radio-button label="two" value="two">任务列表</el-radio-button>
-            <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>
-            <el-radio-button label="four" value="four">任务列表-项目列表</el-radio-button>
-          </el-radio-group>
-        </div>
-      </el-row>
-    </div>
-    <div v-loading="loading" class="table-main" v-show="!mxShow">
-      <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMingx($event,'xgmx')"/>
-      <RenwufourTable v-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMingx($event,'xgmx')"/>
-      <RenwutwoTable v-if="tabsValue==='two'" :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange" @check-xgmx="checkMingx($event,'xgmx')" @check-qmx="checkMingx($event,'qmx')" :showEdit="true"/>
-    </div>
-    <div class="table-main" v-show="mxShow">
-      <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
-      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <div class="table-main" :style="{top:topValue}">
+      <div class="middle-btn">
+        <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
+          <el-col :span="1.5" v-if="tabsValue==='two'">
+            <el-button
+              type="primary"
+              size="small"
+              @click="handleNetCheck"
+            >派发检查组</el-button>
+          </el-col>
+          <el-col :span="1.5" v-if="mxShow">
+            <el-button
+              type="warning"
+              size="small"
+              plain
+              @click="qmxOptions.show=false,xgmxOptions.show=false,mxShow=false"
+            >返回上一层</el-button>
+          </el-col>
+          <div class="top-right-btn">
+            <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+              <el-radio-button label="two" value="two">任务列表</el-radio-button>
+              <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>
+              <el-radio-button label="four" value="four">任务列表-项目列表</el-radio-button>
+            </el-radio-group>
+          </div>
+        </el-row>
+      </div>
+      <div v-loading="loading" v-show="!mxShow" style="height:calc(100% - 37px)">
+        <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @check-xgmx="checkMingx($event,'xgmx')"/>
+        <RenwufourTable v-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkMingx($event,'xgmx')"/>
+        <RenwutwoTable v-if="tabsValue==='two'" :tableData="renwutwoList" @handleSelectionChange="handleSelectionChange" @check-xgmx="checkMingx($event,'xgmx')" @check-qmx="checkMingx($event,'qmx')" :showEdit="true"/>
+      </div>
+      <div v-show="mxShow" style="height:calc(100% - 37px)">
+        <quanmingxi :options="qmxOptions" v-if="qmxOptions.show"/>
+        <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
+      </div>
     </div>
     <pagination
       class="fixed-bottom"
@@ -71,6 +73,7 @@ export default {
   },
   data() {
     return {
+      topValue:0,
       qmxOptions:{
         show:false,
         query:{}
@@ -94,7 +97,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       // 表单参数
       form: {},
@@ -301,13 +304,13 @@ export default {
 .table-main {
   position: absolute;
   top:146px;
-  bottom:70px;
+  bottom:50px;
   left: 20px;
   right: 20px;
 }
 .fixed-bottom {
   position: absolute;
-  bottom:30px;
+  bottom:8px;
   right: 0px;
 }
 </style>

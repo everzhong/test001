@@ -17,7 +17,7 @@
         <el-table-column label="行为认定" align="center" prop="xwrd" :width="flexColumnWidth('xwrd',tableData)"/>
         <el-table-column label="追款单价(元)" align="center" prop="zkdj">
           <template slot-scope="scope">
-            <span>{{formatMoney(scope.row.zkdj,3)}}</span>
+            <span>{{formatMoney(scope.row.zkdj,2)}}</span>
           </template>
         </el-table-column>
         <el-table-column label="违规数量" align="center" prop="wgsl" show-overflow-tooltip/>
@@ -49,7 +49,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 50,
       },
       total:0
     }
