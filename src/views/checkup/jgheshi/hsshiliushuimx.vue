@@ -42,7 +42,7 @@
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="2" :checkAll="false"  @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-            <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
+            <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
               <template slot-scope="scope">
                 <el-button type="text" @click="tongLiushuimx(scope.row)" size="mini">同流水号明细</el-button>
               </template>

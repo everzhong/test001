@@ -11,7 +11,7 @@
   <div class="table-main">
     <sTable :data="tableData" :header="tableHeader" :fixedNum="1" v-show="tabsValue==='three'">
       <el-table-column label="序号" type="index" align="center" min-width="65" slot="fixed"/>
-      <el-table-column label="操作" align="center"  width="110" slot="operate">
+      <el-table-column label="操作"  fixed="right" align="center"  width="110" slot="operate">
         <template slot-scope="scope" >
           <el-button size="mini" type="text" primary @click="submitHsyj(scope.row)">查看反馈信息见</el-button>
         </template> 
@@ -19,7 +19,7 @@
     </sTable>
      <sTable :data="hcTableData" :header="hcHeader" :fixedNum="1" v-show="tabsValue==='four'">
       <el-table-column label="序号" type="index" align="center" min-width="65" slot="fixed"/>
-      <el-table-column label="操作" align="center"  width="110" slot="operate">
+      <el-table-column label="操作"  fixed="right" align="center"  width="110" slot="operate">
         <template slot-scope="scope" >
           <el-button size="mini" type="text" primary @click="submitHsyj(scope.row)">查看反馈信息见</el-button>
         </template> 

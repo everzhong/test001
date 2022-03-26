@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container container_1">
     <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
     <div class="table-main" :style="{top:topValue}">
       <div class="middle-btn">

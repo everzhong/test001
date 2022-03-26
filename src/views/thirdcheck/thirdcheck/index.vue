@@ -63,7 +63,7 @@
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <sTable :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
         <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
-        <el-table-column label="操作" align="center" slot="operate" min-width="100">
+        <el-table-column label="操作"  fixed="right" align="center" slot="operate" min-width="100">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="openUrl(scope.row)" :disabled="scope.row.sccqstatus!=3">数据筛查</el-button>
           </template>

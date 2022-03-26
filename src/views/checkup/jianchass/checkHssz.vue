@@ -29,7 +29,7 @@
       <sTable v-show="tabsValue==='three'&&gzTabsValue==1" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
          <el-table-column type="index" label="序号"  align="center" width="55" slot="fixed">
         </el-table-column>
-        <el-table-column label="操作" align="center" width="150" slot="operate">
+        <el-table-column label="操作"  fixed="right" align="center" width="150" slot="operate">
           <template>
             <el-button type="text" size="mini" @click="checkLiushui">流水号项目汇总</el-button>
           </template>

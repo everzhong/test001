@@ -67,7 +67,7 @@
   <div class="table-main" :style="{top:topValue}">
     <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
       <el-table-column label="序号" type="index" align="center" min-width="65" slot="fixed"/>
-      <el-table-column label="操作" align="center"  width="110" slot="operate">
+      <el-table-column label="操作"  fixed="right" align="center"  width="110" slot="operate">
         <template slot-scope="scope" >
           <el-button size="mini" type="text" primary @click="handleHsShuju(scope.row)">核实数据</el-button>
         </template> 

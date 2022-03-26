@@ -1,7 +1,7 @@
 <template>
   <sTable :data="tableData" :header="tableHeader" :fixedNum="1">
     <el-table-column label="序号" type="index" align="center" width="60" slot="fixed"/>
-    <el-table-column label="操作" align="center" min-width="150" slot="operate">
+    <el-table-column label="操作"  fixed="right" align="center" min-width="150" slot="operate">
       <template slot-scope="scope">
         <el-button
           size="mini"

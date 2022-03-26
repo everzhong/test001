@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container container_1">
     <SearchItem ref="searchForm" @handleQuery="handleQuery" @toggle-search="h=>tableHeight = h"/>
     <div :class="['table-main',tabsValue!=='two'||mxShow?'table-main1':'']" :style="{top:tableHeight}">
       <el-row :gutter="10" class="mb8" style="margin-bottom:5px">

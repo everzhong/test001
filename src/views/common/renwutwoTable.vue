@@ -38,7 +38,7 @@
       </template>
     </el-table-column>
     <el-table-column label="涉及就诊人次" align="center" prop="jsrc"  :width="flexColumnWidth('jsrc',tableData)"/>
-    <el-table-column label="操作" align="center" v-if="showEdit">
+    <el-table-column label="操作"  fixed="right" align="center" v-if="showEdit">
       <template slot-scope="scope">
         <el-button
           size="mini"

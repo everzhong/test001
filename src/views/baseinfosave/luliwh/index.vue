@@ -1,10 +1,10 @@
 <template>
-  <div class="app-container">
+  <div class="app-container container_1">
     <SearchItem ref="searchForm" @handleQuery="handleQuery" @toggle-search="h=>tableHeight=h"/>
     <div v-loading="loading" class="table-main" :style="{top:tableHeight}">
       <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1">
         <el-table-column label="序号" type="index" align="center" slot="fixed"/>
-        <el-table-column label="查处详情" align="center" min-width="100" slot="operate">
+        <el-table-column label="查处详情" fixed="right" align="center" min-width="100" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"

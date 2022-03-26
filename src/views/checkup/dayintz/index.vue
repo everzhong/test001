@@ -21,7 +21,7 @@
       <div v-loading="loading" style="height:calc(100% - 37px)">
         <sTable :data="renwutwoList" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" slot="fixed" fixed></el-table-column>
-          <el-table-column label="操作" align="center" min-width="280" slot="operate">
+          <el-table-column label="操作"  fixed="right" align="center" min-width="280" slot="operate">
             <template slot-scope="scope">
               <el-button
                 v-if="scope.row.isdayin!=1"

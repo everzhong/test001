@@ -180,7 +180,7 @@
             <span>{{['未开始抽取数据','抽取中','成功抽取数据','抽取失败'][scope.row.ends*1]}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" slot="operate">
+        <el-table-column label="操作"  fixed="right" align="center" class-name="small-padding fixed-width" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"

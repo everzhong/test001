@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container container_1">
      <div ref="containerTop">
       <div class="container-top" v-show="showShearch">
         <el-form
@@ -72,7 +72,7 @@
       <div class="table-main" v-loading="loading" :style="{top:topValue}">
         <sTable :data="jcflList" :header="tableHeader" :fixedNum="1">
           <el-table-column label="序号" type="index" align="center"  slot="fixed"/>
-          <el-table-column label="操作" align="center" width="150" slot="operate">
+          <el-table-column label="操作"  fixed="right" align="center" width="150" slot="operate">
             <template slot-scope="scope">
               <el-button
                 v-if="

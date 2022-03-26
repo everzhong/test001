@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container container_1">
     <div ref="containerTop">
       <div class="container-top" v-show="showShearch">
         <el-form class="top-search" :model="queryParams" ref="searchForm" :inline="true" label-width="60px">
@@ -56,7 +56,7 @@
     <div class="table-main" :style="{top:topValue}" v-loading="loading">
       <sTable :data="renwuoneList" :header="tableHeader" :fixedNum="1" :checkAll="false">
         <el-table-column label="序号" type="index" align="center"  slot="fixed" width="55px"/>
-        <el-table-column label="操作" align="center" min-width="200" slot="operate">
+        <el-table-column label="操作"  fixed="right" align="center" min-width="200" slot="operate">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -262,27 +262,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .app-container {
-  // display: flex;
-  // flex-direction: column;
-  // box-sizing: border-box;
-  // height: 100% !important;
-  padding:0 20px;
-  .container-top{
-    box-sizing: content-box;
-    padding: 20px 0 0;
-    width: 100%;
-  }
-  .toggle-search {
-      width: 100%;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      cursor: pointer;
-      color: #515a6e;
-      &:hover {
-        color: #1B65B9;
-      }
-  }
   .fixed-bottom {
     position: absolute;
     bottom:5px;

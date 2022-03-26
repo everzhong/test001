@@ -5,7 +5,7 @@
     <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true" @selection-change="handleSelectionChange">
       <!-- <el-table-column v-if="!hasNoRending" type="selection" width="55" align="center" slot="fixed"/> -->
       <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-      <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
+      <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
         <template slot-scope="scope">
           <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
           <el-button :disabled="!!scope.row.xwrd" type="text" @click="cancelHc(scope.row)" size="mini">取消核查</el-button>

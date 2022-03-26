@@ -77,8 +77,9 @@ export default {
     activeStyle(tag) {
       if (!this.isActive(tag)) return {};
       return {
-        "background-color": this.theme,
-        "border-color": this.theme
+        "background-color": 'rgba(27,101,185,.15)',
+        "border-color": 'rgba(27,101,185,.3)',
+        "color":'rgba(27,101,185,1)',
       };
     },
     isAffix(tag) {
@@ -225,7 +226,7 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
-  height: 34px;
+  height: 40px;
   width: 100%;
   background: #fff;
   border-bottom: 1px solid #d8dce5;
@@ -235,28 +236,27 @@ export default {
       display: inline-block;
       position: relative;
       cursor: pointer;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid #d8dce5;
-      color: #495060;
-      background: #fff;
+      height: 36px;
+      line-height: 36px;
+      border: 1px solid rgba(144,147,153,.3);
+      color: #909399;
+      background: rgba(144,147,153,.15);
       padding: 0 8px;
       font-size: 12px;
-      margin-left: 5px;
-      margin-top: 4px;
+      margin-left: 2px;
+      margin-top: 3px;
       &:first-of-type {
-        margin-left: 15px;
+        margin-left: 10px;
       }
       &:last-of-type {
-        margin-right: 15px;
+        margin-right: 10px;
       }
       &.active {
         background-color: #42b983;
-        color: #fff;
         border-color: #42b983;
         &::before {
           content: '';
-          background: #fff;
+          background: #1B65B9;
           display: inline-block;
           width: 8px;
           height: 8px;

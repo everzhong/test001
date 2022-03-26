@@ -162,7 +162,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="操作"
+            label="操作"  fixed="right"
             align="center"
             width="160"
             class-name="small-padding fixed-width"

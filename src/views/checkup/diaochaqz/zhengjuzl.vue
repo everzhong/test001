@@ -35,7 +35,7 @@
               <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" :width="100">
+          <el-table-column label="操作"  fixed="right" align="center" :width="100">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click="downFile(scope.row.wenjianurl)">下载</el-button>
               <el-button type="text" size="mini" @click="deleteDoc(scope.row)">删除</el-button>

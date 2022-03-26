@@ -7,7 +7,7 @@
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
     </el-table-column>
-    <el-table-column label="操作" align="center"  min-width="180px" slot="operate">
+    <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
       <template slot-scope="scope">
         <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
         <el-button type="text" @click="checkdetail(scope.row)" size="mini">同流水号明细</el-button>

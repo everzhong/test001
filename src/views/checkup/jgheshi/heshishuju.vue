@@ -42,7 +42,7 @@
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false"  @selection-change="handleSelectionChange">
             <!-- <el-table-column type="selection" width="55" align="center" slot="fixed"/> -->
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-            <el-table-column label="操作" align="center"  width="210" slot="operate">
+            <el-table-column label="操作"  fixed="right" align="center"  width="210" slot="operate">
             <template slot-scope="scope">
               <el-button size="mini" type="text" primary @click="hangdleLiushui(scope.row)">流水号项目汇总</el-button>
               <!-- <el-button size="mini" type="text" primary @click="handleXguanmx(scope.row)">查看相关明细</el-button> -->

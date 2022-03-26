@@ -11,7 +11,7 @@
     <s-table v-loading="loading" style="height:calc(100% - 140px)" :data="tableData" :header="tableHeader" :fixedNum="1">
       <!-- <el-table-column align="center" type="selection" width="55" slot="fixed"></el-table-column> -->
       <el-table-column align="center" label="序号" type="index" width="60" slot="fixed"></el-table-column>
-      <el-table-column align="center" label="操作" slot="operate" width="200">
+      <el-table-column align="center" label="操作"  fixed="right" slot="operate" width="200">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="checkDetail(scope.row)">查看详情</el-button>
           <el-button type="text" size="mini" @click="editFile(scope.row)">修改</el-button>

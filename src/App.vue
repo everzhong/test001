@@ -135,13 +135,13 @@ export default  {
   padding:5px 0 !important;
 }
 .page-back-icon {
-  height: 28px;
-  line-height: 30px;
+  height: 36px;
+  line-height: 36px;
   position:absolute;
   right:0px;
-  padding-right: 15px;
-  padding-left: 15px;
-  top:-30px;
+  padding-right: 20px;
+  padding-left: 10px;
+  top:-38px;
   background-color:#fff;
   cursor:pointer;
   i:hover {
@@ -150,30 +150,58 @@ export default  {
 }
 .container-top{
     box-sizing: content-box;
-    padding: 20px 0 0;
+    padding: 20px 0 5px;
     width: 100%;
+    border-bottom: 1px solid rgba(206, 206, 206, 0.3);
   }
   .toggle-search {
-      width: 100%;
       height: 20px;
-      line-height: 20px;
       text-align: center;
-      cursor: pointer;
       color: #515a6e;
+      cursor: pointer;
       &:hover {
         color: #1B65B9;
       }
-  }
-// #app .el-radio-button__inner {
-//   background-color: rgba(144,147,153,.15);
-//   border-color: rgba(144,147,153,.3);
-//   color:rgba(144,147,153,1);
-//   box-shadow: none !important;
+      i {
+        display:block;
+        width: 50px;
+        margin: 0 auto;
+        border-left: 1px solid rgba(206, 206, 206, 0.3);
+        border-right: 1px solid rgba(206, 206, 206, 0.3);
+        border-bottom: 1px solid rgba(206, 206, 206, 0.3);
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        font-size: 13px;
+      }
 
-// }
-// #app .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-//     color: #1B65B9;
-//     background-color: rgba(27,202,185,.15);
-//     border-color: rgba(27,202,185,.3);
-// }
+  }
+  #app .el-button {
+    border-color: #cecece;
+    &:hover:not(.is-disabled,.el-button--text) {
+      border-color: #1B65B9;
+      color: #1B65B9;
+      background-color: #fff;
+    }
+  }
+  #app .el-button--primary {
+    border-color: #1B65B9;
+    &.is-disabled {
+      border-color: #8db2dc;
+    }
+    &:hover{
+      background-color: #3774B9;
+      border-color: #3774B9;
+      color: #fff;
+    }
+  }
+#app .el-radio-button__inner {
+  border-color: #cecece;
+
+}
+#app .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    border-color: #1B65B9;
+}
+#app .el-button--text {
+  border: none;
+}
 </style>

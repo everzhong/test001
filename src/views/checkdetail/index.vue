@@ -1,5 +1,5 @@
 <template>
-  <div :class="['app-container',isFromLuli?'from-luli':'']">
+  <div :class="['app-container container_1',isFromLuli?'from-luli':'']">
     <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" @toggle-search="toggleSearch"/>
     <div class="page-back-icon" @click="$router.back(-1)">
       <!-- <el-button type="primary" icon="el-icon-back" size="mini" >返回</el-button> -->
@@ -43,7 +43,7 @@
         <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange" @on-click="viewSc">
           <el-table-column v-if="!isRwcx" slot="fixed" type="selection" width="55" align="center"/>
           <el-table-column slot="fixed" label="序号" type="index" align="center"/>
-          <el-table-column label="操作" align="center" width="180" slot="operate">
+          <el-table-column label="操作"  fixed="right" align="center" width="180" slot="operate">
             <template slot-scope="scope">
               <el-button
                 size="mini"

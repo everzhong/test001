@@ -45,7 +45,7 @@
       <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="1" :checkAll="false">
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-            <el-table-column label="操作" align="center" min-width="160" slot="operate">
+            <el-table-column label="操作"  fixed="right" align="center" min-width="160" slot="operate">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="fluProject(scope.row)">
                   流水号项目汇总

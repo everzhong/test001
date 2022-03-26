@@ -28,7 +28,7 @@
     <div v-loading="loading" style="height:calc(100% - 140px)">
       <s-table :data="tableData" :header="tableHeader" :fixedNum="1">
         <el-table-column align="center" type="index" width="60" label="序号" slot="fixed"></el-table-column>
-        <el-table-column align="center" label="操作" slot="operate" width="200">
+        <el-table-column align="center" label="操作"  fixed="right" slot="operate" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="checkDetail(scope.row)">查看详情</el-button>
             <el-button type="text" size="mini" @click="deleteNotice(scope.row)">取消</el-button>

@@ -1,6 +1,6 @@
 <template>
   <sTable :data="tableData" :header="tableHeader" :fixedNum="0">
-    <el-table-column label="操作" align="center" width="180" slot="operate">
+    <el-table-column label="操作"  fixed="right" align="center" width="180" slot="operate">
         <template slot-scope="scope">
           <el-button
             size="mini"

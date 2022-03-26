@@ -114,10 +114,13 @@ aside {
 
 //main-container全局样式
 .app-container {
-    padding: 0 20px 20px;
-    height: calc(100vh - 84px);
+    padding: 20px;
+    height: calc(100vh - 90px);
     position: relative;
     // overflow: auto;
+    &.container_1 {
+        padding-top: 0;
+    }
 }
 
 .components-container {
