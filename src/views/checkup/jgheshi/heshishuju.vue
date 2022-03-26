@@ -10,16 +10,16 @@
           </el-select>
         </el-col>
         <!-- <el-col :span="1.5">
-          <el-button type="primary" plain size="small" @click="setyy('1')">有异议</el-button>
+          <el-button type="primary"  size="small" @click="setyy('1')">有异议</el-button>
         </el-col>
         <el-col :span="1.5">
-          <el-button type="primary" plain size="small" @click="setyy('2')">无异议</el-button>
+          <el-button type="primary"  size="small" @click="setyy('2')">无异议</el-button>
         </el-col> -->
         <el-col :span="1.5">
-          <el-button type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
+          <el-button type="primary"  size="small" @click="showCheckForm">查询条件</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
+          <el-button type="primary"  size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
@@ -45,7 +45,7 @@
             <el-table-column label="操作"  fixed="right" align="center"  width="210" slot="operate">
             <template slot-scope="scope">
               <el-button size="mini" type="text" primary @click="hangdleLiushui(scope.row)">流水号项目汇总</el-button>
-              <!-- <el-button size="mini" type="text" primary @click="handleXguanmx(scope.row)">查看相关明细</el-button> -->
+              <el-button size="mini" type="text" primary @click="handleXguanmx(scope.row)">查看相关明细</el-button>
             </template> 
           </el-table-column>
         </sTable>

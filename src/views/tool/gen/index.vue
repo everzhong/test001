@@ -41,7 +41,7 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          plain
+          
           icon="el-icon-download"
           size="mini"
           @click="handleGenTable"
@@ -51,7 +51,7 @@
       <el-col :span="1.5">
         <el-button
           type="info"
-          plain
+          
           icon="el-icon-upload"
           size="mini"
           @click="openImportTable"
@@ -61,7 +61,7 @@
       <el-col :span="1.5">
         <el-button
           type="success"
-          plain
+          
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
@@ -72,7 +72,7 @@
       <el-col :span="1.5">
         <el-button
           type="danger"
-          plain
+          
           icon="el-icon-delete"
           size="mini"
           :disabled="multiple"

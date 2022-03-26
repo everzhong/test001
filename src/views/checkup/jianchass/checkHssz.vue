@@ -9,7 +9,7 @@
           </el-radio-group>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue!=='three'">
-          <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
+          <el-button type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
         <div class="top-right-btn">
           <el-col :span="1.5" v-show="gzTabsValue==1">
@@ -20,7 +20,7 @@
             </el-select>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="primary" plain size="small" @click="chaxunDialog = true">查询条件</el-button>
+            <el-button type="primary" size="small" @click="chaxunDialog = true">查询条件</el-button>
           </el-col>
         </div>
       </el-row>

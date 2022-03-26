@@ -13,9 +13,9 @@
           </el-col>
           <el-col :span="1.5" v-if="mxShow">
             <el-button
-              type="warning"
+              type="default"
               size="small"
-              plain
+              
               @click="qmxOptions.show=false,xgmxOptions.show=false,mxShow=false"
             >返回上一层</el-button>
           </el-col>

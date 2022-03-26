@@ -9,7 +9,7 @@
         </el-select>
       </el-col>
       <el-col :span="1.5" v-if="viewTableObj.show">
-        <el-button type="warning" plain size="small" @click="viewTableObj.show = false">返回上一层</el-button>
+        <el-button type="default"  size="small" @click="viewTableObj.show = false">返回上一层</el-button>
       </el-col>
       <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
         <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>

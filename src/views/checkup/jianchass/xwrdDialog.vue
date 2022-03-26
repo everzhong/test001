@@ -16,7 +16,7 @@
       <el-table-column label="类型" align="center" prop="lx" show-overflow-tooltip/>
     </el-table>
     <div class="msg-footer-inner">
-      <el-button size="mini" type="primary" plain @click="options.show=false">返回</el-button>
+      <el-button size="mini" type="primary"  @click="options.show=false">返回</el-button>
       <el-button size="mini" type="primary" @click="xwConfirm">确定</el-button>
     </div>
   </el-dialog>

@@ -23,7 +23,7 @@
     </el-form-item>
    </el-form>
     <div style="margin-bottom:8px;margin-top:15px">
-      <el-button type="primary" size="small" plain @click="addPeixun">新增培训</el-button>
+      <el-button type="primary" size="small"  @click="addPeixun">新增培训</el-button>
     </div>
     <div v-loading="loading" style="height:calc(100% - 140px)">
       <s-table :data="tableData" :header="tableHeader" :fixedNum="1">
@@ -128,7 +128,7 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button v-if="editType===1" type="primary" @click="addPsjh" size="small" element-loading-spinner="el-icon-loading" :disabled="addLoading" v-loading="addLoading">确 定</el-button>
-            <el-button @click="dialogClosed" size="small" plain>返 回</el-button>
+            <el-button @click="dialogClosed" size="small" >返 回</el-button>
           </span>
     </el-dialog>
   </section>

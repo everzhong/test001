@@ -15,7 +15,7 @@
        >
       </el-date-picker>
       <el-button style="margin-left:15px" slot="append" icon="el-icon-search" type="primary" size="small" @click="getChartData">搜索</el-button>
-      <el-button slot="append" type="primary" size="small" plain @click="resetSearch">重置</el-button>
+      <el-button slot="append" type="primary" size="small"  @click="resetSearch">重置</el-button>
 
     </div>
     <el-row :gutter="32">

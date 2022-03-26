@@ -86,7 +86,7 @@
         @input="upSuccess"
         ref="fileUpload"
       >
-        <el-button slot="select-btn" size="small" type="parmary" plain class="el-icon-plus">上传签字扫描件</el-button>
+        <el-button slot="select-btn" size="small" type="parmary"  class="el-icon-plus">上传签字扫描件</el-button>
       </fileUpload>
     </el-radio-group>
     <div v-show="tabsValue==='2'">

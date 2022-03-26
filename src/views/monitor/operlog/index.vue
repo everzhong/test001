@@ -75,7 +75,7 @@
       <el-col :span="1.5">
         <el-button
           type="danger"
-          plain
+          
           icon="el-icon-delete"
           size="mini"
           :disabled="multiple"
@@ -86,7 +86,7 @@
       <el-col :span="1.5">
         <el-button
           type="danger"
-          plain
+          
           icon="el-icon-delete"
           size="mini"
           @click="handleClean"
@@ -95,8 +95,8 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          plain
+          type="default"
+          
           icon="el-icon-download"
           size="mini"
           :loading="exportLoading"

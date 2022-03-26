@@ -34,7 +34,7 @@
                 <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-if="!queryInfoFrom.fromLuli">
                   <el-button type="primary" size="mini" @click="heshiOption.show=true" >机构核实</el-button>
                   <el-button type="primary" size="mini" @click="doSubmit">检查完成</el-button>
-                  <!-- <el-button type="primary" plain style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button> -->
+                  <!-- <el-button type="primary"  style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button> -->
                 </div>
                 <!-- <div style="position:absolute;right:20px;top:-72px;background-color:#fff" v-else>
                   <el-button type="primary" style="margin-left:50px" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
@@ -84,7 +84,7 @@
           </el-date-picker>
           </el-col>
           <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
-            <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
+            <el-button type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
           </el-col>
           <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
             <el-radio-button label="three">规则筛查</el-radio-button>
@@ -133,16 +133,16 @@
               <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
             </el-form-item>
             <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-              <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
+              <el-input onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.]/g,'')"  v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
             </el-form-item>
             <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-              <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+              <el-input onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.]/g,'')" style="width:90%;margin-right:3px" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
               <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
                 <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
               </el-tooltip>
             </el-form-item>
-            <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-              <el-input onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
+            <el-form-item label="违规金额(元)" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
+              <el-input disabled :value="xwrdForm.wgfy"></el-input>
             </el-form-item>
             <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
               <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
@@ -840,12 +840,14 @@ export default {
       if(selection.length!==0){
         // this.ids = selection.map(item => item.id)
         this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy} = selection[0]
+        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy,wgsl,zkdj} = selection[0]
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
-        this.xwrdForm.zkdj = mxxmdj
-        this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
+        this.xwrdForm.zkdj = zkdj
+        this.xwrdForm.wgsl = wgsl
+        // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
+        this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
         this.xwrdForm.mxxmmc = mxxmmc
         this.xwrdForm.xwrd = ''
         if(this.tabsValue==='six'){//进销存核查
@@ -856,7 +858,7 @@ export default {
           this.xwrdForm.qmkc = qmkc
           this.xwrdForm.ybjs = ybjs
         } else {
-          this.xwrdForm.wgsl = mxxmsl
+          // this.xwrdForm.wgsl = mxxmsl
         }
         this.$refs.xwrdForm.clearValidate()
       } else {

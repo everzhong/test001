@@ -177,7 +177,7 @@ export default  {
   }
   #app .el-button {
     border-color: #cecece;
-    &:hover:not(.is-disabled,.el-button--text) {
+    &:hover:not(.is-disabled,.el-button--text,.el-button--primary,.el-button--warning) {
       border-color: #1B65B9;
       color: #1B65B9;
       background-color: #fff;

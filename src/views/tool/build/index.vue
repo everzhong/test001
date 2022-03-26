@@ -286,7 +286,7 @@ export default {
     },
     execDownload(data) {
       const codeStr = this.generateCode()
-      const blob = new Blob([codeStr], { type: 'text/plain;charset=utf-8' })
+      const blob = new Blob([codeStr], { type: 'text/;charset=utf-8' })
       saveAs(blob, data.fileName)
     },
     execCopy(data) {

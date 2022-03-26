@@ -6,7 +6,7 @@
     </div>
     <div style="margin-bottom:8px">
       <!-- <el-button type="primary" size="small">信息修改</el-button> -->
-      <el-button type="primary" size="small" @click="uploadFile" plain>信息上传</el-button>
+      <el-button type="primary" size="small" @click="uploadFile" >信息上传</el-button>
     </div>
     <s-table v-loading="loading" style="height:calc(100% - 140px)" :data="tableData" :header="tableHeader" :fixedNum="1">
       <!-- <el-table-column align="center" type="selection" width="55" slot="fixed"></el-table-column> -->
@@ -101,7 +101,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="addPsjh"  element-loading-spinner="el-icon-loading" :disabled="addLoading" v-loading="addLoading" size="small">{{editType===2?'修 改':'确 定'}}</el-button>
-        <el-button @click="dialogClosed" size="small" plain>返 回</el-button>
+        <el-button @click="dialogClosed" size="small" >返 回</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -140,7 +140,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogClosed" size="small" plain>返 回</el-button>
+        <el-button @click="dialogClosed" size="small" >返 回</el-button>
       </span>
     </el-dialog>
   </section>

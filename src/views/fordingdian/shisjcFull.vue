@@ -3,7 +3,7 @@
     <section>
       <el-row :gutter="10">
         <el-col :span="1.5">
-          <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
+          <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary"  size="small" @click="showCheckForm">查询条件</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保地：</span>
@@ -14,7 +14,7 @@
         </el-col>
 
         <el-col :span="1.5" v-if="tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
+          <el-button type="primary"  size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
@@ -29,7 +29,7 @@
         </el-date-picker>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
-          <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
+          <el-button type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
         <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
           <el-radio-button label="three">规则筛查</el-radio-button>
@@ -77,16 +77,16 @@
             <div style="box-sizing:border-box;cursor:pointer;padding:0 15px;line-height:28px;height:28px;border:1px solid #DCDFE6;border-radius:4px;width:186px;color:#606266;font-size:13px;"  @click="handelXwrdDialog" >{{xwrdForm.xwrd}}</div>
           </el-form-item>
           <el-form-item label="追款单价" prop="zkdj" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input type="number" min="0" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
+            <el-input onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.]/g,'')" v-model="xwrdForm.zkdj" :disabled="!!isDisabled.dj" @change="handleDjslChange"></el-input>
           </el-form-item>
           <el-form-item label="违规数量" prop="wgsl" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0">
-            <el-input style="width:90%;margin-right:3px" type="number" min="0" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
+            <el-input onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9.]/g,'')" style="width:90%;margin-right:3px" v-model="xwrdForm.wgsl" :disabled="!!isDisabled.sl" @change="handleDjslChange"></el-input>
             <el-tooltip v-if="tabsValue==='six'" class="item" effect="dark" content="默认为差额数量，差额数量=医保结算数量-(期初库存数量+本期购入数据-期末库存数量-现金销售数量)" placement="top">
               <i style="color:#666;cursor:pointer" class="el-icon-info"></i>
             </el-tooltip>
           </el-form-item>
-          <el-form-item label="违规费用(元)" prop="wgfy" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
-            <el-input type="number" min="0" v-model="xwrdForm.wgfy" :disabled="!!isDisabled.fy"></el-input>
+          <el-form-item label="违规金额(元)" v-if="xwrdForm.xwrd.indexOf('未发现违规')<0" >
+            <el-input :value="xwrdForm.wgfy" disabled></el-input>
           </el-form-item>
           <el-form-item label="期初库存数量" prop="qckc" v-if="tabsValue==='six'" >
             <el-input type="number" min="0" v-model="xwrdForm.qckc" :disabled="!pksj" @change="hanndelChange"></el-input>
@@ -757,12 +757,15 @@ export default {
     handleSelectionChange(selection) {
       if(selection.length!==0){
         this.isDisabled = this.isDisabledEvent(selection)
-        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy} = selection[0]
+        const {id,mxxmdj,mxxmsl,mxxmje,bz,mxxmmc,wgfy,wgsl,zkdj} = selection[0]
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
-        this.xwrdForm.zkdj = mxxmdj
-        this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
+        this.xwrdForm.wgsl = wgsl
+        this.xwrdForm.zkdj = zkdj
+        // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
+        this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
+
         this.xwrdForm.mxxmmc = mxxmmc
         this.xwrdForm.xwrd = ''
         if(this.tabsValue==='six'){//进销存核查
@@ -773,7 +776,7 @@ export default {
           this.xwrdForm.qmkc = qmkc
           this.xwrdForm.ybjs = ybjs
         } else {
-          this.xwrdForm.wgsl = mxxmsl
+          // this.xwrdForm.wgsl = mxxmsl
         }
         this.$refs.xwrdForm.clearValidate()
       } else {

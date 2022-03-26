@@ -3,7 +3,7 @@
     <section>
       <el-row :gutter="10">
         <el-col :span="1.5">
-          <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary" plain size="small" @click="showCheckForm">查询条件</el-button>
+          <el-button v-if="!(tabsValue==='five'||tabsValue==='qmx'||tabsValue==='four')&&!qmxOptions.show" type="primary"  size="small" @click="showCheckForm">查询条件</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保地：</span>
@@ -14,7 +14,7 @@
         </el-col>
 
         <el-col :span="1.5" v-if="tabsValue==='six'">
-          <el-button type="primary" plain size="small" @click="showHecha=true">选择核查数据</el-button>
+          <el-button type="primary"  size="small" @click="showHecha=true">选择核查数据</el-button>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue==='six'">
           <label style="font-size:12px;color:#606266;padding-right:6px;margin-left:10px">盘库时间</label>
@@ -29,7 +29,7 @@
         </el-date-picker>
         </el-col>
         <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
-          <el-button type="warning" plain size="small" @click="goBackUpLevel">返回上一层</el-button>
+          <el-button type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
         <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
           <el-radio-button label="three">规则筛查</el-radio-button>

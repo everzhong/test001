@@ -1,8 +1,8 @@
 <template>
-<div>
+<div class="app-container container_1">
   <div ref="containerTop">
     <div class="container-top" v-show="showShearch">
-      <el-form style="height:70px;overflow:auto;margin-bottom:0px;" size="small" label-width="100px" class="top-search" ref="bmQueryForm" :inline="true">
+      <el-form  size="small" label-width="100px" class="top-search" ref="bmQueryForm" :inline="true">
         <div>
           <el-form-item label="险种" prop="ybbf">
             <el-select v-model="searchForm.ybbf" placeholder="全部" clearable size="small">

@@ -1,9 +1,9 @@
 <template>
   <div class="app-container container_1">
     <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
-    <div class="table-main" :style="{top:topValue}">
+    <div :class="['table-main',tabsValue!=='two'?'table-main1':'']" :style="{top:topValue}">
       <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
-        <el-col :span="1.5" v-if="tabsValue==='two'">
+        <!-- <el-col :span="1.5" v-if="tabsValue==='two'">
           <el-button
             type="primary"
             size="small"
@@ -16,12 +16,12 @@
             size="small"
             @click="handleAgree(0)"
           >驳回</el-button>
-        </el-col>
+        </el-col> -->
         <el-col :span="1.5" v-if="mxShow">
           <el-button
-            type="warning"
+            type="default"
             size="small"
-            plain
+            
             @click="mxShow=false,xgmxOptions.show=false,qmxOptions.show=false"
           >返回上一层</el-button>
         </el-col>
@@ -43,45 +43,50 @@
         <quanmingxi :options="qmxOptions" v-if="qmxOptions.show" />
       </div>
     </div>
-    <pagination
-     class="fixed-bottom"
-      v-show="!mxShow"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-    <!-- <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" :rules="rules" ref="submitForm" :inline="true" style="margin-top:5px;">
-      <el-form-item label="已选机构" prop="yxjg">
-        <el-input
-          style="width:280px;"
-          disabled
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          v-model="submitParams.yxjg">
-        </el-input>
-      </el-form-item>
-      <el-form-item label="网审意见" prop="wsyj">
-        <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
-          <el-option
-            key="1"
-            label="同意"
-            value="2"
-          />
-          <el-option
-            key="2"
-            label="驳回"
-            value="0"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="检查人员" prop="wsry">
-        <el-input readonly :value="submitParams.wsry"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary"  @click="handleSubmit" :disabled="ids.length<1">提交</el-button>
-      </el-form-item>
-    </el-form> -->
+    <div :class="['fixed-bottom',tabsValue!=='two'?'fixed-bottom1':'']">
+      <pagination
+        v-show="!mxShow"
+        :total="total"
+        :page.sync="queryParams.pageNum"
+        :limit.sync="queryParams.pageSize"
+        @pagination="getList"
+      />
+      <el-form v-show="!mxShow && tabsValue==='two'" size="small" :model="submitParams" ref="submitForm" :inline="true" style="padding-left:20px">
+        <!-- <el-form-item label="已选机构" prop="yxjg">
+          <el-input
+            style="width:280px;"
+            disabled
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            v-model="submitParams.yxjg">
+          </el-input>
+        </el-form-item> -->
+        <el-form-item label="网审意见" prop="wsyj" style="margin-right:25px">
+          <el-select v-model="submitParams.wsyj" placeholder="请选择" clearable  style="width: 180px">
+            <el-option
+              key="1"
+              label="同意"
+              :value="2"
+            />
+            <el-option
+              key="2"
+              label="驳回"
+              :value="0"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="submitParams.wsyj===0" label="驳回意见" prop="dxqdbh">
+          <el-input
+            style="width:280px;"
+            clearable
+            v-model="submitParams.dxqdbh">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmit" :disabled="!(ids.length && (submitParams.wsyj==2||(submitParams.wsyj==0&&submitParams.dxqdbh)))">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
@@ -139,12 +144,11 @@ export default {
       tabsValue:'two',
       resql:'',
       rules: {
-        yxjg:[{require:true,message:'请选择机构'}],
-        wsry:[{require:true,message:'请选择检查人员'}],
-        wsyj:[{require:true,message:'请选网审意见'}]
+        dxqdbh:[{require:true,message:'请输入驳回意见',trigger:'blur'}],
+        wsyj:[{require:true,message:'请选网审意见',trigger:'change'}]
       },
       submitParams:{
-        yxjg:'',
+        dxqdbh:'',
         wsry:'',
         wsyj:''
       },
@@ -223,7 +227,6 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.submitParams.yxjg = (selection.map(item => item.jgmc)).join(' ')
       this.submitParams.wsry = this.$store.getters.name
       this.ids = selection.map(item => item.id)
       this.selectionList = selection
@@ -240,20 +243,27 @@ export default {
      * 实施网申 type:2同意 0驳回
      */
     handleAgree(type){
-      if(!this.ids.length){
-        this.msgError('请至少选择一项')
-        return
-      } 
-      if(type==2){
-        this.doSubmit({
-          ids:this.ids,
-          status:2,//同意2 ，驳回0
-          dxqd:'同意',
-          dxqdbh:''//驳回意见字段
-        })
-      } else {
-        this.handleNg()
-      }
+      this.doSubmit({
+        ids:this.ids,
+        status:type,//同意2 ，驳回0
+        dxqd:type==2?'同意':'驳回',
+        dxqdbh:type==2?'':this.submitParams.dxqdbh//驳回意见字段
+      })
+
+      // if(!this.ids.length){
+      //   this.msgError('请至少选择一项')
+      //   return
+      // } 
+      // if(type==2){
+      //   this.doSubmit({
+      //     ids:this.ids,
+      //     status:2,//同意2 ，驳回0
+      //     dxqd:'同意',
+      //     dxqdbh:''//驳回意见字段
+      //   })
+      // } else {
+      //   this.handleNg()
+      // }
       
       //检查任务中有未执行第三方筛查的
 
@@ -280,17 +290,14 @@ export default {
             message: '取消输入'
           });       
         });
-      // this.doSubmit({
-      //   ids:this.ids,
-      //   status:0,//同意2 ，驳回0
-      //   dxqd:'驳回',
-      //   dxqdbh:value//驳回意见字段
-      // })
+      
     },
     doSubmit(params){
+      this.loading = true
       submitDxqd(params).then(res=>{
         this.msgSuccess("操作成功")
         this.getList()
+        this.loading = false
         this.selectionList.forEach(item=>{
             this.addJcfl({
               jglc:'对象确定',
@@ -301,7 +308,7 @@ export default {
               sort:4
             })
         })
-        if(params.status===2){//同意
+        if(params.status==2){//同意
           const nowsyj = this.selectionList.filter(item=>{
             return item.wsyj === '暂不检查'
           })
@@ -309,6 +316,8 @@ export default {
             this.updateTwo(nowsyj)
           }
         }
+      }).catch(error=>{
+        this.loading = false
       })
     },
     getResql(){
@@ -352,12 +361,16 @@ export default {
 .table-main {
   position: absolute;
   top:165px;
-  bottom:45px;
+  bottom:98px;
   left: 20px;
   right: 20px;
 }
+.table-main1 {
+  bottom:45px;
+}
 .fixed-bottom {
   position: absolute;
+  width: 100%;
   bottom:8px;
   right: 0px;
 }

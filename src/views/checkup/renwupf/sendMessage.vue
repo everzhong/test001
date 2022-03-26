@@ -13,7 +13,7 @@
       </div>
       <div>
         <el-form-item><el-button size="mini" type="primary">查询</el-button></el-form-item>
-        <el-form-item style="margin-right:0"><el-button size="mini" type="primary" plain >重置</el-button></el-form-item>
+        <el-form-item style="margin-right:0"><el-button size="mini" type="primary"  >重置</el-button></el-form-item>
       </div>
     </el-form>
     <div class="main" v-loading="loading">
@@ -42,7 +42,7 @@
       <el-button size="mini" type="primary" @click="addNewGroup">新增检查组</el-button>
       <div>
         <el-button size="mini" type="primary" @click="confirm">确定</el-button>
-        <el-button size="mini" type="primary" plain @click="cancel">取消</el-button>
+        <el-button size="mini" type="primary"  @click="cancel">取消</el-button>
       </div>
     </div>
     <el-dialog
@@ -86,7 +86,7 @@
                 </el-table>
               </div>
               <div style="text-align:right;margin-top:10px">
-                <el-button size="mini" type="primary" plain @click="$refs.tablePopover.doClose()">返回</el-button>
+                <el-button size="mini" type="primary"  @click="$refs.tablePopover.doClose()">返回</el-button>
                 <el-button size="mini" type="primary" @click="selectedRole">确定</el-button>
               </div>
               <el-select multiple :popper-append-to-body="false" slot="reference" style="width:365px" v-model="addGroup.jczcy">
@@ -97,7 +97,7 @@
           <p style="padding:0;color:#999;padding-left:10px;margin:0">备注：需提前与医保基金监督执法部门确认后，方可进行相应执法人员的选择</p>
         </el-form>
         <div slot="footer" class="msg-footer-inner">
-          <el-button size="mini" type="primary" plain @click="innerBack">返回</el-button>
+          <el-button size="mini" type="primary"  @click="innerBack">返回</el-button>
           <el-button size="mini" type="primary" @click="innerConfirm">确定</el-button>
       </div>
     </el-dialog>

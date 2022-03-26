@@ -12,7 +12,7 @@
       </div>
       <div>
         <el-form-item><el-button size="mini" type="primary">查询</el-button></el-form-item>
-        <el-form-item style="margin-right:0"><el-button size="mini" type="primary" plain >重置</el-button></el-form-item>
+        <el-form-item style="margin-right:0"><el-button size="mini" type="primary"  >重置</el-button></el-form-item>
       </div>
     </el-form>
     <div class="main">

@@ -9,7 +9,7 @@
         </el-select>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="primary" plain size="mini" @click="chaxunDialog = true">查询条件</el-button>
+        <el-button type="primary" size="mini" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="mini" @change="tabsLevelChange">

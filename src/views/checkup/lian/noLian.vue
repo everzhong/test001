@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" style="padding-top:20px">
     <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
-      <!-- <el-button type="primary" plain size="mini" @click="checkLiAn">查看案件信息</el-button> -->
+      <!-- <el-button type="primary"  size="mini" @click="checkLiAn">查看案件信息</el-button> -->
       <el-button type="primary" size="mini" @click="submitForm('submit')">提交</el-button>
       <!-- <el-button type="primary" icon="el-icon-back" size="mini" @click="lianBack">返回</el-button> -->
     </div>

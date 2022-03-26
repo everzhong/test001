@@ -21,14 +21,14 @@
         </el-form-item> 
         <el-form-item>
           <el-button type="primary" @click="getList">查询</el-button>
-          <el-button plain @click="resetFrom">重置</el-button>
+          <el-button  @click="resetFrom">重置</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
         <el-button size="mini" type="primary" @click="setHechashuju">设为核查数据</el-button>
         <el-button size="mini" type="primary" @click="dialogHcVisible = true">新增诊疗相关耗材</el-button>
         <el-button size="mini" type="primary" @click="delHechashuju">删除诊疗相关耗材</el-button>
-        <!-- <el-button v-if="this.$store.getters.roles[0]==='admin'" size="mini" type="primary" plain style="float:right">+新增相关诊疗项目</el-button> -->
+        <!-- <el-button v-if="this.$store.getters.roles[0]==='admin'" size="mini" type="primary"  style="float:right">+新增相关诊疗项目</el-button> -->
       </div>
       <div style="display:flex;flex-direction:column;height:100%" v-loading="loading">
         <sTable class="hc-s-table" :data="gridData" :header="tableHeader" :fixedNum="1" @selection-change="handleSelectionChange" @on-click="checkXghc">

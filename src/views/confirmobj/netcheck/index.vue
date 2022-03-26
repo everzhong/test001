@@ -5,9 +5,9 @@
       <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
         <el-col :span="1.5" v-if="mxShow">
           <el-button
-            type="warning"
+            type="default"
             size="small"
-            plain
+            
             @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
           >返回上一层</el-button>
         </el-col>
