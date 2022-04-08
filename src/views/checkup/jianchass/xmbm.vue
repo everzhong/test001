@@ -31,7 +31,6 @@
       </div>
         <pagination
           style="float:left;width:587"
-          layout='prev, pager, next, slot'
           :total="total"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"

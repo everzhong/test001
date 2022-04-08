@@ -11,7 +11,8 @@
               @click="handleNetCheck"
             >派发检查组</el-button>
           </el-col>
-          <el-col :span="1.5" v-if="mxShow">
+          <div class="top-right-btn">
+            <el-col :span="1.5" v-if="mxShow">
             <el-button
               type="default"
               size="small"
@@ -19,7 +20,6 @@
               @click="qmxOptions.show=false,xgmxOptions.show=false,mxShow=false"
             >返回上一层</el-button>
           </el-col>
-          <div class="top-right-btn">
             <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
               <el-radio-button label="two" value="two">任务列表</el-radio-button>
               <el-radio-button label="three" value="three">任务列表-规则列表</el-radio-button>

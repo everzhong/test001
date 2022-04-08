@@ -17,7 +17,8 @@
             @click="handleAgree(0)"
           >驳回</el-button>
         </el-col> -->
-        <el-col :span="1.5" v-if="mxShow">
+        <div class="top-right-btn">
+          <el-col :span="1.5" v-if="mxShow">
           <el-button
             type="default"
             size="small"
@@ -25,7 +26,6 @@
             @click="mxShow=false,xgmxOptions.show=false,qmxOptions.show=false"
           >返回上一层</el-button>
         </el-col>
-        <div class="top-right-btn">
           <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="two">任务列表</el-radio-button>
             <el-radio-button label="three">任务列表-规则列表</el-radio-button>

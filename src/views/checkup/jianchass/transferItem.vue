@@ -32,7 +32,6 @@
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       :pageSizes="[50,100,150,200]"
-      layout="prev, pager, next, slot"
       size="small"
       @pagination="getList"
     />

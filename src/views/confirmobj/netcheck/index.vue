@@ -3,20 +3,20 @@
     <SearchItem ref="searchForm" @handleQuery="handleQuery" @toggle-search="h=>tableHeight = h"/>
     <div :class="['table-main',tabsValue!=='two'||mxShow?'table-main1':'']" :style="{top:tableHeight}">
       <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
-        <el-col :span="1.5" v-if="mxShow">
-          <el-button
-            type="default"
-            size="small"
-            
-            @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
-          >返回上一层</el-button>
-        </el-col>
         <div class="top-right-btn">
-          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
-            <el-radio-button label="two">任务列表</el-radio-button>
-            <el-radio-button label="three">任务列表-规则列表</el-radio-button>
-            <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
-          </el-radio-group>
+            <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+              <el-radio-button label="two">任务列表</el-radio-button>
+              <el-radio-button label="three">任务列表-规则列表</el-radio-button>
+              <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
+            </el-radio-group>
+          <el-col :span="1.5" v-if="mxShow">
+            <el-button
+              type="default"
+              size="small"
+              
+              @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
+            >返回上一层</el-button>
+          </el-col>
         </div>
       </el-row>
       <div v-loading="loading"  v-show="!mxShow && tabsValue==='two'" style="height:calc(100% - 37px)">

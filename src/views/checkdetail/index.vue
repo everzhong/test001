@@ -21,15 +21,15 @@
             @click="handleThirdCheck"
           >开展第三方筛查</el-button>
         </el-col>
-        <el-col :span="1.5" v-if="mxShow">
-          <el-button
-            type="default"
-            size="small"
-            
-            @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
-          >返回上一层</el-button>
-        </el-col>
         <div class="top-right-btn">
+          <el-col :span="1.5" v-if="mxShow">
+            <el-button
+              type="default"
+              size="small"
+              
+              @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
+            >返回上一层</el-button>
+          </el-col>
           <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="two" v-if="!isFromLuli">任务列表</el-radio-button>
             <el-radio-button label="three">任务列表-规则列表</el-radio-button>

@@ -83,9 +83,11 @@
           >
           </el-date-picker>
           </el-col>
-          <el-col :span="1.5" v-if="tabsValue!=='three'&&tabsValue!=='six'">
+          <div class="top-right-btn" v-if="tabsValue!=='three'&&tabsValue!=='six'">
+          <el-col :span="1.5">
             <el-button type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
           </el-col>
+          </div>
           <el-radio-group v-model="tabsValue" v-if="tabsValue=='three'||tabsValue=='six'"  size="small" class="top-right-btn" @change="tabsLevelChange1">
             <el-radio-button label="three">规则筛查</el-radio-button>
             <el-radio-button label="six">进销存核查</el-radio-button>
