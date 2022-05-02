@@ -10,7 +10,7 @@
       <el-table-column label="行为认定" prop="xwrd" align="center" min-width="180px" show-overflow-tooltip> </el-table-column>
       <el-table-column label="门诊" align="center">
         <el-table-column label="费用" prop="tym" align="center">
-          <template slot-scope="scope"><span @click="viewDetail(scope.row,'门诊')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.tym*1).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span @click="viewDetail(scope.row,{jslb:'0101'})" style="color:#1B65B9;cursor:pointer;">{{(scope.row.tym*1).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column label="占比%" align="center">
           <template slot-scope="scope">
@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column label="住院" align="center">
         <el-table-column label="费用" prop="bz" align="center">
-          <template slot-scope="scope"><span @click="viewDetail(scope.row,'住院')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.bz*1).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span @click="viewDetail(scope.row,{jslb:'0102'})" style="color:#1B65B9;cursor:pointer;">{{(scope.row.bz*1).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column label="占比%" align="center">
           <template slot-scope="scope">
@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column label="进销存核查" align="center">
         <el-table-column label="费用" prop="bz" align="center">
-          <template slot-scope="scope"><span @click="viewDetail(scope.row,'')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.mxsum*1).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span @click="viewDetail(scope.row,{ischeck:1})" style="color:#1B65B9;cursor:pointer;">{{(scope.row.mxsum*1).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column label="占比%" align="center">
           <template slot-scope="scope">

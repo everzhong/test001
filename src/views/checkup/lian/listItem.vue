@@ -2,9 +2,10 @@
   <div class="list-item">
     <p>{{title}}</p>
     <div class="container" v-if="list.length">
-      <div class="item" v-for="(info,idx) in list" :key="idx" @click="downLoad(info.wenjianurl)">
+      <div class="item" v-for="(info,idx) in list" :key="idx" @click="downLoad(info)">
         <span class="wj-icon el-icon-document"></span>
-        <p class="wj-name">{{info.wenjian}}</p>
+        <p class="wj-name" v-if="info.wenjian">{{info.wenjian}}</p>
+        <p class="wj-name" v-else>{{(info.type==2||info.type==4)?`${info.dwqc}-检查笔录`:(info.type==3||info.type==5)?`${info.xwname}-询问笔录`:''}}</p>
       </div>
     </div>
     <div v-else class="no-data">
@@ -13,15 +14,17 @@
   </div>
 </template>
 <script>
+
 export default {
   name:'ListItem',
-  data(){
-    return {}
-  },
   props:['title','list'],
   methods:{
-    downLoad(url){
-      window.open(url)
+    downLoad(info){
+      if(info.wenjianurl){
+        window.open(info.wenjianurl)
+      } else if(info.type!=1) {
+        this.$emit('on-down',{...info,jsdj:info.sex} )//检查笔录时sex代表计算等级
+      }
     }
   }
 }

@@ -11,7 +11,7 @@
                 size="small"
                 v-model="zhizuo.jcsj"
                 type="datetimerange"
-                format="yyyy-MM-dd hh:mm"
+                format="yyyy-MM-dd HH:mm"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期">

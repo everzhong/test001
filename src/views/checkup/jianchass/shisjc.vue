@@ -299,6 +299,13 @@ export default {
     xmbm
   },
   data() {
+    const validateNum = function(rule, value, callback){
+      if (value && value*1<0) {
+          callback(new Error('数值不能为负数'));
+        } else {
+          callback();
+        }
+    }
     return {
       showHecha:false,//显示选择核查数据
       tableHeader:[{
@@ -383,14 +390,14 @@ export default {
       xwrdChecd:{},
       xwRules:{
         xwrd:[{required:true,message:'必填项'}],
-        zkdj:[{required:true,message:'必填项'}],
-        wgsl:[{required:true,message:'必填项'}],
-        wgfy:[{required:true,message:'必填项'}],
-        qckc:[{required:true,message:'必填项'}],
-        bqgr:[{required:true,message:'必填项'}],
-        xjxs:[{required:true,message:'必填项'}],
-        qmkc:[{required:true,message:'必填项'}],
-        ybjs:[{required:true,message:'必填项'}]
+        zkdj:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        wgsl:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        wgfy:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        qckc:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        bqgr:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        xjxs:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        qmkc:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }],
+        ybjs:[{required:true,message:'必填项'},{ validator: validateNum, trigger: 'blur' }]
       },
       guizeOptions:{
         show:false

@@ -2,13 +2,13 @@
 <div class="app-container container_1" v-loading="loading">
   <div v-if="pageView!=='main'" style="position:absolute;right:20px;top:-31px;background-color:rgb(255, 255, 255);">
     <el-button type="primary" size="mini" @click="submit">提交</el-button>
-    <i class="el-icon-arrow-left" @click="pageView='main',xgmxOptions.show=false" style="cursor:pointer;margin-left:15px;vertical-align:middle"></i>
+    <!-- <i class="el-icon-arrow-left" @click="pageView='main',xgmxOptions.show=false" style="cursor:pointer;margin-left:15px;vertical-align:middle"></i> -->
   </div>
   <jgheshi v-if="pageView==='main'" @on-heshi="handleLink($event,'heshuju')"/>
-  <heshishuju v-if="pageView==='heshuju'"  :listConfig="xmInfos" @on-liushui="handleLink($event,'lshhz')" @on-xgmx="handleLink($event,'xgmx')"/>
-  <hsshiliushuimx v-if="pageView==='lshhz'" :listConfig="xmInfos"/>
+  <heshishuju v-if="pageView==='heshuju'"  :listConfig="xmInfos" @on-liushui="handleLink($event,'lshhz')" @on-xgmx="handleLink($event,'xgmx')" @on-back="pageView='main'"/>
+  <hsshiliushuimx v-if="pageView==='lshhz'" :listConfig="xmInfos" @on-back="pageView='heshuju'"/>
   <div v-if="pageView==='xgmx'" style="height:calc(100% - 45px);padding-top:20px">
-    <checkmx :options="xgmxOptions"/>
+    <checkmx :options="xgmxOptions" :showBack="true"  @on-back="pageView='heshuju'"/>
   </div>
 </div>
 </template>

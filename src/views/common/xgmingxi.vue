@@ -1,5 +1,6 @@
 <template>
     <div style="height:100%;width:100%" v-loading="loading">
+    <el-button style="margin-bottom:5px" v-if="showBack"  type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
     <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :checkAll="false">
       <el-table-column label="序号" type="index" align="center" slot="fixed"/>
     </sTable>
@@ -132,13 +133,16 @@ export default {
       }]
     }
   },
-  props:['options'],
+  props:['options','showBack'],
   created(){
     this.getList()
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
   },
   methods:{
+    goBackUpLevel(){
+      this.$emit('on-back')
+    },
     fylbFormat(row, column) {
       return this.selectDictLabels(this.$store.getters.fyDic, row.fylb);
     },

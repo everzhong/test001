@@ -3,6 +3,9 @@
     <section style="height:100%">
       <el-row :gutter="10">
         <el-col :span="1.5" v-if="tabsValue==='three'">
+          <el-col :span="1.5">
+            <el-button  type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
+          </el-col>
           <span style="color:#606266;font-size:14px">参保地：</span>
           <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
             <el-option label="本地" value="01"></el-option>
@@ -471,6 +474,9 @@ export default {
     this.getList();
   },
   methods: {
+    goBackUpLevel(){
+      this.$emit('on-back')
+    },
     tongLiushuimx(row){
       this.tabsValue = 'five'
       this.selectedId = ''

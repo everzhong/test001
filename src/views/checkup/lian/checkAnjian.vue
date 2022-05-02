@@ -8,15 +8,23 @@
     </div>
     <section>
       <list-item title="证件资料" :list="zjList"></list-item>
-      <list-item title="检查笔录列表" :list="jcList"></list-item>
-      <list-item title="询问笔录列表" :list="xwList"></list-item>
+      <list-item title="检查笔录列表" :list="jcList" @on-down="downloadFile"></list-item>
+      <list-item title="询问笔录列表" :list="xwList" @on-down="downloadFile"></list-item>
     </section>
+    <div style="overflow: hidden;height:0">
+      <bl-doc :pageData="pageData"/>
+      <xw-doc :pageData="pageData"/>
+    </div>
   </div>
 </template> 
 
 <script>
-import { listDcqz } from "@/api/renwu/dcqz";
+import { listDcqz } from "@/api/renwu/dcqz"
 import ListItem from './listItem.vue'
+import BlDoc from '../diaochaqz/blDoc.vue'
+import XwDoc from '../diaochaqz/xwDoc.vue'
+import html2canvas from 'html2canvas'
+import JsPDf from 'jspdf'
 export default {
   name: "CheckAnjian",
   data() {
@@ -29,6 +37,7 @@ export default {
         pageNum: 1,
         pageSize: 50000
       },
+      pageData:{}
     };
   },
   created() {
@@ -50,9 +59,9 @@ export default {
             const wenjianurl = element.wenjianurl
             if(wenjianurl && type==1){
               this.zjList.push(element)
-            } else if(wenjianurl && (type==2 || type==4)){
+            } else if(type==2 || type==4){
               this.jcList.push(element)
-            } else if(wenjianurl && (type==3 || type==5)){
+            } else if(type==3 || type==5){
               this.xwList.push(element)
             }
           });
@@ -65,9 +74,41 @@ export default {
     lianBack(){
       this.$router.back(-1)
     },
+    downloadFile(row){
+      this.pageData = {...row}
+      const {dwqc,type,xwname} = row
+      let canvasImg = ''
+      let title = ''
+      if(type==2||type==4){//检查笔录
+        canvasImg = document.getElementById('jcbl')
+        title = `${dwqc}-检查笔录.pdf`
+      } else { //询问笔录
+        canvasImg = document.getElementById('xwbl')
+        title = `${xwname}-询问笔录.pdf`
+      }
+      setTimeout(()=>{
+        html2canvas(canvasImg,{
+          width:1000,
+          allowTaint:true,
+          useCORS:true
+        }).then(canvas=>{
+          console.log(canvas)
+          let url = canvas.toDataURL('image/jpeg');
+          let contentWidth = canvas.width
+          let contentHeight = canvas.height
+          let imgWidth = 595.28
+          let imgHeight = 595.28/(contentWidth/contentHeight)
+          let PDF = new JsPDf('p','px','a4')
+          PDF.addImage(url,"JPEG",30,25,imgWidth,imgHeight)
+          PDF.save(title)
+        },300)
+      })
+    },
   },
   components:{
-    ListItem
+    ListItem,
+    BlDoc,
+    XwDoc
   }
 };
 </script>

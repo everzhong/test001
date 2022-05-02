@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" v-loading="pageLoaing" style="padding-top:20px">
     <el-row :gutter="10">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="!viewTableObj.show">
         <span style="color:#606266;font-size:14px">参保地：</span>
         <el-select v-model="queryParams.ybd" size="small" @change="getList()">
           <el-option label="本地" value="01"></el-option>
@@ -70,18 +70,15 @@ export default {
   },
   methods:{
     viewHanddle(row,type){
+      this.viewTableObj.options = {}
       if(this.tabsValue==="listjc"){
-        this.viewTableObj.options = {
-          ybbf:row.ybbf,
-          jslb:row.label
-        }
+        this.viewTableObj.options['jslb'] = row.jslb==='门诊'?'0101':row.jslb==='住院'?'0102':''
       } else {
-        this.viewTableObj.options = {
-          wglx:row.wglx,
-          jslb:row.ybbf
-        }
+        this.viewTableObj.options['wglx'] = row.wglx
       }
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
+      this.viewTableObj.options.jgdm = this.queryInfoFrom.jgdm
+      type && ( this.viewTableObj.options = {...this.viewTableObj.options,...type})
       this.viewTableObj.show = true
     },
     /** 查询renwu列表 */

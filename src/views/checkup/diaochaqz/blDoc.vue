@@ -29,9 +29,6 @@
 <script>
 export default {
   name:'BlDoc',
-  props:['pageData'],
-  mounted(){
-    console.log(this.pageData)
-  }
+  props:['pageData']
 }
 </script>

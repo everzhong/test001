@@ -15,7 +15,7 @@
                 size="small"
                 v-model="zhizuo.jcsj"
                 type="datetimerange"
-                format="yyyy-MM-dd hh:mm"
+                format="yyyy-MM-dd HH:mm"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期">
@@ -248,6 +248,7 @@ export default {
         type:2,
         rwpcid:this.urlQuery.rwpcid,
         jgdm:this.urlQuery.jgdm,
+        sex:this.urlQuery.jsdj||'',//结算等级 type为2时 sex是结算等级
         ...this.zhizuo
       }
       params.jcstarttime = this.zhizuo.jcsj[0]?this.parseTime(this.zhizuo.jcsj[0].getTime()):""

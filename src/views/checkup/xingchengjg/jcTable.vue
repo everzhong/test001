@@ -13,7 +13,7 @@
           <template slot-scope="scope">
             <span
               v-if="scope.row.jslb!=='进销存核查'"
-              @click="viewDetail(scope.row, '职保')"
+              @click="viewDetail(scope.row, {ybbf:'0'})"
               style="color: #1b65b9; cursor: pointer"
               >{{ (scope.row.zbfy*1).toFixed(2) }}</span>
               <span v-else>-</span>
@@ -31,7 +31,7 @@
           <template slot-scope="scope">
             <span
               v-if="scope.row.jslb!=='进销存核查'"
-              @click="viewDetail(scope.row, '居保')"
+              @click="viewDetail(scope.row, {ybbf:'b'})"
               style="color: #1b65b9; cursor: pointer"
               >{{ (scope.row.jbfy*1).toFixed(2) }}</span>
               <span v-else>-</span>
@@ -47,7 +47,7 @@
       <el-table-column label="合计" align="center">
         <el-table-column label="费用" prop="hj" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.jslb==='进销存核查'||scope.row.jslb==='合计'"  @click="viewDetail(scope.row, '')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.hj*1).toFixed(2)}}</span>
+            <span v-if="scope.row.jslb==='进销存核查'||scope.row.jslb==='合计'"  @click="viewDetail(scope.row, {ischeck:1})" style="color:#1B65B9;cursor:pointer;">{{(scope.row.hj*1).toFixed(2)}}</span>
             <span v-else @click="viewDetail(scope.row, '')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.zbfy*1+scope.row.jbfy*1).toFixed(2)}}</span>
           </template>
         </el-table-column>
@@ -150,7 +150,7 @@ export default {
       })
       list.forEach(item => {
         if(item.type==1){//非进销存核查
-          const ybbfType = isNaN(item.ybbf * 1) ? 'zbfy' : 'jbfy'
+          const ybbfType = isNaN(item.ybbf * 1) ? 'jbfy' : 'zbfy'
           const gz = item.jcfs ? item.jcfs : '规则筛查'
           const mzgzIdx = menzhen.findIndex(value => {
             return value.jcfs === gz

@@ -2,6 +2,9 @@
   <div style="height:100%;padding-top:20px" v-loading="loading">
     <section style="height:100%">
       <el-row :gutter="10">
+        <el-col :span="1.5">
+          <el-button  type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
+        </el-col>
         <el-col :span="1.5" v-if="tabsValue==='three'">
           <span style="color:#606266;font-size:14px">参保地：</span>
           <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
@@ -10,9 +13,6 @@
           </el-select>
         </el-col>
         <!-- <el-col :span="1.5">
-          <el-button type="primary"  size="small" @click="setyy('1')">有异议</el-button>
-        </el-col>
-        <el-col :span="1.5">
           <el-button type="primary"  size="small" @click="setyy('2')">无异议</el-button>
         </el-col> -->
         <el-col :span="1.5">
@@ -252,6 +252,9 @@ export default {
           return this.parseTime(time,'{y}-{m}')
         }
       },{
+        label:"核实意见",
+        prop:'hsyj',
+      },{
         prop: 'gzfl',
         label: '规则分类',
         align: 'left',
@@ -274,6 +277,15 @@ export default {
         label: '核实状态',
         viewFun:(hszt)=>{
           return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
+        }
+      },{
+        prop: 'hsr',
+        label: '核实人'
+      },{
+        prop: 'hssj',
+        label: '核实时间',
+        viewFun:(time)=>{
+          return this.parseTime(time,'{y}-{m}-{d} {h}:{m}:{s}')
         }
       }],
       qmxOptions:{
@@ -383,6 +395,9 @@ export default {
     this.getList();
   },
   methods: {
+    goBackUpLevel(){
+      this.$emit('on-back','heshuju')
+    },
     hangdleLiushui(row){
       this.$emit('on-liushui',row)
     },
