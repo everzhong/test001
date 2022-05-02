@@ -65,7 +65,7 @@
         <ViewTable :options="viewTableObj.options"/>
       </div>
       <jc-table ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
-      <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle"/>
+      <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle2"/>
       <el-form style="margin-top:10px" inline v-if="!viewTableObj.show && !queryInfoFrom.fromLuli">
         <el-form-item label="复核意见：" style="margin-right:50px">
           <el-radio v-model="status" label="5">同意</el-radio>
@@ -125,13 +125,19 @@ export default {
   methods:{
     viewHanddle(row,type){
       this.viewTableObj.options = {}
-      if(this.tabsValue==="listjc"){
-        this.viewTableObj.options['jslb'] = row.jslb==='门诊'?'0101':row.jslb==='住院'?'0102':''
-      } else {
-        this.viewTableObj.options['wglx'] = row.wglx
-      }
+      this.viewTableObj.options['jslb'] = row.jslb==='门诊'?'0101':row.jslb==='住院'?'0102':''
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
       this.viewTableObj.options.jgdm = this.queryInfoFrom.jgdm
+      type && ( this.viewTableObj.options = {...this.viewTableObj.options,...type})
+      this.viewTableObj.show = true
+      // console.log(this.viewTableObj,row)
+    },
+    viewHanddle2(row,type){
+      this.viewTableObj.options = {}
+      this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
+      this.viewTableObj.options.jgdm = this.queryInfoFrom.jgdm
+      row.wglx && row.wglx !=='合计' && (this.viewTableObj.options['wglx'] = row.wglx)
+      row.xwrd && row.xwrd !=='小计' && (this.viewTableObj.options['xwrd'] = row.xwrd)
       type && ( this.viewTableObj.options = {...this.viewTableObj.options,...type})
       this.viewTableObj.show = true
       // console.log(this.viewTableObj,row)
