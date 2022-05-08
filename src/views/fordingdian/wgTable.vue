@@ -28,7 +28,7 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="进销存核查" align="center">
+      <el-table-column label="进销存核查" align="center" v-if="showHc">
         <el-table-column label="费用" prop="bz" align="center">
           <template slot-scope="scope"><span @click="viewDetail(scope.row,{ischeck:1})" style="color:#1B65B9;cursor:pointer;">{{(scope.row.mxsum*1).toFixed(2)}}</span></template>
         </el-table-column>
@@ -62,7 +62,8 @@ export default {
       loading:false,
       rows: [],
       concatList:[],
-      splitList:{}
+      splitList:{},
+      showHc:false
     }
   },
   created(){
@@ -100,7 +101,9 @@ export default {
     },
     initList(list){
       const lxObj = {}
+      let sumMxsum = 0
       list.forEach(item => {
+        sumMxsum += ((item.mxsum===null||item.mxsum===undefined||item.mxsum==='null'||item.mxsum==='undefined')?0:item.mxsum*1)
         const key = item.wglx ? item.wglx : 'lxKey'
         if (lxObj.hasOwnProperty(key)) {
           lxObj[key].push(item)
@@ -108,6 +111,7 @@ export default {
           lxObj[key] = [item]
         }
       })
+      this.showHc = sumMxsum>0
       // 添加小计
       const xiaoji = {}
       let newList = []

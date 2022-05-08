@@ -137,9 +137,9 @@ export default {
       this.$emit("view-detail", row, ybbf);
     },
     initList(list) {
-      const menzhen = [{jslb: '门诊', jcfs: '规则筛查', zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: '0.00'}]
-      const zhuyuan = [{jslb: '住院', jcfs: '规则筛查', zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: '0.00'}]
       const jxchc = []//进销存核查
+      let menzhen = []
+      let zhuyuan = []
       let total = 0
       list.forEach(item=>{
         if(item.type===1){
@@ -151,47 +151,82 @@ export default {
       list.forEach(item => {
         if(item.type==1){//非进销存核查
           const ybbfType = isNaN(item.ybbf * 1) ? 'jbfy' : 'zbfy'
-          const gz = item.jcfs ? item.jcfs : '规则筛查'
-          const mzgzIdx = menzhen.findIndex(value => {
-            return value.jcfs === gz
-          })
-          const zygzIdx = zhuyuan.findIndex(value => {
-            return value.jcfs === gz
-          })
-          if (mzgzIdx > -1) {
-            menzhen[mzgzIdx][ybbfType] = item.tym// 门诊的职保费用或者居保费用
-            menzhen[mzgzIdx]['total'] = total// 总数
+          const gz = item.gzly ? item.gzly : '规则筛查'
+          if(menzhen.length===0){
+            const mzObj = {jslb: '门诊', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: total}
+            const zyObj = {jslb: '住院', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total: total}
+            mzObj[ybbfType] = item?.tym*1||0
+            zyObj[ybbfType] = item?.bz*1||0
+            menzhen.push(mzObj)
+            zhuyuan.push(zyObj)
           } else {
-            const obj = {jslb: '门诊', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total}
-            obj[ybbfType] = item.tym
-            menzhen.push(obj)
+            const mzgzIdx = menzhen.findIndex(value => {
+              return value.jcfs === gz
+            })
+            const zygzIdx = zhuyuan.findIndex(value => {
+              return value.jcfs === gz
+            })
+            if (mzgzIdx > -1) {//已经存在当前类型
+              menzhen[mzgzIdx][ybbfType] = menzhen[mzgzIdx][ybbfType]*1 + (item?.tym*1||0)// 门诊的职保费用或者居保费用
+            } else {
+              const obj = {jslb: '门诊', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total}
+              obj[ybbfType] =item?.tym*1||0
+              menzhen.push(obj)
+            }
+            if (zygzIdx > -1) {
+              zhuyuan[zygzIdx][ybbfType] = zhuyuan[zygzIdx][ybbfType]*1 + (item?.bz*1||0)// 住院的职保费用或者居保费用
+            } else {
+              const obj = {jslb: '住院', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total}
+              obj[ybbfType] = item?.bz*1||0
+              zhuyuan.push(obj)
+            }
           }
-          if (zygzIdx > -1) {
-            zhuyuan[zygzIdx][ybbfType] = item.bz// 住院的职保费用或者居保费用
-            zhuyuan[zygzIdx]['total'] = total// 总数
-          } else {
-            const obj = {jslb: '住院', jcfs: gz, zbfy: '0.00', zblv: '0.00', jbfy: '0.00', jblv: '0.00', hj: '0.00', hjlv: '0.00', total}
-            obj[ybbfType] = item.bz
-            zhuyuan.push(obj)
-          }
+
         } else if(item.type==2) {//进销存核查
           jxchc.push({jslb: '进销存核查', jcfs: '', zbfy:'-', zblv: '-', jbfy:'-', jblv: '-', hj: item.mxsum, hjlv: '0.00', total})
         }
       })
+      //判断检查类型的职保和居保数据是否都是0，是则删掉该类型
+      const nMenzhen = []
+      const nZhuyuan= []
+      menzhen.forEach(mitem=>{
+        if(mitem.zbfy*1+mitem.jbfy*1>0){
+          nMenzhen.push(mitem)
+        } 
+      })
+      zhuyuan.forEach(zitem=>{
+        if(zitem.zbfy*1+zitem.jbfy*1>0){
+          nZhuyuan.push(zitem)
+        } 
+      })
+
+      menzhen = [...nMenzhen]
+      zhuyuan = [...nZhuyuan]
 
       // 插入小计
       const mzzbxj = menzhen.reduce((a, b) => { return a + b.zbfy * 1 }, 0)
       const mzjbxj = menzhen.reduce((a, b) => { return a + b.jbfy * 1 }, 0)
       const zyzbxj = zhuyuan.reduce((a, b) => { return a + b.zbfy * 1 }, 0)
       const zyjbxj = zhuyuan.reduce((a, b) => { return a + b.jbfy * 1 }, 0)
-      menzhen.push({jslb: '门诊', jcfs: '小计', zbfy: mzzbxj, zblv: '0.00', jbfy: mzjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
-      zhuyuan.push({jslb: '住院', jcfs: '小计', zbfy: zyzbxj, zblv: '0.00', jbfy: zyjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
+
+      if(mzzbxj+mzjbxj<=0){//门诊总费用为0，则不用展示门诊项
+        menzhen = []
+      } else {
+        menzhen.push({jslb: '门诊', jcfs: '小计', zbfy: mzzbxj, zblv: '0.00', jbfy: mzjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
+      }
+
+      if(zyzbxj+zyjbxj<=0){//住院总费用为0，则不用展示住院项
+        zhuyuan = []
+      } else {
+        zhuyuan.push({jslb: '住院', jcfs: '小计', zbfy: zyzbxj, zblv: '0.00', jbfy: zyjbxj, jblv: '0.00', hj: '0.00', hjlv: '0.00', total})
+      }
+
       // 合并门诊和住院 & 插入总计
-      let newList = menzhen.concat(zhuyuan)
+      let newList =  menzhen.concat(zhuyuan)
       if(jxchc.length){//存在进销存核查 (type=2)
         newList = newList.concat(jxchc)
       }
-      newList.push({jslb: '合计', jcfs: '', zbfy: mzzbxj + zyzbxj, zblv: '0.00', jbfy: mzjbxj + zyjbxj, jblv: '0.00', hj: total, hjlv: '0.00', total})
+      newList.length && (newList.push({jslb: '合计', jcfs: '', zbfy: mzzbxj + zyzbxj, zblv: '0.00', jbfy: mzjbxj + zyjbxj, jblv: '0.00', hj: total, hjlv: '0.00', total}))
       return newList
     },
     /** 查询renwu列表 */
