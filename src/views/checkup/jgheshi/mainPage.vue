@@ -109,10 +109,10 @@ export default {
       },
       tableHeader:[{
         prop: 'jgmc',
-        label: '监督机构',
+        label: '机构名称',
         fixedWidth:30
       },{
-        prop: 'hsr',
+        prop: 'lxr',
         label: '联系人',
       },{
         prop: 'ybbf',
@@ -141,10 +141,10 @@ export default {
           return this.parseTime(time,'{y}-{m}')
         }
       },{
-        prop:'hspfsj',
-        label:'检查开始时间',
+        prop:'jckssj',
+        label:'检查开始日期',
         viewFun:(hspfsj)=>{
-          return this.parseTime(hspfsj)
+          return this.parseTime(hspfsj,'{y}-{m}-{d}')
         }
       }]
     }

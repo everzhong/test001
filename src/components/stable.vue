@@ -24,7 +24,7 @@
         show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <span v-if="!col.viewTemp">{{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}}</span>
+          <span v-if="!col.viewTemp">{{col.viewFun?col.viewFun(scope.row[col.prop],scope.row):scope.row[col.prop]}}</span>
           <el-input v-if="col.viewTemp==='input'" v-model="scope.row[col.prop]" size="mini" @blur="ydChange(scope.row)"></el-input>
           <el-select v-if="col.viewTemp==='selector'" v-model="scope.row[col.prop]" size="mini" @change="ydChange(scope.row)">
             <el-option
@@ -35,8 +35,8 @@
             </el-option>
           </el-select>
           <div v-if="col.viewTemp==='button' && scope.row[col.prop]">
-            <span v-if="col.noClick && col.noClick(scope.row[col.prop])">{{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}}</span>
-            <span v-else @click="poerateButton(scope.row)" style="color:#1B65B9;cursor:pointer"> {{col.viewFun?col.viewFun(scope.row[col.prop]):scope.row[col.prop]}} </span>
+            <span v-if="col.noClick && col.noClick(scope.row[col.prop])">{{col.viewFun?col.viewFun(scope.row[col.prop],scope.row):scope.row[col.prop]}}</span>
+            <span v-else @click="poerateButton(scope.row)" style="color:#1B65B9;cursor:pointer"> {{col.viewFun?col.viewFun(scope.row[col.prop],scope.row):scope.row[col.prop]}} </span>
           </div>
         </template>
       </el-table-column>

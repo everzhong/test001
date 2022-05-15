@@ -2,7 +2,11 @@
   <div style="height:100%" v-loading="loading">
   <sTable :data="renwufourList" :header="tableHeader" :fixedNum="1" style="height:100%">
     <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
+     <!-- <template slot-scope="scope">
+      <el-button size="mini" type="text" primary @click="hangdleLiushui(scope.row)">流水号项目汇总</el-button>
+    </template>  -->
   </sTable>
+  <!-- <liushui-table v-if="showLiushui" ref="liuShuiTable" :fromLog="queryInfoFrom.fromLuli" :tableData="renwufourList" @radio-change="handleSelectionChange" @checkdetail="tongLiushuimx" @on-log="checkLog"></liushui-table> -->
   <pagination
       class="fixed-bottom"
       :total="total"
@@ -14,9 +18,13 @@
 </template>
 <script>
 import { listXcjg } from "@/api/renwu/renwufour";
- 
+// import LiushuiTable from '../jianchass/liushiTable.vue'
+
 export default {
   name:'ViewTable',
+  // components:{
+  //   LiushuiTable
+  // },
   data(){
     return {
       tableHeader:[{
@@ -34,15 +42,17 @@ export default {
         },
         width:'auto'
       },{
-        prop: 'jcfs',
+        prop: 'gzly',
         label: '检查方式',
-        width:'auto'
+        viewFun:(gzly)=>{
+          return gzly?gzly:'规则筛查'
+        }
       },{
         prop: 'mxxmbm',
         label: '医保项目编码',
       },{
-        prop: 'gzmc',
-        label: '项目名称',
+        prop: 'mxxmmc',
+        label: '明细项目名称',
         fixedWidth:40,
       },{
         prop: 'mxxmdj',
@@ -89,6 +99,7 @@ export default {
       renwufourList:[],
       ybbfOptions:[],
       jslbOptions:[]
+      // showLiushui:false
     }
   },
   created(){
@@ -98,6 +109,9 @@ export default {
 
   },
   methods:{
+    // hangdleLiushui(){
+
+    // },
     getList(){
       const params = {...this.queryParams,...this.options}
       listXcjg(params).then(response => {

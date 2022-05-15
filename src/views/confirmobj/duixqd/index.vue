@@ -246,7 +246,7 @@ export default {
       this.doSubmit({
         ids:this.ids,
         status:type,//同意2 ，驳回0
-        dxqd:type==2?'同意':'驳回',
+        dxqd:type==2?'同意':'网审驳回',
         dxqdbh:type==2?'':this.submitParams.dxqdbh//驳回意见字段
       })
 
@@ -301,7 +301,7 @@ export default {
         this.selectionList.forEach(item=>{
             this.addJcfl({
               jglc:'对象确定',
-              gjxx:`确定意见:${params.status?'同意':'驳回'}`,
+              gjxx:`确定意见:${params.status?'同意':'网审驳回'}`,
               rwpcid:item.rwpcid,
               jgdm:item.jgdm,
               zhczr:this.$store.getters.name,

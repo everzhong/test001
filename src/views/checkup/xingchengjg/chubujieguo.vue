@@ -150,7 +150,7 @@ export default {
       const params = {
         ids:[this.queryInfoFrom.id],
         status:this.status,//提交5，退回3
-        dxqd:this.status==5?'提交':'退回',
+        dxqd:this.status==5?'提交':'复核驳回',
         qdbh:this.qdbh,//驳回意见字段
         fhry:this.$store.getters.name,//登录账户
         fhbm:this.$store.getters.dept,//登录人员部门
@@ -213,7 +213,7 @@ export default {
         })
         this.addJcfl({
           jglc:'结果复核',
-          gjxx:`复核意见：${this.status==5?'提交':'退回'}；具体说明：${this.qdbh}`,
+          gjxx:`复核意见：${this.status==5?'提交':'复核驳回'}；具体说明：${this.qdbh}`,
           rwpcid:this.queryInfoFrom.rwpcid,
           jgdm:this.queryInfoFrom.jgdm,
           zhczr:this.$store.getters.name,

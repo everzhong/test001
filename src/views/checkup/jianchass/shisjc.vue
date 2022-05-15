@@ -313,6 +313,10 @@ export default {
         label: '疑点类型',
         hide: true
       },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
+      },{
         prop: 'ydsm',
         label: '疑点说明',
         hide: true
@@ -853,10 +857,13 @@ export default {
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
-        this.xwrdForm.zkdj = zkdj
-        this.xwrdForm.wgsl = wgsl
+        this.xwrdForm.zkdj = zkdj||mxxmdj
+        this.xwrdForm.wgsl = wgsl||mxxmsl
+        this.xwrdForm.zkdj && (Math.abs(this.xwrdForm.zkdj*1))
+        this.xwrdForm.wgsl && (Math.abs(this.xwrdForm.wgsl*1))
         // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
-        this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
+        // this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
+        this.xwrdForm.wgfy = (this.xwrdForm.zkdj && this.xwrdForm.wgsl)?(Math.abs(this.xwrdForm.zkdj * this.xwrdForm.wgsl).toFixed(2)):''
         this.xwrdForm.mxxmmc = mxxmmc
         this.xwrdForm.xwrd = ''
         if(this.tabsValue==='six'){//进销存核查

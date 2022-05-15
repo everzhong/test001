@@ -40,8 +40,22 @@ export default {
         label:"状态",
         prop:"istui",
         width:'140px',
-        viewFun:(istui)=>{
-          return istui&&istui==1?'待检查/法核退回':'待检查实施'
+        viewFun:(istui,row)=>{
+          let text = ''
+          if(istui){
+            if(row.dxqd==='复核驳回'){
+              text = '待检查/复核驳回/法核退回'
+            } else {
+             text = '待检查/法核退回'
+            }
+          } else {
+            if(row.dxqd==='复核驳回'){
+              text = '待检查/复核驳回'
+            } else {
+             text = '待检查'
+            }
+          }
+          return text 
         }
       },{
         label: '批次号',
