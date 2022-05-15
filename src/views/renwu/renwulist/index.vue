@@ -67,7 +67,7 @@
             <el-button
               size="mini"
               type="text"
-              
+              :disabled="scope.row.jsstatus!=2"
               @click="checkdetail(scope.row)"
             >查看任务详情</el-button>
           </template>
