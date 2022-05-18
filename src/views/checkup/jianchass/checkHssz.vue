@@ -2,7 +2,7 @@
   <div class="hssz" style="height:100%">
     <div class="hssz-top">
       <el-row :gutter="10">
-        <el-col :span="1.5">
+        <el-col :span="1.5" v-if="tabsValue==='three'">
           <el-radio-group v-model="gzTabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="1">规则筛查</el-radio-button>
             <el-radio-button label="2">进销存核查</el-radio-button>
@@ -12,7 +12,7 @@
           <el-button type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
         </el-col>
         <div class="top-right-btn">
-          <el-col :span="1.5" v-show="gzTabsValue==1">
+          <el-col :span="1.5" v-show="gzTabsValue==1 && tabsValue==='three'">
             <span style="margin-right:10px;font-size:12px;color:#606266">参保地</span>
             <el-select v-model="queryGzForm.ybd" size="small" @change="ybdChange" style="width:100px">
               <el-option label="本地" value="01"></el-option>
@@ -30,8 +30,8 @@
          <el-table-column type="index" label="序号"  align="center" width="55" slot="fixed">
         </el-table-column>
         <el-table-column label="操作"  fixed="right" align="center" width="150" slot="operate">
-          <template>
-            <el-button type="text" size="mini" @click="checkLiushui">流水号项目汇总</el-button>
+          <template scope="scope">
+            <el-button type="text" size="mini" @click="checkLiushui(scope.row)">流水号项目汇总</el-button>
           </template>
         </el-table-column>
       </sTable>
@@ -372,7 +372,7 @@ export default {
          break
       }
     },
-    checkLiushui(){
+    checkLiushui(row){
       this.total = 0
       this.queryParams.pageNum=1
       this.tabsValue = 'four'
@@ -382,7 +382,7 @@ export default {
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
-      this.getList()
+      this.getList({gzmc:row.gzmc,hs:row.hs})
     },
     tongLiushuimx(row){
       this.tabsValue = 'five'

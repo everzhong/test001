@@ -64,7 +64,7 @@ export default {
       this.loading = false
     },
     handleLink(row,type){
-      this.xmInfos.id = row?.id
+      
       this.xmInfos.rwpcid = row?.rwpcid
       this.xmInfos.jgdm = row?.jgdm
       this.pageView = type
@@ -72,6 +72,13 @@ export default {
         pch:row.rwpcid,
         jgdm:row.jgdm,
         jgmc:row.jgmc
+      }
+      if(type==='lshhz'){
+        delete this.xmInfos.id
+        this.xmInfos['gzmc'] = row.gzmc
+      } else {
+        this.xmInfos.id = row?.id
+        delete this.xmInfos.gzmc
       }
       this.xgmxOptions.show = true
     },

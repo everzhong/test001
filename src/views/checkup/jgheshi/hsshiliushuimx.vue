@@ -2,12 +2,12 @@
   <div style="height:100%;padding-top:20px">
     <section style="height:100%">
       <el-row :gutter="10">
-        <el-col :span="1.5" v-if="tabsValue==='three'">
+        <el-col :span="1.5" v-if="tabsValue==='three'||tabsValue==='five'">
           <el-col :span="1.5">
             <el-button  type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
           </el-col>
-          <span style="color:#606266;font-size:14px">参保地：</span>
-          <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()">
+          <span style="color:#606266;font-size:14px" v-if="tabsValue==='three'">参保地：</span>
+          <el-select v-model="gzQueryForm.ybd" size="small" @change="getList()" v-if="tabsValue==='three'">
             <el-option label="本地" value="01"></el-option>
             <el-option label="异地" value="02"></el-option>
           </el-select>
@@ -51,11 +51,11 @@
               </template>
             </el-table-column>
         </sTable>
+        <tongls ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc"></tongls>
       </div>
       <div v-loading="loading" v-else style="height:calc(100% - 159px)">
         <jxhecha v-if="tabsValue=='six'" :exHeight="88" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
-      <tongls ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc"></tongls>
       <div  class="fixed-bottom">
         <pagination
           v-show="!logShow&&!qmxOptions.show"
@@ -475,7 +475,11 @@ export default {
   },
   methods: {
     goBackUpLevel(){
-      this.$emit('on-back')
+      if(this.tabsValue==='five'){
+        this.tabsValue = 'three'
+      } else {
+        this.$emit('on-back')
+      }
     },
     tongLiushuimx(row){
       this.tabsValue = 'five'
@@ -642,17 +646,18 @@ export default {
     },
     /** 查询renwu列表 */
     async getList(query) {
-      let params = {...this.queryParams,...this.listConfig, hszt:'3'}
+      let params = {...this.queryParams,...this.listConfig, hs:3}
       if(query){
         params = {...params,...query}
       }
+      console.log(params)
       this.loading = true
       try {
         let  res = null
         switch(this.tabsValue) {
           case 'three':
             params.type=1
-            res = await listRenwufour({...params,...this.gzQueryForm})
+            res = await listRenwufour({...this.gzQueryForm,...params})
             break;
           case 'six':
             params.type=2
