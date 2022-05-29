@@ -183,7 +183,11 @@ export default {
           }
 
         } else if(item.type==2) {//进销存核查
-          jxchc.push({jslb: '进销存核查', jcfs: '', zbfy:'-', zblv: '-', jbfy:'-', jblv: '-', hj: item.mxsum, hjlv: '0.00', total})
+          if(jxchc.length){
+            jxchc[0]['hj']+=item.mxsum
+          } else {
+            jxchc.push({jslb: '进销存核查', jcfs: '', zbfy:'-', zblv: '-', jbfy:'-', jblv: '-', hj: item.mxsum, hjlv: '0.00', total})
+          }
         }
       })
       //判断检查类型的职保和居保数据是否都是0，是则删掉该类型
@@ -227,7 +231,7 @@ export default {
         newList = newList.concat(jxchc)
       }
       newList.length && (newList.push({jslb: '合计', jcfs: '', zbfy: mzzbxj + zyzbxj, zblv: '0.00', jbfy: mzjbxj + zyjbxj, jblv: '0.00', hj: total, hjlv: '0.00', total}))
-      return newList
+     return newList
     },
     /** 查询renwu列表 */
     async getList(query) {

@@ -44,13 +44,13 @@ export default {
           let text = ''
           if(istui){
             if(row.dxqd==='复核驳回'){
-              text = '待检查/复核驳回/法核退回'
+              text = '复核驳回'
             } else {
-             text = '待检查/法核退回'
+             text = '法核退回'
             }
           } else {
             if(row.dxqd==='复核驳回'){
-              text = '待检查/复核驳回'
+              text = '复核驳回'
             } else {
              text = '待检查'
             }

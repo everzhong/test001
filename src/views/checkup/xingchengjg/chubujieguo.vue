@@ -53,16 +53,16 @@
             <el-option label="异地" value="02"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="1.5" v-if="viewTableObj.show">
+        <!-- <el-col :span="1.5" v-if="viewTableObj.show">
           <el-button type="default"  size="small" @click="viewTableObj.show = false">返回上一层</el-button>
-        </el-col>
+        </el-col> -->
         <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
           <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>
           <el-radio-button label="listjg" value="listjg">按违规类别汇总</el-radio-button>
         </el-radio-group>
       </el-row>
       <div v-if="viewTableObj.show" style="height:calc(100% - 110px);margin-top:5px">
-        <ViewTable :options="viewTableObj.options"/>
+        <ViewTable :options="viewTableObj.options" @click-back="viewTableObj.show = false"/>
       </div>
       <jc-table ref="listjcTable" v-if="tabsValue=='listjc'&&!viewTableObj.show" @view-detail="viewHanddle"/>
       <wg-table ref="listjgTable" v-if="tabsValue=='listjg'&&!viewTableObj.show" @view-detail="viewHanddle2"/>
@@ -124,13 +124,20 @@ export default {
   },
   methods:{
     viewHanddle(row,type){
+      const {jcfs} = row
       this.viewTableObj.options = {}
-      this.viewTableObj.options['jslb'] = row.jslb==='门诊'?'0101':row.jslb==='住院'?'0102':''
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
       this.viewTableObj.options.jgdm = this.queryInfoFrom.jgdm
+      if(row.jslb==='门诊'){
+        this.viewTableObj.options['jslb'] = '0101'
+      } else if(row.jslb==='住院'){
+        this.viewTableObj.options['jslb'] = '0102'
+      }
+      if(jcfs && jcfs!=='小计'){
+        this.viewTableObj.options['jcfs'] = jcfs
+      }
       type && ( this.viewTableObj.options = {...this.viewTableObj.options,...type})
       this.viewTableObj.show = true
-      // console.log(this.viewTableObj,row)
     },
     viewHanddle2(row,type){
       this.viewTableObj.options = {}

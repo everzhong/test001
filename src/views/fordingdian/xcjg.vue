@@ -72,6 +72,9 @@ export default {
       this.viewTableObj.options['jslb'] = row.jslb==='门诊'?'0101':row.jslb==='住院'?'0102':''
       this.viewTableObj.options.rwpcid = this.queryInfoFrom.rwpcid
       this.viewTableObj.options.jgdm = this.queryInfoFrom.jgdm
+      if(jcfs && jcfs!=='小计'){
+        this.viewTableObj.options['jcfs'] = jcfs
+      }
       type && ( this.viewTableObj.options = {...this.viewTableObj.options,...type})
       this.viewTableObj.show = true
       // console.log(this.viewTableObj,row)

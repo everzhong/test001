@@ -97,7 +97,9 @@ export default {
       },{
         prop: 'ybd',
         label: '异地/本地',
-        width:'auto'
+        viewFun:(ybd)=>{
+          return ybd==='01'?'本地':ybd==='02'?'异地':'--'
+        },
       },{
         label:"数据开始日期",
         prop:'datastarttime',

@@ -240,7 +240,7 @@ export default {
         label: '核实意见',
         fixedWidth:55,
         viewFun:(queren)=>{
-          return queren==1?'确认':'不确认'
+          return queren==1?'确认':queren==2?'不确认':''
         },
       },{
         prop: 'jgmc',

@@ -26,6 +26,9 @@
         <div class="chart-wrapper">
           <el-tabs type="border-card" v-loading="loading1">
             <el-tab-pane label="就诊类型">
+              <div class="chart-title">
+                <span v-for="item in chart1Data" :key="item.label">{{item.label}}</span>
+              </div>
               <pie-chart v-if="chart1Data.length" :seriesData="chart1Data"/>
             </el-tab-pane>
           </el-tabs>
@@ -46,7 +49,7 @@
         <div class="chart-wrapper">
           <el-tabs type="border-card" v-loading="loading3" v-model="chart5Value">
             <el-tab-pane label="结算等级" name="1" >
-                <pie-chart v-if="chart5Data.length" :seriesData="chart5Data"/>
+                <bar-chart-t v-if="chart5Data.label.length" :seriesData="chart5Data"/>
             </el-tab-pane>
             <el-tab-pane label="医疗机构" name="2" style="text-align:right">
               <label style="font-size:14px;color:#666">结算等级 &nbsp;</label><el-select @change="handelJsdjChange" v-model="jsdj" placeholder="结算等级" size="mini" style="width:100px;">
@@ -66,7 +69,7 @@
         <div class="chart-wrapper">
           <el-tabs type="border-card" v-loading="loading4">
             <el-tab-pane label="调查单位">
-              <bar-chart v-if="chart4Data.label.length" :seriesData="chart4Data"/>
+              <bar-chart-t v-if="chart4Data.label.length" :seriesData="chart4Data"/>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -80,6 +83,7 @@ import LineChart from './dashboard/LineChart'
 import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
+import BarChartT from './dashboard/BarChartT'
 import {getTjjzlx1,getTjjzlx2,getTjjzlx3,getTjjzlx4,getTjjzlx5} from '@/api/renwu/renwufour.js'
 
 export default {
@@ -89,7 +93,8 @@ export default {
     LineChart,
     RaddarChart,
     PieChart,
-    BarChart
+    BarChart,
+    BarChartT
   },
   
   data() {
@@ -150,7 +155,9 @@ export default {
       chart4Data:{
         label:[]
       },
-      chart5Data:[],
+      chart5Data:{
+        label:[]
+      },
     }
   },
   created(){
@@ -193,37 +200,38 @@ export default {
       try {
          const res = await getTjjzlx1(query)
         if(res.code===200){
-          const sdata = []
+          const sdata = [
+             {
+              label:'人次',
+              data:[]
+            },
+            {
+              label:'疑点费用',
+              data:[]
+            },
+            {
+              label:'认定费用',
+              data:[]
+            },
+          ]
           res.rows.forEach(element => {
-            const obj = [
-              {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
-              { value: element?.wgfy*1||0, name: '认定费用' },
-              { value: element?.xjjzrs*1||0, name: '人次' }
-            ]
-            switch(element.jslb) {
-              case '0101':
-                sdata[0]={
-                  label:'住院',
-                  data:obj
-                }
-                break;
-              case '0102':
-                sdata[1]={
-                  label:'门诊',
-                  data:obj
-                }
-                break;
-              case '0107':
-                sdata[2]={
-                  label:'内设',
-                  data:obj
-                }
-                break;
-              default:
-                break;
-            }
-            this.chart1Data = sdata
+            let name = element.jslb === '0101'? '住院':element.jslb ==='0102'?'门诊':element.jslb ==='0107'?'内设':''
+            sdata[0]['data'].push({
+              value: ((element?.xjjzrs*1||0)/10000).toFixed(3), 
+              name
+            })
+            sdata[1]['data'].push({
+              value: ((element?.mxxmbjsfy*1||0)/10000).toFixed(3), 
+              name
+            })
+            sdata[2]['data'].push({
+              value: ((element?.wgfy*1||0)/10000).toFixed(3), 
+              name
+            })
           });
+          console.log(sdata,78)
+          this.chart1Data = sdata
+
         }
       } catch (error) {
         console.log(error)
@@ -236,17 +244,22 @@ export default {
       try {
         const res = await getTjjzlx2(query)
         if(res.code===200){
-          const gzfl = res.rows.map(item=>item.gzfl)
+          var gzfl = res.rows.map(item=>{
+            const fl = item.gzfl? item.gzfl.trim():''
+            return fl.split('-').pop()
+          })
           const sdata = {
             label:gzfl,
-            data:[[],[],[]]
+            data:[[],[]]
           }
           res.rows.forEach(element => {
-            sdata.data[0].push(element?.mxxmbjsfy*1||0)
-            sdata.data[1].push(element?.wgfy*1||0)
-            sdata.data[2].push(element?.xjjzrs*1||0)
-            this.chart2Data = sdata
+            const jsfy = element?.mxxmbjsfy*1||0
+            const wgfy = element?.wgfy*1||0
+
+            sdata.data[0].push((jsfy/10000).toFixed(3))
+            sdata.data[1].push((wgfy/10000).toFixed(3))
           });
+          this.chart2Data = sdata
         }
       } catch (error) {
         console.log(error)
@@ -259,17 +272,18 @@ export default {
       try {
         const res = await getTjjzlx3(query)
         if(res.code===200){
-          const jgmc = res.rows.map(item=>item.jgmc)
+          const jgmc = res.rows.map(item=>item.jgmc.trim())
           const sdata = {
             label:jgmc,
-            data:[[],[],[]]
+            data:[[],[]]
           }
           res.rows.forEach(element => {
-            sdata.data[0].push(element?.mxxmbjsfy*1||0)
-            sdata.data[1].push(element?.wgfy*1||0)
-            sdata.data[2].push(element?.xjjzrs*1||0)
-            this.chart3Data = sdata
+            const jsfy = element?.mxxmbjsfy*1||0
+            const wgfy = element?.wgfy*1||0
+            sdata.data[0].push((jsfy/10000).toFixed(3))
+            sdata.data[1].push((wgfy/10000).toFixed(3))
           });
+          this.chart3Data = sdata
         }
       } catch (error) {
         console.log(error)
@@ -282,17 +296,20 @@ export default {
       try {
         const res = await getTjjzlx4(query)
         if(res.code===200){
-          const xm = res.rows.map(item=>item.xm)
+          const xm = res.rows.map(item=>`医生${item.xm}`)
           const sdata = {
             label:xm,
-            data:[[],[],[]]
+            data:[[],[]]
           }
           res.rows.forEach(element => {
-            sdata.data[0].push(element?.mxxmbjsfy*1||0)
-            sdata.data[1].push(element?.wgfy*1||0)
-            sdata.data[2].push(element?.xjjzrs*1||0)
-            this.chart4Data = sdata
+            const jsfy = element?.mxxmbjsfy*1||0
+            const wgfy = element?.wgfy*1||0
+
+            sdata.data[0].push((jsfy/10000).toFixed(3))
+            sdata.data[1].push((wgfy/10000).toFixed(3))
+            
           });
+          this.chart4Data = sdata
         }
       } catch (error) {
         console.log(error)
@@ -305,36 +322,30 @@ export default {
       try {
          const res = await getTjjzlx5({...query,jsdj:this.jsdj})
         if(res.code===200){
-          const sdata = []
-          res.rows.forEach(item => {
+          let lv1 = res.rows.filter(item=>{
+            return item?.jsdj==1
+          })
+          let lv2 = res.rows.filter(item=>{
+            return item?.jsdj==2
+          })
+          let lv3 = res.rows.filter(item=>{
+            return item?.jsdj==3
+          })
+          !lv1[0] && (lv1=[{}])
+          !lv2[0] && (lv2=[{}])
+          !lv3[0] && (lv3=[{}])
+          const result = [...lv1,...lv2,...lv3]
+          const sdata = {
+            label:['一级','二级','三级'],
+            data:[[],[]]
+          }
+          result.forEach(item => {
             let element = item?item:{}
-            const obj = [
-              {value: element?.mxxmbjsfy*1||0, name: '疑点费用' },
-              { value: element?.wgfy*1||0, name: '认定费用' },
-              { value: element?.xjjzrs*1||0, name: '人次' }
-            ]
-            switch(element.jsdj*1) {
-              case 1:
-                sdata[0]={
-                  label:'一级',
-                  data:obj
-                }
-                break;
-              case 2:
-                sdata[1]={
-                  label:'二级',
-                  data:obj
-                }
-                break;
-              case 3:
-                sdata[2]={
-                  label:'三级',
-                  data:obj
-                }
-                break;
-              default:
-                break;
-            }
+            const jsfy = element?.mxxmbjsfy*1||0
+            const wgfy = element?.wgfy*1||0
+            sdata.data[0].push((jsfy/10000).toFixed(3))
+            sdata.data[1].push((wgfy/10000).toFixed(3))
+           
           })
           this.chart5Data = sdata
         }
@@ -359,5 +370,17 @@ export default {
     background: #fff;
     margin-bottom: 20px;
   }
+}
+.chart-title {
+  width: 100%;
+  left: 1%;
+  top: 10%;
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  color: #1B65B9;
+}
+::v-deep .el-tab-pane{
+  box-sizing: border-box;
 }
 </style>

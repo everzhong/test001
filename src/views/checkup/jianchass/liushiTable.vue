@@ -1,8 +1,8 @@
 /**项目流水号汇总 第四层数据 type=1*/
 <template>
 <div class="liushui-table" style="height:100%">
-  <sTable :data="tableData" :header="tableHeader" :fixedNum="1" :isrowClassName="true">
-    <el-table-column  align="center" width="55" slot="fixed" fixed>
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="!noRadio?1:0" :isrowClassName="true">
+    <el-table-column v-if="!noRadio"  align="center" width="55" slot="fixed" fixed>
       <template slot-scope="scope">
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
@@ -147,7 +147,7 @@ export default {
       }]
     }
   },
-  props:['tableData','fromLog','noLog'],
+  props:['tableData','fromLog','noLog','noRadio'],
   created(){
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic

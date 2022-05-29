@@ -58,53 +58,79 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
       this.chart.setOption({
+        color:['#1b65b9','#91cc75'],
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+          formatter:function(params){
+            let str = params.seriesName+"<br/>"+params.marker+params.name+'：'+params.value+'(万元)'+'('+params.percent+'%)'
+            return str
+          }
         },
+       
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['疑点费用', '认定费用', '人次']
+          data: ['住院', '门诊']
         },
         series: [
           {
+            top: "10%",
             name: this.seriesData[0]?.label||'',
             type: 'pie',
             //roseType: 'radius',
             minAngle:5,
-            radius: [25, 85],
-            center: ['18%', '38%'],
+            radius: [0, 80],
+            center: ['15%', '40%'],
             data: this.seriesData[0]?.data||[],
-           
             animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            animationDuration: 2600,
+            label:{
+              normal:{
+                show:true,
+                formatter: '{b}: {d}%',
+                position:'inside'
+              }
+            }
           },
           {
+            top: "10%",
             name: this.seriesData[1]?.label||'',
             type: 'pie',
             minAngle:5,
             //roseType: 'radius',
-            radius: [25, 85],
-            center: ['50%', '38%'],
+            radius: [0, 80],
+            center: ['50%', '40%'],
             data: this.seriesData[1]?.data||[],
-           
             animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            animationDuration: 2600,
+            label:{
+              normal:{
+                show:true,
+                formatter: '{b}: {d}%',
+                position:'inside'
+
+              }
+            }
           },
           {
+            top: "10%",
             name: this.seriesData[2]?.label||'',
             type: 'pie',
             minAngle:5,
             //roseType: 'radius',
-            radius: [25, 85],
-            center: ['80%', '38%'],
+            radius: [0, 80],
+            center: ['85%', '40%'],
             data: this.seriesData[2]?.data||[],
-           
             animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            animationDuration: 2600,
+            label:{
+              normal:{
+                show:true,
+                formatter: '{b}: {d}%',
+                position:'inside'
+              }
+            }
           }
         ]
       })

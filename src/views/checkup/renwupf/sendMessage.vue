@@ -72,8 +72,8 @@
                 <el-input min="2" size="mini" style="width:90px" v-model="randomCount" type="number"></el-input>
                 <el-button type="primary" size="mini" style="margin-left:8px" @click="autoSelect">随机选择</el-button>
               </div>
-              <div style="min-height:150px;max-height:270px;overflow:auto">
-                <el-table ref="multipleTable" :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
+              <div style="height:300px">
+                <el-table height="100%" ref="multipleTable" :data="gridData" border="" class="sys-small-table" @selection-change="handleSelectionChange">
                   <el-table-column type="selection" width="50" align="center" fixed/>
                   <el-table-column property="jgdm" label="机构ID" align="center" show-overflow-tooltip></el-table-column>
                   <el-table-column property="jgmc" label="机构名称" align="center" show-overflow-tooltip></el-table-column>
@@ -209,8 +209,10 @@ export default {
     async getJanChacy(){
       try {
         const res = await listUser({pageNum:1,pageSize: 50000})
-        if(res.code === 200) {
-          this.gridData = res.rows
+        if(res.code === 200  && res.rows && res.rows.length) {
+          this.gridData =  res.rows.filter(item=>{
+            return item.roleId==4||item.roleId==9
+          })
         }
       } catch (error) { 
         console.log(error)

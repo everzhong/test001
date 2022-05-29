@@ -859,8 +859,8 @@ export default {
         this.xwrdForm.bz = bz
         this.xwrdForm.zkdj = zkdj||mxxmdj
         this.xwrdForm.wgsl = wgsl||mxxmsl
-        this.xwrdForm.zkdj && (Math.abs(this.xwrdForm.zkdj*1))
-        this.xwrdForm.wgsl && (Math.abs(this.xwrdForm.wgsl*1))
+        this.xwrdForm.zkdj && (this.xwrdForm.zkdj = Math.abs(this.xwrdForm.zkdj*1))
+        this.xwrdForm.wgsl && (this.xwrdForm.wgsl = Math.abs(this.xwrdForm.wgsl*1))
         // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
         // this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
         this.xwrdForm.wgfy = (this.xwrdForm.zkdj && this.xwrdForm.wgsl)?(Math.abs(this.xwrdForm.zkdj * this.xwrdForm.wgsl).toFixed(2)):''

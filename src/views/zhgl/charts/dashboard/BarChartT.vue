@@ -29,7 +29,7 @@ export default {
       default(){
         return {
           label:[],
-          data:[[],[],[]]
+          data:[]
         }
       }
     }
@@ -58,9 +58,8 @@ export default {
         color:['#1b65b9','#91cc75'],
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            // Use axis to trigger tooltip
-            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           },
           formatter:function(params){
             let str = params[0].name||''
@@ -74,70 +73,41 @@ export default {
           bottom: '2',
         },
         grid: {
-          left: '3%',
-          right: '8%',
-          top:'1%',
+          top: "10%",
+          left: '2%',
+          right: '2%',
           bottom: '13%',
           containLabel: true
         },
         xAxis: [{
-          name:'(万）',
-          type: 'value',
-          axisLabel:{
-            interval: 1,
-            rotate:30
+          type: 'category',
+          data: this.seriesData?.label||[],
+          axisTick: {
+            alignWithLabel: true
           }
         }],
         yAxis: [{
-          type: 'category',
-          data: this.seriesData?.label||[],
+          name:'(万)',
+          type: 'value',
+          axisTick: {
+            show: false
+          }
         }],
         series: [{
           name: '疑点费用',
           type: 'bar',
-          stack: 'total',
-          barWidth: '60%',
+          stack: 'vistors',
+          barWidth: '50%',
           data: this.seriesData?.data[0]||[],
-          animationDuration,
-          emphasis: {
-            focus: 'series'
-          },
+          animationDuration
         }, {
           name: '认定费用',
           type: 'bar',
-          stack: 'total',
-          barWidth: '60%',
+          stack: 'vistors',
+          barWidth: '50%',
           data: this.seriesData?.data[1]||[],
-          animationDuration,
-          emphasis: {
-            focus: 'series'
-          },
+          animationDuration
         }]
-        // series: [{
-        //   name: '疑点费用',
-        //   type: 'bar',
-        //   stack: 'vistors',
-        //   barWidth: '60%',
-        //   barMinHeight:7,
-        //   data: this.seriesData?.data[0]||[],
-        //   animationDuration
-        // }, {
-        //   name: '认定费用',
-        //   type: 'bar',
-        //   barMinHeight:7,
-        //   stack: 'vistors',
-        //   barWidth: '60%',
-        //   data: this.seriesData?.data[1]||[],
-        //   animationDuration
-        // }, {
-        //   name: '人次',
-        //   type: 'bar',
-        //   barMinHeight:7,
-        //   stack: 'vistors',
-        //   barWidth: '60%',
-        //   data: this.seriesData?.data[2]||[],
-        //   animationDuration
-        // }]
       })
     }
   },
