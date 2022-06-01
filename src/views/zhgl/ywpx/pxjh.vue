@@ -119,11 +119,16 @@
             >
               <el-button type="text" size="mini">添加附件</el-button>
             </el-upload>
-            <div class="file-item" v-for="(item,i) in fileList" :key="i">
-              <el-input :disabled="!editType" @blur="fileNameBlur(i)" :ref="'fileName'+i" :class="item.isEdit?'':'no-border'" v-model="item.fileName" size="mini"></el-input>
-              <el-button type="text" size="mini" @click="eidtFileName(i)" v-if="editType">编辑名称</el-button>
-              <el-button type="text" size="mini" @click="delFile(i)" v-if="editType">删除</el-button>
-              <el-button type="text" size="mini" disabled v-if="!editType">附件{{i}}</el-button>
+            <div v-for="(item,i) in fileList" :key="i">
+              <div class="file-item" v-if="editType">
+                <el-input  @blur="fileNameBlur(i)" :ref="'fileName'+i" :class="item.isEdit?'':'no-border'" v-model="item.fileName" size="mini"></el-input>
+                <el-button type="text" size="mini" @click="eidtFileName(i)">编辑名称</el-button>
+                <el-button type="text" size="mini" @click="delFile(i)" >删除</el-button>
+              </div>
+              <div class="file-item" v-else  @click="dowwnFile(item)">
+                <span>{{item.fileName}}</span>
+                <el-button type="text" size="mini">附件{{i+1}}</el-button>
+              </div>
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
@@ -235,6 +240,16 @@ export default {
     this.getList()
   },
   methods:{
+    dowwnFile(i){
+      const el = document.createElement('a')
+      el.style.display='none'
+      el.setAttribute('target','_blank')
+      el.setAttribute('download',i.fileName)
+      el.href = i.url
+      document.body.appendChild(el)
+      el.click()
+      document.body.removeChild(el)
+    },
     dialogClosed(){
       this.psForm = {
         noticeTitle: '',
@@ -479,6 +494,8 @@ export default {
       padding-right: 18px;
       background-color: #f2f2f2;
       margin-bottom: 3px;
+      justify-content: space-between;
+      align-items: center;
       &::v-deep .el-input {
         // width: auto;
         background-color: transparent;
@@ -491,6 +508,12 @@ export default {
             border-color: transparent !important;
           }
         }
+      }
+      span {
+        width: 100%;
+        padding-left: 15px;
+        cursor: pointer;
+        font-size: 12px;
       }
     }
   }

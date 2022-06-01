@@ -84,6 +84,10 @@ export default {
           data: this.seriesData?.label||[],
           axisTick: {
             alignWithLabel: true
+          },
+          axisLabel:{
+            interval:0,
+            rotate:30
           }
         }],
         yAxis: [{

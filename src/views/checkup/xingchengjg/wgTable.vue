@@ -103,10 +103,19 @@ export default {
       const lxObj = {}
       let sumMxsum = 0
       list.forEach(item => {
-        sumMxsum += ((item.mxsum===null||item.mxsum===undefined||item.mxsum==='null'||item.mxsum==='undefined')?0:item.mxsum*1)
         const key = item.wglx ? item.wglx : 'lxKey'
+        sumMxsum += ((item.mxsum===null||item.mxsum===undefined||item.mxsum==='null'||item.mxsum==='undefined')?0:item.mxsum*1)
         if (lxObj.hasOwnProperty(key)) {
-          lxObj[key].push(item)
+          const hasName = lxObj[key].filter(subItem=>{return subItem.xwrd==item.xwrd})
+          if(hasName.length){
+            const idx = lxObj[key].findIndex(element=> element.xwrd==item.xwrd)
+            const temp = {...lxObj[key][idx]}
+            lxObj[key][idx]['tym'] = temp.tym*1+item.tym*1
+            lxObj[key][idx]['bz'] = temp.bz*1+item.bz*1
+            lxObj[key][idx]['mxsum'] = temp.mxsum*1+item.mxsum*1
+          } else {
+            lxObj[key].push(item)
+          }
         } else {
           lxObj[key] = [item]
         }
@@ -115,9 +124,9 @@ export default {
       // 添加小计
       const xiaoji = {}
       let newList = []
+
       for (let lxkey in lxObj) {
         const lx = lxObj[lxkey][0].wglx
-        // let zkdj = lxObj[lxkey][0].zkdj
         xiaoji[lxkey] = {}
         xiaoji[lxkey]['bz'] = lxObj[lxkey].reduce((a, b) => { return a + b.bz * 1 }, 0)
         xiaoji[lxkey]['tym'] = lxObj[lxkey].reduce((a, b) => { return a + b.tym * 1 }, 0)

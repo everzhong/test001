@@ -650,7 +650,8 @@ export default {
               delete  params.wgfy
             }
             if(this.tabsValue==='six'){//进销存核查
-              const cesl = this.cesl()
+              let cesl = this.cesl()
+              cesl = cesl?Math.abs(cesl):''
               params.cesl = cesl
               params.dzce = this.formatMoney(cesl*this.selectionList[0].mxxmdj,2) 
             }
@@ -763,11 +764,8 @@ export default {
         this.selectedId = id
         this.selectionList = selection
         this.xwrdForm.bz = bz
-        this.xwrdForm.wgsl = wgsl
-        this.xwrdForm.zkdj = zkdj
-        // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
-        this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
-
+        this.xwrdForm.zkdj = zkdj||mxxmdj
+        this.xwrdForm.zkdj && (this.xwrdForm.zkdj = Math.abs(this.xwrdForm.zkdj*1))
         this.xwrdForm.mxxmmc = mxxmmc
         this.xwrdForm.xwrd = ''
         if(this.tabsValue==='six'){//进销存核查
@@ -779,6 +777,9 @@ export default {
           this.xwrdForm.ybjs = ybjs
         } else {
           // this.xwrdForm.wgsl = mxxmsl
+          this.xwrdForm.wgsl = wgsl||mxxmsl
+          this.xwrdForm.wgsl && (this.xwrdForm.wgsl = Math.abs(this.xwrdForm.wgsl*1))
+          this.xwrdForm.wgfy = (this.xwrdForm.zkdj && this.xwrdForm.wgsl)?(Math.abs(this.xwrdForm.zkdj * this.xwrdForm.wgsl).toFixed(2)):''
         }
         this.$refs.xwrdForm.clearValidate()
       } else {
@@ -864,7 +865,7 @@ export default {
     hanndelChange(){
       const res = this.cesl()
       if(res!==''){
-        this.xwrdForm.wgsl = res
+        this.xwrdForm.wgsl = Math.abs(res)
         this.handleDjslChange()
       }
     },

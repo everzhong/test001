@@ -137,7 +137,7 @@ export default {
       this.total = 0
       this.queryParams.pageNum = 1
       this.tabsValue='four'
-      this.serachOptions = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,hs:row.hs}
+      this.serachOptions = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,hs:row.hs,type:row.type}
       this.getList()
     },
     tongLiushuimx(row){

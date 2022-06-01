@@ -84,7 +84,7 @@ export default {
           name:'(万）',
           type: 'value',
           axisLabel:{
-            interval: 1,
+            interval: 0,
             rotate:30
           }
         }],

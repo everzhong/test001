@@ -650,7 +650,6 @@ export default {
       if(query){
         params = {...params,...query}
       }
-      console.log(params)
       this.loading = true
       try {
         let  res = null
@@ -666,7 +665,7 @@ export default {
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
             // res = await listRenwutwo(params)
-            res = await getTLS({...this.params})
+            res = await getTLS({...this.params,...this.searchTlsNextParams})
             break;
         }
         if(res.code===200){

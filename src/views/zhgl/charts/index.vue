@@ -68,7 +68,7 @@
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
           <el-tabs type="border-card" v-loading="loading4">
-            <el-tab-pane label="调查单位">
+            <el-tab-pane label="医生">
               <bar-chart-t v-if="chart4Data.label.length" :seriesData="chart4Data"/>
             </el-tab-pane>
           </el-tabs>
@@ -296,7 +296,7 @@ export default {
       try {
         const res = await getTjjzlx4(query)
         if(res.code===200){
-          const xm = res.rows.map(item=>`医生${item.xm}`)
+          const xm = res.rows.map(item=>item.xm)
           const sdata = {
             label:xm,
             data:[[],[]]
@@ -379,6 +379,7 @@ export default {
   display: flex;
   justify-content: space-around;
   color: #1B65B9;
+  
 }
 ::v-deep .el-tab-pane{
   box-sizing: border-box;

@@ -41,6 +41,7 @@ export default {
         query:{}
       },
       pageView:'main',//'main' ,'heshuju','lshhz','xgmx','ckxq',
+      updateTwoId:''
     }
   },
   created(){
@@ -64,7 +65,6 @@ export default {
       this.loading = false
     },
     handleLink(row,type){
-      
       this.xmInfos.rwpcid = row?.rwpcid
       this.xmInfos.jgdm = row?.jgdm
       this.pageView = type
@@ -72,6 +72,9 @@ export default {
         pch:row.rwpcid,
         jgdm:row.jgdm,
         jgmc:row.jgmc
+      }
+      if(type==='heshuju'){
+        this.updateTwoId = row?.id
       }
       if(type==='lshhz'){
         delete this.xmInfos.id

@@ -46,11 +46,7 @@ export default {
         }
       },{
         label:"检查方式",
-        prop:'jcfs',
-        width:'auto',
-        viewFun:()=>{
-          return '规则筛查'
-        }
+        prop:'jcfs'
       },{
         label: '机构名称',
         fixedWidth:60,
