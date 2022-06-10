@@ -5,7 +5,7 @@
       <!-- <el-button type="primary" icon="el-icon-back" size="mini" >返回</el-button> -->
       <i class="el-icon-arrow-left"></i>
     </div>
-    <div class="table-main" :style="{top:topValue}">
+    <div :class="[isFromLuli?'table-main1':'table-main']" :style="{top:topValue}">
       <el-row :gutter="10" style="margin-bottom:5px">
         <el-col :span="1.5" v-if="tabsValue==='two'&&!mxShow && !isRwcx">
           <el-button
@@ -21,7 +21,8 @@
             @click="handleThirdCheck"
           >开展第三方筛查</el-button>
         </el-col>
-        <div class="top-right-btn">
+       
+        <div class="top-right-btn" >
           <el-col :span="1.5" v-if="mxShow">
             <el-button
               type="default"
@@ -30,7 +31,7 @@
               @click="mxShow=false,qmxOptions.show=false,xgmxOptions.show=false"
             >返回上一层</el-button>
           </el-col>
-          <el-radio-group v-model="tabsValue" size="small" @change="tabsLevelChange">
+          <el-radio-group v-if="!mxShow" v-model="tabsValue" size="small" @change="tabsLevelChange">
             <el-radio-button label="two" v-if="!isFromLuli">任务列表</el-radio-button>
             <el-radio-button label="three">任务列表-规则列表</el-radio-button>
             <el-radio-button label="four">规则筛查-项目汇总</el-radio-button>
@@ -59,6 +60,10 @@
           </el-table-column>
         </sTable>
       </div>
+      <div v-if="xgmxOptions.show||qmxOptions.show" style="height:calc(100% - 37px)">
+        <checkmx ref="xgmx" :options="xgmxOptions" v-if="xgmxOptions.show"/>
+        <quanmingxi ref="qmx" :options="qmxOptions" v-else />
+      </div>
     </div>
     <pagination
       v-show="!mxShow"
@@ -68,10 +73,6 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div :class="[isFromLuli?'table-main1':'table-main']" v-if="xgmxOptions.show||qmxOptions.show" :style="{top:topValue}">
-      <checkmx :options="xgmxOptions" v-if="xgmxOptions.show"/>
-      <quanmingxi :options="qmxOptions" v-else />
-    </div>
   </div>
 </template>
 <script>
@@ -223,7 +224,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 50,
-        status:-1
       },
       // 表单参数
       form: {},
@@ -238,7 +238,8 @@ export default {
       duration:0,//每隔三秒，post一个筛查数据
       postTimmer:null,
       waitScList:[],//等待setsc的列表
-      topValue:0
+      topValue:0,
+      mxType:''
     };
   },
   created() {
@@ -261,6 +262,7 @@ export default {
     },
     checkdetail(row,key){
       const keyw = `${key}Options`
+      this.mxType = key
       if(key==='xgmx'){
         const query = {
           pch:row.rwpcid,
@@ -340,7 +342,17 @@ export default {
       // this.tabsValue = 'two'
       this.queryParams.pageNum = 1;
       delete query.status
-      this.getList(query);
+      if(this.mxShow && this.mxType){
+        console.log(this.$refs[this.mxType])
+        const params = {...query}
+        if(params.hasOwnProperty('jgmc') && !params['jgmc']){
+          console.log(this[`${this.mxType}Options`]['query']['jgmc'])
+          params.jgmc = this[`${this.mxType}Options`]['query']['jgmc']
+        }
+        this.$refs[this.mxType].getList(params)
+      } else {
+        this.getList(query);
+      }
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

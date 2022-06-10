@@ -54,7 +54,9 @@ export default {
       try {
         const res = await updateRenwutwo({
           jghs:1,
-          ...this.xmInfos
+          id:this.updateTwoId,
+          jgdm:this.xmInfos.jgdm,
+          rwpcid:this.xmInfos.rwpcid
         })
         if(res.code==200) {
           this.msgSuccess('操作成功！')

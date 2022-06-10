@@ -77,7 +77,7 @@
         <div>
           <el-form-item style="margin-right:0;text-align:right">
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="getList()">重置</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
         </div>
     </el-form>
@@ -99,14 +99,14 @@ export default {
         jgmc:'',//机构名称
         jsdj:'',//机构等级
         jslb:'',//就医类别
-        dsfsc:'',//第三方筛查
+        // dsfsc:'',//第三方筛查
         ybbf:'',//险种
         xzq:'',//行政区
         status:'',//任务状态
-        ajly:'',//案件来源
+        // ajly:'',//案件来源
         rwpcid:'',//任务批次号
-        jglb:'',//机构类型
-        jgxz:''//机构性质
+        // jglb:'',//机构类型
+        // jgxz:''//机构性质
       },
       cbjgOptions:[],
       ybbfOptions:[],

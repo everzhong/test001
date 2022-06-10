@@ -114,7 +114,7 @@ export default {
       ybbfOptions:[],
       jslbOptions:[],
       tabsValue:'three',
-      serachOptions:{}
+      serachOptions:{},
     }
   },
   created(){
@@ -148,19 +148,26 @@ export default {
       this.getList()
     },
     getList(){
+      this.loading = true
       if(this.tabsValue=='four'){
         listRenwufour({...this.queryParams,...this.serachOptions}).then(res=>{
+          this.loading = false
           if(res.code==200){
             this.lshTable = res.rows
             this.total = res.total
           }
+        }).catch(e=>{
+           this.loading = false;
         })
       } else if(this.tabsValue=='five'){
         getTLS({...this.queryParams,...this.serachOptions}).then(res=>{
+          this.loading = false
           if(res.code==200){
             this.tlshTable = res.rows
             this.total = res.total
           }
+        }).catch(e=>{
+           this.loading = false;
         })
       } else {
         const params = {...this.queryParams,...this.options}

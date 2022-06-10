@@ -130,9 +130,10 @@ export default {
     jslbFormat(row, column) {
       return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
-    async getList(){
+    async getList(query){
       this.loading = true;
-      const params = {...this.queryParams,...this.options.query}
+      let params = {...this.queryParams,...this.options.query}
+      query && (params={...params,...query})
       try {
         const res = await getQMX(params);
         if(res.code==200){

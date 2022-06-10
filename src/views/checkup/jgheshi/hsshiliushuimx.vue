@@ -2,7 +2,7 @@
   <div style="height:100%;padding-top:20px">
     <section style="height:100%">
       <el-row :gutter="10">
-        <el-col :span="1.5" v-if="tabsValue==='three'||tabsValue==='five'">
+        <el-col :span="1.5" v-if="tabsValue==='three'||tabsValue==='five'||tabsValue==='six'">
           <el-col :span="1.5">
             <el-button  type="default"  size="small" @click="goBackUpLevel">返回上一层</el-button>
           </el-col>
