@@ -361,9 +361,9 @@ export default {
       const jgmc = selection.map(item => item.jgmc)
       this.submitParams.yxjg = jgmc.join(',')
       this.submitParams.wsry = selection.length?this.$store.getters.name:''
-      //第三方筛查状态sccqstatus 3已完成
+      //第三方筛查状态scstatus 3已完成
       this.noThirdCheckList  = selection.filter(item => {
-        return item.sccqstatus != 3
+        return item.scstatus != 3
       });
     },
     //第三层（中间tab）勾选

@@ -145,7 +145,8 @@ export default {
         label: '就医类型',
         viewFun:(jslb)=>{
           return this.selectDictLabels(this.jslbOptions,jslb)
-        }
+        },
+        hide:true
       },{
         prop: 'rwms',
         label: '任务描述',

@@ -9,7 +9,7 @@
   <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="tlshTable"></tongliumx>
   <sTable v-if="tabsValue==='three'" :data="renwufourList" :header="tableHeader" :fixedNum="1" style="height:100%">
     <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
-     <el-table-column label="操作"  fixed="right" align="center" width="150" slot="operate">
+     <el-table-column label="操作" v-if="options.type!=2"  fixed="right" align="center" width="150" slot="operate">
       <template slot-scope="scope">
         <el-button size="mini" type="text" primary @click="hangdleLiushui(scope.row)">流水号项目汇总</el-button>
       </template> 
@@ -137,7 +137,7 @@ export default {
       this.total = 0
       this.queryParams.pageNum = 1
       this.tabsValue='four'
-      this.serachOptions = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,hs:row.hs,type:row.type}
+      this.serachOptions = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,hs:row.hs,type:row.type,mxxmdj:row.mxxmdj}
       this.getList()
     },
     tongLiushuimx(row){
@@ -150,7 +150,7 @@ export default {
     getList(){
       this.loading = true
       if(this.tabsValue=='four'){
-        listRenwufour({...this.queryParams,...this.serachOptions}).then(res=>{
+        listRenwufour({...this.queryParams,...this.serachOptions,...{type:this.options.type||''}}).then(res=>{
           this.loading = false
           if(res.code==200){
             this.lshTable = res.rows
@@ -160,7 +160,7 @@ export default {
            this.loading = false;
         })
       } else if(this.tabsValue=='five'){
-        getTLS({...this.queryParams,...this.serachOptions}).then(res=>{
+        getTLS({...this.queryParams,...this.serachOptions,...{type:this.options.type||''}}).then(res=>{
           this.loading = false
           if(res.code==200){
             this.tlshTable = res.rows

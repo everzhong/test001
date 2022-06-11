@@ -13,7 +13,7 @@
           <template slot-scope="scope">
             <span
               v-if="scope.row.jslb!=='进销存核查'"
-              @click="viewDetail(scope.row, {ybbf:'0'})"
+              @click="viewDetail(scope.row, {ybbf:'0',type:1})"
               style="color: #1b65b9; cursor: pointer"
               >{{ (scope.row.zbfy*1).toFixed(2) }}</span>
               <span v-else>-</span>
@@ -31,7 +31,7 @@
           <template slot-scope="scope">
             <span
               v-if="scope.row.jslb!=='进销存核查'"
-              @click="viewDetail(scope.row, {ybbf:'b'})"
+              @click="viewDetail(scope.row, {ybbf:'b',type:1})"
               style="color: #1b65b9; cursor: pointer"
               >{{ (scope.row.jbfy*1).toFixed(2) }}</span>
               <span v-else>-</span>
@@ -47,8 +47,8 @@
       <el-table-column label="合计" align="center">
         <el-table-column label="费用" prop="hj" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.jslb==='进销存核查'||scope.row.jslb==='合计'"  @click="viewDetail(scope.row, scope.row.jslb==='进销存核查'?{ischeck:1}:'')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.hj*1).toFixed(2)}}</span>
-            <span v-else @click="viewDetail(scope.row)" style="color:#1B65B9;cursor:pointer;">{{(scope.row.zbfy*1+scope.row.jbfy*1).toFixed(2)}}</span>
+            <span v-if="scope.row.jslb==='进销存核查'||scope.row.jslb==='合计'"  @click="viewDetail(scope.row, scope.row.jslb==='进销存核查'?{ischeck:1,type:2}:'')" style="color:#1B65B9;cursor:pointer;">{{(scope.row.hj*1).toFixed(2)}}</span>
+            <span v-else @click="viewDetail(scope.row,{type:1})" style="color:#1B65B9;cursor:pointer;">{{(scope.row.zbfy*1+scope.row.jbfy*1).toFixed(2)}}</span>
           </template>
         </el-table-column>
         <el-table-column label="占比%" prop="hjlv" align="center">
