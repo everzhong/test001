@@ -5,11 +5,12 @@
         <el-button type="default"  size="small" @click="handleBack">返回上一层</el-button>
       </el-col>
     </el-row>
-  <liushui-table :noRadio="true" ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="lshTable" :noLog="true"  @checkdetail="tongLiushuimx"></liushui-table>
+  <liushui-table :noRadio="true" ref="liuShuiTable" v-if="tabsValue==='four'&&serachOptions.type==1" :tableData="lshTable" :noLog="true"  @checkdetail="tongLiushuimx"></liushui-table>
+  <jxchslstable :noRadio="true" ref="jxclsTable" v-if="tabsValue==='four'&&serachOptions.type==2" :tableData="lshTable" :noLog="true" ></jxchslstable>
   <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="tlshTable"></tongliumx>
   <sTable v-if="tabsValue==='three'" :data="renwufourList" :header="tableHeader" :fixedNum="1" style="height:100%">
     <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
-     <el-table-column label="操作" v-if="options.type!=2"  fixed="right" align="center" width="150" slot="operate">
+     <el-table-column label="操作" fixed="right" align="center" width="150" slot="operate">
       <template slot-scope="scope">
         <el-button size="mini" type="text" primary @click="hangdleLiushui(scope.row)">流水号项目汇总</el-button>
       </template> 
@@ -28,14 +29,15 @@
 import { listXcjg } from "@/api/renwu/renwufour";
 import LiushuiTable from '../jianchass/liushiTable.vue'
 import Tongliumx from '../jianchass/tongliumx.vue'
-
+import jxchslstable from './jxchslstable.vue'
 import { listRenwufour } from '@/api/renwu/renwufour'
 import { getTLS} from '@/api/renwu/mingxi'
 export default {
   name:'ViewTable',
   components:{
     LiushuiTable,
-    Tongliumx
+    Tongliumx,
+    jxchslstable
   },
   data(){
     return {
@@ -137,20 +139,30 @@ export default {
       this.total = 0
       this.queryParams.pageNum = 1
       this.tabsValue='four'
-      this.serachOptions = {rwpcid:row.rwpcid,jgdm:row.jgdm,gzmc:row.gzmc,hs:row.hs,type:row.type,mxxmdj:row.mxxmdj}
+      this.serachOptions = {
+        rwpcid:row.rwpcid,
+        jgdm:row.jgdm,
+        gzmc:row.gzmc,
+        hs:row.hs,
+        type:row.type,
+        mxxmdj:row.mxxmdj,
+        mxxmbmjg:row.mxxmbm,
+        ybbf:row.ybbf,
+        xwrdjg:row.xwrd
+      }
       this.getList()
     },
     tongLiushuimx(row){
       this.total = 0
       this.queryParams.pageNum = 1
       this.tabsValue='five'
-      this.serachOptions = {lsh:row.lsh}
+      this.serachOptions = {lsh:row.lsh,mxxmbm:row.mxxmbm}
       this.getList()
     },
     getList(){
       this.loading = true
       if(this.tabsValue=='four'){
-        listRenwufour({...this.queryParams,...this.serachOptions,...{type:this.options.type||''}}).then(res=>{
+        listRenwufour({...this.queryParams,...this.serachOptions}).then(res=>{
           this.loading = false
           if(res.code==200){
             this.lshTable = res.rows
@@ -160,7 +172,7 @@ export default {
            this.loading = false;
         })
       } else if(this.tabsValue=='five'){
-        getTLS({...this.queryParams,...this.serachOptions,...{type:this.options.type||''}}).then(res=>{
+        getTLS({...this.queryParams,...this.serachOptions}).then(res=>{
           this.loading = false
           if(res.code==200){
             this.tlshTable = res.rows

@@ -1,34 +1,36 @@
 /**进销存核查 第四层数据 type=2*/
 <template>
-<div class="liushui-table" style="height:calc(100% - 20px);margin-top:5px">
-  <div style="height:100%">
-    <sTable :data="tableData" :header="tableHeader" :fixedNum="jghs.value==1?1:2" :isrowClassName="true" @selection-change="handleSelectionChange">
-      <el-table-column :selectable="(row,index)=>{return row.isput!=1}" type="selection" width="55" align="center" slot="fixed" fixed v-if="jghs.value!=1"/>
-      <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
-      <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
-        <template slot-scope="scope">
-          <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
-          <el-button :disabled="!!scope.row.xwrd" type="text" @click="cancelHc(scope.row)" size="mini">取消核查</el-button>
-        </template>
-      </el-table-column>
-    </sTable>
-  </div>
+<div class="liushui-table" :style="{height:'100%'}">
+  <sTable :data="tableData" :header="tableHeader" :fixedNum="0" :isrowClassName="true">
+    <!-- <el-table-column  align="center" width="40" slot="fixed" fixed>
+      <template slot-scope="scope">
+        <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
+      </template>
+    </el-table-column> -->
+    <!-- <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
+      <template slot-scope="scope">
+        <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
+        <el-button :disabled="!!scope.row.xwrd" type="text" @click="cancelHc(scope.row)" size="mini">取消核查</el-button>
+      </template>
+    </el-table-column> -->
+  </sTable>
 </div>
 </template>
 <script>
 import { updateRenwufour } from '@/api/renwu/renwufour'
 export default {
-  name:'Jxhecha',
+  name:'Jxchslstable',
   data(){
     return {
+      wsCheck:'',
       tableHeader:[{
         prop: 'xwrd',
-        label: '行为认定',
-        fixedWidth:50
+        label: '认定行为',
+        fixedWidth:55,
       },{
         prop: 'bz',
         label: '备注',
-        fixedWidth:90
+        fixedWidth:45,
       },{
         prop: 'mxxmbm',
         label: '明细项目编号',
@@ -36,14 +38,38 @@ export default {
         prop: 'mxxmmc',
         label: '明细项目名称',
       },{
-        prop: 'xgzlxmmc',
-        label: '相关诊疗项目',
+        prop: 'tym',
+        label: '通用名',
       },{
         prop: 'mxxmdj',
-        label: '单价(元)',
-        viewFun: (dj)=>{
-          return this.formatMoney(dj,2)
+        label: '明细项目单价(元)',
+        viewFun: (mxxmdj)=>{
+          return this.formatMoney(mxxmdj,2)
         }
+      },{
+        prop: 'mxxmdw',
+        label: '明细项目单位',
+      },{
+        prop: 'mxxmsl',
+        label: '明细项目数量',
+        width: 'auto'
+      },{
+        prop: 'mxxmbjsfy',
+        label: '明细项目医保结算范围费用(元)',
+        fixedWidth:-130,
+        viewFun: (mxxmbjsfy)=>{
+          return this.formatMoney(mxxmbjsfy,2)
+        }  
+      },{
+        prop: 'fylb',
+        label: '费用类别',
+        viewFun: (fylb)=>{
+          return this.selectDictLabels(this.$store.getters.fyDic, fylb)
+        },
+      },{
+        prop: 'xgzlxmmc',
+        label: '相关诊疗项目',
+        fixedWidth:30
       },{
         prop: 'qckc',
         label: '期初库存数量',
@@ -52,13 +78,10 @@ export default {
         label: '本期购入数量',
       },{
         prop: 'qmkc',
-        label: '期末库存数量',
+        label: '期末库存数量'
       },{
         prop: 'xjxs',
         label: '现金销售数量',
-      },{
-        prop: 'sjxs',
-        label: '实际销售',
       },{
         prop: 'ybjs',
         label: '医保结算数量',
@@ -88,31 +111,10 @@ export default {
         viewFun: (wgfy)=>{
           return this.formatMoney(wgfy,2)
         }
-      },{
-        prop:'hssj',
-        label:'确定核实时间',
-        viewFun:(hssj)=>{
-          return this.parseTime(hssj)
-        }
-      },{
-        prop: 'hs',
-        label: '核实状态',
-        viewFun:(hszt)=>{
-          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
-        }
-      },{
-        prop:'hsr',
-        label:'核实人'
-      },{
-        prop:'hspfsj',
-        label:'核实时间',
-        viewFun:(hspfsj)=>{
-          return this.parseTime(hspfsj)
-        }
-      }],
+      }]
     }
   },
-  props:['tableData','fromLog','noLog','hasNoRending','exHeight','jghs'],
+  props:['tableData','fromLog','noLog'],
   created(){
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
@@ -144,13 +146,39 @@ export default {
     jslbFormat(row, column) {
       return this.selectDictLabels(this.jslbOptions, row.jslb);
     },
+    radioChange(e){
+      const selection = this.tableData.filter(item=>{
+        return item.id === e
+      })
+      this.$emit('radio-change',selection)
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.$emit('on-change',selection)
+      this.$emit('handleSelectionChange',selection)
     },
     //操作记录
     operateLog(row){
       this.$emit('on-log',row,4)
+    },
+    checkdetail(row){
+      this.$emit('checkdetail',row)
+    },
+    selectAll(){
+      this.tableData.forEach(row => {
+        this.$refs.multipleTable.toggleRowSelection(row)
+      })
+    },
+    clearAll(){
+      this.$refs.multipleTable.clearSelection()
+    },
+    tableRowClassName({row}){
+      let className = ''
+      if(row.xwrd){
+        className = row.xwrd.indexOf('未发现违规')>-1?'xwrd-table-row-normal':'xwrd-table-row';
+      } else {
+        className = ''
+      }
+      return  className    
     }
   }
 }

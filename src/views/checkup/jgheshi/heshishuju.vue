@@ -51,7 +51,7 @@
         </sTable>
       </div>
       <div v-loading="loading" v-else style="height:calc(100% - 37px)">
-        <jxhecha v-if="tabsValue=='six'" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
+        <jxhecha v-if="tabsValue=='six'" :jghs="jghs" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <pagination
         class="fixed-bottom"
@@ -185,7 +185,15 @@ export default {
       default(){
         return {}
       }
-    }
+    },
+    jghs:{
+      type:Object,
+      default(){
+        return {
+          value:''
+        }
+      }
+    },
   },
   data() {
     return {
@@ -278,7 +286,7 @@ export default {
         prop: 'hs',
         label: '核实状态',
         viewFun:(hszt)=>{
-          return hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':''
+          return this.jghs.value==1?'已核实':(hszt==1?'未核实':hszt==2?'待核实确认':hszt==3?'核实中':hszt==4?'已核实':'')
         }
       },{
         prop: 'hsr',

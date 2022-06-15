@@ -1,6 +1,6 @@
 <template>
   <div class="app-container container_1">
-    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h" :disabled="mxShow||tabsValue!='two'"/>
     <div :class="['table-main',tabsValue!=='two'?'table-main1':'']" :style="{top:topValue}">
       <el-row :gutter="10" class="mb8" style="margin-bottom:5px">
         <!-- <el-col :span="1.5" v-if="tabsValue==='two'">

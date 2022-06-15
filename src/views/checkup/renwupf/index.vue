@@ -1,6 +1,6 @@
 <template>
   <div class="app-container container_1">
-    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h"/>
+    <SearchItem @handleQuery="handleQuery" @toggle-search="h=>topValue=h" :disabled="mxShow||tabsValue!='two'"/>
     <div class="table-main" :style="{top:topValue}">
       <div class="middle-btn">
         <el-row :gutter="10" class="mb8" style="margin-bottom:5px">

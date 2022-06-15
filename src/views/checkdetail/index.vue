@@ -1,6 +1,6 @@
 <template>
   <div :class="['app-container container_1',isFromLuli?'from-luli':'']">
-    <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" @toggle-search="toggleSearch"/>
+    <SearchItem ref="searchForm" @handleQuery="handleQuery" v-if="!isFromLuli" @toggle-search="toggleSearch" :disabled="mxShow"/>
     <div class="page-back-icon" @click="$router.back(-1)">
       <!-- <el-button type="primary" icon="el-icon-back" size="mini" >返回</el-button> -->
       <i class="el-icon-arrow-left"></i>
@@ -310,7 +310,7 @@ export default {
             res = await listRenwufourRj({type:1,...params,...data})
             break;
           default:
-            res = await listRenwutwo(params)
+            res = await listRenwutwo({...params,status:-1})
             break;
         }
         if(res.code===200){
@@ -343,7 +343,6 @@ export default {
       this.queryParams.pageNum = 1;
       delete query.status
       if(this.mxShow && this.mxType){
-        console.log(this.$refs[this.mxType])
         const params = {...query}
         if(params.hasOwnProperty('jgmc') && !params['jgmc']){
           console.log(this[`${this.mxType}Options`]['query']['jgmc'])

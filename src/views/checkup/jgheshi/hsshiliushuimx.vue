@@ -41,9 +41,9 @@
           <el-radio-button label="six">进销存核查</el-radio-button>
         </el-radio-group>
       </el-row>
-      <div class="table-main"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
-        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="2" :checkAll="false"  @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" align="center" slot="fixed" fixed/>
+      <div class="table-main" :style="{bottom:jghs.value==1?'50px':'162px'}"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
+        <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="jghs.value==1?1:2" :checkAll="false"  @selection-change="handleSelectionChange">
+            <el-table-column :selectable="(row,index)=>{return row.isput!=1}" type="selection" width="55" align="center" slot="fixed" fixed v-if="jghs.value!=1"/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
             <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
               <template slot-scope="scope">
@@ -53,8 +53,8 @@
         </sTable>
         <tongls ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc"></tongls>
       </div>
-      <div v-loading="loading" v-else style="height:calc(100% - 159px)">
-        <jxhecha v-if="tabsValue=='six'" :exHeight="88" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
+      <div v-loading="loading" v-else :style="{height:jghs.value!=1?'calc(100% - 159px)':'calc(100% - 50px)'}">
+        <jxhecha v-if="tabsValue=='six'" :jghs="jghs" :exHeight="88" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <div  class="fixed-bottom">
         <pagination
@@ -64,7 +64,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
-        <div class="xingweirz" v-show="tabsValue!=='five'">
+        <div class="xingweirz" v-show="tabsValue!=='five'&&jghs.value!=1">
           <div class="yy-content">
             <span>核实意见</span>
             <el-radio-group v-model="queren" size="small">
@@ -223,6 +223,14 @@ export default {
       type:Object,
       default(){
         return {}
+      }
+    },
+    jghs:{
+      type:Object,
+      default(){
+        return {
+          value:''
+        }
       }
     }
   },
@@ -476,6 +484,7 @@ export default {
   methods: {
     goBackUpLevel(){
       if(this.tabsValue==='five'){
+        this.$emit('on-tls',false)
         this.tabsValue = 'three'
       } else {
         this.$emit('on-back')
@@ -487,6 +496,7 @@ export default {
       this.lsh = row.lsh || ''
       this.mxxmbm = row.mxxmbm || ''
       this.searchTlsNextParams = {lsh:row.lsh||'',mxxmbm:row.mxxmbm}
+      this.$emit('on-tls',true)
       this.getList()
     },
     upSuccess(fileUrl,file){

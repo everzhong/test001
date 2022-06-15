@@ -107,8 +107,8 @@
         </div>
         <div style="margin-right:10px">
           <el-form-item style="width:80px;display:table-cell">
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">查询</el-button>
-            <el-button style="margin-left:0" icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery" :disabled="!!disabled">查询</el-button>
+            <el-button style="margin-left:0" icon="el-icon-refresh" size="mini" @click="resetQuery" :disabled="!!disabled">重置</el-button>
           </el-form-item>
         </div>
     </el-form>
@@ -148,7 +148,7 @@ export default {
       xzqOptions:[],//行政区
     }
   },
-  props:[],
+  props:['disabled'],
   created(){
     this.getDic()
   },
