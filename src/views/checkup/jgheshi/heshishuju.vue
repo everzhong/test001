@@ -50,17 +50,50 @@
           </el-table-column>
         </sTable>
       </div>
-      <div v-loading="loading" v-else style="height:calc(100% - 37px)">
+      <div v-loading="loading" v-else :style="{height:jghs.value!=1?'calc(100% - 159px)':'calc(100% - 50px)'}">
         <jxhecha v-if="tabsValue=='six'" :jghs="jghs" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
-      <pagination
-        class="fixed-bottom"
-        v-show="!logShow&&!qmxOptions.show"
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="getList"
-      />
+      <div class="fixed-bottom">
+        <pagination
+          v-show="!logShow&&!qmxOptions.show"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+        <div class="xingweirz" v-show="tabsValue=='six'&&jghs.value!=1">
+            <div class="yy-content">
+              <span>核实意见</span>
+              <el-radio-group v-model="queren" size="small">
+                <el-radio label="1">确认</el-radio>
+                <el-radio  label="2">不确认--需要说明并提供材料</el-radio>
+              </el-radio-group>
+            </div>
+            <div>
+              <div style="margin-bottom:8px">
+                <span>上传相关资料（格式：jpg、png、pdf、doc、docx、xls、xlsx，单个文件不超过10M）</span>
+              </div>
+              <div>
+                <fileUpload
+                  v-model="wenjian.wenjianurl"
+                  :fileSize="10"
+                  :fileType='["jpg","jpeg","png","pdf","doc","docs","xls","xlsx"]'
+                  :isShowTip="false"
+                  :needHide="true"
+                  :hideFileList="false"
+                  :buttonOPtions="{size:'mini',text:'选择文件'}"
+                  @input="upSuccess"
+                  ref="fileUpload"
+                />
+              </div>
+            </div>
+            <div class="yy-content">
+              <span>情况说明</span>
+              <el-input rows="2" type="textarea" v-model="hsyj"></el-input>
+            </div>
+            <el-button type="primary" size="mini" @click="handleSubmit">保存</el-button>
+        </div>
+      </div>
       <hechashuju v-if="showHecha" :isShow="showHecha" @onClose="showHecha=false" @update="getList"/>
     </section>
      <!-- 查询条件 -->
@@ -159,8 +192,7 @@
 
 <script>
 import {listRenwuthreeHs} from '@/api/renwu/renwuthree'
-import {setYynr} from  '@/api/renwu/renwutwo'
-import { listRenwufourHs } from '@/api/renwu/renwufour'
+import { listRenwufourHs,updateRenwufour } from '@/api/renwu/renwufour'
 import { addDcqz} from "@/api/renwu/dcqz"
 import Guizeshuom from '../jianchass/guizeshuom.vue'
 import operateLog from '../jianchass/operateLog.vue'
@@ -197,6 +229,12 @@ export default {
   },
   data() {
     return {
+      queren:'',
+      wenjian:{
+        wenjianurl:'',
+        wenjian:''
+      },
+      hsyj:'',
       loading:false,
       showHecha:false,//显示选择核查数据
       tableHeader:[{
@@ -405,6 +443,70 @@ export default {
     this.getList();
   },
   methods: {
+    upSuccess(fileUrl,file){
+      if(fileUrl) {
+        this.wenjian.wenjian = file.name
+      } else {
+        this.wenjian.wenjian = ''
+      }
+    },
+     handleSubmit(){
+      if(!this.ids.length){
+        this.msgError('请至少选择一项')
+        this.queren = ''
+        return
+      }
+      if(!this.queren){
+        this.msgError('请选择核实意见')
+        return
+      }
+      if(!this.hsyj){
+        this.msgError('请输入情况说明')
+        return
+      }
+      if(this.queren==2&&!this.wenjian.wenjianurl){
+        this.msgError('请上传说明材料')
+        return
+      }
+      let responseCount = 0
+      this.loading = true
+      this.ids.forEach(async id=>{
+        try {
+          await updateRenwufour({id,queren:this.queren,hsyj:this.hsyj})
+          responseCount++
+          if(responseCount===this.ids.length){
+            this.queren = ''
+            this.hsyj = ''
+            this.msgSuccess('保存成功！')
+            this.getList()
+          }
+        } catch (error) {
+          this.loading = false
+          responseCount++
+        }
+      })
+      if(this.wenjian.wenjianurl){
+        this.submitFileInfo()
+      }
+      
+    },
+    submitFileInfo(){
+      const {wenjian,wenjianurl} = this.wenjian
+      addDcqz({
+        type: this.tabsValue==='three'?7:8,//文件资料
+        rwpcid:this.listConfig.rwpcid,
+        jgdm:this.listConfig.jgdm,
+        upman:this.$store.getters.name,
+        addtime: this.parseTime(new Date().getTime()),
+        wenjian,
+        wenjianurl,
+      }).then(res=>{
+        if(res.code===200) {
+          this.wenjian.wenjian = ''
+          this.wenjian.wenjianurl = ''
+        }
+      })
+    },
     goBackUpLevel(){
       this.$emit('on-back','heshuju')
     },
@@ -518,13 +620,13 @@ export default {
         if(this.tabsValue==='three'){
           res = await listRenwuthreeHs({
             jgdm,
-            hszt:'3,4',
+            hszt:'3',
             ...params
           })
         } else {
           res = await listRenwufourHs({
             jgdm,
-            hszt:'3,4',
+            hszt:'3',
             type:2,
             ...params
           })
@@ -580,19 +682,19 @@ export default {
 }
 .fixed-bottom {
   position: absolute;
-  bottom:8px;
-  right:0;
+  width: 100%;
+  bottom:0px;
+  left:0;
+  padding-bottom: 10px;
 }
 .xingweirz {
-  width: 100%;
   height: 80px;
-  position: absolute;
-  bottom: 15px;
   font-size: 14px;
   color: #606266;
+  padding:0 20px;
   >div {
     float: left;
-    margin-right: 20px;
+    margin-right: 30px;
     position: relative;
     &::v-deep .el-upload-list {
       position: absolute !important;

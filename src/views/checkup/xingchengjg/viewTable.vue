@@ -156,7 +156,7 @@ export default {
       this.total = 0
       this.queryParams.pageNum = 1
       this.tabsValue='five'
-      this.serachOptions = {lsh:row.lsh,mxxmbm:row.mxxmbm}
+      this.serachOptions = {lsh:row.lsh,mxxmbm:row.mxxmbm,type:row.type}
       this.getList()
     },
     getList(){
@@ -172,7 +172,9 @@ export default {
            this.loading = false;
         })
       } else if(this.tabsValue=='five'){
-        getTLS({...this.queryParams,...this.serachOptions}).then(res=>{
+        const params = {...this.queryParams,...this.serachOptions}
+        delete params.type//查询通流水数据，不需要type
+        getTLS(params).then(res=>{
           this.loading = false
           if(res.code==200){
             this.tlshTable = res.rows

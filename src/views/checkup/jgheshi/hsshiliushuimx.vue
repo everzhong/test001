@@ -41,7 +41,7 @@
           <el-radio-button label="six">进销存核查</el-radio-button>
         </el-radio-group>
       </el-row>
-      <div class="table-main" :style="{bottom:jghs.value==1?'50px':'162px'}"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
+      <div class="table-main" :style="{bottom:(jghs.value==1||tabsValue==='five')?'50px':'162px'}"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="jghs.value==1?1:2" :checkAll="false"  @selection-change="handleSelectionChange">
             <el-table-column :selectable="(row,index)=>{return row.isput!=1}" type="selection" width="55" align="center" slot="fixed" fixed v-if="jghs.value!=1"/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>
@@ -195,8 +195,7 @@
 
 <script>
 // import { listRenwuthree,updateRenwuthree} from "@/api/renwu/renwuthree";
-import {setYynr} from  '@/api/renwu/renwutwo'
-import { listRenwufour, updateRenwufour } from '@/api/renwu/renwufour'
+import { listRenwufour, updateRenwufour,listRenwufourHs } from '@/api/renwu/renwufour'
 import { addDcqz} from "@/api/renwu/dcqz"
 import Guizeshuom from '../jianchass/guizeshuom.vue'
 import operateLog from '../jianchass/operateLog.vue'
@@ -550,7 +549,7 @@ export default {
       this.loading = true
       this.ids.forEach(async id=>{
         try {
-          await updateRenwufour({id,queren:this.queren,hsyj:this.hsyj,type:this.tabsValue=='three'?1:2})
+          await updateRenwufour({id,queren:this.queren,hsyj:this.hsyj})
           responseCount++
           if(responseCount===this.ids.length){
             this.queren = ''
@@ -656,7 +655,7 @@ export default {
     },
     /** 查询renwu列表 */
     async getList(query) {
-      let params = {...this.queryParams,...this.listConfig, hs:3}
+      let params = {...this.queryParams,...this.listConfig}
       if(query){
         params = {...params,...query}
       }
@@ -666,11 +665,11 @@ export default {
         switch(this.tabsValue) {
           case 'three':
             params.type=1
-            res = await listRenwufour({...this.gzQueryForm,...params})
+            res = await listRenwufour({...this.gzQueryForm,...params,hs:3})
             break;
           case 'six':
             params.type=2
-            res = await listRenwufour({...params,...this.bmQueryForm})
+            res = await listRenwufourHs({...params,...this.bmQueryForm,hszt:3})
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
