@@ -6,7 +6,7 @@
       第<span style="padding:0 8px"></span>页&nbsp;&nbsp;&nbsp;&nbsp;共<span style="padding:0 8px"></span>页</div>
     <div style="padding:30px 35px;font-size:16px;border:1px solid #303313;letter-spacing:1px">
       <p style="font-weight:600;text-align: center;">询问笔录</p>
-      <div style="line-height:36px">调查时间：{{parseTime(pageData.jcstarttime,'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(pageData.jcendtime,'{y}年{m}月{d}日{h}时{m}分')}}</div>
+      <div style="line-height:36px">调查时间：{{parseTime(pageData.jcstarttime,'{y}年{m}月{d}日{h}时{i}分')}}&nbsp;至&nbsp;{{parseTime(pageData.jcendtime,'{y}年{m}月{d}日{h}时{i}分')}}</div>
       <div style="line-height:36px">调查地点：{{pageData.jcdd}}</div>
       <p style="line-height:36px">被询问人信息：</p>
       <div style="line-height:36px;margin-left:16px;">姓名：{{pageData.xwname}}</div>

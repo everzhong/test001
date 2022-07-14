@@ -736,7 +736,7 @@ export default {
               this.selectionList.forEach(item=>{
                 const addData = {
                   bjr: this.$store.getters.name,
-                  bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{m}:{s}'),
+                  bjsj: this.parseTime(new Date(), '{y}-{m}-{d} {h}:{i}:{s}'),
                   fid:item.id,
                   rid:item.rwpcid,
                   jgdm:item.jgdm,

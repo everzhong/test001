@@ -376,13 +376,13 @@ export default {
       this.total = 0
       this.queryParams.pageNum=1
       this.tabsValue = 'four'
-      const {jgdm,datastarttime,dataendtime} = this.queryInfoFrom
+      const {jgdm,datastarttime,dataendtime,rwpcid} = this.queryInfoFrom
       this.searchNextParams = {
-        jgdm:jgdm,
+        jgdm,
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
-      this.getList({gzmc:row.gzmc,hs:row.hs})
+      this.getList({gzmc:row.gzmc,hs:row.hs,rwpcid,jgdm})
     },
     tongLiushuimx(row){
       this.tabsValue = 'five'

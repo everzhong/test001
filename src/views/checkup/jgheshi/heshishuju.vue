@@ -313,7 +313,7 @@ export default {
         align: 'left'
       },{
         prop: 'xjmxs',
-        label: '违反条数(违反规则的明细数量)',
+        label: '违反条数(违反规则的项目数量)',
       },{
         prop: 'xjje',
         label: '疑点金额',
@@ -333,7 +333,7 @@ export default {
         prop: 'hssj',
         label: '核实时间',
         viewFun:(time)=>{
-          return this.parseTime(time,'{y}-{m}-{d} {h}:{m}:{s}')
+          return this.parseTime(time,'{y}-{m}-{d} {h}:{i}:{s}')
         }
       }],
       qmxOptions:{

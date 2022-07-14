@@ -7,7 +7,7 @@
     <div class="content" style="padding:30px 35px;font-size:16px;border:1px solid #303313;letter-spacing:1px">
       <p style="font-weight:600;text-align: center;">检查笔录</p>
       <div style="line-height:36px">检查地点：{{pageData.jcdd}}</div>
-      <div style="line-height:36px">检查时间：{{parseTime(pageData.jcstarttime,'{y}年{m}月{d}日{h}时{m}分')}}&nbsp;至&nbsp;{{parseTime(pageData.jcendtime,'{y}年{m}月{d}日{h}时{m}分')}}</div>
+      <div style="line-height:36px">检查时间：{{parseTime(pageData.jcstarttime,'{y}年{m}月{d}日{h}时{i}分')}}&nbsp;至&nbsp;{{parseTime(pageData.jcendtime,'{y}年{m}月{d}日{h}时{i}分')}}</div>
       <p style="line-height:36px">被检查人（被检查单位）信息：</p>
       <div style="line-height:36px;margin-left:16px;">姓名（单位全称）：<span>{{pageData.dwqc}}</span></div>
       <div style="line-height:36px;margin-left:16px;">性别（等级）：<span>{{pageData.jsdj==1?'一级':pageData.jsdj==2?'二级':pageData.jsdj==3?'三级':'--'}}</span></div>

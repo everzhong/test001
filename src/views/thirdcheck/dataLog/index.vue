@@ -136,7 +136,7 @@
         <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
         <el-table-column label="创建时间" align="center" prop="createDate" width="180px">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+            <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="开始时间" align="center" prop="stime" width="150">
@@ -148,7 +148,7 @@
         <el-table-column label="日志路径" align="center" prop="logFilePath" :width="flexColumnWidth('logFilePath',logList)"/>
         <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+            <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
           </template>
         </el-table-column>
         <el-table-column label="抽取分类" align="center" prop="type" width="150px">

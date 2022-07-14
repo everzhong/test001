@@ -32,7 +32,7 @@
           <el-table-column label="上传人" align="center" prop="upman" :width="flexColumnWidth('upman',tableData)"/>
           <el-table-column label="上传时间" align="center" prop="addtime"  :width="150">
             <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{s}') }}</span>
+              <span>{{ parseTime(scope.row.addtime,'{y}-{m}-{d} {h}:{i}') }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作"  fixed="right" align="center" :width="100">

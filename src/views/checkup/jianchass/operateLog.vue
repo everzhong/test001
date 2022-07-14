@@ -11,7 +11,7 @@
         <el-table-column label="标记人" align="center" prop="bjr" />
         <el-table-column label="标记时间" align="center" prop="bjsj" width="160">
           <template slot-scope="scope" :width="flexColumnWidth('bjsj',tableData)">
-            <span>{{parseTime(scope.row.bjsj, '{y}-{m}-{d} {h}:{s}')}}</span>
+            <span>{{parseTime(scope.row.bjsj, '{y}-{m}-{d} {h}:{i}')}}</span>
           </template>
         </el-table-column>
         <el-table-column label="行为认定" align="center" prop="xwrd" :width="flexColumnWidth('xwrd',tableData)"/>
