@@ -1,12 +1,12 @@
 <template>
 <div class="app-container container_1" v-loading="loading">
-  <div v-if="pageView=='heshuju'&&!hideSubmit&&twoJghs!=1" style="position:absolute;right:20px;top:-31px;background-color:rgb(255, 255, 255);">
+  <div v-if="pageView=='heshuju'&&!hideSubmit&&twoJghs!=1&&updateTwoStatus===3" style="position:absolute;right:20px;top:-31px;background-color:rgb(255, 255, 255);">
     <el-button type="primary" size="mini" @click="submit">提交</el-button>
     <!-- <i class="el-icon-arrow-left" @click="pageView='main',xgmxOptions.show=false" style="cursor:pointer;margin-left:15px;vertical-align:middle"></i> -->
   </div>
   <jgheshi v-if="pageView==='main'" @on-heshi="handleLink($event,'heshuju')"/>
   <heshishuju v-if="pageView==='heshuju'" :jghs="{value:twoJghs}" :listConfig="xmInfos" @on-liushui="handleLink($event,'lshhz'),hideSubmit=false" @on-xgmx="handleLink($event,'xgmx')" @on-back="pageView='main'"/>
-  <hsshiliushuimx v-if="pageView==='lshhz'" :listConfig="xmInfos" @on-back="pageView='heshuju'" @on-tls="onTls" :jghs="{value:twoJghs}"/>
+  <hsshiliushuimx v-if="pageView==='lshhz'" :listConfig="xmInfos" @on-back="pageView='heshuju'" @on-tls="onTls" :jghs="{value:twoJghs,status:updateTwoStatus}"/>
   <div v-if="pageView==='xgmx'" style="height:calc(100% - 45px);padding-top:20px">
     <checkmx :options="xgmxOptions" :showBack="true"  @on-back="pageView='heshuju'"/>
   </div>
@@ -43,7 +43,8 @@ export default {
       },
       pageView:'main',//'main' ,'heshuju','lshhz','xgmx','ckxq',
       updateTwoId:'',//第二层的id
-      twoJghs:''//第二层的jghs字段
+      twoJghs:'',//第二层的jghs字段
+      updateTwoStatus:''//第二层的status
     }
   },
   created(){
@@ -83,6 +84,7 @@ export default {
       }
       if(type==='heshuju'){
         this.updateTwoId = row?.id
+        this.updateTwoStatus = row?.status
         // this.twoJghs = row.jghs
       }
       if(type==='lshhz'){

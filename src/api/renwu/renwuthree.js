@@ -9,6 +9,14 @@ export function listRenwuthree(query) {
     })
 }
 // 查询renwuthree列表
+export function listRenwuthreehsls(query) {
+    return request({
+        url: '/renwu/renwuthree/listhsls',
+        method: 'get',
+        params: query
+    })
+}
+// 查询renwuthree列表
 export function listRenwuthreeTab(query) {
     return request({
         url: '/renwu/renwuthree/listtab',

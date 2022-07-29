@@ -71,6 +71,7 @@ export default {
     },
     confirmHs(){
       const allSelect = this.$refs.rightList.getAllSelection()
+      const jyclrq = this.$refs.rightList.getJyclqx()
       if(!allSelect.length){
         this.msgError('请从已选列表选择需要核实的数据')
         return
@@ -78,7 +79,7 @@ export default {
       if(allSelect && allSelect.length){//遍历核实
         const request = []
         allSelect.forEach(need=>{
-          request.push(this.dataType==1?updateRenwuthree({id:need.id,hs:'3'}):updateRenwufour({id:need.id,hs:'3'}))
+          request.push(this.dataType==1?updateRenwuthree({id:need.id,hs:'3',jyclrq}):updateRenwufour({id:need.id,hs:'3',jyclrq}))
         })
         this.loading= true
         Promise.all(request).then(()=>{

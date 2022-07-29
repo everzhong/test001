@@ -11,6 +11,19 @@
       <el-col :span="1.5">
         <el-button type="primary" size="mini" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <span style="margin-right:10px;font-size:12px;color:#606266">建议处理期限</span>
+        <el-date-picker
+          style="width:130px"
+          size="mini"
+          v-model="jyclrq "
+          type="date"
+          placeholder="请选择"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+        >
+        </el-date-picker>
+      </el-col>
       <div class="top-right-btn">
         <el-radio-group v-model="tabsValue" size="mini" @change="tabsLevelChange">
           <el-radio-button label="1">规则筛查</el-radio-button>
@@ -79,6 +92,16 @@
               <span>-</span>
               <el-input type="number" min="0" v-model="queryGzForm.jsdj"></el-input>
             </div>
+          </el-form-item>
+          <el-form-item label="认定" prop="isrd">
+            <el-select v-model="queryGzForm.isrd">
+              <el-option
+                v-for="item in isrdOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
           </el-form-item>
         </div>
         <div class="form-group" v-if="tabsValue==2">
@@ -229,8 +252,19 @@ export default {
         ydsm:'',
         jsfy:'',
         jsdj:'',
-        ybd:''
+        ybd:'',
+        isrd:''
       },
+      isrdOptions:[{
+        dictValue:0,
+        dictLabel:'未认定'
+      },{
+        dictValue:1,
+        dictLabel:'已认定'
+      },{
+        dictValue:'',
+        dictLabel:'全部'
+      }],
       queryHcForm:{
         mxxmbm:'',
         mxxmmc:'',
@@ -254,10 +288,12 @@ export default {
         {dictValue:'2',dictLabel:'核实中'},
         {dictValue:'3',dictLabel:'已核实'}
       ],
-      xzqOptions:[]
+      xzqOptions:[],
+      jyclrq : ''
     }
   },
   created(){
+    this.jyclrq = this.parseTime(new Date().getTime()+3*24*60*60*1000,'{y}-{m}-{d}')
     this.getList()
     this.getDicts('sys_renwu_gzfl').then(res=>{
       if(res.code==200){
@@ -285,7 +321,8 @@ export default {
         ydsm:'',
         jsfy:'',
         jsdj:'',
-        ybd:''
+        ybd:'',
+        isrd:''
       }
       this.$refs['chaxunForm'].resetFields()
       this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())
@@ -354,6 +391,9 @@ export default {
     },
     getAllSelection(){
       return this.allSelection
+    },
+    getJyclqx(){
+      return this.jyclrq
     },
     clear() {
       this.allSelection = []

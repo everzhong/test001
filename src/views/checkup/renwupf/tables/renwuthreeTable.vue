@@ -56,7 +56,7 @@ export default {
           return this.formatMoney(xjje,2)
         }
       },{
-        label:"医保结算费用(元)",
+        label:"医保结算范围费用(元)",
         prop:'jsfy',
         viewFun:(jsfy)=>{
           return this.formatMoney(jsfy,2)

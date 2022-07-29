@@ -119,8 +119,8 @@
   </div>
 </template>
 <script>
-import { listRenwuthree } from '@/api/renwu/renwuthree'
-import { listRenwufour } from '@/api/renwu/renwufour'
+import { listRenwuthreehsls, listRenwuthree} from '@/api/renwu/renwuthree'
+import { listRenwufour,listRenwufourhsls } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
@@ -382,6 +382,7 @@ export default {
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
+      console.log(1212)
       this.getList({gzmc:row.gzmc,hs:row.hs,rwpcid,jgdm})
     },
     tongLiushuimx(row){
@@ -406,10 +407,10 @@ export default {
             res = await listRenwuthree({hszt:3,...params})
             break;
           case (this.gzTabsValue==='2'):
-            res = await listRenwufour({hszt:3,...params,type:2,ischeck:1})
+            res = await listRenwufourhsls({hszt:3,...params,type:2,ischeck:1})
             break;
           case (this.tabsValue === 'four'):
-            res = await listRenwufour(params)
+            res = await listRenwufourhsls(params)
             break;
           case (this.tabsValue ==='five'):
             res = await getTLS({...this.queryParams,...this.searchNextParams})

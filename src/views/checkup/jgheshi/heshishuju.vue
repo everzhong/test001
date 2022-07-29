@@ -50,7 +50,7 @@
           </el-table-column>
         </sTable>
       </div>
-      <div v-loading="loading" v-else :style="{height:jghs.value!=1?'calc(100% - 159px)':'calc(100% - 50px)'}">
+      <div v-loading="loading" v-else :style="{height:(jghs.value!=1&&jghs.status==3)?'calc(100% - 159px)':'calc(100% - 50px)'}">
         <jxhecha v-if="tabsValue=='six'" :jghs="jghs" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <div class="fixed-bottom">
@@ -61,7 +61,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
-        <div class="xingweirz" v-show="tabsValue=='six'&&jghs.value!=1">
+        <div class="xingweirz" v-show="tabsValue=='six'&&jghs.value!=1 && jghs.status==3">
             <div class="yy-content">
               <span>核实意见</span>
               <el-radio-group v-model="queren" size="small">

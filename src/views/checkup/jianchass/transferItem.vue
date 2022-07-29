@@ -81,6 +81,16 @@
               <el-input type="number" min="0" v-model="queryGzForm.jsdj"></el-input>
             </div>
           </el-form-item>
+          <el-form-item label="认定" prop="isrd">
+            <el-select v-model="queryGzForm.isrd">
+              <el-option
+                v-for="item in isrdOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </div>
         <div class="form-group" v-if="tabsValue==2">
           <el-form-item label="明细项目编号" prop="mxxmbm" >
@@ -229,8 +239,19 @@ export default {
         ydsm:'',
         jsfy:'',
         jsdj:'',
-        ybd:''
+        ybd:'',
+        isrd:''
       },
+      isrdOptions:[{
+        dictValue:0,
+        dictLabel:'未认定'
+      },{
+        dictValue:1,
+        dictLabel:'已认定'
+      },{
+        dictValue:'',
+        dictLabel:'全部'
+      }],
       queryHcForm:{
         mxxmbm:'',
         mxxmmc:'',
@@ -286,7 +307,8 @@ export default {
         ydsm:'',
         jsfy:'',
         jsdj:'',
-        ybd:''
+        ybd:'',
+        isrd:''
       }
       this.$refs['chaxunForm'].resetFields()
       this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())

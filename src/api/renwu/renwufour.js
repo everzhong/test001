@@ -9,6 +9,14 @@ export function listRenwufour(query) {
     })
 }
 // 查询renwufour列表
+export function listRenwufourhsls(query) {
+    return request({
+        url: '/renwu/renwufour/listhsls',
+        method: 'get',
+        params: query
+    })
+}
+// 查询renwufour列表
 export function listRenwufourTab(query) {
     return request({
         url: '/renwu/renwufour/listtab',
@@ -32,7 +40,14 @@ export function getRenwufour(xwrd) {
         method: 'get'
     })
 }
-
+//listduogz
+export function listMutil(data) {
+    return request({
+        url: '/renwu/renwufour/listduogz',
+        method: 'post',
+        data: data
+    })
+}
 // 新增renwufour
 export function addRenwufour(data) {
     return request({

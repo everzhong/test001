@@ -57,7 +57,7 @@ export default {
         width:'auto'
       },{
         prop: 'gzly',
-        label: '检查方式',
+        label: '疑点来源',
         viewFun:(gzly)=>{
           return gzly?gzly:'规则筛查'
         }

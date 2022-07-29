@@ -53,7 +53,7 @@
         </sTable>
         <tongls ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList" :gzmc="xwrdForm.mxxmmc"></tongls>
       </div>
-      <div v-loading="loading" v-else :style="{height:jghs.value!=1?'calc(100% - 159px)':'calc(100% - 50px)'}">
+      <div v-loading="loading" v-else :style="{height:(jghs.value!=1&&jghs.status==3)?'calc(100% - 159px)':'calc(100% - 50px)'}">
         <jxhecha v-if="tabsValue=='six'" :jghs="jghs" :exHeight="88" :tableData="renwusixList" @on-change="handleSelectionChange" @on-log="checkLog" @update="getList"/>
       </div>
       <div  class="fixed-bottom">
@@ -64,7 +64,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
-        <div class="xingweirz" v-show="tabsValue!=='five'&&jghs.value!=1">
+        <div class="xingweirz" v-show="tabsValue!=='five'&&jghs.value!=1 && jghs.status==3">
           <div class="yy-content">
             <span>核实意见</span>
             <el-radio-group v-model="queren" size="small">
@@ -195,7 +195,7 @@
 
 <script>
 // import { listRenwuthree,updateRenwuthree} from "@/api/renwu/renwuthree";
-import { listRenwufour, updateRenwufour,listRenwufourHs } from '@/api/renwu/renwufour'
+import { listRenwufourhsls, updateRenwufour,listRenwufourHs } from '@/api/renwu/renwufour'
 import { addDcqz} from "@/api/renwu/dcqz"
 import Guizeshuom from '../jianchass/guizeshuom.vue'
 import operateLog from '../jianchass/operateLog.vue'
@@ -330,7 +330,7 @@ export default {
         }  
       },{
         prop: 'mxxmbjsfy',
-        label: '明细项目医保医保结算费用(元)',
+        label: '明细项目医保医保结算范围费用(元)',
         viewFun: (mxxmbjsfy)=>{
           return this.formatMoney(mxxmbjsfy,2)
         }  
@@ -665,11 +665,11 @@ export default {
         switch(this.tabsValue) {
           case 'three':
             params.type=1
-            res = await listRenwufour({...this.gzQueryForm,...params,hs:3})
+            res = await listRenwufourhsls({...this.gzQueryForm,...params,hs:3})
             break;
           case 'six':
             params.type=2
-            res = await listRenwufourHs({...params,...this.bmQueryForm,hszt:3})
+            res = await listRenwufourhsls({...params,...this.bmQueryForm,hszt:3})
             break;
           default:
             // params.statu = 2 //0待网审1实施网审2对象确定3任务派发了4打印通知和实施检查5形成结果
