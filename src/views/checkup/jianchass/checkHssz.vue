@@ -25,7 +25,7 @@
         </div>
       </el-row>
     </div>
-    <div :class="[tabsValue==='four'?'four-type':'nor-type']"  v-loading="loading"  style="margin-top:6px">
+    <div :class="[tabsValue==='four'||gzTabsValue==2?'four-type':'nor-type']"  v-loading="loading"  style="margin-top:6px">
       <sTable v-show="tabsValue==='three'&&gzTabsValue==1" :data="renwuthreeList" :header="tableHeader" :fixedNum="1">
          <el-table-column type="index" label="序号"  align="center" width="55" slot="fixed">
         </el-table-column>
@@ -35,11 +35,10 @@
           </template>
         </el-table-column>
       </sTable>
-      <sTable v-show="gzTabsValue==2" :data="hcList" :header="hcHeader" :fixedNum="1">
-         <el-table-column type="index" label="序号"  align="center" width="55" slot="fixed">
-        </el-table-column>
+      <sTable ref="jxhecTable" v-show="gzTabsValue==2" :data="hcList" :header="hcHeader" :fixedNum="1" @selection-change="handleSelectionChange">
+        <el-table-column :reserve-selection="true" type="selection" width="40" align="center" slot="fixed" fixed></el-table-column>
       </sTable>
-      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" :noLog="true"  @checkdetail="tongLiushuimx"></liushui-table>
+      <liushui-table ref="liuShuiTable" v-if="tabsValue==='four'" :tableData="renwufourList" :noLog="true"  @checkdetail="tongLiushuimx" @radio-change="handleSelectionChange"></liushui-table>
       <tongliumx ref="tongLiumx" v-if="tabsValue==='five'" :tableData="renwufiveList"></tongliumx>
       <pagination
         style="float:right"
@@ -52,9 +51,35 @@
         @pagination="getList"
       />
     </div>
-    <div class="bottom-dec" v-if="tabsValue==='four'">
-      <p>规则名称：{{selection.gzmc}}</p>
-      <div><span>情况说明：{{selection.qksm}}</span><span>相关资料：{{selection.xgzl}}</span></div>
+    <div class="bottom-dec" v-if="tabsValue==='four'||gzTabsValue==2">
+      <!-- <p>规则名称：{{selection.gzmc}}</p>
+      <div><span>情况说明：{{selection.qksm}}</span><span>相关资料：{{selection.xgzl}}</span></div> -->
+      <el-form size="small" :model="submitParams" ref="yjForm" :inline="true" style="padding-left:20px">
+        <el-form-item label="审核意见" prop="tongguo" style="margin-right:25px">
+          <el-select v-model="submitParams.tongguo" placeholder="请选择" clearable  style="width: 180px">
+            <el-option
+              key="1"
+              label="通过"
+              :value="1"
+            />
+            <el-option
+              key="2"
+              label="不通过"
+              :value="2"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注" prop="tgyj">
+          <el-input
+            style="width:400px;"
+            clearable
+            v-model="submitParams.tgyj">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmit">提交</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <!-- 查询条件 -->
     <el-dialog title="查询条件" class="check-dialog" :visible.sync="chaxunDialog" width="800px" :modal="true">
@@ -120,7 +145,7 @@
 </template>
 <script>
 import { listRenwuthreehsls, listRenwuthree} from '@/api/renwu/renwuthree'
-import { listRenwufour,listRenwufourhsls } from '@/api/renwu/renwufour'
+import { listRenwufour,listRenwufourhsls,updateRenwufour } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
 import LiushuiTable from './liushiTable.vue'
 import Tongliumx from './tongliumx.vue'
@@ -135,6 +160,11 @@ export default {
   },
   data(){
     return {
+      submitParams:{
+        tgyj:'',
+        tongguo:''
+      },
+      ids:[],
       gzTabsValue:'1',
       tableHeader:[{
         prop:'gzfl',
@@ -317,7 +347,8 @@ export default {
       selection:{},
       queryInfoFrom:{},
       tabsValue:'three',
-      lsh:''
+      lsh:'',
+      checkLiushuiOptions:{}
     }
   },
   created(){
@@ -355,6 +386,13 @@ export default {
       this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())
     },
     tabsLevelChange(){
+      this.submitParams.tgyj=''
+      this.submitParams.tongguo=""
+      this.ids = []
+      this.queryParams = {
+        pageSize:50,
+        pageNum:1
+      }
       this.getList()
     },
     //返回上一层
@@ -382,8 +420,8 @@ export default {
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
-      console.log(1212)
-      this.getList({gzmc:row.gzmc,hs:row.hs,rwpcid,jgdm})
+      this.checkLiushuiOptions = {gzmc:row.gzmc,hs:row.hs,rwpcid,jgdm}
+      this.getList()
     },
     tongLiushuimx(row){
       this.tabsValue = 'five'
@@ -410,7 +448,7 @@ export default {
             res = await listRenwufourhsls({hszt:3,...params,type:2,ischeck:1})
             break;
           case (this.tabsValue === 'four'):
-            res = await listRenwufourhsls(params)
+            res = await listRenwufourhsls({...params,...this.checkLiushuiOptions})
             break;
           case (this.tabsValue ==='five'):
             res = await getTLS({...this.queryParams,...this.searchNextParams})
@@ -456,6 +494,45 @@ export default {
       this.selection = this.tableData.filter(item=>{
         return item.id === val
       })[0]
+    },
+    handleSelectionChange(selection){
+      if(selection.length){
+        this.ids = selection.map(item=>item.id)
+      }else {
+        this.ids = []
+      }
+    },
+    handleSubmit(){
+      if(!this.ids.length){
+        this.msgError('请至少选择表格一项！')
+        return
+      }
+      if(!this.submitParams.tongguo){
+        this.msgError('请选择审核意见！')
+        return
+      }
+      let responseCount = 0
+      this.loading = true
+      this.ids.forEach(async id=>{
+        try {
+          await updateRenwufour({id,...this.submitParams})
+          responseCount++
+          if(responseCount===this.ids.length){
+            this.submitParams.tongguo = ''
+            this.submitParams.tgyj = ''
+            if(this.tabsValue==='four'){
+               this.$refs.liuShuiTable.clearAll()
+            } else {
+              this.$refs.jxhecTable.clearAll()
+            }
+           
+            this.getList()
+          }
+        } catch (error) {
+          this.loading = false
+          responseCount++
+        }
+      })
     }
   }
 

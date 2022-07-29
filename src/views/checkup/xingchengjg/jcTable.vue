@@ -7,7 +7,7 @@
       style="margin-top: 10px"
     >
       <el-table-column label="就医类型" prop="jslb" align="center" min-width="150px" show-overflow-tooltip></el-table-column>
-      <el-table-column label="检查方式" prop="jcfs" align="center" min-width="150px" show-overflow-tooltip> </el-table-column>
+      <el-table-column label="疑点来源" prop="jcfs" align="center" min-width="150px" show-overflow-tooltip> </el-table-column>
       <el-table-column label="职保" align="center">
         <el-table-column label="费用" prop="zbfy" align="center">
           <template slot-scope="scope">

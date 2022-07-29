@@ -265,7 +265,6 @@
             "
             :tableData="renwufiveList"
             :gzmc="xwrdForm.mxxmmc"
-            @radio-change="handleSelectionChange"
             @on-log="checkLog"
             @check-mx="checkMx"
             @on-close="logShow = false"
@@ -319,6 +318,9 @@
           "
           class="xingweirz"
         >
+          <div class="jie-suan" v-if="tabsValue == 'four'">
+            计数：{{ selectionList.length }}；<span v-if="selectionList.length">医保结算金额：{{formatMoney(totalJsje)}}元;违规金额：{{formatMoney(totalWgje)}}元</span>
+          </div>
           <el-form
             inline
             :model="xwrdForm"
@@ -365,7 +367,7 @@
             <el-form-item
               label="违规数量"
               prop="wgsl"
-              v-if="xwrdForm.xwrd.indexOf('未发现违规') < 0"
+              v-if="xwrdForm.xwrd.indexOf('未发现违规') < 0 && ids.length === 1"
             >
               <el-input
                 onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')"
@@ -387,6 +389,13 @@
                   class="el-icon-info"
                 ></i>
               </el-tooltip>
+            </el-form-item>
+            <el-form-item
+              label="违规数量"
+              v-if="ids.length > 1 && xwrdForm.xwrd.indexOf('未发现违规') < 0"
+            >
+              <el-input disabled :value="fxValue" style="width: 80%"></el-input
+              ><span class="fx-btn" @click="fxDialogShow = true">fx</span>
             </el-form-item>
             <el-form-item
               label="违规金额(元)"
@@ -465,6 +474,45 @@
               >
             </el-form-item>
           </el-form>
+          <el-dialog
+            ref="fxDialog"
+            class="fx-dialog"
+            :visible.sync="fxDialogShow"
+            width="400px"
+            :close-on-click-modal="false"
+            center
+          >
+            <el-form
+              ref="fxForm"
+              size="mini"
+              :model="fxForm"
+              inline
+              :rules="fxRules"
+              :show-message="false"
+            >
+              <el-form-item label="fx=[数量]" prop="fx">
+                <el-select v-model="fxForm.fx" style="width: 100px" clearable>
+                  <el-option label="+(加)" value="fx+"></el-option>
+                  <el-option label="-(减)" value="fx-"></el-option>
+                  <el-option label="*(乘%)" value="fx*"></el-option>
+                  <el-option label="/(除)" value="fx/"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="sl" style="margin-right: 0">
+                <el-input
+                  v-model="fxForm.sl"
+                  style="width: 170px"
+                  type="number"
+                  clearable
+                ></el-input>
+              </el-form-item>
+              <el-form-item style="margin: 15px 0 0 150px !important">
+                <el-button type="primary" @click="handlefxConfirm"
+                  >确定</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </el-dialog>
         </div>
       </div>
       <hechashuju
@@ -589,7 +637,7 @@
                 v-model="bmQueryForm.mxxmbjsfy"
               ></el-input>
               <span>-</span>
-              <el-input type="number" v-model="bmQueryForm.mxxmjyfy"></el-input>
+              <el-input type="number" v-model="bmQueryForm.mxxmbjsfy"></el-input>
             </div>
           </el-form-item>
           <el-form-item label="明细项目单价" prop="mxxmdj">
@@ -669,6 +717,37 @@ export default {
     xmbm,
   },
   data() {
+    const validateSl = (rule, value, callback) => {
+      const wgslList = this.selectionList.map((item) => item.wgsl);
+      const minsl = Math.min.apply(null, wgslList);
+      if (value && this.fxForm.fx === "fx-" && value > minsl) {
+        callback(new Error(""));
+      } else if (value && this.fxForm.fx === "fx*" && value > 100) {
+        callback(new Error(""));
+      } else {
+        callback();
+      }
+    };
+    const isRequiredj = (rule, value, callback) => {
+      if (
+        (this.selectionList.length == 1 ||
+          (this.selectionList.length > 1 &&
+            this.isDisabled.mxxmdjEqual &&
+            this.isDisabled.mxxmdjEqual)) &&
+        !value
+      ) {
+        callback(new Error(""));
+      } else {
+        callback();
+      }
+    };
+    const isRequirefy = (rule, value, callback) => {
+      if (this.selectionList.length == 1 && !value) {
+        callback(new Error(""));
+      } else {
+        callback();
+      }
+    };
     const validateNum = function (rule, value, callback) {
       if (value && value * 1 < 0) {
         callback(new Error("数值不能为负数"));
@@ -677,6 +756,15 @@ export default {
       }
     };
     return {
+      fxDialogShow: false,
+      fxForm: {
+        fx: "",
+        sl: "",
+      },
+      fxValue: "",
+      fxRules: {
+        sl: [{ validator: validateNum, trigger: "blur" },{ validator: validateSl, trigger: "blur" }],
+      },
       showHecha: false, //显示选择核查数据
       tableHeader: [
         {
@@ -756,6 +844,8 @@ export default {
         dj: true,
         sl: false,
         fy: false,
+        mxxmbmEqual: false,
+        mxxmdjEqual: false,
       },
       xwrdDialog: {
         show: false,
@@ -778,7 +868,7 @@ export default {
       xwRules: {
         xwrd: [{ required: true, message: "必填项" }],
         zkdj: [
-          { required: true, message: "必填项" },
+          { validator: isRequiredj, message: "必填项", trigger: "blur" },
           { validator: validateNum, trigger: "blur" },
         ],
         wgsl: [
@@ -786,7 +876,7 @@ export default {
           { validator: validateNum, trigger: "blur" },
         ],
         wgfy: [
-          { required: true, message: "必填项" },
+          { validator: isRequirefy, trigger: "blur" },
           { validator: validateNum, trigger: "blur" },
         ],
         qckc: [
@@ -894,6 +984,18 @@ export default {
     this.getList();
   },
   methods: {
+    handlefxConfirm() {
+      this.$refs["fxForm"].validate((valid) => {
+        if (valid) {
+          if (this.fxForm.fx && this.fxForm.sl) {
+            this.fxValue = `${this.fxForm.fx}${this.fxForm.sl}`;
+          }
+          this.fxDialogShow = false;
+        } else {
+          return false;
+        }
+      });
+    },
     mxxmbmChecked(val) {
       this.bmQueryForm.mxxmbm = val;
     },
@@ -945,8 +1047,12 @@ export default {
     tabsLevelChange1(val) {
       this.selectedId = "";
       this.selectionList = [];
+      this.ids = [];
+      this.fxForm = { fx: "", sl: "" };
+      this.fxValue = "";
       this.getList();
       this.$refs.xwrdForm.clearValidate();
+      this.$refs.fxForm && this.$refs.fxForm.clearValidate();
     },
     //同流水号明细，全明细切换
     tabsLevelChange(val) {
@@ -1093,6 +1199,9 @@ export default {
         qmkc: "",
         ybjs: "",
       };
+      this.fxForm = { fx: "", sl: "" };
+      this.fxValue = "";
+      this.$refs.fxForm && this.$refs.fxForm.clearValidate();
       switch (true) {
         case this.tabsValue == "five" || this.tabsValue == "qmx":
           if (this.qmxOptions.show) {
@@ -1120,7 +1229,7 @@ export default {
     },
     //点击行为认定
     handelXwrdDialog() {
-      if (!this.selectedId) {
+      if (!this.selectionList.length) {
         this.msgError("请选择规则后再点行为认定");
       } else {
         this.xwrdDialog.show = true;
@@ -1136,26 +1245,57 @@ export default {
         this.msgError("请选择盘库期初和盘库期末时间");
         return;
       }
-      const mxxmbjsfy = this.selectionList[0]?.mxxmbjsfy || 0;
-      const wgfy = this.xwrdForm?.wgfy || 0;
-      if (
-        wgfy * 1 > mxxmbjsfy * 1 &&
-        this.xwrdForm.xwrd.indexOf("未发现违规") < 0
-      ) {
-        this.msgError("违规费用不能大于明细项目医保结算金额");
-        return;
-      }
       this.$refs["xwrdForm"].validate(async (valid) => {
-        if (valid) {
+        if(!valid) return false
+        if(this.selectionList.length === 1){
+          const sllected = this.selectionList[0]
+          const mxxmbjsfy = sllected?.mxxmbjsfy || 0;
+          const wgfy = this.xwrdForm?.wgfy || 0;
+          if (
+            wgfy * 1 > mxxmbjsfy &&
+            this.xwrdForm.xwrd.indexOf("未发现违规") < 0
+          ) {
+            this.msgError("违规费用不能大于明细项目医保结算金额");
+            return;
+          }
           let res = "";
-          const { type, xwbh, lx } = this.xwrdChecd; //这个type是行文认定选择的类型
+          const { type, xwbh, lx,wgxw } = this.xwrdChecd; //这个type是行文认定选择的类型
           const params = {
-            id: this.selectedId,
-            ...this.xwrdForm,
-            xwbh,
+            id: sllected.id,
+            mxxmmc:sllected.mxxmmc,
+            bz:this.xwrdForm.bz,
+            zkdj:this.xwrdForm.zkdj,
+            wgsl:this.xwrdForm.wgsl,
+            wgfy:this.xwrdForm.wgfy,
+            xwrd:wgxw,
             wglx: lx,
+            jgbf:type,
+            xwbh
           };
-          if (this.pksj) {
+          if(this.tabsValue === "six"){
+            //进销存核查
+            params['qckc'] = this.xwrdForm.qckc
+            params['bqgr'] = this.xwrdForm.bqgr
+            params['xjxs'] = this.xwrdForm.xjxs
+            params['qmkc'] = this.xwrdForm.qmkc
+            params['ybjs'] = this.xwrdForm.ybjs
+            let cesl = this.cesl();
+            cesl = cesl ? Math.abs(cesl) : "";
+            params.cesl = cesl;
+            params.dzce = this.formatMoney(
+              cesl * sllected.mxxmdj,
+              2
+            );
+          } else {
+            delete params['qckc']
+            delete params['bqgr']
+            delete params['xjxs']
+            delete params['qmkc']
+            delete params['ybjs']
+            delete params['cesl']
+            delete params['dzce']
+          }
+          if (this.pksj) {//盘库时间
             params.pkqcsj = this.parseTime(
               this.pksj[0].getTime(),
               "{y}-{m}-{d}"
@@ -1170,16 +1310,6 @@ export default {
             delete params.wgsl;
             delete params.wgfy;
           }
-          if (this.tabsValue === "six") {
-            //进销存核查
-            let cesl = this.cesl();
-            cesl = cesl ? Math.abs(cesl) : "";
-            params.cesl = cesl;
-            params.dzce = this.formatMoney(
-              cesl * this.selectionList[0].mxxmdj,
-              2
-            );
-          }
           delete params.bjsj;
           res = await updateRenwufour({ ...params, jgbf: type });
           if (res.code === 200) {
@@ -1189,7 +1319,61 @@ export default {
             } else {
               this.getList();
             }
-            this.selectionList.forEach((item) => {
+              const addData = {
+                bjr: this.$store.getters.name,
+                bjsj: this.parseTime(new Date(), "{y}-{m}-{d} {h}:{i}:{s}"),
+                fid: sllected.id,
+                rid: sllected.rwpcid,
+                jgdm: sllected.jgdm,
+                type: this.tabsValue === "four" ? "1" : "2",
+                ...params,
+              };
+              rendingAdd(addData);
+          }
+        } else {
+          this.mutilXwrdSubmit();
+        }
+      })
+    },
+    mutilXwrdSubmit() {
+      const slList = []
+      const fyList = []
+      const fyCompare = []
+      this.selectionList.forEach(item=>{
+        if(this.fxValue){//有选择函数计算数量
+          fyCompare.push(this.caclaFy(item)>item.wgfy*1)
+        } else {
+          fyLfyCompareist.push(false)
+        }
+        slList.push(this.fxValue?this.caclaNum(item.wgsl):item.wgsl)
+        fyList.push(this.fxValue?this.caclaFy(item):item.wgfy)
+      })
+      if(fyCompare.indexOf(true)>-1){
+        this.msgError("违规费用不能大于明细项目医保结算金额");
+      } else {
+        const { type, xwbh, lx,wgxw } = this.xwrdChecd; //这个type是行文认定选择的类型
+        const params = {
+          bz:this.xwrdForm.bz,
+          xwrd:wgxw,
+          wglx: lx,
+          jgbf:type,
+          xwbh
+        }
+        let num  = 0;
+        this.selectionList.forEach((item,i)=>{
+          params['id'] = item.id
+          if(this.xwrdForm.xwrd.indexOf("未发现违规") <0){
+            params['zkdj'] = item.zkdj
+            params['wgsl'] = slList[i]
+            params['wgfy'] = fyList[i]
+          } else {
+            delete params.zkdj;
+            delete params.wgsl;
+            delete params.wgfy;
+          }
+          num++;
+          updateRenwufour({ ...params, jgbf: type }).then(res=>{
+            if (res.code === 200) {
               const addData = {
                 bjr: this.$store.getters.name,
                 bjsj: this.parseTime(new Date(), "{y}-{m}-{d} {h}:{i}:{s}"),
@@ -1198,28 +1382,45 @@ export default {
                 jgdm: item.jgdm,
                 type: this.tabsValue === "four" ? "1" : "2",
                 ...params,
+                ...{id:item.id}
               };
-
-              if (this.tabsValue === "four") {
-                //流水号项目汇总
-                delete addData.qckc;
-                delete addData.bqgr;
-                delete addData.xjxs;
-                delete addData.qmkc;
-                delete addData.ybjs;
-                delete addData.pkqmsj;
-                delete addData.pkqcsj;
-              } else {
-                addData.cesl = params.cesl;
-                addData.dzce = params.dzce;
-              }
               rendingAdd(addData);
-            });
-          }
-        } else {
-          return false;
-        }
-      });
+            }
+          }).finally(()=>{
+            if(--num < 1){
+              this.msgSuccess("操作成功");
+              this.getList(this.searchLsNextParams);
+            }
+          })
+          
+        })
+      }
+    },
+    caclaNum(sl){
+      let wgsl = (sl||0)*1
+      const fxsl = (this.fxForm.sl||0)*1
+      switch(this.fxForm.fx) {
+        case 'fx+':
+          wgsl+=fxsl
+          break
+        case 'fx-':
+          wgsl-=fxsl
+          break
+        case 'fx*':
+          wxsl = wxsl*fxsl/100
+          break
+        case 'fx/':
+          wxsl = wxsl/fxsl
+          break
+        default:
+          break
+      }
+      return wgsl
+    },
+    caclaFy(item){
+      const {zkdj,wgsl} = item
+      const fxsl = this.caclaNum(wgsl)
+      return zkdj*1*fxsl
     },
     getGuizList() {
       console.log(this.guizefl);
@@ -1235,6 +1436,7 @@ export default {
      * 查看流水号项目汇总
      */
     fluProject(row) {
+      this.queryParams.pageNum = 1;
       this.$set(this, "tabsValue", "four");
       this.searchLsNextParams = {
         rwpcid: row.rwpcid,
@@ -1330,41 +1532,59 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       if (selection.length !== 0) {
-        // this.ids = selection.map(item => item.id)
+        this.ids = selection.map((item) => item.id);
+        this.selectionList = [...selection];
         this.isDisabled = this.isDisabledEvent(selection);
-        const { id, mxxmdj, mxxmsl, mxxmje, bz, mxxmmc, wgfy, wgsl, zkdj } =
-          selection[0];
-        this.selectedId = id;
-        this.selectionList = selection;
-        this.xwrdForm.bz = bz;
-        this.xwrdForm.zkdj = zkdj || mxxmdj;
-        this.xwrdForm.zkdj &&
-          (this.xwrdForm.zkdj = Math.abs(this.xwrdForm.zkdj * 1));
-        // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
-        // this.xwrdForm.wgfy = (zkdj && wgsl)?(zkdj*wgsl).toFixed(2):''
-        this.xwrdForm.mxxmmc = mxxmmc;
-        this.xwrdForm.xwrd = "";
-        if (this.tabsValue === "six") {
-          //进销存核查
-          const { qckc, bqgr, xjxs, qmkc, ybjs } = selection[0];
-          this.xwrdForm.qckc = qckc;
-          this.xwrdForm.bqgr = bqgr;
-          this.xwrdForm.xjxs = xjxs;
-          this.xwrdForm.qmkc = qmkc;
-          this.xwrdForm.ybjs = ybjs;
+        if (selection.length == 1) {
+          const { id, mxxmdj, mxxmsl, bz, mxxmmc, wgsl, zkdj } = selection[0];
+          this.selectedId = id;
+          this.xwrdForm.bz = bz;
+          this.xwrdForm.zkdj = zkdj || mxxmdj;
+          this.xwrdForm.zkdj &&
+            (this.xwrdForm.zkdj = Math.abs(this.xwrdForm.zkdj * 1));
+          // this.xwrdForm.wgfy = (wgfy!==null||wgfy!==undefined)?wgfy:''
+          this.xwrdForm.wgfy = zkdj && wgsl ? (zkdj * wgsl).toFixed(2) : "";
+          this.xwrdForm.mxxmmc = mxxmmc;
+          this.xwrdForm.xwrd = "";
+          if (this.tabsValue === "six") {
+            //进销存核查
+            const { qckc, bqgr, xjxs, qmkc, ybjs } = selection[0];
+            this.xwrdForm.qckc = qckc;
+            this.xwrdForm.bqgr = bqgr;
+            this.xwrdForm.xjxs = xjxs;
+            this.xwrdForm.qmkc = qmkc;
+            this.xwrdForm.ybjs = ybjs;
+          } else {
+            this.xwrdForm.wgsl = wgsl || mxxmsl;
+            this.xwrdForm.wgsl &&
+              (this.xwrdForm.wgsl = Math.abs(this.xwrdForm.wgsl * 1));
+            this.xwrdForm.wgfy =
+              this.xwrdForm.zkdj && this.xwrdForm.wgsl
+                ? Math.abs(this.xwrdForm.zkdj * this.xwrdForm.wgsl).toFixed(2)
+                : "";
+            // this.xwrdForm.wgsl = mxxmsl
+          }
+          this.$refs.xwrdForm.clearValidate();
+        } else if (this.isDisabled.mxxmbmEqual) {
+          //明细项目名称一样
+          this.xwrdForm.wgsl = "";
+          this.xwrdForm.wgfy = "";
+          this.xwrdForm.mxxmmc = this.selection[0].mxxmmc;
+          if (this.isDisabled.mxxmdjEqual) {
+            //明细项目单价也一样
+            const zkdj = selection[0]["zkdj"] || selection[0]["mxxmdj"];
+            zkdj && (this.xwrdForm.zkdj = Math.abs(zkdj * 1));
+          } else {
+            this.xwrdForm.zkdj = "";
+          }
         } else {
-          this.xwrdForm.wgsl = wgsl || mxxmsl;
-          this.xwrdForm.wgsl &&
-            (this.xwrdForm.wgsl = Math.abs(this.xwrdForm.wgsl * 1));
-          this.xwrdForm.wgfy =
-            this.xwrdForm.zkdj && this.xwrdForm.wgsl
-              ? Math.abs(this.xwrdForm.zkdj * this.xwrdForm.wgsl).toFixed(2)
-              : "";
-          // this.xwrdForm.wgsl = mxxmsl
+          this.xwrdForm.mxxmmc = ''
         }
         this.$refs.xwrdForm.clearValidate();
+
       } else {
         this.ids = [];
+        this.selectionList = [];
         this.xwrdForm = {
           mxxmmc: "",
           xwrd: "",
@@ -1417,25 +1637,25 @@ export default {
       let dj = true; //单价
       let sl = false; //数量
       let fy = false; //费用
+      let mxxmbmEqual = false;
+      let mxxmdjEqual = false;
       if (sellection.length < 1) {
         dj = true;
         sl = false;
         fy = false;
       } else {
-        const mxxmbm = [];
-        const mxxmdj = [];
-        sellection.forEach((item) => {
-          if (!mxxmbm.includes(item.mxxmbm)) {
-            mxxmbm.push(item.mxxmbm);
-          }
-          if (!mxxmdj.includes(item.mxxmdj)) {
-            mxxmdj.push(item.mxxmdj);
-          }
+        //明细项目编码是否相同
+        mxxmbmEqual = sellection.every((bm) => {
+          return bm.mxxmbm === sellection[0]["mxxmbm"];
         });
-        if (mxxmbm.length === 1) {
+        //明细项目单价是否相同
+        mxxmdjEqual = sellection.every((dj) => {
+          return dj.mxxmdj === sellection[0]["mxxmdj"];
+        });
+        if (mxxmbmEqual) {
           //项目明细编号相同,
           sl = false;
-          dj = mxxmdj.length > 1 ? true : false;
+          dj = mxxmdjEqual ? false : true;
           fy = false;
         } else {
           sl = true;
@@ -1443,7 +1663,7 @@ export default {
           dj = true;
         }
       }
-      return { dj, sl, fy };
+      return { dj, sl, fy, mxxmbmEqual, mxxmdjEqual };
     },
     handleDjslChange() {
       if (this.xwrdForm.zkdj !== "" && this.xwrdForm.wgsl !== "") {
@@ -1475,6 +1695,28 @@ export default {
       return res;
     },
   },
+  computed: {
+    totalJsje() {
+      if (this.selectionList.length) {
+        const list = this.selectionList.map((item) => (item.mxxmbjsfy || 0) * 1);
+        return list.reduce((a, b) => {
+          return a + b;
+        });
+      } else {
+        return 0;
+      }
+    },
+    totalWgje(){
+      if (this.selectionList.length) {
+        const list = this.selectionList.map((item) => (item.wgfy || 0) * 1);
+        return list.reduce((a, b) => {
+          return a + b;
+        });
+      } else {
+        return 0;
+      }
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -1495,6 +1737,7 @@ export default {
   }
 }
 .xingweirz {
+  position: relative;
   .el-form-item {
     margin-bottom: 12px !important;
   }
@@ -1530,6 +1773,33 @@ export default {
   .item-group {
     width: 100%;
     display: flex;
+  }
+}
+.jie-suan {
+  font-size: 12px;
+  color: #606266;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: -28px;
+  transform: translateX(-90%);
+}
+.fx-btn {
+  display: inline-block;
+  width: 26px;
+  line-height: 26px;
+  margin-left: 2px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #cecece;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+}
+.fx-dialog {
+  &::v-deep .el-dialog {
+    margin-top: 75vh !important;
   }
 }
 </style>

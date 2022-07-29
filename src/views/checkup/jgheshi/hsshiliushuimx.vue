@@ -41,7 +41,7 @@
           <el-radio-button label="six">进销存核查</el-radio-button>
         </el-radio-group>
       </el-row>
-      <div class="table-main" :style="{bottom:(jghs.value==1||tabsValue==='five')?'50px':'162px'}"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
+      <div class="table-main" :style="{bottom:(tabsValue!=='five'&&jghs.value!=1 && jghs.status==3)?'162px':'50px'}"  v-loading="loading" v-if="tabsValue!=='four'&&tabsValue!=='six'">
         <sTable v-if="tabsValue=='three'" :data="renwuthreeList" :header="tableHeader" :fixedNum="jghs.value==1?1:2" :checkAll="false"  @selection-change="handleSelectionChange">
             <el-table-column :selectable="(row,index)=>{return row.isput!=1}" type="selection" width="55" align="center" slot="fixed" fixed v-if="jghs.value!=1"/>
             <el-table-column label="序号" width="55" type="index" align="center" slot="fixed"/>

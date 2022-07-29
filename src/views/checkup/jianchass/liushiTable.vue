@@ -1,12 +1,13 @@
 /**项目流水号汇总 第四层数据 type=1*/
 <template>
 <div class="liushui-table" style="height:100%">
-  <sTable :data="tableData" :header="tableHeader" :fixedNum="!noRadio?1:0" :isrowClassName="true">
-    <el-table-column v-if="!noRadio"  align="center" width="55" slot="fixed" fixed>
+  <sTable ref="multipleTable" :data="tableData" :header="tableHeader" :fixedNum="!noRadio?1:0" :isrowClassName="true" @clear="clearAll" @selection-change="handleSelectionChange">
+    <!-- <el-table-column v-if="!noRadio"  align="center" width="55" slot="fixed" fixed>
       <template slot-scope="scope">
         <el-radio :label="scope.row.id" v-model="wsCheck" @change="radioChange"></el-radio>
       </template>
-    </el-table-column>
+    </el-table-column> -->
+    <el-table-column v-if="!noRadio" :reserve-selection="true" type="selection" width="40" align="center" slot="fixed" fixed></el-table-column>
     <el-table-column label="操作"  fixed="right" align="center"  min-width="180px" slot="operate">
       <template slot-scope="scope">
         <el-button v-if="!noLog" type="text" @click="operateLog(scope.row)" size="mini">操作记录</el-button>
@@ -172,7 +173,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.$emit('handleSelectionChange',selection)
+      this.$emit('radio-change',selection)
     },
     //操作记录
     operateLog(row){
@@ -187,7 +188,7 @@ export default {
       })
     },
     clearAll(){
-      this.$refs.multipleTable.clearSelection()
+      this.$refs.multipleTable.clearAll()
     },
     tableRowClassName({row}){
       let className = ''
@@ -197,7 +198,7 @@ export default {
         className = ''
       }
       return  className    
-    }
+    },
   }
 }
 </script>

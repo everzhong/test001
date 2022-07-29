@@ -10,6 +10,9 @@
       height="100%"
       @selection-change="handleSelectionChange"
       ref="scTable"
+      :row-key="(row)=>{
+        return row.id
+      }"
     >
       <slot v-if="tableHeader.length" name="fixed" @contextmenu="mouseRightClick"></slot>
       <el-table-column v-for="(col, index) in tableHeader" :key="index"
@@ -314,6 +317,9 @@ export default {
         className+=" isyd-row"
       }
       return  className
+    },
+    clearAll(){
+      this.$refs.scTable.clearSelection()
     }
   },
   watch: {
