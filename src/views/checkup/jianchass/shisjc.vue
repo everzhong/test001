@@ -1148,8 +1148,7 @@ export default {
         return;
       }
       this.tabsValue = "four";
-      const gzmc = this.mutilSelect.map((item) => item.gzmc);
-      this.getList({ gzmcduo: gzmc }, "mutil");
+      this.getList({}, "mutil");
     },
     tableFourRadioChange(e) {
       console.log(e);
@@ -1214,6 +1213,7 @@ export default {
           break;
         case this.tabsValue == "four":
           this.tabsValue = "three";
+          this.mutilSelect = [];
           this.getList();
           this.xwrdForm.mxxmmc = "";
           break;
@@ -1437,6 +1437,7 @@ export default {
      */
     fluProject(row) {
       this.queryParams.pageNum = 1;
+      this.mutilSelect = []
       this.$set(this, "tabsValue", "four");
       this.searchLsNextParams = {
         rwpcid: row.rwpcid,
@@ -1456,11 +1457,14 @@ export default {
       let res = null;
       this.loading = true;
       try {
-        if (isMutil) {
+        console.log(this.mutilSelect,1212)
+        if (isMutil||(this.tabsValue==='four'&&this.mutilSelect.length>1)) {
+          const gzmc = this.mutilSelect.map((item) => item.gzmc);
+          console.log(this.mutilSelect,1212)
           const isMutilparams = {
             ...params,
             ...this.searchLsNextParams,
-            ...query,
+            gzmcduo: gzmc,
           };
           delete isMutilparams.gzmc;
           res = await listMutil(isMutilparams);
