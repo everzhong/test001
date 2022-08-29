@@ -81,6 +81,12 @@
         </el-form-item>
       </el-form>
     </div>
+    <div class="file-list">
+      <div class="file-title">已上传文件：</div>
+      <div class="list">
+        <span v-for="file in filesList" :key="file.qzid" @click="downFile(file.wenjianurl)">{{file.wenjian}}</span>
+      </div>
+    </div>
     <!-- 查询条件 -->
     <el-dialog title="查询条件" class="check-dialog" :visible.sync="chaxunDialog" width="800px" :modal="true">
       <el-form ref="chaxunForm" :model="queryGzForm"  label-width="110px" size="small">
@@ -126,6 +132,36 @@
               <el-input type="number" min="0" v-model="queryGzForm.jsdj"></el-input>
             </div>
           </el-form-item>
+          <el-form-item label="下发情况" prop="hs" v-if="tabsValue=='four'">
+            <el-select v-model="queryGzForm.hs">
+              <el-option
+                v-for="item in hsOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="审核意见" prop="tongguo" v-if="tabsValue=='four'">
+            <el-select v-model="queryGzForm.tongguo">
+              <el-option
+                v-for="item in tongguoOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="核实意见" prop="queren" v-if="tabsValue=='four'">
+            <el-select v-model="queryGzForm.queren">
+              <el-option
+                v-for="item in querenOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </div>
         <div class="form-group" v-if="gzTabsValue==2">
           <el-form-item label="明细项目编号" prop="mxxmbm" >
@@ -147,9 +183,10 @@
 import { listRenwuthreehsls, listRenwuthree} from '@/api/renwu/renwuthree'
 import { listRenwufour,listRenwufourhsls,updateRenwufour } from '@/api/renwu/renwufour'
 import { getTLS,getQMX} from '@/api/renwu/mingxi'
-import LiushuiTable from './liushiTable.vue'
+import LiushuiTable from './hessjLiushuitable.vue'
 import Tongliumx from './tongliumx.vue'
 import xmbm from './xmbm.vue'
+import { listDcqz } from "@/api/renwu/dcqz"
 
 export default {
   name:"CheckHssz",
@@ -160,6 +197,7 @@ export default {
   },
   data(){
     return {
+      filesList:[],//已上传文件列表
       submitParams:{
         tgyj:'',
         tongguo:''
@@ -332,7 +370,10 @@ export default {
         ydsm:'',
         jsfy:'',
         jsdj:'',
-        ybd:''
+        ybd:'',
+        tongguo:'',
+        hs:'',
+        queren:'0'
       },
       queryHcForm:{
         mxxmbm:'',
@@ -343,6 +384,21 @@ export default {
         {dictValue:'1',dictLabel:'未核实'},
         {dictValue:'2',dictLabel:'核实中'},
         {dictValue:'3',dictLabel:'已核实'}
+      ],
+      hsOptions:[
+        {dictValue:'',dictLabel:'全部'},
+        {dictValue:'1',dictLabel:'未下发'},
+        {dictValue:'3',dictLabel:'已下发'},
+      ],
+      tongguoOptions:[
+        {dictValue:'',dictLabel:'全部'},
+        {dictValue:'1',dictLabel:'通过'},
+        {dictValue:'2',dictLabel:'不通过'},
+      ],
+      querenOptions:[
+        {dictValue:'0',dictLabel:'全部'},
+        {dictValue:'1',dictLabel:'确认'},
+        {dictValue:'2',dictLabel:'不确认'},
       ],
       selection:{},
       queryInfoFrom:{},
@@ -359,8 +415,24 @@ export default {
         this.gzflOptions = res.data
       }
     })
+    this.getFiles()
   },
   methods:{
+    async getFiles(){
+      try {
+        const {code,rows} = await listDcqz({jgdm:this.queryInfoFrom.jgdm,rwpcid:this.queryInfoFrom.rwpcid,type:7})
+        if(code==200){
+          this.filesList = rows
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    downFile(url){
+      if(url) {
+        window.open(url)
+      }
+    },
     mxxmbmChecked(val){
       this.queryHcForm.mxxmbm = val
     },
@@ -380,7 +452,11 @@ export default {
         ydsm:'',
         jsfy:'',
         jsdj:'',
-        ybd:''
+        ybd:'',
+        hs:'',
+        tongguo:'',
+        queren:'0'
+        
       }
       this.$refs['chaxunForm'].resetFields()
       this.$refs.mxxmbmPopo && (this.$refs.mxxmbmPopo.clear())
@@ -420,7 +496,8 @@ export default {
         zdbm:this.parseTime(datastarttime, '{y}{m}'),
         zdbm1:this.parseTime(dataendtime, '{y}{m}')
       }
-      this.checkLiushuiOptions = {gzmc:row.gzmc,hs:row.hs,rwpcid,jgdm}
+      console.log(row,121212)
+      this.checkLiushuiOptions = {gzmc:row.gzmc,hs:row.hs,rwpcid,jgdm,ishs:1}
       this.getList()
     },
     tongLiushuimx(row){
@@ -442,13 +519,14 @@ export default {
         let  res = null
         switch(true) {
           case (this.gzTabsValue==='1' && this.tabsValue==='three'):
+            delete params.hs
             res = await listRenwuthree({hszt:3,...params})
             break;
           case (this.gzTabsValue==='2'):
             res = await listRenwufourhsls({hszt:3,...params,type:2,ischeck:1})
             break;
           case (this.tabsValue === 'four'):
-            res = await listRenwufourhsls({...params,...this.checkLiushuiOptions})
+            res = await listRenwufourhsls({...params,...this.queryGzForm,...this.checkLiushuiOptions,})
             break;
           case (this.tabsValue ==='five'):
             res = await getTLS({...this.queryParams,...this.searchNextParams})
@@ -539,6 +617,23 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.file-list {
+  font-size:14px;
+  padding-bottom: 30px;
+  .file-title {
+    color: #666;
+    margin-bottom: 5px;
+  }
+  .list span{
+    cursor: pointer;
+    color: rgba(27,101,185,1);
+    margin-right: 25px;
+    line-height: 22px;
+    &:hover {
+      color: rgba(27,101,185,.7);
+    }
+  }
+}
 .hssz {
   .hssz-top {
     // display: flex;
@@ -566,7 +661,6 @@ export default {
   }
   .four-type {
     height:calc(100% - 170px);
-    margin-bottom:60px
   }
   .nor-type {
     height:calc(100% - 100px);

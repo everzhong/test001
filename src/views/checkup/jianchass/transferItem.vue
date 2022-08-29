@@ -91,6 +91,16 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="下发情况" prop="hs">
+            <el-select v-model="queryGzForm.hs">
+              <el-option
+                v-for="item in hsOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </div>
         <div class="form-group" v-if="tabsValue==2">
           <el-form-item label="明细项目编号" prop="mxxmbm" >
@@ -126,6 +136,12 @@ export default {
       tableData:[],
       total:0,
       gzHeader:[{
+        prop:"hs",
+        label:"发送核查 ",
+        viewFun:(hs)=>{
+          return hs==1?'未下发':hs==2?'下发中':hs==3?'已下发':hs==4?'已下发':'--'
+        }
+      },{
         prop: 'gzfl',
         label: '规则分类',
         fixedWidth:150
@@ -252,6 +268,19 @@ export default {
         dictValue:'',
         dictLabel:'全部'
       }],
+      hsOptions:[{
+        dictValue:'1',
+        dictLabel:'未下发'
+      },{
+        dictValue:'2',
+        dictLabel:'下发中'
+      },{
+        dictValue:'3',
+        dictLabel:'已下发'
+      },{
+        dictValue:'',
+        dictLabel:'全部'
+      }],
       queryHcForm:{
         mxxmbm:'',
         mxxmmc:'',
@@ -343,7 +372,7 @@ export default {
       this.tableData = this.tableData.concat(selection)
     },
     async getList(query){
-      let params ={...this.queryParams,hs:1,jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
+      let params ={...this.queryParams,jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       query&&(params = {...params,...query})
       this.loading = true
       try {

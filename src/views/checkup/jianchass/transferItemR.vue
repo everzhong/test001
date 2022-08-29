@@ -1,18 +1,18 @@
 <template>
   <div style="width:100%;height:100%">
     <el-row :gutter="10">
-      <el-col :span="1.5">
-        <span style="margin-right:10px;font-size:12px;color:#606266">{{options.title||'待选择'}}</span>
+      <el-col :span="1.5" style="margin-top:2px">
+        <span style="margin-right:5px;font-size:12px;color:#606266">{{options.title||'待选择'}}</span>
         <el-select v-model="queryGzForm.ybd" size="mini"  @change="ybdChange" style="width:90px" v-if="tabsValue==1">
           <el-option label="本地" value="01"></el-option>
           <el-option label="异地" value="02"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" style="margin-top:2px;margin-right:10px">
         <el-button type="primary" size="mini" @click="chaxunDialog = true">查询条件</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <span style="margin-right:10px;font-size:12px;color:#606266">建议处理期限</span>
+      <el-col :span="1.5" class="suggest">
+        <span class="suggest-date">建议处理期限</span>
         <el-date-picker
           style="width:130px"
           size="mini"
@@ -24,14 +24,22 @@
         >
         </el-date-picker>
       </el-col>
-      <div class="top-right-btn">
+      <el-col :span="1.5" class="suggest">
+        <span class="tiaojian">设定条件</span>
+        <el-select v-model="hsstatus" size="mini"  style="width:110px" @change="handleHsstatis">
+          <el-option label="全部" value="0"></el-option>
+          <el-option label="已认定部分" value="1"></el-option>
+          <el-option label="未认定部分" value="2"></el-option>
+        </el-select>
+      </el-col>
+      <div class="top-right-btn" style="margin-top:2px">
         <el-radio-group v-model="tabsValue" size="mini" @change="tabsLevelChange">
           <el-radio-button label="1">规则筛查</el-radio-button>
           <el-radio-button label="2">进销存核查</el-radio-button>
         </el-radio-group>
       </div>
     </el-row>
-    <div style="height:calc(100% - 80px)" v-loading="loading">
+    <div style="height:calc(100% - 85px)" v-loading="loading">
       <sTable v-show="tabsValue==1" style="margin-top:8px;height:100%" :fixedNum="1" :data="tableData" @selection-change="handleSelectionChange" :header="gzHeader">
         <el-table-column type="selection" width="40" align="center" slot="fixed" fixed/>
       </sTable>
@@ -114,7 +122,7 @@
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="getList()" size="small">确 定</el-button>
+        <el-button type="primary" @click="checkThreeWay=1,getList()" size="small">确 定</el-button>
         <el-button @click="resetCheckForm" size="small">重置</el-button>
       </div>
     </el-dialog>
@@ -289,7 +297,9 @@ export default {
         {dictValue:'3',dictLabel:'已核实'}
       ],
       xzqOptions:[],
-      jyclrq : ''
+      jyclrq : '',
+      hsstatus:'0',
+      checkThreeWay:1,//查询列表的方式，默认1,选择设定条件查询是2
     }
   },
   created(){
@@ -302,6 +312,10 @@ export default {
     })
   },
   methods:{
+    handleHsstatis(){
+      this.checkThreeWay = 2
+      this.getList1()
+    },
     mxxmbmChecked(val){
       this.queryHcForm.mxxmbm = val
     },
@@ -335,6 +349,26 @@ export default {
       this.queryParams.pageNum = 1
       this.getList()
     },
+    async getList1(){
+      let params ={...this.queryParams,hs:2,jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
+      this.loading = true
+      try {
+        if(this.hsstatus==2){
+          params['isrd']=0
+        } else if(this.hsstatus==1){
+          params['isrd']=1
+        }
+        const res = await listRenwuthree(params)
+        if(res.code===200){
+          this.tableData = res.rows;
+          this.total = res.total;
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
+      
+    },
     async getList(query){
       let params ={...this.queryParams,hs:2,jgdm:this.$route.query.jgdm,rwpcid:this.$route.query.rwpcid}
       query&&(params = {...params,...query})
@@ -343,7 +377,7 @@ export default {
         let res = ""
         if(this.tabsValue==='1'){
           params = {...params,...this.queryGzForm}
-          res = await listRenwuthree(params)
+          res = this.checkThreeWay==1?await listRenwuthree(params):this.getList1()
         } else {
           params = {...params,...this.queryHcForm,type:2,ischeck:1}
           res = await listRenwufour(params)
@@ -392,8 +426,8 @@ export default {
     getAllSelection(){
       return this.allSelection
     },
-    getJyclqx(){
-      return this.jyclrq
+    getJyclqxAndStatus(){
+      return {jyclrq:this.jyclrq,hsstatus:this.hsstatus}
     },
     clear() {
       this.allSelection = []
@@ -445,5 +479,20 @@ export default {
     width: 100%;
     display: flex;
   }
+}
+.suggest {
+  // display: flex;
+  // align-items: center;
+  >span {
+    margin-right:5px;
+    font-size:12px;
+    color: rgb(96, 98, 102);
+  }
+  // .suggest-date {
+  //   width: 38px;
+  // }
+  // .tiaojian {
+  //   width: 26px;
+  // }
 }
 </style>

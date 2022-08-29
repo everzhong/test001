@@ -544,32 +544,68 @@ export default {
     tableFourRadioChange(e){
       console.log(e)
     },
+
+    async submitCheckNext(){
+      const params = {
+          ids: [this.queryInfoFrom.id],
+          status: 4, //检查完成去到状态4，形成结果
+          dxqd: "检查完成",
+        };
+        const res = await submitDxqd(params);
+        if(res.code===200){
+          this.msgSuccess("操作成功");
+          this.getList();
+          this.addJcfl({
+            jglc: "检查实施",
+            gjxx: `检查完成`,
+            rwpcid: this.queryInfoFrom.rwpcid,
+            jgdm: this.queryInfoFrom.jgdm,
+            zhczr: this.$store.getters.name,
+            sort: 7,
+          });
+        }
+    },
+
     //点击检查完成状态跳到4
     doSubmit() {
-      this.$confirm("请确认所有规则均已完成检查，是否提交？", "提示", {
+
+      if(this.queryInfoFrom.jghs==2){
+        this.$confirm('此机构还有数据未核实是否继续提交检查完成？','提示',{
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         }).then(()=>{
-          const params = {
-            ids:[this.queryInfoFrom.id],
-            status:4,//检查完成去到状态4，形成结果
-            dxqd:'检查完成',
-          }
-          return submitDxqd(params);
-        }).then(()=>{
-          this.msgSuccess("操作成功")
-          this.getList()
-          this.addJcfl({
-            jglc:'检查实施',
-            // gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
-            gjxx:`检查完成`,
-            rwpcid:this.queryInfoFrom.rwpcid,
-            jgdm:this.queryInfoFrom.jgdm,
-            zhczr:this.$store.getters.name,
-            sort:7
-          })
-        }).catch(_=>{})
+          this.submitCheckNext()
+        }).catch((_) => {});
+      } else {
+        this.submitCheckNext()
+      }
+
+
+      // this.$confirm("请确认所有规则均已完成检查，是否提交？", "提示", {
+      //     confirmButtonText: "确定",
+      //     cancelButtonText: "取消",
+      //     type: "warning"
+      //   }).then(()=>{
+      //     const params = {
+      //       ids:[this.queryInfoFrom.id],
+      //       status:4,//检查完成去到状态4，形成结果
+      //       dxqd:'检查完成',
+      //     }
+      //     return submitDxqd(params);
+      //   }).then(()=>{
+      //     this.msgSuccess("操作成功")
+      //     this.getList()
+      //     this.addJcfl({
+      //       jglc:'检查实施',
+      //       // gjxx:`检查完成：批号为${this.queryInfoFrom.rwpcid}机构代码为${this.queryInfoFrom.jgdm}`,
+      //       gjxx:`检查完成`,
+      //       rwpcid:this.queryInfoFrom.rwpcid,
+      //       jgdm:this.queryInfoFrom.jgdm,
+      //       zhczr:this.$store.getters.name,
+      //       sort:7
+      //     })
+      //   }).catch(_=>{})
     },
     //返回上一层
     goBackUpLevel(){
@@ -632,7 +668,7 @@ export default {
       const mxxmbjsfy = this.selectionList[0]?.mxxmbjsfy||0
       const wgfy = this.xwrdForm?.wgfy||0
       if(wgfy*1>mxxmbjsfy*1 && this.xwrdForm.xwrd.indexOf('未发现违规')<0){
-        this.msgError('违规费用不能大于明细项目医保结算金额')
+        this.msgError('违规费用不能大于明细项目医保结算范围费用')
         return
       }
       this.$refs['xwrdForm'].validate(async valid => {

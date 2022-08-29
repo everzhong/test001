@@ -73,7 +73,15 @@ export default {
       }]
     }
   },
-  props:['tableData'],
+  props:['tableData','tHeader'],
+  mounted(){
+    this.tHeader && (this.tableHeader = [...this.tHeader])
+  },
+  watch:{
+    tHeader(val){
+      this.tableHeader = [...val]
+    }
+  },
   methods:{
     // 多选框选中数据
     handleSelectionChange(selection) {

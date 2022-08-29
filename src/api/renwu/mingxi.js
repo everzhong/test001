@@ -15,6 +15,14 @@ export function getTLS(query) {
         params: query
     })
 }
+// 批量查询同流水号列表
+export function getTLSDuo(data) {
+    return request({
+        url: '/renwu/jdmxb/listpchduo',
+        method: 'post',
+        data: data
+    })
+}
 // 查询全明细列表
 export function getQMX(query) {
     return request({
@@ -23,3 +31,4 @@ export function getQMX(query) {
         params: query
     })
 }
+

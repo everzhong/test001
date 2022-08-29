@@ -114,6 +114,9 @@ export default {
       },{
         prop: 'lxr',
         label: '联系人',
+        splitFun:(lxr)=>{
+          return lxr?lxr.split(','):[]
+        }
       },{
         prop: 'ybbf',
         label: '险种',
@@ -145,6 +148,18 @@ export default {
         label:'检查开始日期',
         viewFun:(hspfsj)=>{
           return this.parseTime(hspfsj,'{y}-{m}-{d}')
+        }
+      },{
+        label:'下发核实时间',
+        prop:'xfyq',
+        splitFun:(xfyq)=>{
+          return xfyq?xfyq.split(','):[]
+        }
+      },{
+        label:'核实截止日期',
+        prop:'jyclrq',
+        splitFun:(jyclrq)=>{
+          return jyclrq?jyclrq.split(','):[]
         }
       }]
     }

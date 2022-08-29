@@ -61,7 +61,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
-        <div class="xingweirz" v-show="tabsValue=='six'&&jghs.value!=1 && jghs.status==3">
+        <div class="xingweirz" v-show="tabsValue=='six' && jghs.status==3">
             <div class="yy-content">
               <span>核实意见</span>
               <el-radio-group v-model="queren" size="small">

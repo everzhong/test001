@@ -39,7 +39,7 @@
         </div>
       </el-row>
       <div v-loading="loading" v-show="!mxShow" style="height:calc(100% - 37px)">
-        <RenwuthreeTable v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
+        <RenwuthreeTable :tHeader="threeThead" v-if="tabsValue==='three'" :tableData="renwuthreeList" @selection-change="handleThreeTableChange"  @check-xgmx="checkdetail($event,'xgmx')"/>
         <RenwufourTable v-else-if="tabsValue==='four'" :tableData="renwufourList" @check-xgmx="checkdetail($event,'xgmx')"/>
         <sTable v-else :data="renwutwoList" :header="tableHeader" :fixedNum="isRwcx?1:2" @selection-change="handleSelectionChange" @on-click="viewSc">
           <el-table-column v-if="!isRwcx" slot="fixed" type="selection" width="55" align="center"/>
@@ -97,6 +97,53 @@ export default {
   },
   data() {
     return {
+      threeThead:[{
+        prop: 'rwpcid',
+        label: '批次号',
+        fixedWidth:30
+      },{
+        prop: 'jgdm',
+        label: '机构代码',
+        fixedWidth:55,
+      },{
+        prop: 'jgmc',
+        label: '机构名称',
+        fixedWidth:60,
+      },{
+        prop: 'gzfl',
+        label: '规则分类',
+        align: 'left'
+      },{
+        prop: 'gzmc',
+        label: '规则名称',
+        align: 'left'
+      },{
+        prop: 'xjjzrs',
+        label: '涉及就诊人员数',
+        hide:true
+      },{
+        prop: 'sjrcs',
+        label: '涉及结算人次数',
+      },{
+        prop: 'xjmxs',
+        label: '涉及项目数',
+      },{
+        prop: 'jsfy',
+        label: '医保结算范围费用(元)',
+        viewFun: (jsfy)=>{
+          return this.formatMoney(jsfy,2)
+        }  
+      },{
+        prop: 'ajly',
+        label: '案件来源',
+        viewFun: (ajly)=>{
+          return this.selectDictLabels(this.$store.getters.ajlyDic, ajly)
+        }
+      },{
+        label: '规则来源',
+        fixedWidth:55,
+        prop:'gzly'
+      }],
       tableHeader:[{
         prop: 'scstatus',
         label: '第三方筛查状态',
@@ -110,7 +157,6 @@ export default {
       },{
         prop: 'rwpcid',
         label: '批次号',
-        fixedWidth:30
 
       },{
         prop: 'jgdm',

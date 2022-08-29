@@ -1,6 +1,6 @@
 <template>
 <div class="app-container container_1" v-loading="loading">
-  <div v-if="pageView=='heshuju'&&!hideSubmit&&twoJghs!=1&&updateTwoStatus===3" style="position:absolute;right:20px;top:-31px;background-color:rgb(255, 255, 255);">
+  <div v-if="(pageView=='heshuju'||pageView==='lshhz') &&!hideSubmit&&updateTwoStatus===3" style="position:absolute;right:20px;top:-31px;background-color:rgb(255, 255, 255);">
     <el-button type="primary" size="mini" @click="submit">提交</el-button>
     <!-- <i class="el-icon-arrow-left" @click="pageView='main',xgmxOptions.show=false" style="cursor:pointer;margin-left:15px;vertical-align:middle"></i> -->
   </div>

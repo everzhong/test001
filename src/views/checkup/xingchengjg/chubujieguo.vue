@@ -57,7 +57,7 @@
           <el-button type="default"  size="small" @click="viewTableObj.show = false">返回上一层</el-button>
         </el-col> -->
         <el-radio-group @change="typeChange" v-model="tabsValue" size="small" class="top-right-btn">
-          <el-radio-button label="listjc" value="listjc">按检查方式汇总</el-radio-button>
+          <el-radio-button label="listjc" value="listjc">按疑点来源方式汇总</el-radio-button>
           <el-radio-button label="listjg" value="listjg">按违规类别汇总</el-radio-button>
         </el-radio-group>
       </el-row>

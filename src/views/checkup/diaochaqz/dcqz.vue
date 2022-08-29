@@ -40,7 +40,7 @@
                 <!-- <div style="position:absolute;right:20px;top:-72px;background-color:#fff">
                   <el-button type="primary" icon="el-icon-back" size="mini" @click="$router.back(-1)">返回</el-button>
                 </div> -->
-                <div class="page-back-icon" @click="$router.back(-1)">
+                <div v-if="!noshowback" class="page-back-icon" @click="$router.back(-1)">
                   <i class="el-icon-arrow-left"></i>
                 </div>
           </el-form>
@@ -77,6 +77,7 @@ export default {
     Jcbl,
     Xunwbl
   },
+  props:['noshowback'],
   data() {
     return {
       // 遮罩层
@@ -99,5 +100,8 @@ export default {
     this.queryInfoFrom = this.$route.query
     this.tabsValue = this.$route.query.tabKey || '1'
   },
+  mounted(){
+    console.log(this.noshowback,1212)
+  }
 };
 </script>

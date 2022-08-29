@@ -23,7 +23,7 @@
         <span>{{formatMoney(scope.row.mxxmjyfy,2)}}</span>
       </template>
     </el-table-column>
-    <el-table-column label="明细项目医保结算金额(元)" align="center" prop="mxxmbjsfy"  show-overflow-tooltip>
+    <el-table-column label="明细项目医保结算范围费用(元)" align="center" prop="mxxmbjsfy"  show-overflow-tooltip>
        <template slot-scope="scope">
         <span>{{formatMoney(scope.row.mxxmbjsfy,2)}}</span>
       </template>

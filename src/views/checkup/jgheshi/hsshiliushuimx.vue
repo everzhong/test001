@@ -64,7 +64,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
-        <div class="xingweirz" v-show="tabsValue!=='five'&&jghs.value!=1 && jghs.status==3">
+        <div class="xingweirz" v-show="tabsValue!=='five' && jghs.status==3">
           <div class="yy-content">
             <span>核实意见</span>
             <el-radio-group v-model="queren" size="small">
@@ -665,7 +665,7 @@ export default {
         switch(this.tabsValue) {
           case 'three':
             params.type=1
-            res = await listRenwufourhsls({...this.gzQueryForm,...params,hs:3})
+            res = await listRenwufourhsls({...this.gzQueryForm,...params,hs:3,ishs:1})
             break;
           case 'six':
             params.type=2

@@ -69,7 +69,7 @@ export default {
         }  
       },{
         prop: 'mxxmbjsfy',
-        label: '明细项目医保结算金额(元)',
+        label: '明细项目医保结算范围费用(元)',
         viewFun: (mxxmbjsfy)=>{
           return this.formatMoney(mxxmbjsfy,2)
         }  
