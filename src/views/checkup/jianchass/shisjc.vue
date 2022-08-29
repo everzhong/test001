@@ -1264,7 +1264,12 @@ export default {
         const res = await submitDxqd(params);
         if(res.code===200){
           this.msgSuccess("操作成功");
-          this.getList();
+          // this.getList();
+          setTimeout(() => {
+            this.$router.replace({
+              path:'/checkup/jcss/jianchass'
+            })
+          }, 100);
           this.addJcfl({
             jglc: "检查实施",
             gjxx: `检查完成`,
@@ -1407,7 +1412,6 @@ export default {
             bz:this.xwrdForm.bz,
             zkdj:this.xwrdForm.zkdj,
             wgsl:this.xwrdForm.wgsl,
-            mxxmsl:this.xwrdForm.wgsl,
             wgfy:this.xwrdForm.wgfy,
             xwrd:wgxw,
             wglx: lx,
@@ -1509,8 +1513,6 @@ export default {
           if(this.xwrdForm.xwrd.indexOf("未发现违规") <0){
             params['zkdj'] = djList[i]
             params['wgsl'] = slList[i]
-            params['wgsl'] = slList[i]
-            params['mxxmsl'] = slList[i]
             params['wgfy'] = djList[i]*slList[i]
           } else {
             delete params.zkdj;
