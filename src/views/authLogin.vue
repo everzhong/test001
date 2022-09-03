@@ -18,20 +18,6 @@
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
-      <!-- <el-form-item prop="code">
-        <el-input
-          v-model="loginForm.code"
-          auto-complete="off"
-          placeholder="验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
-        </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img"/>
-        </div>
-      </el-form-item> -->
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
@@ -55,16 +41,12 @@
 
 <script>
 import { getCodeImg } from "@/api/login";
-import Cookies from "js-cookie";
-import { encrypt, decrypt } from '@/utils/jsencrypt'
-import { removeToken } from '@/utils/auth'
 
 export default {
   name: "Login",
   data() {
     return {
       codeUrl: "",
-      cookiePassword: "",
       loginForm: {
         username: "admin",
         password: "admin123",
@@ -85,17 +67,6 @@ export default {
       redirect: undefined
     };
   },
-  watch: {
-    // $route: {
-    //   handler: function(route) {
-    //     this.redirect = route.query && route.query.redirect;
-    //   },
-    //   immediate: true
-    // }
-  },
-  created() {
-    this.getCookie();
-  },
   methods: {
     getCode() {
       getCodeImg().then(res => {
@@ -103,31 +74,10 @@ export default {
         this.loginForm.uuid = res.uuid;
       });
     },
-    getCookie() {
-      const username = Cookies.get("username");
-      const password = Cookies.get("password");
-      const rememberMe = Cookies.get('rememberMe');
-      this.loginForm = {
-        username: username === undefined ? this.loginForm.username : username,
-        password: password === undefined ? this.loginForm.password : decrypt(password),
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
-      };
-      this.$store.commit('SET_ROLES', []);
-      removeToken();
-    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, { expires: 30 });
-            Cookies.set("password", encrypt(this.loginForm.password), { expires: 30 });
-            Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
-          } else {
-            Cookies.remove("username");
-            Cookies.remove("password");
-            Cookies.remove('rememberMe');
-          }
           this.$store.dispatch("Login", this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || "/renwu/renwulist" }).catch(()=>{});
             // this.$store.dispatch('GetFyList');
