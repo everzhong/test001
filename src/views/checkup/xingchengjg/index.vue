@@ -62,7 +62,7 @@ export default {
         }
       },{
         prop: 'jcfs',
-        label: '检查方式',
+        label: '疑点来源',
         width:'auto'
       },{
         prop: 'ybbf',
