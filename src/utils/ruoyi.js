@@ -104,6 +104,7 @@ export function selectDictLabels(datas, value, separator) {
     if (value === null || value === undefined || value === '') {
         return ''
     } else {
+        value = value + ''
         var actions = [];
         var currentSeparator = undefined === separator ? "," : separator;
         var temp = value.split(currentSeparator);

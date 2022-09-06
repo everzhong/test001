@@ -42,10 +42,16 @@ router.beforeEach((to, from, next) => {
 
                     })
                 }).catch(err => {
-                    store.dispatch('LogOut').then(() => {
-                        Message.error(err)
-                        next({ path: '/' })
-                    })
+                    // store.dispatch('LogOut').then(() => {
+                    //     Message.error(err)
+                    //     next({ path: '/' })
+                    // }).catch(() => {
+                    store.commit('SET_TOKEN', '')
+                    store.commit('SET_ROLES', [])
+                    store.commit('SET_PERMISSIONS', [])
+                    removeToken()
+                    next({ path: '/authLogin' })
+                        // })
                 })
             } else {
                 next()

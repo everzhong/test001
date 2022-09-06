@@ -67,6 +67,9 @@ export default {
       redirect: undefined
     };
   },
+  created(){
+    this.$message.close()
+  },
   methods: {
     getCode() {
       getCodeImg().then(res => {

@@ -134,52 +134,6 @@
     <div class="table-main" v-loading="loading" >
       <sTable :data="logList" :header="tableHeader" :fixedNum="1">
         <el-table-column label="序号" type="index" width="55" align="center" slot="fixed"/>
-        <el-table-column label="创建时间" align="center" prop="createDate" width="180px">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.createDate, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="开始时间" align="center" prop="stime" width="150">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.stime, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="任务层ID" align="center" prop="jobId" :width="flexColumnWidth('jobId',logList)"/>
-        <el-table-column label="日志路径" align="center" prop="logFilePath" :width="flexColumnWidth('logFilePath',logList)"/>
-        <el-table-column label="更新时间" align="center" prop="updateDate" width="180">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.updateDate, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="抽取分类" align="center" prop="type" width="150px">
-          <template slot-scope="scope">
-            <span>{{scope.row.type==1?'住院明细抽取':scope.row.type==2?'住院主单抽取':scope.row.type==3?'门诊明细抽取':scope.row.type==4?'门诊主单抽取':scope.row.type==5?'据ID抽取明细':''}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="成功条数" align="center" prop="succ">
-          <template slot-scope="scope">
-            <span>{{scope.row.succ?(scope.row.succ.replace(/[^0-9]/ig,"")):''}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="机构代码" align="center" prop="jgdm" :width="flexColumnWidth('jgdm',logList)"/>
-        <el-table-column label="年月份" align="center" prop="ny" show-overflow-tooltip width="300px"/>
-        <el-table-column label="状态" align="center" prop="status">
-          <template slot-scope="scope">
-            <span>{{scope.row.status==1?'正常':scope.row.status==2?'禁用':''}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="总耗时" align="center" prop="ztime"  />
-        <el-table-column label="结束时间" align="center" prop="etime" width="150">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.etime, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="失败条数" align="center" prop="fucc" />
-        <el-table-column label="抽取状态" align="center" prop="ends" width="150px">
-          <template slot-scope="scope">
-            <span>{{['未开始抽取数据','抽取中','成功抽取数据','抽取失败'][scope.row.ends*1]}}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="操作"  fixed="right" align="center" class-name="small-padding fixed-width" slot="operate">
           <template slot-scope="scope">
             <el-button
@@ -294,7 +248,6 @@ export default {
       },{
         prop: 'stime',
         label: '开始时间',
-        fixedWidth:30,
         viewFun:(stime)=>{
           return this.parseTime(stime,'{y}-{m}-{d}')
         }
@@ -304,11 +257,9 @@ export default {
       },{
         label:"日志路径",
         prop:'logFilePath',
-        fixedWidth:100,
       },{
         label:"更新时间",
         prop:'updateDate',
-        fixedWidth:66,
         viewFun:(time)=>{
           return this.parseTime(time)
         }
@@ -322,14 +273,12 @@ export default {
       },{
         prop: 'succ',
         label: '成功条数',
-        width:'auto',
         viewFun: (succ)=>{
           return (succ?(succ.replace(/[^0-9]/ig,"")):'')
         }
       },{
         prop: 'jgdm',
         label: '机构代码',
-        fixedWidth:55,
       },{
         prop: 'ny',
         label: '年月份',
@@ -345,7 +294,6 @@ export default {
       },{
         prop: 'etime',
         label: '结束时间',
-        width:"150px",
         viewFun:(etime)=>{
           return this.parseTime(etime,'{y}-{m}-{d}')
         }
@@ -356,7 +304,6 @@ export default {
       },{
         prop: 'ends',
         label: '抽取状态',
-        width: '180px',
         viewFun: (ends)=>{
           return (ends==0?'未开始抽取数据':ends==1?'抽取中':ends==2?'成功抽取数据':ends==3?'抽取失败':'--')
         }

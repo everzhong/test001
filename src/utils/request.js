@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Notification, MessageBox, Message } from 'element-ui'
-import { getToken, getUid } from '@/utils/auth'
+import { getToken, getUid, removeToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import Qs from 'qs'
 var baseUrl = ''
@@ -64,6 +64,7 @@ service.interceptors.response.use(res => {
         // 获取错误信息
         const msg = errorCode[code] || res.data.msg || errorCode['default']
         if (code === 401) {
+            removeToken()
             let redirectUrl = window.location.origin + '/#/'
             if (window.location.href.split('/#/')[1]) {
                 redirectUrl += window.location.href.split('/#/')[1]
@@ -90,6 +91,7 @@ service.interceptors.response.use(res => {
             //     })
             // })
         } else if (code === 500 && !innoreError) {
+            Message.close()
             Message({
                 message: msg,
                 type: 'error',
@@ -97,6 +99,7 @@ service.interceptors.response.use(res => {
             })
             return Promise.reject(new Error(msg))
         } else if (code !== 200 && !innoreError) {
+            Message.close()
             Notification.error({
                 title: msg,
                 showClose: true
@@ -115,6 +118,7 @@ service.interceptors.response.use(res => {
         } else if (message.includes("Request failed with status code")) {
             message = "系统接口" + message.substr(message.length - 3) + "异常";
         }
+        Message.close()
         Message({
             message: message,
             type: 'error',
