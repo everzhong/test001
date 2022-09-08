@@ -12,7 +12,7 @@ export default {
   created(){
     const {protocol,hostname} = window.location
     const port = sessionStorage.getItem('sfPort')
-    this.baseUrl = `${protocol}//${hostname}:${port}/#/scenarioConfiguration/leftdis/1/userid/${this.$store.getters.name}`
+    this.baseUrl = `${protocol}//${hostname}:${port}/#/login?token=5b85cc1783a64e0a7a4b053e82f34ecf&reurl=scenarioConfiguration/leftdis/1/userid/${this.$store.getters.name}`
   }
 }
 </script>

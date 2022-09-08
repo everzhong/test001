@@ -3,7 +3,7 @@ import { Notification, MessageBox, Message } from 'element-ui'
 import { getToken, getUid, removeToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import Qs from 'qs'
-var baseUrl = ''
+var baseUrl = '/prod-api'
 var innoreError = false
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 axios.defaults.paramsSerializer = (params) => {
@@ -130,13 +130,14 @@ service.interceptors.response.use(res => {
 )
 var setPort = function(proms = () => {}) {
     let result = null;
-    if (process.env.NODE_ENV === 'production' && !axios.defaults.baseURL) {
-        result = axios.get('./host.json').then(ports => {
-            const apiPort = ports.data.apiPort
-            const urlList = location.origin.split(':')
-            urlList[2] = apiPort
-            service.defaults.baseURL = urlList.join(':')
-            axios.defaults.baseURL = urlList.join(':')
+    const sfPort = sessionStorage.getItem('sfPort')
+    if (process.env.NODE_ENV === 'production' && !sfPort) {
+        result = axios.get(`${location.origin}/host.json`).then(ports => {
+            // const apiPort = ports.data.apiPort
+            // const urlList = location.origin.split(':')
+            // urlList[2] = apiPort
+            // service.defaults.baseURL = urlList.join(':')
+            // axios.defaults.baseURL = urlList.join(':')
             sessionStorage.setItem('sfPort', ports.data.sfPort)
             return proms();
         });
