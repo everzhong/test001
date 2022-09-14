@@ -152,7 +152,7 @@ export default {
         deptId:xiaozu.deptId,
         jczname:xiaozu.deptName
       }).then(res=>{
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess('派发成功')
           this.getList()
           // this.selection.forEach(item=>{
@@ -214,7 +214,7 @@ export default {
             res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
           if(this.tabsValue === 'two'){

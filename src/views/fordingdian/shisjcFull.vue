@@ -523,7 +523,7 @@ export default {
             deptId:this.$store.getters.userId
           }).then(res=>{
             this.loading = false
-            if(res.code===200) {
+            if(res.code===200||res.code===0) {
               this.msgSuccess('操作成功')
               setSancha(requireParams)
             }
@@ -552,7 +552,7 @@ export default {
           dxqd: "检查完成",
         };
         const res = await submitDxqd(params);
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess("操作成功");
           this.getList();
           this.addJcfl({
@@ -693,7 +693,7 @@ export default {
             }
             delete params.bjsj
             res = await updateRenwufour({...params,jgbf:type})
-            if(res.code===200) {
+            if(res.code===200||res.code===0) {
               this.msgSuccess('操作成功')
               if(this.tabsValue==="four"){
                 this.getList(this.searchLsNextParams)
@@ -775,7 +775,7 @@ export default {
             // res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.tabsValue=='qmx'){
             this[`renwufiveList`] = res.rows;
           } else {

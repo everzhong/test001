@@ -199,7 +199,7 @@ export default {
       this.loading1 = true
       try {
          const res = await getTjjzlx1(query)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           const sdata = [
              {
               label:'人次',
@@ -243,7 +243,7 @@ export default {
       this.loading2 = true
       try {
         const res = await getTjjzlx2(query)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           var gzfl = res.rows.map(item=>{
             const fl = item.gzfl? item.gzfl.trim():''
             return fl.split('-').pop()
@@ -271,7 +271,7 @@ export default {
       this.loading3= true
       try {
         const res = await getTjjzlx3(query)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           const jgmc = res.rows.map(item=>item.jgmc.trim())
           const sdata = {
             label:jgmc,
@@ -295,7 +295,7 @@ export default {
       this.loading4 = true
       try {
         const res = await getTjjzlx4(query)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           const xm = res.rows.map(item=>item.xm)
           const sdata = {
             label:xm,
@@ -321,7 +321,7 @@ export default {
       this.loading3 = true
       try {
          const res = await getTjjzlx5({...query,jsdj:this.jsdj})
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           let lv1 = res.rows.filter(item=>{
             return item?.jsdj==1
           })

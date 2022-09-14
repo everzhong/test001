@@ -198,7 +198,7 @@ export default {
       this.loading = true
       try {
         const res = await listDept()
-        if(res.code === 200) {
+        if(res.code === 200 || res.code===0) {
           this.roleList = res.data
         }
       } catch (error) { 
@@ -209,7 +209,7 @@ export default {
     async getJanChacy(){
       try {
         const res = await listUser({pageNum:1,pageSize: 50000})
-        if(res.code === 200  && res.rows && res.rows.length) {
+        if((res.code === 200 || res.code===0) && res.rows && res.rows.length) {
           this.gridData =  res.rows.filter(item=>{
             return item.roleId==4||item.roleId==9
           })
@@ -251,7 +251,7 @@ export default {
         type: 'warning'
       }).then(() => {
         delDept(row.deptId).then(res=>{
-          if(res.code===200) {
+          if(res.code===200||res.code===0) {
             this.msgSuccess('删除成功')
             this.getJanChaxz();
           }
@@ -304,7 +304,7 @@ export default {
           const {jczbh,deptName,jczcy,deptId} = this.addGroup
           if(this.isEditInner){
             const res = await updateDept({deptId,jczbh,parentId: 101,deptName})
-            if(res.code===200){
+            if(res.code===200||res.code===0){
               this.msgSuccess('更改成功')
               await this.getJanChaxz()
               const editIdx = this.roleList.findIndex(item=>{
@@ -329,7 +329,7 @@ export default {
             }
           } else {
             const res = await addDept({jczbh,deptName,parentId: 101,jczcy:jczcy.join(',')})
-            if(res.code===200) {
+            if(res.code===200||res.code===0) {
               this.msgSuccess('新增成功')
               this.getJanChaxz()
               this.innerBack()

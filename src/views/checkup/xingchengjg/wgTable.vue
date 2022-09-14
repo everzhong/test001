@@ -181,7 +181,7 @@ export default {
       this.loading = true
       try {
         let  res = await getListjg(query?query:params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.rows = this.initList(res.rows)
           this.splitList = this.initialWgRow()
         }

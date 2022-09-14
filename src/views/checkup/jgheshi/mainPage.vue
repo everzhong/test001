@@ -189,7 +189,7 @@ export default {
       this.loading = true
       try {
         const res = await listRenwutwo()
-        if(res.code === 200) {
+        if(res.code === 200 || res.code===0) {
           this.tableData = res.rows
           this.total = res.total
         }

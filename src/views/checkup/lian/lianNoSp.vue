@@ -95,7 +95,7 @@ export default {
         rwpcid:this.zhizuo.rwpcid,
         jgdm:this.zhizuo.jgdm
       }).then(res => {
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess("操作成功！");
           this.addJcfl({
               jglc:'申请不予立案',

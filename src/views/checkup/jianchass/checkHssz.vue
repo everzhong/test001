@@ -536,7 +536,7 @@ export default {
             // res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.gzTabsValue==2){
             this.hcList = res.rows
           } else {
@@ -558,7 +558,7 @@ export default {
     //   query&&(params = {...params,...query})
     //   this.loading = true
     //   const res = await listRenwuthree(params)
-    //   if(res.code===200){
+    //   if(res.code===200||res.code===0){
     //     this.tableData = res.rows;
     //     this.total = res.total;
     //   }

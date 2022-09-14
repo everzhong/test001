@@ -209,7 +209,7 @@ export default {
             res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
           if(this.tabsValue==='two'){
@@ -243,7 +243,7 @@ export default {
         this.msgError('请选择网审意见')
       } else {
         submitNetCheck({ids:this.ids,wsry:this.submitParams.wsry,wsyj:this.submitParams.wsyj}).then(async res=>{
-          if(res.code===200){
+          if(res.code===200||res.code===0){
             this.msgSuccess('提交成功')
             this.getList()
             this.selectionList.forEach(item=>{

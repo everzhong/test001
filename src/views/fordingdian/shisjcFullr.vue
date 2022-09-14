@@ -439,7 +439,7 @@ export default {
           dxqd: "检查完成",
         };
         const res = await submitDxqd(params);
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess("操作成功");
           this.getList();
           this.addJcfl({
@@ -557,7 +557,7 @@ export default {
             // res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.tabsValue=='qmx'){
             this[`renwufiveList`] = res.rows;
           } else {

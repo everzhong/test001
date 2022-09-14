@@ -360,7 +360,7 @@ export default {
             res = await listRenwutwo({...params,status:-1})
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
           if(this.tabsValue==='two'){
@@ -529,7 +529,7 @@ export default {
           const postTarget = this.scSucces.shift()
           setShujusc(postTarget).then(res=>{
             const waitSc = this.waitScList.shift()
-            if(res.code===200) {
+            if(res.code===200||res.code===0) {
               setSancha(waitSc)
             }
           }).catch(()=>{

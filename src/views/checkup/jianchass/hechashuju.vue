@@ -237,7 +237,7 @@ export default {
     checkXghc(row){
       console.log(row)
       getXghc(row.hcid).then(res=>{
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.xghcDetail = res.data
         }
       })
@@ -257,7 +257,7 @@ export default {
           this.loading = true
           try {
             const res = await addRenwufour({...this.hCform,type:'2'})
-            if(res.code===200){
+            if(res.code===200||res.code===0){
               this.loading = false
               this.msgSuccess('新增成功')
               this.getList()
@@ -355,7 +355,7 @@ export default {
           jgdm:this.$route.query.jgdm,
           rwpcid:this.$route.query.rwpcid,
         })
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.hcTotal = res.total
           this.hcData = res.rows
         }
@@ -377,7 +377,7 @@ export default {
         params.mxxmbm && (params.mxxmbm=`'${params.mxxmbm}'`)
       try {
         const res = await listRenwufour(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.gridData = res.rows
           this.total = res.total
         }

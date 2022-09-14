@@ -384,7 +384,7 @@ export default {
           params = {...params,...this.queryHcForm,type:2,ischeck:1}
           res = await listRenwufour(params)
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.tableData = res.rows;
           this.total = res.total;
           if(this.chaxunDialog){

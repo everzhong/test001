@@ -147,7 +147,7 @@ export default {
         lian:this.radio,
         cbr:this.cbrList.join(',')
       }).then(res => {
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess("操作成功！");
           this.addJcfl({
               jglc:'申请立案',
@@ -166,7 +166,7 @@ export default {
     async getJanChacy(){
       try {
         const res = await listUser({pageNum:1,pageSize: 50000})
-        if(res.code === 200 && res.rows.length) {
+        if((res.code === 200 || res.code===0) && res.rows.length) {
           const rows = res.rows
           if(this.zhizuo.cbr){
             this.cbrList = this.zhizuo.cbr.split(',')

@@ -274,7 +274,7 @@ export default {
             ...this.queryParams
           })
         }
-        if(res.code === 200) {
+        if(res.code === 200 || res.code===0) {
           this.tabsValue==='three'? this.tableData = res.rows : this.hcTableData = res.rows
           this.total = res.total
         }

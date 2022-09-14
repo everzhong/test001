@@ -89,7 +89,7 @@ export default {
       this.loading = true;
       try {
         const res = await listDcqz(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.tableData = res.rows;
           this.total = res.total;
         }
@@ -121,7 +121,7 @@ export default {
         wenjianurl,
         zlsm
       }).then(res=>{
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.msgSuccess('提交成功')
           this.wenjian.wenjianurl = ''
           this.getList()
@@ -148,7 +148,7 @@ export default {
       }).then(() => {
         return delDcqz(row.qzid)
       }).then(res=>{
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.msgSuccess('删除成功')
           this.getList()
         }

@@ -260,7 +260,7 @@ export default {
       this.loading = true;
       try {
         const res = await listJcfl(params);
-        if (res.code === 200) {
+        if (res.code === 200 || res.code===0) {
           this.jcflList = res.rows;
           this.total = res.total;
         }

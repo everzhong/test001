@@ -378,7 +378,7 @@ export default {
       try {
         const params = {...this.pageParams,noticeTitle:this.fileName,noticeType:1,zstype:this.zstype}
         const res = await listNotice(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.total = res.total;
           this.tableData = res.rows
         }
@@ -415,7 +415,7 @@ export default {
           params.createTime = createTime?(this.parseTime(createTime.toLocaleDateString())):''
           res = await addNotice(params)
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess(this.editType===2?"修改成功":"新增成功");
           this.getList()
           this.dialogClosed()

@@ -191,7 +191,7 @@ export default {
     },
     handleUpdate(params,isSave){
        updateRenwutwo(params).then(res => {
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess(isSave?'保存成功！':'操作成功！');
           if(!isSave){
             setTimeout(()=>{
@@ -204,7 +204,7 @@ export default {
     async getJanChacy(){
       try {
         const res = await listUser({pageNum:1,pageSize: 50000})
-        if(res.code === 200 && res.rows.length) {
+        if((res.code === 200 || res.code===0) && res.rows.length) {
           const rows = res.rows
           if(this.zhizuo.cbr){
             this.cbrList = this.zhizuo.cbr.split(',')

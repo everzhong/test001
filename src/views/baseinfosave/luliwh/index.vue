@@ -217,7 +217,7 @@ export default {
       this.loading = true
       try {
         const res = await listRenwutwo(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this[`renwu${this.tabsValue}List`] = res.rows;
           this.total = res.total;
         }

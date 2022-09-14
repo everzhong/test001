@@ -252,7 +252,7 @@ export default {
         id:row.id,
         rwpcid:row.rwpcid
       }).then(res=>{
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.getList()
           this.msgSuccess('提交成功')
         }

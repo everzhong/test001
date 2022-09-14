@@ -397,7 +397,7 @@ export default {
       this.addLoading = true
       try {
         const res = await addNotice(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess("新增成功");
           this.getList()
           this.dialogClosed()
@@ -424,7 +424,7 @@ export default {
         params = {...this.pageParams,...params}
         console.log(params,787)
         const res = await listNotice(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.total = res.total;
           this.tableData = res.rows
         }

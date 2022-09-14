@@ -566,7 +566,7 @@ export default {
       //   jgdm:this.listConfig.jgdm,
       //   hsyj:this.hsyj
       // }).then(res=>{
-      //   if(res.code===200){
+      //   if(res.code===200||res.code===0){
       //     this.msgSuccess('操作成功')
       //     this.hsyj = ''
       //   }
@@ -587,7 +587,7 @@ export default {
         wenjian,
         wenjianurl,
       }).then(res=>{
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.wenjian.wenjian = ''
           this.wenjian.wenjianurl = ''
         }
@@ -677,7 +677,7 @@ export default {
             res = await getTLS({...this.params,...this.searchTlsNextParams})
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.tabsValue=='five'){
             this[`renwufiveList`] = res.rows;
           } else {

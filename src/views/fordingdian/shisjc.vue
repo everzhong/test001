@@ -372,7 +372,7 @@ export default {
         ...this.queryInfoFrom,
         yynr:this.yynr
       }).then(res=>{
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.msgSuccess('操作成功')
           this.yynr = ''
         }
@@ -392,7 +392,7 @@ export default {
         wenjian,
         wenjianurl,
       }).then(res=>{
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.wenjian.wenjian = ''
           this.wenjian.wenjianurl = ''
         }
@@ -479,7 +479,7 @@ export default {
             // res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.tabsValue=='qmx'){
             this[`renwufiveList`] = res.rows;
           } else {

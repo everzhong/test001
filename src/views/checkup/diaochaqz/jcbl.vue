@@ -234,7 +234,7 @@ export default {
       this.loading = true;
       try {
         const res = await listDcqz(params)
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           this.tabsValue==='2'?this.tableData = res.rows:this.uploadList = res.rows;
           this.total = res.total;
         }
@@ -265,7 +265,7 @@ export default {
       this.loading = true
       try {
         const res = await addDcqz(params)
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.msgSuccess('保存成功')
           this.getList()
           this.addJcfl({
@@ -286,7 +286,7 @@ export default {
       this.loading = true
       try {
         const res = await updateDcqz(padams)
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.opertationType = 'add'
           this.msgSuccess('修改成功')
           //清空还回默认新增的状态
@@ -387,7 +387,7 @@ export default {
           wenjian:file.name,
           wenjianurl:fileUrl
         }).then(res=>{
-          if(res.code===200) {
+          if(res.code===200||res.code===0) {
             this.msgSuccess('上传成功')
             this.tabsValue==='4'&&(this.getList())
           }

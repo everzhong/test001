@@ -85,7 +85,7 @@ export default {
       try {
         this.loading = true
         const res = await listXmbm({...this.bmQueryParams,rwpcid:this.$route.query.rwpcid,jgdm:this.$route.query.jgdm,mxxmbm:this.searchMxxmbm})
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.tableData = res.rows
           this.total =  res.total
         }

@@ -414,7 +414,7 @@ export default {
             // res = await listRenwutwo(params)
             break;
         }
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.tabsValue=='qmx'){
             this[`renwufiveList`] = res.rows;
           } else {

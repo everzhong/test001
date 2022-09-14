@@ -501,7 +501,7 @@ export default {
         wenjian,
         wenjianurl,
       }).then(res=>{
-        if(res.code===200) {
+        if(res.code===200||res.code===0) {
           this.wenjian.wenjian = ''
           this.wenjian.wenjianurl = ''
         }
@@ -632,7 +632,7 @@ export default {
           })
         }
 
-        if(res.code===200){
+        if(res.code===200||res.code===0){
           if(this.tabsValue=='qmx'){
             this[`renwufiveList`] = res.rows;
           } else {
