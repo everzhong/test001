@@ -65,7 +65,7 @@ export default {
         const {rwpcid,id} = this.options
         const params = {...this.queryParams,fid:id}
         const res  = await getRending(params)
-        if(res.code==200) {
+        if(res.code==200 || res.code==0) {
           this.total = res.total
           this.tableData = res.rows
         }

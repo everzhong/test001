@@ -64,7 +64,7 @@ export default {
           jgdm:this.xmInfos.jgdm,
           rwpcid:this.xmInfos.rwpcid
         })
-        if(res.code==200) {
+        if(res.code==200 || res.code==0) {
           this.twoJghs = 1
           this.msgSuccess('操作成功！')
         }

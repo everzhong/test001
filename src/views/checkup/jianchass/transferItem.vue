@@ -311,7 +311,7 @@ export default {
   created(){
     this.getList()
     this.getDicts('sys_renwu_gzfl').then(res=>{
-      if(res.code==200){
+      if(res.code==200 || res.code==0){
         this.gzflOptions = res.data
       }
     })

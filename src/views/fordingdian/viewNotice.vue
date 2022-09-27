@@ -112,7 +112,7 @@ export default {
           rwpcid:rwpcid||'',
           ...this.queryParams
         })
-        if(res.code==200) {
+        if(res.code==200 || res.code==0) {
           this.zhzList = res.rows
           this.zhizuo = res.rows[0]
         }

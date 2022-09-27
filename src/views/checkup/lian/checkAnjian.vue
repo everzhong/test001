@@ -53,7 +53,7 @@ export default {
           rwpicd,
           ...this.queryParams
         })
-        if(res.code==200 && res.rows.length){
+        if((res.code==200 || res.code==0) && res.rows.length){
           res.rows.forEach(element => {
             const type = element.type
             const wenjianurl = element.wenjianurl

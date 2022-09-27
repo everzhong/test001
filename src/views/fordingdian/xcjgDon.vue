@@ -3,7 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="1.5" v-if="!viewTableObj.show">
         <span style="color:#606266;font-size:14px">参保地：</span>
-        <el-select v-model="queryParams.ybd" size="small" @change="getList()">
+        <el-select v-model="queryParams.ybd" size="small" @change="getList()" clearable>
           <el-option label="本地" value="01"></el-option>
           <el-option label="异地" value="02"></el-option>
         </el-select>
@@ -25,8 +25,7 @@
 </template>
 <script>
 
-import { submitDxqd} from "@/api/renwu/dcqz"
-import JcTable from '../checkup/xingchengjg/jcTable.vue'
+import JcTable from './jcTable.vue'
 import WgTable from './wgTable.vue'
 import ViewTable from '../checkup/xingchengjg/viewTable.vue'
 import { getToken } from '@/utils/auth'
@@ -91,8 +90,11 @@ export default {
     /** 查询renwu列表 */
     async getList() {
       const {rwpcid,jgdm} = this.queryInfoFrom
-      const params = {rwpcid,jgdm,ybd:this.queryParams.ybd}
-      await this.$refs[`${this.tabsValue}Table`].getList(params,'listjgdone')
+      const params = {rwpcid,jgdm}
+      if(this.queryParams.ybd){
+        params.ybd = this.queryParams.ybd
+      }
+      await this.$refs[`${this.tabsValue}Table`].getList(params)
     },
     typeChange(){
       this.viewTableObj.show = false

@@ -136,7 +136,7 @@ export default {
       query && (params={...params,...query})
       try {
         const res = await getQMX(params);
-        if(res.code==200){
+        if(res.code==200 || res.code==0){
           this.tableData = res.rows
           this.total = res.total
         }

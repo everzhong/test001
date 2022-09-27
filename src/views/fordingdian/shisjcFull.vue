@@ -459,7 +459,7 @@ export default {
     async remoteGzflMethod(){
       try {
         const res = await this.getDicts('sys_renwu_gzfl')
-        if(res.code==200){
+        if(res.code==200 || res.code==0){
           this.gzflOptions = res.data
         }
       } catch (error) {

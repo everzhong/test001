@@ -106,6 +106,14 @@ export function getListjc(query) {
         params: query
     })
 }
+//listjc  是按检查方式分组
+export function getListjcDone(query) {
+    return request({
+        url: '/renwu/renwufour/listjcdone',
+        method: 'get',
+        params: query
+    })
+}
 //获取图形数据tjjzlx
 export function getTjjzlx1(query) {
     return request({

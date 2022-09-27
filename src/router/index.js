@@ -119,7 +119,8 @@ export const constantRoutes = [{
     {
         path: '/xcjg',
         component: (resolve) => require(['@/views/fordingdian/xcjg'], resolve),
-        hidden: true
+        hidden: true,
+        name:'XCJG'
     },
     {
         path: '/ssjcFull',
@@ -134,7 +135,8 @@ export const constantRoutes = [{
     {
         path: '/xcjgd',
         component: (resolve) => require(['@/views/fordingdian/xcjgDon'], resolve),
-        hidden: true
+        hidden: true,
+        name:'XCJGD'
     },
     {
         path: '/ssjcFullr',

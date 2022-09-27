@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%;position:relative" v-loading="loading">
     <el-row style="position:absolute;left:0;top:-37px">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-show="!isFordingDian">
         <el-button type="default"  size="small" @click="handleBack">返回上一层</el-button>
       </el-col>
     </el-row>
@@ -117,13 +117,14 @@ export default {
       jslbOptions:[],
       tabsValue:'three',
       serachOptions:{},
+      isFordingDian:false//是否定点的页面引用
     }
   },
   created(){
     this.getList()
     this.ybbfOptions = this.$store.getters.ybbfDic
     this.jslbOptions = this.$store.getters.jslbDic
-
+    this.isFordingDian = ['XCJGD','XCJG'].includes(this.$route.name)
   },
   methods:{
     handleBack(){
@@ -164,7 +165,7 @@ export default {
       if(this.tabsValue=='four'){
         listRenwufour({...this.queryParams,...this.serachOptions}).then(res=>{
           this.loading = false
-          if(res.code==200){
+          if(res.code==200 || res.code==0){
             this.lshTable = res.rows
             this.total = res.total
           }
@@ -176,7 +177,7 @@ export default {
         delete params.type//查询通流水数据，不需要type
         getTLS(params).then(res=>{
           this.loading = false
-          if(res.code==200){
+          if(res.code==200 || res.code==0){
             this.tlshTable = res.rows
             this.total = res.total
           }

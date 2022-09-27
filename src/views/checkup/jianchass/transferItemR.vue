@@ -306,7 +306,7 @@ export default {
     this.jyclrq = this.parseTime(new Date().getTime()+3*24*60*60*1000,'{y}-{m}-{d}')
     this.getList()
     this.getDicts('sys_renwu_gzfl').then(res=>{
-      if(res.code==200){
+      if(res.code==200 || res.code==0){
         this.gzflOptions = res.data
       }
     })
